@@ -5,6 +5,8 @@ using UnityEngine;
 public class Skill
 {
 	public SkillType type;
+   
+    public int cooldown;
 
 	public void Tick(float dt)
 	{
