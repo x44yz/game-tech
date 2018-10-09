@@ -13,5 +13,11 @@ public class Skill
 		
 	}
 
-	// public void 
+    public void ApplyEffectToOwner()
+    {
+    }
+
+    public void ApplyEffectToTarget()
+    {
+    }
 }
