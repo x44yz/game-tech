@@ -2,6 +2,9 @@
 // Skill - 参考 Dota
 // 时间统一采用 ms 单位
 
+// 技能分为主动技能，或者被动技能
+// 
+
 // ROADMAP:
 // 先实现 skill
 // 再实现一个技能带多种效果 (回复血同时 + 攻击力加成) - 一个 skill 包含多个 ability
@@ -19,3 +22,7 @@
 // 攻击力加强 - Buff
 
 
+// LINK:
+// https://www.jianshu.com/p/7c03920240de
+// https://gamedev.stackexchange.com/questions/62974/c-design-for-ability-system
+// https://bbs.gameres.com/thread_453222_1_1.html
