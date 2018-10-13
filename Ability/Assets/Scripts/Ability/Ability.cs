@@ -14,14 +14,14 @@ public class Ability
 
     public void Activate(Actor parent)
     {
-        
+        OnActivate(parent);
     }
 
     public void Deactivate()
     {
     }
      
-    public virtual void OnActivate()
+    public virtual void OnActivate(Actor parent)
     {
     }
 

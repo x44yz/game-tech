@@ -4,9 +4,14 @@ using UnityEngine;
 
 public class Fireball : Ability
 {
-    public override void OnActivate()
+    private AbilityCircleTargeter targeter = null;
+
+    public override void OnActivate(Actor parent)
     {
-        
+        if (targeter == null)
+        {
+            targeter = new AbilityCircleTargeter();
+        }
     }
 
     public override void OnDeactivate()
