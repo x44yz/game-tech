@@ -10,7 +10,7 @@ public class Actor : MonoBehaviour
     {
         for (int i = 0; i < abilitySlots.Length; ++i)
         {
-            abilitySlots[i].parent = this;
+            abilitySlots[i].caster = this;
         }
 
         //
@@ -28,5 +28,10 @@ public class Actor : MonoBehaviour
         {
             abilitySlots[selectSlotIndex].Activate();
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        
     }
 }

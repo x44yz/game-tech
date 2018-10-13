@@ -6,7 +6,7 @@ using UnityEngine;
 // AbilitySlot 相当于一个管理 Ability 的容器
 public class AbilitySlot
 {
-    public Actor parent;
+    public Actor caster;
     public Ability ability = null;
     public int cooldownLeftMSec = 0;
 
@@ -25,7 +25,7 @@ public class AbilitySlot
         if (cooldownLeftMSec > 0)
             return;
 
-        ability.Activate(parent);
+        ability.Activate(caster);
     }
 
     public void Deactivate()

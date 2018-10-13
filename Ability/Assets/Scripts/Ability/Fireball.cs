@@ -11,11 +11,23 @@ public class Fireball : Ability
         if (targeter == null)
         {
             targeter = new AbilityCircleTargeter();
+            targeter.radius = 5;
+            targeter.Activate();
         }
     }
 
     public override void OnDeactivate()
     {
         
+    }
+
+    public override void OnTargetSelect()
+    {
+        // targeter.
+
+    }
+
+    private void PerformFireball()
+    {
     }
 }
