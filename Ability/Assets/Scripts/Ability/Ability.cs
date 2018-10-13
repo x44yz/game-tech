@@ -5,24 +5,31 @@ using UnityEngine;
 public class Ability 
 {
     public AbilityType type;
-    public bool bActive;
+    public bool isActive;
     public int cooldownMSec;
 
-    public virtual void Tick(float dt)
+    public void Tick(float dt)
     {
     }
 
+    public void Activate(Actor parent)
+    {
+        
+    }
+
+    public void Deactivate()
+    {
+    }
+     
     public virtual void OnActivate()
     {
-        // create target selector
     }
 
     public virtual void OnDeactivate()
     {
     }
-       
+
     public virtual void OnTargetSelect()
     {
     }
-
 }

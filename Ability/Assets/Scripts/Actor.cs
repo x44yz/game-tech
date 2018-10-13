@@ -6,13 +6,27 @@ public class Actor : MonoBehaviour
 {
     public AbilitySlot[] abilitySlots = new AbilitySlot[4];
 
-    // public 
+    void Awake()
+    {
+        for (int i = 0; i < abilitySlots.Length; ++i)
+        {
+            abilitySlots[i].parent = this;
+        }
+
+        //
+        Fireball abilityFireball = new Fireball();
+        abilitySlots[0].ability = abilityFireball;
+    }
 
     void Update()
     {
+        int selectSlotIndex = -1;
         if (Input.GetKeyDown(KeyCode.Q))
+            selectSlotIndex = 0;
+
+        if (selectSlotIndex != -1)
         {
-            
+            abilitySlots[selectSlotIndex].Activate();
         }
     }
 }
