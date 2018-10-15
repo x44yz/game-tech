@@ -7,6 +7,8 @@ public class Actor : MonoBehaviour
     public AbilitySlot[] abilitySlots = new AbilitySlot[4];
     public bool isPlayerControl;
 
+	private int curSelectAbilitySlotIndex = -1;
+
     void Awake()
     {
         for (int i = 0; i < abilitySlots.Length; ++i)
@@ -42,16 +44,22 @@ public class Actor : MonoBehaviour
         if (selectSlotIndex != -1)
         {
             abilitySlots[selectSlotIndex].Activate();
+
+			// TODO:
+			// highlight opp
         }
 
-        // check select actor
-        if (Input.GetMouseButtonDown(0))
+		curSelectAbilitySlotIndex = selectSlotIndex;
+
+		// check select actor
+		if (curSelectAbilitySlotIndex != -1 && Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100))
+            if (Physics.Raycast(ray, out hit, 100, ))
             {
                 Debug.Log("xx-- click Actor");
+				
             }
         }
     }
