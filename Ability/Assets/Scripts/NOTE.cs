@@ -1,7 +1,7 @@
 // NOTE
 // 类似 Dota 技能
 
-// Skill - 参考 Dota
+// Ability - 参考 Dota
 // 时间统一采用 ms 单位
 
 // 技能分为主动技能，或者被动技能

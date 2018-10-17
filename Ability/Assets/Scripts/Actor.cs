@@ -32,7 +32,6 @@ public class Actor : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        
     }
 
     public void UpdatePlayerControl()
@@ -52,14 +51,22 @@ public class Actor : MonoBehaviour
 		curSelectAbilitySlotIndex = selectSlotIndex;
 
 		// check select actor
-		if (curSelectAbilitySlotIndex != -1 && Input.GetMouseButtonDown(0))
-        {
+		// if (curSelectAbilitySlotIndex != -1 && Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0))
+		{
+			int layerMask = 1 << 8;
+			// layerMask = ~layerMask;
+
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100, ))
+            if (Physics.Raycast(ray, out hit, 100, layerMask))
             {
-                Debug.Log("xx-- click Actor");
-				
+                Debug.Log("xx-- click Actor");	
+				if (hit.collider.gameObject != gameObject)
+				{
+					// click opp
+
+				}
             }
         }
     }
