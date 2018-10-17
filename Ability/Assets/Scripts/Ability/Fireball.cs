@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Fireball : Ability
 {
-    private AbilityCircleTargeter targeter = null;
+    // private AbilityCircleTargeter targeter = null;
+
 
     public override void OnActivate(Actor parent)
     {
-        if (targeter == null)
-        {
-            targeter = new AbilityCircleTargeter();
-            targeter.radius = 5;
-            targeter.Activate();
-        }
+//        if (targeter == null)
+//        {
+//            targeter = new AbilityCircleTargeter();
+//            targeter.radius = 5;
+//            targeter.Activate();
+//        }
     }
 
     public override void OnDeactivate()

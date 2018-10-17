@@ -7,14 +7,26 @@ using UnityEngine;
 public class AbilitySlot
 {
     public Actor caster;
-    public Ability ability = null;
+    private Ability ability = null;
     public int cooldownLeftMSec = 0;
+
+    private AbilityTargeter targeter = null;
 
     public bool isActive
     {
         get {
             return ability != null && ability.isActive;
         }
+    }
+
+    public void SetAbility(Ability ability)
+    {
+        this.ability = ability;
+
+        // create targeter based on ability
+        // TODO:
+        // 测试统一采用指向型技能
+        targeter = new AbilityTargeter();
     }
 
     public void Activate()

@@ -7,7 +7,9 @@ public class Actor : MonoBehaviour
     public AbilitySlot[] abilitySlots = new AbilitySlot[4];
     public bool isPlayerControl;
 
-	private int curSelectAbilitySlotIndex = -1;
+	// private int curSelectAbilitySlotIndex = -1;
+
+    private AbilitySlot targetAbilitySlot = null;
 
     void Awake()
     {
@@ -19,7 +21,9 @@ public class Actor : MonoBehaviour
 
         //
         Fireball abilityFireball = new Fireball();
-        abilitySlots[0].ability = abilityFireball;
+        abilitySlots[0].SetAbility(abilityFireball);
+
+        targetAbilitySlot = abilitySlots[0];
     }
 
     void Update()
@@ -42,13 +46,13 @@ public class Actor : MonoBehaviour
 
         if (selectSlotIndex != -1)
         {
-            abilitySlots[selectSlotIndex].Activate();
+            // abilitySlots[selectSlotIndex].Activate();
 
 			// TODO:
 			// highlight opp
         }
 
-		curSelectAbilitySlotIndex = selectSlotIndex;
+		// curSelectAbilitySlotIndex = selectSlotIndex;
 
 		// check select actor
 		// if (curSelectAbilitySlotIndex != -1 && Input.GetMouseButtonDown(0))
@@ -65,7 +69,7 @@ public class Actor : MonoBehaviour
 				if (hit.collider.gameObject != gameObject)
 				{
 					// click opp
-
+                    targetAbilitySlot.Activate();
 				}
             }
         }
