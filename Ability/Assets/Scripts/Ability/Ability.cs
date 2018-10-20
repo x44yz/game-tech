@@ -35,7 +35,6 @@ public class Ability
 
     public void ApplyHealing(Actor caster, Actor target, int healing)
     {
-        
     }
      
     public virtual void OnActivate(Actor parent)

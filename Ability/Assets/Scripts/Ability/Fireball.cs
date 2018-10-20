@@ -24,8 +24,10 @@ public class Fireball : Ability
 
     public override void OnTargetSelect()
     {
-        // targeter.
-
+        // TODO:
+        // 播放技能释放动画，粒子特效
+        // delay: 创造火球，火球飞往目标，计算飞行的时间
+        // delay: 真正释放到对方身上，创建 Effect
     }
 
     private void PerformFireball()
