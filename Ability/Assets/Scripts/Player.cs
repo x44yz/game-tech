@@ -2,15 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour {
+// 1. choose ability
+// 2. choose target
+public class Player : MonoBehaviour, IAbilityTarget 
+{
+    private void Update()
+    {
+//        if (Input.GetKeyDown(KeyCode.W))
+//        {  
+//        }
+//
+//        if (Input.GetMouseButtonDown(0))
+//        {       
+//        }
+    }
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public void Selected()
+    {
+        Debug.Log("Player selected");
+    }
 }
