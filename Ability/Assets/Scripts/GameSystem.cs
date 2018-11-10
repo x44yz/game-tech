@@ -4,8 +4,20 @@ using UnityEngine;
 
 public class GameSystem : MonoBehaviour 
 {
+    public Player player;
+    public Enemy enemy;
+
+    private void Start()
+    {
+        Debug.Assert(player != null, "CHECK");
+        Debug.Assert(enemy != null, "CHECK");
+    }
+
     private void Update()
     {
+        if (player.activeAbility == null)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -20,7 +32,7 @@ public class GameSystem : MonoBehaviour
                 IAbilityTarget target = obj.GetComponent<IAbilityTarget>();
                 if (target != null)
                 {
-                    target.Selected();
+                    target.Selected(player.activeAbility);
                 }
             }
         }

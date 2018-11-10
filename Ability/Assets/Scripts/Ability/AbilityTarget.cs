@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IAbilityTarget
 {
-    void Selected();
+    void Selected(Ability ability);
 }

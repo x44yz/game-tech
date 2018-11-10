@@ -9,8 +9,11 @@ public class Enemy : MonoBehaviour, IAbilityTarget
         
     }
 
-    public void Selected()
+    public void Selected(Ability ability)
     {
-        Debug.Log("Enemy selected");
+        // Debug.Log("Enemy selected");
+        Debug.Assert(ability != null, "CHECK");
+
+
     }
 }

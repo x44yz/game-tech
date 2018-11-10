@@ -4,8 +4,10 @@ using UnityEngine;
 
 // 1. choose ability
 // 2. choose target
-public class Player : MonoBehaviour, IAbilityTarget 
+public class Player : MonoBehaviour 
 {
+    public Ability activeAbility = null;
+
     private void Update()
     {
 //        if (Input.GetKeyDown(KeyCode.W))
