@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IAbilityTarget
 {
+    public bool isActive = false;
+
     private void Update()
     {
         
