@@ -27,7 +27,7 @@ public class GameSystem : MonoBehaviour
             if (hit.collider != null)
             {
                 GameObject obj = hit.collider.gameObject;
-                // Debug.Log("click object: " + obj.name);
+                Debug.Log("click object: " + obj.name);
 
                 IAbilityTarget target = obj.GetComponent<IAbilityTarget>();
                 if (target != null)

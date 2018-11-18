@@ -28,50 +28,11 @@ public class Actor : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerControl)
-        {
-            UpdatePlayerControl();
-        }
     }
 
     public void TakeDamage(int damage)
     {
     }
 
-    public void UpdatePlayerControl()
-    {
-        int selectSlotIndex = -1;
-        if (Input.GetKeyDown(KeyCode.Q))
-            selectSlotIndex = 0;
 
-        if (selectSlotIndex != -1)
-        {
-            // abilitySlots[selectSlotIndex].Activate();
-
-			// TODO:
-			// highlight opp
-        }
-
-		// curSelectAbilitySlotIndex = selectSlotIndex;
-
-		// check select actor
-		// if (curSelectAbilitySlotIndex != -1 && Input.GetMouseButtonDown(0))
-		if (Input.GetMouseButtonDown(0))
-		{
-			int layerMask = 1 << 8;
-			// layerMask = ~layerMask;
-
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit, 100, layerMask))
-            {
-                Debug.Log("xx-- click Actor");	
-				if (hit.collider.gameObject != gameObject)
-				{
-					// click opp
-                    targetAbilitySlot.Activate();
-				}
-            }
-        }
-    }
 }

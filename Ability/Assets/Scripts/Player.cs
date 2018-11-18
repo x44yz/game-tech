@@ -8,15 +8,13 @@ public class Player : MonoBehaviour
 {
     public Ability activeAbility = null;
 
+    private void Start()
+    {
+        activeAbility = new Freeze();
+    }
+
     private void Update()
     {
-//        if (Input.GetKeyDown(KeyCode.W))
-//        {  
-//        }
-//
-//        if (Input.GetMouseButtonDown(0))
-//        {       
-//        }
     }
 
     public void Selected()
