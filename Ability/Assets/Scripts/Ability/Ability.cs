@@ -21,6 +21,11 @@ public class Ability
     {
     }
 
+    public virtual void Apply(IAbilityTarget target)
+    {
+        
+    }
+
     public void ApplyDamage(Actor caster, Actor target, int damage)
     {
         // determine damage mutiplier from caster

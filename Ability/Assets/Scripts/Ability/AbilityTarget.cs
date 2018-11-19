@@ -5,4 +5,5 @@ using UnityEngine;
 public interface IAbilityTarget
 {
     void Selected(Ability ability);
+    void ApplyEffect(Effect effect);
 }

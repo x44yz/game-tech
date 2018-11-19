@@ -16,6 +16,10 @@ public class Enemy : MonoBehaviour, IAbilityTarget
         // Debug.Log("Enemy selected");
         Debug.Assert(ability != null, "CHECK");
 
+ 
+    }
 
+    public void ApplyEffect(Effect effect)
+    {
     }
 }
