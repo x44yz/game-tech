@@ -1,0 +1,9 @@
+{
+	"name": "Freeze",
+	"type": "",
+	"icon": "",
+	"desc": "",
+	"cooldown": 10,
+	"ai": {
+	}
+}
