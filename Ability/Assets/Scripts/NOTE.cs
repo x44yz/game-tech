@@ -41,3 +41,5 @@
 // https://www.jianshu.com/p/7c03920240de
 // https://gamedev.stackexchange.com/questions/62974/c-design-for-ability-system
 // https://bbs.gameres.com/thread_453222_1_1.html
+
+// 主要测试技能，攻击采用最简单的回合制

@@ -9,6 +9,5 @@ public class Freeze : Ability
     public override void Apply(IAbilityTarget target)
     {
         // create effect
-
     }
 }

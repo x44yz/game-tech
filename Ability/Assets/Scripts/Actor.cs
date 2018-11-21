@@ -33,6 +33,4 @@ public class Actor : MonoBehaviour
     public void TakeDamage(int damage)
     {
     }
-
-
 }

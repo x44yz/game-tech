@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GameSystem : MonoBehaviour 
 {
     public Player player;
     public Enemy enemy;
+
+    private int attackTurn = 0;
 
     private void Start()
     {
@@ -14,6 +17,12 @@ public class GameSystem : MonoBehaviour
     }
 
     private void Update()
+    {
+        UpdateInput();
+        UpdateBattle();
+    }
+
+    private void UpdateInput()
     {
         if (player.activeAbility == null)
             return;
@@ -35,6 +44,12 @@ public class GameSystem : MonoBehaviour
                     target.Selected(player.activeAbility);
                 }
             }
-        }
+        }        
+    }
+
+    private void UpdateBattle()
+    {
+        // attack turn
+
     }
 }

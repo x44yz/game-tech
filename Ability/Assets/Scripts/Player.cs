@@ -4,7 +4,7 @@ using UnityEngine;
 
 // 1. choose ability
 // 2. choose target
-public class Player : MonoBehaviour 
+public class Player : Actor 
 {
     public Ability activeAbility = null;
 
