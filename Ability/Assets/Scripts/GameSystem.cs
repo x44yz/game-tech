@@ -1,14 +1,26 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class GameSystem : MonoBehaviour 
 {
+	private const int TURN_PLAYER = 0;
+
     public Player player;
     public Enemy enemy;
 
-    private int attackTurn = 0;
+	public enum TurnStatus
+	{
+		NONE,
+		PREPARE,
+		SWITCHING,
+		RUNNING,
+	}
+
+	public TurnStatus turnStatus { get; set; }
+	private TurnStatus curTurnStatus = TurnStatus.NONE;
+    private int actionTurn = 0;
 
     private void Start()
     {
@@ -18,8 +30,8 @@ public class GameSystem : MonoBehaviour
 
     private void Update()
     {
-        UpdateInput();
-        UpdateBattle();
+        // UpdateInput();
+        UpdateAction();
     }
 
     private void UpdateInput()
@@ -47,9 +59,29 @@ public class GameSystem : MonoBehaviour
         }        
     }
 
-    private void UpdateBattle()
+    private void UpdateAction()
     {
-        // attack turn
+		if (curTurnStatus != turnStatus)
+		{
+			if (turnStatus == TurnStatus.PREPARE)
+			{
+				turnStatus = TurnStatus.SWITCHING;
+			}
+			else if (turnStatus == TurnStatus.SWITCHING)
+			{
+				// TODO
+				// 2 = actor nums
+				actionTurn = (actionTurn + 1) % 2; 
+				if (actionTurn == 0)
+				{
+				}
+			}
+			else if (turnStatus == TurnStatus.RUNNING)
+			{
 
+			}
+
+			curTurnStatus = turnStatus;
+		}
     }
 }

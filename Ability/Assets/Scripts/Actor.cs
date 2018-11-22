@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,9 @@ public class Actor : MonoBehaviour
 	// private int curSelectAbilitySlotIndex = -1;
 
     private AbilitySlot targetAbilitySlot = null;
+
+	public Action<Actor> onTurnStart;
+	public Action<Actor> onTurnFinish;
 
     void Awake()
     {
@@ -33,4 +37,16 @@ public class Actor : MonoBehaviour
     public void TakeDamage(int damage)
     {
     }
+
+	public void StartTurn()
+	{
+		if (onTurnStart != null)
+			onTurnStart(this);
+	}
+
+	private void FinishTurn()
+	{
+		if (onTurnFinish != null)
+			onTurnFinish(this);
+	}
 }
