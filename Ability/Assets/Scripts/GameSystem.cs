@@ -72,13 +72,14 @@ public class GameSystem : MonoBehaviour
 				// TODO
 				// 2 = actor nums
 				actionTurn = (actionTurn + 1) % 2; 
-				if (actionTurn == 0)
-				{
-				}
-			}
-			else if (turnStatus == TurnStatus.RUNNING)
-			{
-
+                if (actionTurn == TURN_PLAYER)
+                {
+                    player.StartTurn();
+                }
+                else
+                {
+                    enemy.StartTurn();
+                }
 			}
 
 			curTurnStatus = turnStatus;
