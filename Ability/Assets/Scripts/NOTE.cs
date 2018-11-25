@@ -43,3 +43,5 @@
 // https://bbs.gameres.com/thread_453222_1_1.html
 
 // 主要测试技能，攻击采用最简单的回合制
+
+// Q: 是否加入脚本 xLua

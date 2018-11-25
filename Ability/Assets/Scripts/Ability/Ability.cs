@@ -8,6 +8,9 @@ public class Ability
     public bool isActive;
     public int cooldownMSec;
 
+    public IAbilityCaster caster;
+    public IAbilityTarget target;
+
     public void Tick(float dt)
     {
     }
@@ -21,9 +24,10 @@ public class Ability
     {
     }
 
-    public virtual void Apply(IAbilityTarget target)
+    public virtual void Apply(IAbilityCaster caster, IAbilityTarget target)
     {
-        
+        this.caster = caster;
+        this.target = target;
     }
 
     public void ApplyDamage(Actor caster, Actor target, int damage)

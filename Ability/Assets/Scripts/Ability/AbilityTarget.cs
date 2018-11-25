@@ -6,6 +6,6 @@ public interface IAbilityTarget
 {
     bool CanAttack();
 
-    void Selected(Ability ability);
+    void Selected(IAbilityCaster caster, Ability ability);
     void ApplyEffect(Effect effect);
 }

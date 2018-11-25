@@ -2,29 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : Actor, IAbilityTarget
+public class Enemy : Actor
 {
     public bool isActive = false;
 
-    private void Update()
+    public override void Tick(float dt)
     {
-        
     }
 
-    public bool CanAttack()
+    public override bool CanAttack()
     {
         return false;
     }
 
-    public void Selected(Ability ability)
+    public override void Selected(IAbilityCaster caster, Ability ability)
     {
-        // Debug.Log("Enemy selected");
+        Debug.Log("Enemy selected");
         Debug.Assert(ability != null, "CHECK");
 
- 
+        ability.Apply(caster, this);
     }
 
-    public void ApplyEffect(Effect effect)
+    public override void ApplyEffect(Effect effect)
     {
     }
 }
