@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,4 +26,8 @@ public class Enemy : Actor
     public override void ApplyEffect(Effect effect)
     {
     }
+
+	public override void TakeDamage(int damage)
+	{
+	}
 }

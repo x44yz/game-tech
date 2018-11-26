@@ -43,8 +43,7 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
     public virtual void Selected(IAbilityCaster caster, Ability ability){}
     public virtual void ApplyEffect(Effect effect){}
-
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage)
     {
     }
 

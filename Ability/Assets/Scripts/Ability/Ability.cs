@@ -30,7 +30,7 @@ public class Ability
         this.target = target;
     }
 
-    public void ApplyDamage(Actor caster, Actor target, int damage)
+    public void ApplyDamage(IAbilityCaster caster, IAbilityTarget target, int damage)
     {
         // determine damage mutiplier from caster
         int damageMult = 1;

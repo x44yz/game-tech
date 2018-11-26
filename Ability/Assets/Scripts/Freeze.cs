@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +12,10 @@ public class Freeze : Ability
         Actor aCaster = caster as Actor;
         Debug.Assert(aCaster == null, "CHECK");
 
-        // create effect
-    }
+		// create effect
+		// damage may be delay after effect
+		// compute damange by caster level or ability level
+		int damage = 1;
+		ApplyDamage(caster, target, damage);
+	}
 }
