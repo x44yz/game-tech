@@ -15,10 +15,13 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 	public Action<Actor> onTurnStart;
 	public Action<Actor> onTurnFinish;
 
+	public int actionPoint { get; set; }
     public bool isActionTurn { get; set; }
+	public List<Effect> effects = new List<Effect>();
 
     void Awake()
     {
+		actionPoint = 1;
         isActionTurn = false;
 
 //        for (int i = 0; i < abilitySlots.Length; ++i)
@@ -37,12 +40,28 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
     public virtual void Tick(float dt)
     {
+
     }
+
+	public virtual void TickRound()
+	{
+		// handle effect
+		foreach (var effect in effects)
+		{
+
+		}
+	}
 
     public virtual bool CanAttack(){ return false; }
 
     public virtual void Selected(IAbilityCaster caster, Ability ability){}
-    public virtual void ApplyEffect(Effect effect){}
+
+	public virtual void ApplyEffect(Effect effect)
+	{
+		Debug.Assert(effects.Contains(effect) == false, "CHECK");
+		effects.Add(effect);
+	}
+
     public virtual void TakeDamage(int damage)
     {
     }
