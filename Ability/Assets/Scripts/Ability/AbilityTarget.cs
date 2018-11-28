@@ -8,5 +8,6 @@ public interface IAbilityTarget
 
     void Selected(IAbilityCaster caster, Ability ability);
     void ApplyEffect(Effect effect);
+	void RemoveEffect(Effect effect);
 	void TakeDamage(int damage);
 }

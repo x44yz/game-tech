@@ -9,17 +9,34 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 //    public bool isPlayerControl;
 
 	// private int curSelectAbilitySlotIndex = -1;
-
     // private AbilitySlot targetAbilitySlot = null;
 
 	public Action<Actor> onTurnStart;
 	public Action<Actor> onTurnFinish;
 
 	public int actionPoint { get; set; }
+	// public int bonusActionPoint { get; set; }
     public bool isActionTurn { get; set; }
 	public List<Effect> effects = new List<Effect>();
 
-    void Awake()
+	// public Bonus bonus = new Bonus();
+	public List<Bonus> bonuses = new List<Bonus>();
+
+	public bool isActionForbid
+	{
+		get
+		{
+			for (int i = 0; i < bonuses.Count; ++i)
+			{
+				Bonus bs = bonuses[i];
+				if (bs.isActionForbid)
+					return true;
+			}
+			return false;
+		}
+	}
+
+	void Awake()
     {
 		actionPoint = 1;
         isActionTurn = false;
@@ -35,12 +52,10 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
         // abilitySlots[0].SetAbility(abilityFireball);
 
         // targetAbilitySlot = abilitySlots[0];
-
     }
 
     public virtual void Tick(float dt)
     {
-
     }
 
 	public virtual void TickRound()
@@ -48,7 +63,6 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 		// handle effect
 		foreach (var effect in effects)
 		{
-
 		}
 	}
 
@@ -60,11 +74,21 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 	{
 		Debug.Assert(effects.Contains(effect) == false, "CHECK");
 		effects.Add(effect);
+
+		// update bonus
+		// bonusActionPoint += effect.bonusActionPoint;
+		// bonus.isActionForbid |= effect.bonus.isActionForbid;
+		bonuses.Add(effect.bonus);
 	}
 
-    public virtual void TakeDamage(int damage)
-    {
-    }
+	public virtual void RemoveEffect(Effect effect)
+	{
+
+	}
+
+	public virtual void TakeDamage(int damage)
+	{
+	}
 
     public virtual void StartTurn()
 	{
@@ -72,6 +96,9 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
 		if (onTurnStart != null)
 			onTurnStart(this);
+
+		if (isActionForbid)
+			FinishTurn();
 	}
 
     protected virtual void FinishTurn()

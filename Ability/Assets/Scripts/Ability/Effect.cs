@@ -14,6 +14,7 @@ public class Effect
 
 	// 持续多少回合
 	public int round { get; set; }
-	
-	public int bonusActionPoint { get; set; }
+
+	// public int bonusActionPoint { get; set; }
+	public Bonus bonus = new Bonus();
 }
