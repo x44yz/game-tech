@@ -16,5 +16,6 @@ public class Effect
 	public int round { get; set; }
 
 	// public int bonusActionPoint { get; set; }
-	public Bonus bonus = new Bonus();
+	// public Bonus bonus = new Bonus();
+	public bool isActionForbid = false;
 }

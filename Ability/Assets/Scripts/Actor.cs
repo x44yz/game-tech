@@ -20,16 +20,16 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 	public List<Effect> effects = new List<Effect>();
 
 	// public Bonus bonus = new Bonus();
-	public List<Bonus> bonuses = new List<Bonus>();
+	// public List<Bonus> bonuses = new List<Bonus>();
 
 	public bool isActionForbid
 	{
 		get
 		{
-			for (int i = 0; i < bonuses.Count; ++i)
+			for (int i = 0; i < effects.Count; ++i)
 			{
-				Bonus bs = bonuses[i];
-				if (bs.isActionForbid)
+				Effect eff = effects[i];
+				if (eff.isActionForbid)
 					return true;
 			}
 			return false;
@@ -78,12 +78,11 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 		// update bonus
 		// bonusActionPoint += effect.bonusActionPoint;
 		// bonus.isActionForbid |= effect.bonus.isActionForbid;
-		bonuses.Add(effect.bonus);
+		// bonuses.Add(effect.bonus);
 	}
 
 	public virtual void RemoveEffect(Effect effect)
 	{
-
 	}
 
 	public virtual void TakeDamage(int damage)
@@ -92,13 +91,16 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
     public virtual void StartTurn()
 	{
-        isActionTurn = true;
+		if (isActionForbid)
+		{
+			FinishTurn();
+			return;
+		}
+
+		isActionTurn = true;
 
 		if (onTurnStart != null)
 			onTurnStart(this);
-
-		if (isActionForbid)
-			FinishTurn();
 	}
 
     protected virtual void FinishTurn()

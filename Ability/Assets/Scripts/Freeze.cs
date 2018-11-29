@@ -10,10 +10,10 @@ public class Freeze : Ability
         base.Apply(caster, target);
 
         Actor aCaster = caster as Actor;
-        Debug.Assert(aCaster == null, "CHECK");
+        Debug.Assert(aCaster != null, "CHECK");
 
 		Actor aTarget = target as Actor;
-		Debug.Assert(aTarget == null, "CHECK");
+		Debug.Assert(aTarget != null, "CHECK");
 
 		// create animation
 
@@ -25,7 +25,7 @@ public class Freeze : Ability
 		// create effect
 		Effect effect = new Effect();
 		effect.round = 3;
-		effect.bonus.isActionForbid = true;
+		effect.isActionForbid = true;
 		target.ApplyEffect(effect);
 	}
 }
