@@ -83,6 +83,8 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
 	public virtual void RemoveEffect(Effect effect)
 	{
+		Debug.Assert(effects.Contains(effect) == true, "CHECK");
+		effects.Remove(effect); 
 	}
 
 	public virtual void TakeDamage(int damage)
