@@ -60,10 +60,18 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
 	public virtual void TickRound()
 	{
-		// handle effect
-		foreach (var effect in effects)
+		foreach(Effect effect in effects)
 		{
+			effect.TickRound();
+
+
 		}
+
+		// if (isActionForbid)
+		// {
+		// 	FinishTurn();
+		// 	return;
+		// }
 	}
 
     public virtual bool CanAttack(){ return false; }
@@ -93,13 +101,9 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
     public virtual void StartTurn()
 	{
-		if (isActionForbid)
-		{
-			FinishTurn();
-			return;
-		}
-
 		isActionTurn = true;
+
+		TickRound();
 
 		if (onTurnStart != null)
 			onTurnStart(this);
@@ -108,6 +112,18 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
     protected virtual void FinishTurn()
 	{
         isActionTurn = false;
+
+		for (int i = effects.Count - 1; i >= 0; --i)
+		{
+			Effect effect = effects[i];
+
+			// effect.round -= 1;
+			if (effect.round <= 0)
+			{
+				// remove effect
+				RemoveEffect(effect);
+			}
+		}
 
 		if (onTurnFinish != null)
 			onTurnFinish(this);

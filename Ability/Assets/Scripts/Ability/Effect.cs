@@ -18,4 +18,9 @@ public class Effect
 	// public int bonusActionPoint { get; set; }
 	// public Bonus bonus = new Bonus();
 	public bool isActionForbid = false;
+
+	public void TickRound()
+	{
+		round -= 1;
+	}
 }
