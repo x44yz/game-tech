@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Bonus
 {
-	public bool isActionForbid = false;
+  public bool isActionForbid = false;
 
 }

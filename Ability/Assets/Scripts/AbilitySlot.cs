@@ -6,13 +6,13 @@ using UnityEngine;
 // AbilitySlot 相当于一个管理 Ability 的容器
 public class AbilitySlot
 {
-    public Actor caster;
-    private Ability ability = null;
-    public int cooldownLeftMSec = 0;
+  public Actor caster;
+  private Ability ability = null;
+  public int cooldownLeftMSec = 0;
 
-    private AbilityTargeter targeter = null;
+  private AbilityTargeter targeter = null;
 
-    public bool isActive
+  public bool isActive
     {
         get {
             return ability != null && ability.isActive;
