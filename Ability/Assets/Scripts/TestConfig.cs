@@ -1,4 +1,4 @@
-﻿
+
 public struct SkillConfig
 {
     public string id { get; set; }

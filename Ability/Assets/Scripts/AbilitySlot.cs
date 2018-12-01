@@ -13,35 +13,34 @@ public class AbilitySlot
   private AbilityTargeter targeter = null;
 
   public bool isActive
-    {
-        get {
-            return ability != null && ability.isActive;
-        }
+  {
+    get {
+      return ability != null && ability.isActive;
     }
+  }
 
-    public void SetAbility(Ability ability)
-    {
-        this.ability = ability;
+  public void SetAbility(Ability ability)
+  {
+    this.ability = ability;
 
-        // create targeter based on ability
-        // TODO:
-        // 测试统一采用指向型技能
-        targeter = new AbilityTargeter();
-    }
+    // create targeter based on ability
+    // TODO:
+    // 测试统一采用指向型技能
+    targeter = new AbilityTargeter();
+  }
 
-    public void Activate()
-    {
-        if (ability == null)
-            return;
+  public void Activate()
+  {
+    if (ability == null)
+      return;
 
-        if (cooldownLeftMSec > 0)
-            return;
+    if (cooldownLeftMSec > 0)
+      return;
 
-        ability.Activate(caster);
-    }
+    ability.Activate(caster);
+  }
 
-    public void Deactivate()
-    {
-        
-    }
+  public void Deactivate()
+  {
+  }
 }
