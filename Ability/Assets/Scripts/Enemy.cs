@@ -21,6 +21,8 @@ public class Enemy : Actor
     Debug.Assert(ability != null, "CHECK");
 
     ability.Apply(caster, this);
+
+    
   }
 
   public override void ApplyEffect(Effect effect)
