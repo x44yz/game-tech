@@ -6,12 +6,17 @@ using UnityEngine;
 // Freeze 禁止 Action，并不能阻止其他 Effect 起作用
 public class Freeze : Ability
 {
-    public override void Apply(IAbilityCaster caster, IAbilityTarget target)
-    {
-        base.Apply(caster, target);
+  public Freeze()
+  {
+    name = "Freeze";
+  }
 
-        Actor aCaster = caster as Actor;
-        Debug.Assert(aCaster != null, "CHECK");
+  public override void Apply(IAbilityCaster caster, IAbilityTarget target)
+  {
+    base.Apply(caster, target);
+
+    Actor aCaster = caster as Actor;
+    Debug.Assert(aCaster != null, "CHECK");
 
     Actor aTarget = target as Actor;
     Debug.Assert(aTarget != null, "CHECK");

@@ -63,8 +63,6 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
     foreach(Effect effect in effects)
     {
       effect.TickRound();
-
-
     }
 
     // if (isActionForbid)
