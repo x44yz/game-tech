@@ -32,7 +32,7 @@ public class Freeze : Ability
     // create effect
     Effect effect = new Effect();
     effect.round = 3;
-    effect.isActionForbid = true;
+    effect.forbidAction = true;
     target.ApplyEffect(effect);
   }
 }

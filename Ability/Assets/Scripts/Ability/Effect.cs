@@ -11,16 +11,32 @@ public class Effect
   // icon
   // title
   // description
+  public Actor target = null;
 
   // 持续多少回合
   public int round { get; set; }
+  public int roundDamage { get; set; }
+  public int endDamage { get; set; }
 
   // public int bonusActionPoint { get; set; }
   // public Bonus bonus = new Bonus();
-  public bool isActionForbid = false;
+  public bool forbidAction = false;
 
   public void TickRound()
   {
     round -= 1;
+
+    if (round <= 0)
+    {
+
+    }
+  }
+
+  public void End()
+  {
+    if (endDamage > 0)
+    {
+      target.TakeDamage(endDamage);
+    }
   }
 }

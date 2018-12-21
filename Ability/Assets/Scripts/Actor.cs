@@ -22,14 +22,16 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
   // public Bonus bonus = new Bonus();
   // public List<Bonus> bonuses = new List<Bonus>();
 
-  public bool isActionForbid
+  public int hp;
+
+  public bool forbidAction
   {
     get
     {
       for (int i = 0; i < effects.Count; ++i)
       {
-        Effect eff = effects[i];
-        if (eff.isActionForbid)
+        Effect eft = effects[i];
+        if (eft.forbidAction)
           return true;
       }
       return false;
@@ -60,16 +62,20 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
   public virtual void TickRound()
   {
-    foreach(Effect effect in effects)
+    foreach(Effect eft in effects)
     {
-      effect.TickRound();
+      eft.TickRound();
     }
 
-    // if (isActionForbid)
-    // {
-    // 	FinishTurn();
-    // 	return;
-    // }
+    for (int i = effects.Count - 1; i >= 0; --i)
+    {
+      Effect eft = effects[i];
+      if (eft.round <= 0)
+      {
+        eft.End();
+        RemoveEffect(eft);
+      }
+    }
   }
 
   public virtual bool CanAttack(){ return false; }
@@ -95,6 +101,8 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
 
   public virtual void TakeDamage(int damage)
   {
+    Debug.Assert(damage > 0, "CHECK");
+    hp -= damage;
   }
 
   public virtual void StartTurn()
