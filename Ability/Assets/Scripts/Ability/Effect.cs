@@ -25,11 +25,6 @@ public class Effect
   public void TickRound()
   {
     round -= 1;
-
-    if (round <= 0)
-    {
-
-    }
   }
 
   public void End()

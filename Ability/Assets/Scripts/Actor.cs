@@ -22,7 +22,12 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
   // public Bonus bonus = new Bonus();
   // public List<Bonus> bonuses = new List<Bonus>();
 
+  public int atk;
+  public int def;
+  public float crit; // %
+  public float critDMG; // %
   public int hp;
+  public int mp;
 
   public bool forbidAction
   {
@@ -42,18 +47,6 @@ public class Actor : MonoBehaviour, IAbilityTarget, IAbilityCaster
   {
     actionPoint = 1;
     isActionTurn = false;
-
-//        for (int i = 0; i < abilitySlots.Length; ++i)
-//        {
-//            abilitySlots[i] = new AbilitySlot();
-//            abilitySlots[i].caster = this;
-//        }
-
-        //
-        // Fireball abilityFireball = new Fireball();
-        // abilitySlots[0].SetAbility(abilityFireball);
-
-        // targetAbilitySlot = abilitySlots[0];
   }
 
   public virtual void Tick(float dt)
