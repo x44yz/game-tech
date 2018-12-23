@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActorStats : MonoBehaviour {
+public class Loader : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Actor : Entity
+public class ActorStats
 {
-	
+	public RangeInt hp;
+	public RangeInt mana;
 }
