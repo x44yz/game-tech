@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ally : MonoBehaviour {
-	
+public class ActorStats : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 		

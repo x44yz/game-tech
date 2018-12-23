@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ally : MonoBehaviour {
-	
+// TODO:
+// use TextureImporter
+public class HaleTextureImporter : MonoBehaviour {
+
 	// Use this for initialization
 	void Start () {
 		
