@@ -25,6 +25,8 @@ https://diablo2.diablowiki.net/Guide:Defense_101_v1.11,_by_Alecz
 http://web.archive.org/web/20071024204556/http://www.battle.net:80/diablo2exp/monsters/act1-fallen.shtml
 http://wiki.d.163.com/index.php?title=%E9%A6%96%E9%A1%B5_%E6%9A%97%E9%BB%912
 
+ART: https://www.spriters-resource.com/pc_computer/diablodiablohellfire/
+
 辅助参考:
 Soda Dungeon
 
