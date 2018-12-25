@@ -178,6 +178,178 @@ TextureImporter:
     21300342: creatures_171
     21300344: creatures_172
     21300346: creatures_173
+    21300348: s1
+    21300350: s2
+    21300352: sabretooth
+    21300354: ogre
+    21300356: yeti
+    21300358: treeant-small
+    21300360: treeant-medium
+    21300362: treeant-large
+    21300364: wolf-small
+    21300366: wolf-medium
+    21300368: wolf-large
+    21300370: wolf-dire
+    21300372: human01
+    21300374: human02
+    21300376: human03
+    21300378: human04
+    21300380: human05
+    21300382: spider
+    21300384: tiger
+    21300386: dwarf01
+    21300388: dwarf02
+    21300390: dwarf03
+    21300392: human06
+    21300394: human07
+    21300396: human08
+    21300398: human09
+    21300400: human10
+    21300402: human11
+    21300404: human12
+    21300406: human13
+    21300408: human14
+    21300410: human15
+    21300412: zombie01
+    21300414: zombie02
+    21300416: skeleton01
+    21300418: skeleton02
+    21300420: skeleton03
+    21300422: elf01
+    21300424: dwarf04
+    21300426: human16
+    21300428: human17
+    21300430: human18
+    21300432: human19
+    21300434: dwarf05
+    21300436: human20
+    21300438: human21
+    21300440: human22
+    21300442: rat
+    21300444: orc01
+    21300446: elemental
+    21300448: snake
+    21300450: lizard
+    21300452: human23
+    21300454: human24
+    21300456: human25
+    21300458: giantbat
+    21300460: ghoul
+    21300462: spectre
+    21300464: human26
+    21300466: human27
+    21300468: human28
+    21300470: human29
+    21300472: human30
+    21300474: bear
+    21300476: skeleton04
+    21300478: human31
+    21300480: scorpion
+    21300482: serpent
+    21300484: ghast1
+    21300486: drake
+    21300488: ghast2
+    21300490: fairy
+    21300492: firedrake
+    21300494: tentacle-beast
+    21300496: mushroom
+    21300498: gryphon
+    21300500: minotaur
+    21300502: human-male-fg
+    21300504: human-male-bg
+    21300506: human-female-fg
+    21300508: human-female-bg
+    21300510: dwarf-fg
+    21300512: dwarf-bg
+    21300514: bloodbeast
+    21300516: bloodserpent
+    21300518: werewolf01
+    21300520: werewolf02
+    21300522: magmaman
+    21300524: pixie
+    21300526: centaur
+    21300528: beetleman
+    21300530: killerbeetleman
+    21300532: human-male-clothes
+    21300534: human-female-clothes
+    21300536: dwarf-clothes
+    21300538: goblin01
+    21300540: goblin02
+    21300542: goblin03
+    21300544: serpent02
+    21300546: drake02
+    21300548: drake03
+    21300550: drake04
+    21300552: drake05
+    21300554: drake06
+    21300556: drake07
+    21300558: drake08
+    21300560: drake09
+    21300562: lizardling01
+    21300564: lizardling02
+    21300566: lizardling03
+    21300568: lizardling04
+    21300570: demon03
+    21300572: demon04
+    21300574: demon05
+    21300576: demon06
+    21300578: basilisk
+    21300580: demon07
+    21300582: ghost01
+    21300584: ghost02
+    21300586: ghost03
+    21300588: trollkin-fg
+    21300590: trollkin-bg
+    21300592: trollkin-clothes
+    21300594: crystal
+    21300596: theMaster
+    21300598: merling-male-fg
+    21300600: merling-male-bg
+    21300602: merling-male-clothes
+    21300604: merling-female-fg
+    21300606: merling-female-bg
+    21300608: merling-female-clothes
+    21300610: seasnake
+    21300612: demon08
+    21300614: dwarf06
+    21300616: dwarf07
+    21300618: witch
+    21300620: tentacle
+    21300622: dwarf08
+    21300624: shroumblue
+    21300626: shroumred
+    21300628: ratking01
+    21300630: ratking02
+    21300632: tentacle-eye
+    21300634: bigorc
+    21300636: golemstell
+    21300638: gluton
+    21300640: fossil
+    21300642: skeleton05
+    21300644: ratman01
+    21300646: ratman02
+    21300648: ratman03
+    21300650: ratman04
+    21300652: ratman05
+    21300654: golemearth
+    21300656: snakeman
+    21300658: dragon01
+    21300660: dragon02
+    21300662: dragon03
+    21300664: dragon04
+    21300666: dragonbaby
+    21300668: demon09
+    21300670: dragon05
+    21300672: orc02
+    21300674: orc03
+    21300676: werewolf03
+    21300678: demon10
+    21300680: dracona-fg
+    21300682: dracona-bg
+    21300684: dracona-clothes
+    21300686: furfoot-fg
+    21300688: furfoot-bg
+    21300690: furfoot-clothes
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -217,11 +389,11 @@ TextureImporter:
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
+  alignment: 7
+  spritePivot: {x: 0.5, y: 0}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -255,2441 +427,2413 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: creatures_0
+      name: sabretooth
       rect:
         serializedVersion: 2
         x: 0
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_1
+      name: ogre
       rect:
         serializedVersion: 2
         x: 72
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_2
+      name: yeti
       rect:
         serializedVersion: 2
         x: 144
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_3
+      name: treeant-small
       rect:
         serializedVersion: 2
         x: 216
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_4
+      name: treeant-medium
       rect:
         serializedVersion: 2
         x: 288
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_5
+      name: treeant-large
       rect:
         serializedVersion: 2
         x: 360
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_6
+      name: wolf-small
       rect:
         serializedVersion: 2
         x: 432
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_7
+      name: wolf-medium
       rect:
         serializedVersion: 2
         x: 504
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_8
+      name: wolf-large
       rect:
         serializedVersion: 2
         x: 576
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_9
+      name: wolf-dire
       rect:
         serializedVersion: 2
         x: 648
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_10
+      name: human01
       rect:
         serializedVersion: 2
         x: 720
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_11
+      name: human02
       rect:
         serializedVersion: 2
         x: 792
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_12
+      name: human03
       rect:
         serializedVersion: 2
         x: 864
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_13
+      name: human04
       rect:
         serializedVersion: 2
         x: 936
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_14
+      name: human05
       rect:
         serializedVersion: 2
         x: 1008
         y: 864
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_15
+      name: spider
       rect:
         serializedVersion: 2
         x: 0
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_16
+      name: tiger
       rect:
         serializedVersion: 2
         x: 72
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_17
+      name: dwarf01
       rect:
         serializedVersion: 2
         x: 144
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_18
+      name: dwarf02
       rect:
         serializedVersion: 2
         x: 216
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_19
+      name: dwarf03
       rect:
         serializedVersion: 2
         x: 288
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_20
+      name: human06
       rect:
         serializedVersion: 2
         x: 360
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_21
+      name: human07
       rect:
         serializedVersion: 2
         x: 432
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_22
+      name: human08
       rect:
         serializedVersion: 2
         x: 504
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_23
+      name: human09
       rect:
         serializedVersion: 2
         x: 576
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_24
+      name: human10
       rect:
         serializedVersion: 2
         x: 648
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_25
+      name: human11
       rect:
         serializedVersion: 2
         x: 720
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_26
+      name: human12
       rect:
         serializedVersion: 2
         x: 792
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_27
+      name: human13
       rect:
         serializedVersion: 2
         x: 864
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_28
+      name: human14
       rect:
         serializedVersion: 2
         x: 936
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_29
+      name: human15
       rect:
         serializedVersion: 2
         x: 1008
         y: 792
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_30
+      name: zombie01
       rect:
         serializedVersion: 2
         x: 0
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_31
+      name: zombie02
       rect:
         serializedVersion: 2
         x: 72
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_32
+      name: skeleton01
       rect:
         serializedVersion: 2
         x: 144
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_33
+      name: skeleton02
       rect:
         serializedVersion: 2
         x: 216
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_34
+      name: skeleton03
       rect:
         serializedVersion: 2
         x: 288
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_35
+      name: elf01
       rect:
         serializedVersion: 2
         x: 360
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_36
+      name: dwarf04
       rect:
         serializedVersion: 2
         x: 432
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_37
+      name: human16
       rect:
         serializedVersion: 2
         x: 504
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_38
+      name: human17
       rect:
         serializedVersion: 2
         x: 576
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_39
+      name: human18
       rect:
         serializedVersion: 2
         x: 648
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_40
+      name: human19
       rect:
         serializedVersion: 2
         x: 720
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_41
+      name: dwarf05
       rect:
         serializedVersion: 2
         x: 792
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_42
+      name: human20
       rect:
         serializedVersion: 2
         x: 864
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_43
+      name: human21
       rect:
         serializedVersion: 2
         x: 936
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_44
+      name: human22
       rect:
         serializedVersion: 2
         x: 1008
         y: 720
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_45
+      name: rat
       rect:
         serializedVersion: 2
         x: 0
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_46
+      name: orc01
       rect:
         serializedVersion: 2
         x: 72
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_47
+      name: elemental
       rect:
         serializedVersion: 2
         x: 144
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_48
+      name: snake
       rect:
         serializedVersion: 2
         x: 216
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_49
+      name: lizard
       rect:
         serializedVersion: 2
         x: 288
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_50
+      name: human23
       rect:
         serializedVersion: 2
         x: 360
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_51
+      name: human24
       rect:
         serializedVersion: 2
         x: 432
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_52
+      name: human25
       rect:
         serializedVersion: 2
         x: 504
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_53
+      name: giantbat
       rect:
         serializedVersion: 2
         x: 576
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_54
+      name: ghoul
       rect:
         serializedVersion: 2
         x: 648
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_55
+      name: spectre
       rect:
         serializedVersion: 2
         x: 720
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_56
+      name: human26
       rect:
         serializedVersion: 2
         x: 792
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_57
+      name: human27
       rect:
         serializedVersion: 2
         x: 864
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_58
+      name: human28
       rect:
         serializedVersion: 2
         x: 936
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_59
+      name: human29
       rect:
         serializedVersion: 2
         x: 1008
         y: 648
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_60
+      name: human30
       rect:
         serializedVersion: 2
         x: 0
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_61
+      name: bear
       rect:
         serializedVersion: 2
         x: 72
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_62
+      name: skeleton04
       rect:
         serializedVersion: 2
         x: 144
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_63
+      name: human31
       rect:
         serializedVersion: 2
         x: 216
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_64
+      name: scorpion
       rect:
         serializedVersion: 2
         x: 288
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_65
+      name: serpent
       rect:
         serializedVersion: 2
         x: 360
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_66
+      name: ghast1
       rect:
         serializedVersion: 2
         x: 432
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_67
+      name: drake
       rect:
         serializedVersion: 2
         x: 504
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_68
+      name: ghast2
       rect:
         serializedVersion: 2
         x: 576
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_69
+      name: fairy
       rect:
         serializedVersion: 2
         x: 648
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_70
+      name: firedrake
       rect:
         serializedVersion: 2
         x: 720
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_71
+      name: tentacle-beast
       rect:
         serializedVersion: 2
         x: 792
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_72
+      name: mushroom
       rect:
         serializedVersion: 2
         x: 864
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_73
+      name: gryphon
       rect:
         serializedVersion: 2
         x: 936
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_74
+      name: minotaur
       rect:
         serializedVersion: 2
         x: 1008
         y: 576
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_75
+      name: human-male-fg
       rect:
         serializedVersion: 2
         x: 0
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_76
+      name: human-male-bg
       rect:
         serializedVersion: 2
         x: 72
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_77
+      name: human-female-fg
       rect:
         serializedVersion: 2
         x: 144
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_78
+      name: human-female-bg
       rect:
         serializedVersion: 2
         x: 216
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_79
+      name: dwarf-fg
       rect:
         serializedVersion: 2
         x: 288
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_80
+      name: dwarf-bg
       rect:
         serializedVersion: 2
         x: 360
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_81
+      name: bloodbeast
       rect:
         serializedVersion: 2
         x: 432
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_82
+      name: bloodserpent
       rect:
         serializedVersion: 2
         x: 504
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_83
+      name: werewolf01
       rect:
         serializedVersion: 2
         x: 576
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_84
+      name: werewolf02
       rect:
         serializedVersion: 2
         x: 648
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_85
+      name: magmaman
       rect:
         serializedVersion: 2
         x: 720
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_86
+      name: pixie
       rect:
         serializedVersion: 2
         x: 792
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_87
+      name: centaur
       rect:
         serializedVersion: 2
         x: 864
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_88
+      name: beetleman
       rect:
         serializedVersion: 2
         x: 936
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_89
+      name: killerbeetleman
       rect:
         serializedVersion: 2
         x: 1008
         y: 504
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_90
+      name: human-male-clothes
       rect:
         serializedVersion: 2
         x: 0
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_91
+      name: human-female-clothes
       rect:
         serializedVersion: 2
         x: 72
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_92
+      name: dwarf-clothes
       rect:
         serializedVersion: 2
         x: 144
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_93
+      name: goblin01
       rect:
         serializedVersion: 2
         x: 216
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_94
+      name: goblin02
       rect:
         serializedVersion: 2
         x: 288
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_95
+      name: goblin03
       rect:
         serializedVersion: 2
         x: 360
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_96
+      name: serpent02
       rect:
         serializedVersion: 2
         x: 432
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_97
+      name: drake02
       rect:
         serializedVersion: 2
         x: 504
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_98
+      name: drake03
       rect:
         serializedVersion: 2
         x: 576
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_99
+      name: drake04
       rect:
         serializedVersion: 2
         x: 648
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_100
+      name: drake05
       rect:
         serializedVersion: 2
         x: 720
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_101
+      name: drake06
       rect:
         serializedVersion: 2
         x: 792
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_102
+      name: drake07
       rect:
         serializedVersion: 2
         x: 864
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_103
+      name: drake08
       rect:
         serializedVersion: 2
         x: 936
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_104
+      name: drake09
       rect:
         serializedVersion: 2
         x: 1008
         y: 432
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_105
+      name: lizardling01
       rect:
         serializedVersion: 2
         x: 0
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_106
+      name: lizardling02
       rect:
         serializedVersion: 2
         x: 72
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_107
+      name: lizardling03
       rect:
         serializedVersion: 2
         x: 144
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_108
+      name: lizardling04
       rect:
         serializedVersion: 2
         x: 216
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_109
+      name: demon01
       rect:
         serializedVersion: 2
-        x: 288
-        y: 360
+        x: 20736
+        y: -35424
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_110
+      name: demon02
       rect:
         serializedVersion: 2
-        x: 360
-        y: 360
+        x: 25920
+        y: -35424
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_111
+      name: demon03
       rect:
         serializedVersion: 2
         x: 432
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_112
+      name: demon04
       rect:
         serializedVersion: 2
         x: 504
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_113
+      name: demon05
       rect:
         serializedVersion: 2
         x: 576
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_114
+      name: demon06
       rect:
         serializedVersion: 2
         x: 648
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_115
+      name: basilisk
       rect:
         serializedVersion: 2
         x: 720
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_116
+      name: demon07
       rect:
         serializedVersion: 2
         x: 792
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_117
+      name: ghost01
       rect:
         serializedVersion: 2
         x: 864
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_118
+      name: ghost02
       rect:
         serializedVersion: 2
         x: 936
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_119
+      name: ghost03
       rect:
         serializedVersion: 2
         x: 1008
         y: 360
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_120
+      name: trollkin-fg
       rect:
         serializedVersion: 2
         x: 0
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_121
+      name: trollkin-bg
       rect:
         serializedVersion: 2
         x: 72
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_122
+      name: trollkin-clothes
       rect:
         serializedVersion: 2
         x: 144
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_123
-      rect:
-        serializedVersion: 2
-        x: 288
-        y: 288
-        width: 72
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: creatures_124
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 288
-        width: 72
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: creatures_125
+      name: crystal
       rect:
         serializedVersion: 2
         x: 432
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_126
+      name: theMaster
       rect:
         serializedVersion: 2
         x: 504
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_127
+      name: merling-male-fg
       rect:
         serializedVersion: 2
         x: 576
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_128
+      name: merling-male-bg
       rect:
         serializedVersion: 2
         x: 648
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_129
+      name: merling-male-clothes
       rect:
         serializedVersion: 2
         x: 720
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_130
+      name: merling-female-fg
       rect:
         serializedVersion: 2
         x: 792
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_131
+      name: merling-female-bg
       rect:
         serializedVersion: 2
         x: 864
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_132
+      name: merling-female-clothes
       rect:
         serializedVersion: 2
         x: 936
         y: 288
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_133
+      name: seasnake
       rect:
         serializedVersion: 2
         x: 0
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_134
+      name: demon08
       rect:
         serializedVersion: 2
         x: 72
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_135
+      name: dwarf06
       rect:
         serializedVersion: 2
         x: 144
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_136
+      name: dwarf07
       rect:
         serializedVersion: 2
         x: 216
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_137
+      name: witch
       rect:
         serializedVersion: 2
         x: 288
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_138
+      name: tentacle
       rect:
         serializedVersion: 2
         x: 360
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_139
+      name: dwarf08
       rect:
         serializedVersion: 2
         x: 432
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_140
+      name: shroumblue
       rect:
         serializedVersion: 2
         x: 504
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_141
+      name: shroumred
       rect:
         serializedVersion: 2
         x: 576
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_142
+      name: ratking01
       rect:
         serializedVersion: 2
         x: 648
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_143
+      name: ratking02
       rect:
         serializedVersion: 2
         x: 720
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_144
+      name: tentacle-eye
       rect:
         serializedVersion: 2
         x: 792
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_145
+      name: bigorc
       rect:
         serializedVersion: 2
         x: 864
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_146
+      name: golemstell
       rect:
         serializedVersion: 2
         x: 936
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_147
+      name: gluton
       rect:
         serializedVersion: 2
         x: 1008
         y: 216
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_148
+      name: fossil
       rect:
         serializedVersion: 2
         x: 0
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_149
+      name: skeleton05
       rect:
         serializedVersion: 2
         x: 72
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_150
+      name: ratman01
       rect:
         serializedVersion: 2
         x: 144
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_151
+      name: ratman02
       rect:
         serializedVersion: 2
         x: 216
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_152
+      name: ratman03
       rect:
         serializedVersion: 2
         x: 288
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_153
+      name: ratman04
       rect:
         serializedVersion: 2
         x: 360
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_154
+      name: ratman05
       rect:
         serializedVersion: 2
         x: 432
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_155
+      name: golemearth
       rect:
         serializedVersion: 2
         x: 504
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_156
+      name: snakeman
       rect:
         serializedVersion: 2
         x: 576
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_157
+      name: dragon01
       rect:
         serializedVersion: 2
         x: 648
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_158
+      name: dragon02
       rect:
         serializedVersion: 2
         x: 720
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_159
+      name: dragon03
       rect:
         serializedVersion: 2
         x: 792
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_160
+      name: dragon04
       rect:
         serializedVersion: 2
         x: 864
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_161
+      name: dragonbaby
       rect:
         serializedVersion: 2
         x: 936
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_162
+      name: demon09
       rect:
         serializedVersion: 2
         x: 1008
         y: 144
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_163
+      name: dragon05
       rect:
         serializedVersion: 2
         x: 0
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_164
+      name: orc02
       rect:
         serializedVersion: 2
         x: 72
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_165
+      name: orc03
       rect:
         serializedVersion: 2
         x: 144
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_166
+      name: werewolf03
       rect:
         serializedVersion: 2
         x: 216
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_167
+      name: demon10
       rect:
         serializedVersion: 2
         x: 288
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_168
+      name: dracona-fg
       rect:
         serializedVersion: 2
         x: 360
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_169
+      name: dracona-bg
       rect:
         serializedVersion: 2
         x: 432
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_170
+      name: dracona-clothes
       rect:
         serializedVersion: 2
         x: 504
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_171
+      name: furfoot-fg
       rect:
         serializedVersion: 2
         x: 576
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_172
+      name: furfoot-bg
       rect:
         serializedVersion: 2
         x: 648
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     - serializedVersion: 2
-      name: creatures_173
+      name: furfoot-clothes
       rect:
         serializedVersion: 2
         x: 720
         y: 72
         width: 72
         height: 72
-      alignment: 0
+      alignment: 7
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
     outline: []
     physicsShape: []
   spritePackingTag: 
