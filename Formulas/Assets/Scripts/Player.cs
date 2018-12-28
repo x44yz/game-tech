@@ -17,8 +17,12 @@ public enum PlayerAttribute : byte
 	VIT = 3,	// vitality
 }
 
-public class Player : Entity
+public class Player : Actor
 {
+	// NOTE:
+	// 实际的 Cooldown 应该与攻击动画有关
+	public const float TIME_ATK_COOLDOWN = 2;
+
 	public int strength;		// 力量
 	public int magic;				// 意志
 	public int dexterity;		// 敏捷
@@ -28,6 +32,8 @@ public class Player : Entity
 	public int mana;
 
 	private bool bAttack = false;
+	private float atkCdTick = 0f;
+	private Actor target = null;
 
 	public static Player Create(PlayerClass pc)
 	{
@@ -36,12 +42,58 @@ public class Player : Entity
 
 	private void Update() 
 	{
-		// attack
-		if (Input.GetKeyDown(KeyCode.J) && !bAttack)
-		{
-			bAttack = true;
+		float dt = Time.deltaTime;
 
-			
+		if (target != null)
+		{
+			// attack
+			if (Input.GetKeyDown(KeyCode.J) && !bAttack)
+			{
+				if (CanAttack(target))
+				{
+					bAttack = true;
+					atkCdTick = 0f;
+
+					Attack(target);
+				}
+			}
 		}
+
+		if (bAttack)
+		{
+			atkCdTick += dt;
+			if (atkCdTick >= TIME_ATK_COOLDOWN)
+			{
+				bAttack = false;
+				atkCdTick = 0f;
+			}
+		}
+	}
+
+	public int GetDamage()
+	{
+		return 5;
+	}
+
+	public void Attack(Actor enemy)
+	{
+		// play sound
+		if (CheckAttack(enemy))
+		{
+			enemy.TakeDamage(GetDamage());
+			enemy.CheckDeath();
+		}
+	}
+
+	public bool CanAttack(Actor enemy)
+	{
+		return false;
+	}
+
+	public bool CheckAttack(Actor enemy)
+	{
+		// TODO
+		// 计算敌人闪避
+		return true;
 	}
 }
