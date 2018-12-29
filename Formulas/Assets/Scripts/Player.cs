@@ -31,14 +31,15 @@ public class Player : Actor
 	public int hp;
 	public int mana;
 
+	public Actor target = null;
+
 	private bool bAttack = false;
 	private float atkCdTick = 0f;
-	private Actor target = null;
 
-	public static Player Create(PlayerClass pc)
-	{
-		return null;
-	}
+	// public static Player Create(PlayerClass pc)
+	// {
+	// 	return null;
+	// }
 
 	private void Update() 
 	{
@@ -78,6 +79,9 @@ public class Player : Actor
 	public void Attack(Actor enemy)
 	{
 		// play sound
+		// play ani
+		PlayAnimation("Attack");
+
 		if (CheckAttack(enemy))
 		{
 			enemy.TakeDamage(GetDamage());
@@ -87,7 +91,8 @@ public class Player : Actor
 
 	public bool CanAttack(Actor enemy)
 	{
-		return false;
+		// 检查距离和自身，敌方情况
+		return true;
 	}
 
 	public bool CheckAttack(Actor enemy)
