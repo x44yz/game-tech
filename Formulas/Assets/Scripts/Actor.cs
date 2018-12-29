@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Actor : Entity
 {
+	
+
 	public SpriteRenderer spr;
 	private Animator ani;
 
@@ -29,5 +31,10 @@ public class Actor : Entity
 	protected void PlayAnimation(string id)
 	{
 		ani.SetTrigger(id);
+	}
+
+	public void OnAnimationEnd(string id)
+	{
+
 	}
 }
