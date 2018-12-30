@@ -21,7 +21,7 @@ public class Player : Actor
 {
 	// NOTE:
 	// 实际的 Cooldown 应该与攻击动画有关
-	public const float TIME_ATK_COOLDOWN = 2;
+//	public const float TIME_ATK_COOLDOWN = 2;
 
 	public int strength;		// 力量
 	public int magic;				// 意志
@@ -33,8 +33,8 @@ public class Player : Actor
 
 	public Actor target = null;
 
-	private bool bAttack = false;
-	private float atkCdTick = 0f;
+// 	private bool bAttack = false;
+//	private float atkCdTick = 0f;
 
 	// public static Player Create(PlayerClass pc)
 	// {
@@ -45,30 +45,21 @@ public class Player : Actor
 	{
 		float dt = Time.deltaTime;
 
-		if (target != null)
+		// attack
+		if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
 		{
-			// attack
-			if (Input.GetKeyDown(KeyCode.J) && !bAttack)
-			{
-				if (CanAttack(target))
-				{
-					bAttack = true;
-					atkCdTick = 0f;
-
-					Attack(target);
-				}
-			}
+			Attack(target);
 		}
 
-		if (bAttack)
-		{
-			atkCdTick += dt;
-			if (atkCdTick >= TIME_ATK_COOLDOWN)
-			{
-				bAttack = false;
-				atkCdTick = 0f;
-			}
-		}
+		// if (bAttack)
+		// {
+		// 	atkCdTick += dt;
+		// 	if (atkCdTick >= TIME_ATK_COOLDOWN)
+		// 	{
+		// 		bAttack = false;
+		// 		atkCdTick = 0f;
+		// 	}
+		// }
 	}
 
 	public int GetDamage()
@@ -80,7 +71,8 @@ public class Player : Actor
 	{
 		// play sound
 		// play ani
-		PlayAnimation("Attack");
+		// PlayAnimation("Attack");
+		ani.PlayAnimation(ActorAnimation.AniState.Attack);
 
 		if (CheckAttack(enemy))
 		{
@@ -91,6 +83,11 @@ public class Player : Actor
 
 	public bool CanAttack(Actor enemy)
 	{
+		if (enemy == null)
+			return false;
+		
+		if (ani.GetCurrentAniState() != )
+
 		// 检查距离和自身，敌方情况
 		return true;
 	}

@@ -29,6 +29,7 @@ public class ActorBehaviour : StateMachineBehaviour
 
 		CheckActor(animator);
 
+		// if (stateInfo.IsName("Actor_Attack"))
 		// actor.
 	}
 
