@@ -43,12 +43,24 @@ public class Player : Actor
 
 	private void Update() 
 	{
-		float dt = Time.deltaTime;
-
-		// attack
-		if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
+		if (state == State.Normal)
 		{
-			Attack(target);
+			if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
+			{
+				Attack(target);
+			}
+		}
+		else if (state == State.Attack)
+		{
+			Debug.Assert(target, "CHECK: target cant be null.");
+			if (ani.GetCurrentAniState() != ActorAniState.Attack)
+				state = State.Normal;
+
+			if (CheckHitTarget(target))
+			{
+				target.TakeDamage(GetDamage());
+				target.CheckDeath();
+			}
 		}
 
 		// if (bAttack)
@@ -72,27 +84,21 @@ public class Player : Actor
 		// play sound
 		// play ani
 		// PlayAnimation("Attack");
-		ani.PlayAnimation(ActorAnimation.AniState.Attack);
-
-		if (CheckAttack(enemy))
-		{
-			enemy.TakeDamage(GetDamage());
-			enemy.CheckDeath();
-		}
+		state = State.Attack;
+		ani.PlayAnimation(ActorAniState.Attack);
 	}
 
 	public bool CanAttack(Actor enemy)
 	{
 		if (enemy == null)
 			return false;
-		
-		if (ani.GetCurrentAniState() != )
 
 		// 检查距离和自身，敌方情况
 		return true;
 	}
 
-	public bool CheckAttack(Actor enemy)
+	// 命中率
+	public bool CheckHitTarget(Actor enemy)
 	{
 		// TODO
 		// 计算敌人闪避
