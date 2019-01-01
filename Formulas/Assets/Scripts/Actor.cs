@@ -17,15 +17,15 @@ public class Actor : Entity
 
 	public SpriteRenderer spr;
 	// private Animator ani;
-	public ActorAnimation ani;
+	public ActorAnimation ani = new ActorAnimation();
 
 	protected State state;
 
 	protected virtual void Start() 
 	{
 		state = State.Normal;
-
 		// ani = spr.GetComponent<Animator>();
+		ani.Init(this);
 	}
 
 	private void Update() 
