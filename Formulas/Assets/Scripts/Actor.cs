@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ActorType
+{
+	Player,
+	Enemy,
+}
+
 // TODO:
 // 动画状态和 Actor 状态不同
 public class Actor : Entity
@@ -27,8 +33,15 @@ public class Actor : Entity
 		}
 	}
 
+	public Vector2 pos {
+		get;
+		set;
+	}
+
 	protected State state;
 	private FaceDir m_faceDir;
+
+	public Actor target = null;
 
 	protected virtual void Start() 
 	{
@@ -37,7 +50,7 @@ public class Actor : Entity
 		ani.Init(this);
 	}
 
-	private void Update() 
+	protected virtual void Update() 
 	{
 		// var aniStateInfo = ani.GetCurrentAnimatorStateInfo(0);
 		// if (aniStateInfo.IsName(""))
@@ -61,4 +74,9 @@ public class Actor : Entity
 	// {
 	// 	ani.SetTrigger(id);
 	// }
+
+	public bool InAttackRange(Vector2 pos)
+	{
+		throw new System.NotImplementedException();
+	}
 }

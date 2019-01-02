@@ -34,9 +34,8 @@ public class ActorAnimation
 
 	private Animator ani;
 	private AniInfo[] aniInfos = new AniInfo[(int)ActorAniState.Count];
-	private ActorAniState curAniState = ActorAniState.None;
-
-	public ActorAniState currentAniState { get { return curAniState; }}
+	// private ActorAniState curAniState = ActorAniState.None;
+	public ActorAniState curAniState { get; set; }
 
 	public void Init(Actor actor)
 	{
@@ -58,15 +57,29 @@ public class ActorAnimation
 		aniInfos[(int)ActorAniState.Idle] = aniInfo;
 
 		aniInfo = new AniInfo();
-		aniInfo.name = "Actor_Attack";
-		aniInfo.shortNameHash = Animator.StringToHash("Actor_Attack");
+		aniInfo.name = "Actor_Attack_L";
+		aniInfo.shortNameHash = Animator.StringToHash("Actor_Attack_L");
 		aniInfo.condition = "Attack";
 		aniInfo.ctype = AniConditionType.Trigger;
 		aniInfos[(int)ActorAniState.Attack] = aniInfo;
 
 		aniInfo = new AniInfo();
-		aniInfo.name = "Actor_Hurt";
-		aniInfo.shortNameHash = Animator.StringToHash("Actor_Hurt");
+		aniInfo.name = "Actor_Attack_R";
+		aniInfo.shortNameHash = Animator.StringToHash("Actor_Attack_R");
+		aniInfo.condition = "Attack";
+		aniInfo.ctype = AniConditionType.Trigger;
+		aniInfos[(int)ActorAniState.Attack] = aniInfo;
+
+		aniInfo = new AniInfo();
+		aniInfo.name = "Actor_Hurt_L";
+		aniInfo.shortNameHash = Animator.StringToHash("Actor_Hurt_L");
+		aniInfo.condition = "Hurt";
+		aniInfo.ctype = AniConditionType.Trigger;
+		aniInfos[(int)ActorAniState.Hurt] = aniInfo;
+
+		aniInfo = new AniInfo();
+		aniInfo.name = "Actor_Hurt_R";
+		aniInfo.shortNameHash = Animator.StringToHash("Actor_Hurt_R");
 		aniInfo.condition = "Hurt";
 		aniInfo.ctype = AniConditionType.Trigger;
 		aniInfos[(int)ActorAniState.Hurt] = aniInfo;

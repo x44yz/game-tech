@@ -31,8 +31,6 @@ public class Player : Actor
 	public int hp;
 	public int mana;
 
-	public Actor target = null;
-
 // 	private bool bAttack = false;
 //	private float atkCdTick = 0f;
 
@@ -50,7 +48,7 @@ public class Player : Actor
 		faceDir = FaceDir.RIGHT;
 	}
 
-	private void Update() 
+	protected override void Update() 
 	{
 		if (state == State.Normal)
 		{
@@ -62,7 +60,7 @@ public class Player : Actor
 		else if (state == State.Attack)
 		{
 			Debug.Assert(target, "CHECK: target cant be null.");
-			if (ani.currentAniState != ActorAniState.Attack)
+			if (ani.curAniState != ActorAniState.Attack)
 				state = State.Normal;
 
 			if (CheckHitTarget(target))

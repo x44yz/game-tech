@@ -14,6 +14,7 @@ damage Reduction: 减伤
 
 ##TODO:  
 [+]实现 Diablo 的数值  
+[+]动态设置动画 speed  
 
 ##Q&A  
 Q: 如何设计攻击的时候被hit
