@@ -41,24 +41,33 @@ public class Player : Actor
 	// 	return null;
 	// }
 
+	public int damage { get {return 5;} }
+
+	protected override void Start() 
+	{
+		base.Start();
+
+		faceDir = FaceDir.RIGHT;
+	}
+
 	private void Update() 
 	{
 		if (state == State.Normal)
 		{
 			if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
 			{
-				Attack(target);
+				DoAttack(target);
 			}
 		}
 		else if (state == State.Attack)
 		{
 			Debug.Assert(target, "CHECK: target cant be null.");
-			if (ani.GetCurrentAniState() != ActorAniState.Attack)
+			if (ani.currentAniState != ActorAniState.Attack)
 				state = State.Normal;
 
 			if (CheckHitTarget(target))
 			{
-				target.TakeDamage(GetDamage());
+				target.TakeDamage(damage);
 				target.CheckDeath();
 			}
 		}
@@ -74,12 +83,7 @@ public class Player : Actor
 		// }
 	}
 
-	public int GetDamage()
-	{
-		return 5;
-	}
-
-	public void Attack(Actor enemy)
+	public void DoAttack(Actor enemy)
 	{
 		// play sound
 		// play ani

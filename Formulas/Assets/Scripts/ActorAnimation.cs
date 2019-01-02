@@ -36,6 +36,8 @@ public class ActorAnimation
 	private AniInfo[] aniInfos = new AniInfo[(int)ActorAniState.Count];
 	private ActorAniState curAniState = ActorAniState.None;
 
+	public ActorAniState currentAniState { get { return curAniState; }}
+
 	public void Init(Actor actor)
 	{
 		ani = actor.gameObject.GetComponentInChildren<Animator>();
@@ -75,6 +77,9 @@ public class ActorAnimation
 		aniInfo.condition = "Dead";
 		aniInfo.ctype = AniConditionType.Bool;
 		aniInfos[(int)ActorAniState.Dead] = aniInfo;
+
+		// make sure
+		SetFaceDir(actor.faceDir);
 	}
 
 	public void Update(float dt)
@@ -97,9 +102,10 @@ public class ActorAnimation
 			throw new System.NotImplementedException();
 	}
 
-	public ActorAniState GetCurrentAniState()
+	public void SetFaceDir(FaceDir faceDir)
 	{
-		return curAniState;
+		if (ani != null)
+			ani.SetInteger("FaceDir", (int)faceDir);
 	}
 
 	public void OnActorBehaviourEnter(int shortNameHash)

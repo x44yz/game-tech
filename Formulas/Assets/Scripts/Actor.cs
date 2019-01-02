@@ -18,8 +18,17 @@ public class Actor : Entity
 	public SpriteRenderer spr;
 	// private Animator ani;
 	public ActorAnimation ani = new ActorAnimation();
+	public FaceDir faceDir { 
+		get { return m_faceDir; }
+		set { 
+			m_faceDir = value;
+			if (ani != null)
+				ani.SetFaceDir(m_faceDir);
+		}
+	}
 
 	protected State state;
+	private FaceDir m_faceDir;
 
 	protected virtual void Start() 
 	{

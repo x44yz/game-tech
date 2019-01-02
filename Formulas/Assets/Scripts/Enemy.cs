@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class Enemy : Actor
 {
+	protected override void Start() 
+	{
+		base.Start();
 
+		faceDir = FaceDir.LEFT;
+	}
 }
