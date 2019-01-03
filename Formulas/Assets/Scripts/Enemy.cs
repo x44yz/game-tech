@@ -13,6 +13,8 @@ public class Enemy : Actor
 
 	protected override void Update() 
 	{
+		float dt = Time.deltaTime;
+
 		if (state == State.Normal)
 		{
 			// check nearest
@@ -26,7 +28,14 @@ public class Enemy : Actor
 		else if (state == State.Attack)
 		{
 			if (ani.curAniState == ActorAniState.Idle)
-				DoAttack();
+			{
+				attackSpeedTick += dt;
+				if (attackSpeedTick >= baseAttackSpeed)
+				{
+					attackSpeedTick = 0f;
+					DoAttack();
+				}
+			}
 		}
 	}
 

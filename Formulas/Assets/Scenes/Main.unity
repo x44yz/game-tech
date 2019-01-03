@@ -360,6 +360,11 @@ Prefab:
       propertyPath: target
       value: 
       objectReference: {fileID: 934625842}
+    - target: {fileID: 114414863809577474, guid: 0278b2761ce3d4f05bcc0762be416fb9,
+        type: 2}
+      propertyPath: baseAttackSpeed
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0278b2761ce3d4f05bcc0762be416fb9, type: 2}
   m_IsPrefabParent: 0

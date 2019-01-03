@@ -11,6 +11,9 @@ defense rating: 防御率
 Evade: 闪避
 damage Reduction: 减伤
 
+BAS = Base Attack Speed
+IAS = Increase Attack Speed
+
 
 ##TODO:  
 [+]实现 Diablo 的数值  
@@ -24,6 +27,7 @@ A: hit的时候，attack被打断，播放 hit 动画/音效，如果在 hit 过
 Q: 敌人的攻击间隔？
 A: 敌人的攻击间隔还是根据动画来决定的，玩家的是手动，敌人的是自动，开始攻击的条件就是在攻击范围之内
 如果不在攻击范围之内，就更新 Move
+个人理解，攻击间隔也就是攻击速度，攻击动画应该是小于攻击速度的
 
 主要参考:
 Diablo 
@@ -42,3 +46,6 @@ Soda Dungeon
 
 https://www.reddit.com/r/sodadungeon/comments/3pe273/how_is_damage_calculated/
 https://www.reddit.com/r/sodadungeon/comments/3qcy3f/formulas_for_several_value_in_the_game/
+
+Attack Speed Formula
+https://dota2.gamepedia.com/Attack_speed#Attack_speed_representation

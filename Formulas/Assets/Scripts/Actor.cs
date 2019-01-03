@@ -42,6 +42,9 @@ public class Actor : Entity
 	private FaceDir m_faceDir;
 
 	public Actor target = null;
+	public float baseAttackSpeed = 0f;
+
+	protected float attackSpeedTick = 0f;
 
 	protected virtual void Start() 
 	{
