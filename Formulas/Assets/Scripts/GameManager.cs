@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour 
+public class GameManager : MonoSingleton<GameManager> 
 {
-	
+	// Asset
+	public GameObject actorHealthBar;
 }

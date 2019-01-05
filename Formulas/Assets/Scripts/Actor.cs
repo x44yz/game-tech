@@ -22,6 +22,8 @@ public class Actor : Entity
 	} 
 
 	public SpriteRenderer spr;
+	public Vector3 healthBarOffset;
+
 	// private Animator ani;
 	public ActorAnimation ani = new ActorAnimation();
 	public FaceDir faceDir { 
@@ -40,11 +42,19 @@ public class Actor : Entity
 
 	protected State state;
 	private FaceDir m_faceDir;
+	protected GameObject healthBar;
 
 	public Actor target = null;
 	public float baseAttackSpeed = 0f;
 
 	protected float attackSpeedTick = 0f;
+
+	protected virtual void Awake() 
+	{
+		healthBar = GameObject.Instantiate(GameManager.Instance.actorHealthBar);
+		healthBar.transform.SetParent(transform, false);
+		healthBar.transform.localPosition = healthBarOffset;
+	}
 
 	protected virtual void Start() 
 	{
