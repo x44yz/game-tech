@@ -13,6 +13,8 @@ public class Enemy : Actor
 
 	protected override void Update() 
 	{
+		return;
+
 		float dt = Time.deltaTime;
 
 		if (state == State.Normal)

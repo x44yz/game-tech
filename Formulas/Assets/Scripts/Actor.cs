@@ -24,6 +24,9 @@ public class Actor : Entity
 	public SpriteRenderer spr;
 	public Vector3 healthBarOffset;
 
+	public int hp;
+	protected int maxHP;
+
 	// private Animator ani;
 	public ActorAnimation ani = new ActorAnimation();
 	public FaceDir faceDir { 
@@ -52,8 +55,10 @@ public class Actor : Entity
 	protected virtual void Awake() 
 	{
 		healthBar = GameObject.Instantiate(GameManager.Instance.actorHealthBar);
-		healthBar.transform.SetParent(transform, false);
+		healthBar.transform.SetParent(spr.transform, false);
 		healthBar.transform.localPosition = healthBarOffset;
+
+		maxHP = hp;
 	}
 
 	protected virtual void Start() 
@@ -71,6 +76,9 @@ public class Actor : Entity
 
 	public void TakeDamage(int damage)
 	{
+		hp = hp - damage;
+		
+		UpdateHealthBar();
 	}
 
 	public bool CheckDeath()
@@ -91,5 +99,12 @@ public class Actor : Entity
 	public bool InAttackRange(Vector2 pos)
 	{
 		throw new System.NotImplementedException();
+	}
+
+	protected void UpdateHealthBar()
+	{
+		float sx = hp * 1.0f / maxHP;
+		sx = Mathf.Clamp(sx, 0, 1);
+		healthBar.transform.localScale = new Vector3(sx, 1, 1);
 	}
 }

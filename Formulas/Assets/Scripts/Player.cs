@@ -28,7 +28,7 @@ public class Player : Actor
 	public int dexterity;		// 敏捷
 	public int vitality;		// 活力
 
-	public int hp;
+	// public int hp;
 	public int mana;
 
 // 	private bool bAttack = false;
@@ -62,12 +62,6 @@ public class Player : Actor
 			Debug.Assert(target, "CHECK: target cant be null.");
 			if (ani.curAniState != ActorAniState.Attack)
 				state = State.Normal;
-
-			if (CheckHitTarget(target))
-			{
-				target.TakeDamage(damage);
-				target.CheckDeath();
-			}
 		}
 
 		// if (bAttack)
@@ -88,6 +82,12 @@ public class Player : Actor
 		// PlayAnimation("Attack");
 		state = State.Attack;
 		ani.PlayAnimation(ActorAniState.Attack);
+
+		if (CheckHitTarget(target))
+		{
+			target.TakeDamage(damage);
+			target.CheckDeath();
+		}
 	}
 
 	public bool CanAttack(Actor enemy)

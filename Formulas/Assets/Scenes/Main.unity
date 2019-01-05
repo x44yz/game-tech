@@ -253,6 +253,11 @@ Prefab:
       propertyPath: healthBarOffset.y
       value: 0.664
       objectReference: {fileID: 0}
+    - target: {fileID: 114020547161776210, guid: 6115afb3b6395429fb3d1b68d96aee49,
+        type: 2}
+      propertyPath: hp
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6115afb3b6395429fb3d1b68d96aee49, type: 2}
   m_IsPrefabParent: 0
@@ -492,6 +497,11 @@ Prefab:
         type: 2}
       propertyPath: healthBarOffset.y
       value: 0.742
+      objectReference: {fileID: 0}
+    - target: {fileID: 114414863809577474, guid: 0278b2761ce3d4f05bcc0762be416fb9,
+        type: 2}
+      propertyPath: hp
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0278b2761ce3d4f05bcc0762be416fb9, type: 2}
