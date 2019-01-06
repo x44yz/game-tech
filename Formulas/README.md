@@ -14,6 +14,8 @@ damage Reduction: 减伤
 BAS = Base Attack Speed
 IAS = Increase Attack Speed
 
+TC = Treasure Class
+
 
 ##TODO:  
 [+]实现 Diablo 的数值  
@@ -40,6 +42,15 @@ http://web.archive.org/web/20071024204556/http://www.battle.net:80/diablo2exp/mo
 http://wiki.d.163.com/index.php?title=%E9%A6%96%E9%A1%B5_%E6%9A%97%E9%BB%912
 
 ART: https://www.spriters-resource.com/pc_computer/diablodiablohellfire/
+
+怪物列表：
+https://diablo2.diablowiki.net/Category:Monsters
+
+http://wiki.d.163.com/index.php?title=Monsters_(Diablo2)
+https://diablo.gamepedia.com/Monsters_(Diablo_II)   // 英文
+http://d2.uuu9.com/2007/200706/2989.shtml
+http://www.d2tomb.com/monsters11.shtml
+https://diablo2.diablowiki.net/Diablo_Monsters
 
 辅助参考:
 Soda Dungeon
