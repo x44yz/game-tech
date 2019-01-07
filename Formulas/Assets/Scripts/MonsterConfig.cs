@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,5 +30,10 @@ public static class MonsterConfigs
 		cfg.speed = 4;
 		cfg.attack[0] = 1; cfg.attack[1] = 2;
 		cfg.attackRating = 23;
+
+		cfg = new CfgMonster();
+		cfg.name = "Blood Hawk";
+		cfg.lvl = 6;
+		cfg.exp = 29;
 	}
 }
