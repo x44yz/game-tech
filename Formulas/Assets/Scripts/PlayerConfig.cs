@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// https://diablo2.diablowiki.net/Diablo_Characters
 public class PlayerConfig
 {
 	int[,] baseAttributes = new int[,]

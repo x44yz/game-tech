@@ -15,7 +15,7 @@ BAS = Base Attack Speed
 IAS = Increase Attack Speed
 
 TC = Treasure Class
-
+AC = 防御力
 
 ##TODO:  
 [+]实现 Diablo 的数值  
