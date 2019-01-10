@@ -39,7 +39,18 @@ public class Player : Actor
 	// 	return null;
 	// }
 
-	public int damage { get {return 5;} }
+	// http://bfed2.diablomods.ru/site/index.php?page=gm_damage
+	// Final Damage = (((Normal Damge x 1.5)(only if ethereal)
+	//							x(1 + Enhanced Damage on Weapon/100) + Bonuses to Minimum/Maximum Damage)
+	//							x(1 + Strength or Dexterity/100 + Off-Weapon Enhanced Damage/100 + Skill Damage Bonus%/100)+Elemental Damage)
+	//							x(1 - Skill Damage Penalty/100)
+	//							x2(only if a critical or deadly strike is scored)
+	public int damage { 
+		get {
+
+			return 5;
+		} 
+	}
 
 	protected override void Start() 
 	{

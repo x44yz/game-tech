@@ -17,6 +17,8 @@ IAS = Increase Attack Speed
 TC = Treasure Class
 AC = 防御力
 
+1H/2H = 1Hand/2Hands 单手/双手武器
+
 ##TODO:  
 [+]实现 Diablo 的数值  
 [+]动态设置动画 speed  
@@ -51,6 +53,9 @@ https://diablo.gamepedia.com/Monsters_(Diablo_II)   // 英文
 http://d2.uuu9.com/2007/200706/2989.shtml
 http://www.d2tomb.com/monsters11.shtml
 https://diablo2.diablowiki.net/Diablo_Monsters
+
+暗黑武器列表
+http://bfed2.diablomods.ru/site/index.php?page=itm_normal
 
 辅助参考:
 Soda Dungeon
