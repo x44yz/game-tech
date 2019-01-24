@@ -1,16 +1,21 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State : MonoBehaviour {
+public class State
+{
+	public virtual void OnEnter()
+	{
 
-	// Use this for initialization
-	void Start () {
-		
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	public virtual void OnExit()
+	{
+
+	}
+
+	public virtual void Update()
+	{
 		
 	}
 }

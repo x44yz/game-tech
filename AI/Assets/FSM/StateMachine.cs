@@ -2,15 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour {
+public class StateMachine
+{
+	private State m_lastState = null;
+	private State m_curState = null;
+	private Dictionay<System.Type, State> states = new Dictionay<System.Type, State>();
 
-	// Use this for initialization
-	void Start () {
-		
+	public void Update()
+	{
+			if (m_curState != null)
+				m_curState.Update();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void AddState(State state)
+	{
+		states[state.GetType()] = state;
+	}
+
+	public State ChangeState(System.Type stateType)
+	{
+		if (m_curState != null && m_curState.GetType() == stateType)
+			return m_curState;
+
+		if (states.Contain(stateType) == false)
+			return null;
+
+		if (m_curState != null)
+			m_curState.OnExit();
+		m_lastState = m_curState;
+
+		m_curState = states[stateType];
+		m_curState.OnEnter();
 	}
 }
