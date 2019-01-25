@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StateMachine
 {
-	private State m_lastState = null;
+	private State m_prevState = null;
 	private State m_curState = null;
 	private Dictionay<System.Type, State> states = new Dictionay<System.Type, State>();
 
@@ -24,14 +24,19 @@ public class StateMachine
 		if (m_curState != null && m_curState.GetType() == stateType)
 			return m_curState;
 
-		if (states.Contain(stateType) == false)
+		if (!states.Contain(stateType))
+		{
+			Debug.LogError("failed to find state > " + stateType);
 			return null;
+		}
 
 		if (m_curState != null)
 			m_curState.OnExit();
-		m_lastState = m_curState;
+		m_prevState = m_curState;
 
 		m_curState = states[stateType];
 		m_curState.OnEnter();
+
+		return m_curState;
 	}
 }
