@@ -1,12 +1,13 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class StateMachine
 {
 	private State m_prevState = null;
 	private State m_curState = null;
-	private Dictionay<System.Type, State> states = new Dictionay<System.Type, State>();
+	private Dictionary<System.Type, State> states = new Dictionary<System.Type, State>();
 
 	public void Update()
 	{
@@ -24,7 +25,7 @@ public class StateMachine
 		if (m_curState != null && m_curState.GetType() == stateType)
 			return m_curState;
 
-		if (!states.Contain(stateType))
+		if (!states.ContainsKey(stateType))
 		{
 			Debug.LogError("failed to find state > " + stateType);
 			return null;
