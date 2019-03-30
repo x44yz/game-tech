@@ -26,6 +26,9 @@ namespace TicTacToe
 		public const int PLAYER_NUM = 2;
 		public const int REALPLAYER_INDEX = 0;
 
+		public const int REALPLAYER_CHESS_TYPE = ChessType.O;
+		public const int AI_CHESS_TYPE = ChessType.X;
+
 		private System.Random rnd = new System.Random();
 
 		public Transform chessParent;
@@ -82,13 +85,13 @@ namespace TicTacToe
 				var p = playerHeads[playerIdx].transform.localPosition;
 				playerHeads[playerIdx].transform.localPosition = new Vector3(p.x, 0, p.z);
 
-				PlayerEnterTurn();
+				StartCoroutine(PlayerEnterTurn());
 			}
 		}
 
 		public void OnClickBoardCell(int cidx)
 		{
-			Debug.Log("xx-- OnClickBoardCell > " + cidx);
+			// Debug.Log("xx-- OnClickBoardCell > " + cidx);
 			Debug.Assert(cidx >= 0 && cidx < BOARD_CELLS, "CHECK");
 
 			if (playerIdx != REALPLAYER_INDEX)
@@ -97,9 +100,11 @@ namespace TicTacToe
 				return;
 			}
 
-			int cx = cidx % BOARD_WIDTH;
-			int cy = cidx / BOARD_WIDTH;
+			int cx = cidx / BOARD_WIDTH;
+			int cy = cidx % BOARD_WIDTH;
+			Debug.Log("click on cell > (" + cx + "," + cy + ")");
 
+			Debug.Assert(cx >= 0 && cx < BOARD_WIDTH, "CHECK");
 			Debug.Assert(cy >= 0 && cy < BOARD_WIDTH, "CHECK");
 
 			if (chesss[cx, cy] != ChessType.None)
@@ -125,14 +130,34 @@ namespace TicTacToe
 			// check end
 		}
 
-		public void PlayerEnterTurn()
+		public IEnumerator PlayerEnterTurn()
 		{
 			playerThinking = true;
-
+		
 			// AI
 			if (playerIdx != REALPLAYER_INDEX)
 			{
-				// MinMax.
+				// Simulate think
+				yield return new WaitForSeconds(0.5f);
+
+				Debug.Assert(ai != null, "CHECK");
+				var move = ai.Think(chesss, 9, AI_CHESS_TYPE, REALPLAYER_CHESS_TYPE);
+				
+				Debug.Assert(move.Length == 2, "CHECK");
+				Debug.Assert(move[0] >= 0 && move[0] < BOARD_WIDTH, "CHECK");
+				Debug.Assert(move[1] >= 0 && move[1] < BOARD_WIDTH, "CHECK");
+				
+				int cx = move[0];
+				int cy = move[1];
+				Debug.Log("ai next move > (" + cx + "," + cy + ")");
+
+				GameObject objChess = Instantiate(objX);
+
+				objChess.transform.SetParent(chessParent, false);
+				objChess.transform.position = boardCells[cx * BOARD_WIDTH + cy].position;
+				chesss[cx, cy] = ChessType.X;
+
+				PlayerFinishTurn();
 			}
 		}
 
@@ -144,24 +169,108 @@ namespace TicTacToe
 		// AI Callback
 		public bool FuncGameOver(int[,] board, int player, int opp)
 		{
-			
+			if (GetWinner(board) != ChessType.None)
+				return true;
 
-			return false;
+			// check ChessType.None
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+					if (board[i, j] == ChessType.None)
+						return false;
+			}
+			return true;
 		}
 
 		public int FuncEvaluate(int[,] board, int player, int opp)
 		{
+			int winner = GetWinner(board);
+			if (winner == player)
+				return 10;
+			else if (winner == opp)
+				return -10;
 			return 0;
 		}
 
 		public List<int[]> FuncMoves(int[,] board, int player)
 		{
-			return null;
+			List<int[]> moves = new List<int[]>();
+
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+				{
+					if (board[i, j] == ChessType.None)
+						moves.Add(new int[2]{i, j});
+				}
+			}
+
+			return moves;
 		}
 
 		public int[,] FuncBoardgen(int[,] board, int player, int[] move)
 		{
-			return null;
+			int[,] newBoard = new int[BOARD_WIDTH, BOARD_WIDTH];
+			Array.Copy(board, newBoard, board.Length);
+			newBoard[move[0], move[1]] = player;
+			return newBoard;
+		}
+
+		private int GetWinner(int[,] board)
+		{
+			// vertical
+			for (int j = 0; j < BOARD_WIDTH; ++j)
+			{
+				for (int i = 0; i < BOARD_WIDTH; ++i)
+				{
+					if (board[i, j] == ChessType.None ||
+						board[i, j] != board[0, j])
+						break;
+
+					if (i == BOARD_WIDTH - 1)
+						return board[0, j];
+				}
+			}
+
+			// horizontal
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+				{
+					if (board[i, j] == ChessType.None ||
+						board[i, j] != board[i, 0])
+						break;
+
+					if (j == BOARD_WIDTH - 1)
+						return board[i, 0];
+				}
+			}
+
+			// top left to bottom right
+			// [0,0], [1,1], [2,2]
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				if (board[i, i] == ChessType.None ||
+					board[i, i] != board[0, 0])
+					break;
+
+				if (i == BOARD_WIDTH - 1)
+					return board[0, 0];
+			}
+
+			// bottom left to top right
+			// [2,0],[1,1],[0,2]
+			for (int i = BOARD_WIDTH - 1, j = 0; i >= 0; --i, ++j)
+			{
+				if (board[i, j] == ChessType.None ||
+					board[i, j] != board[BOARD_WIDTH - 1, 0])
+					break;
+
+				if (i == 0)
+					return board[BOARD_WIDTH - 1, 0];
+			}
+
+			return ChessType.None;
 		}
 	}
 }
