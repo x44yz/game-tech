@@ -12,9 +12,17 @@ namespace TicTacToe
 		public const int X = 1;
 	}
 
+	public enum GameStatus
+	{
+		START,
+		RUNNING,
+		END,
+	}
+
 	public class TestMinMax : MonoBehaviour
 	{
 		public const int BOARD_CELLS = 9;
+		public const int BOARD_WIDTH = 3;
 		public const int PLAYER_NUM = 2;
 		public const int REALPLAYER_INDEX = 0;
 
@@ -28,28 +36,36 @@ namespace TicTacToe
 
 		public GameObject[] playerHeads = new GameObject[PLAYER_NUM];
 
-		private int[] chesss = new int[BOARD_CELLS];
+		private int[,] chesss = new int[BOARD_WIDTH, BOARD_WIDTH];
 
 		private int playerIdx = -1;
 		private bool playerThinking = false;
 
+		private GameStatus status = GameStatus.START;
+
+		private MinMax ai = null;
+
 		private void Start()
 		{
-			for (int i = 0; i < chesss.Length; ++i)
+			for (int i = 0; i < BOARD_WIDTH; ++i)
 			{
-				chesss[i] = ChessType.None;
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+					chesss[i,j] = ChessType.None;
 			}
+
+			ai = new MinMax(FuncGameOver, FuncEvaluate, FuncMoves, FuncBoardgen);
+
+			status = GameStatus.RUNNING;
 		}
 
 		private void Update()
 		{
+			if (status != GameStatus.RUNNING)
+				return;
+
 			if (playerThinking)
 			{
-				if (playerIdx != REALPLAYER_INDEX)
-				{
-					// Update AI
-
-				}
+				
 			}
 			else
 			{
@@ -66,7 +82,7 @@ namespace TicTacToe
 				var p = playerHeads[playerIdx].transform.localPosition;
 				playerHeads[playerIdx].transform.localPosition = new Vector3(p.x, 0, p.z);
 
-				playerThinking = true;
+				PlayerEnterTurn();
 			}
 		}
 
@@ -81,7 +97,12 @@ namespace TicTacToe
 				return;
 			}
 
-			if (chesss[cidx] != ChessType.None)
+			int cx = cidx % BOARD_WIDTH;
+			int cy = cidx / BOARD_WIDTH;
+
+			Debug.Assert(cy >= 0 && cy < BOARD_WIDTH, "CHECK");
+
+			if (chesss[cx, cy] != ChessType.None)
 			{
 				Debug.Log("xx-- cell is not empty.");
 				return;
@@ -92,7 +113,7 @@ namespace TicTacToe
 
 			objChess.transform.SetParent(chessParent, false);
 			objChess.transform.position = boardCells[cidx].position;
-			chesss[cidx] = ChessType.O;
+			chesss[cx, cy] = ChessType.O;
 
 			PlayerFinishTurn();
 		}
@@ -102,6 +123,45 @@ namespace TicTacToe
 			playerThinking = false;
 
 			// check end
+		}
+
+		public void PlayerEnterTurn()
+		{
+			playerThinking = true;
+
+			// AI
+			if (playerIdx != REALPLAYER_INDEX)
+			{
+				// MinMax.
+			}
+		}
+
+		public void EndGame()
+		{
+			status = GameStatus.END;
+		}
+
+		// AI Callback
+		public bool FuncGameOver(int[,] board, int player, int opp)
+		{
+			
+
+			return false;
+		}
+
+		public int FuncEvaluate(int[,] board, int player, int opp)
+		{
+			return 0;
+		}
+
+		public List<int[]> FuncMoves(int[,] board, int player)
+		{
+			return null;
+		}
+
+		public int[,] FuncBoardgen(int[,] board, int player, int[] move)
+		{
+			return null;
 		}
 	}
 }
