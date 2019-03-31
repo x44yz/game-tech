@@ -19,12 +19,20 @@ namespace TicTacToe
 		END,
 	}
 
+	public enum GameResult
+	{
+		WIN,
+		LOSE,
+		TIE,
+	}
+
 	public class TestMinMax : MonoBehaviour
 	{
 		public const int BOARD_CELLS = 9;
 		public const int BOARD_WIDTH = 3;
 		public const int PLAYER_NUM = 2;
 		public const int REALPLAYER_INDEX = 0;
+		public const int AI_THINK_DEPTH = 9;
 
 		public const int REALPLAYER_CHESS_TYPE = ChessType.O;
 		public const int AI_CHESS_TYPE = ChessType.X;
@@ -38,6 +46,10 @@ namespace TicTacToe
 		public GameObject objX = null;
 
 		public GameObject[] playerHeads = new GameObject[PLAYER_NUM];
+		public GameObject panelResult = null;
+		public GameObject txtWin = null;
+		public GameObject txtLose = null;
+		public GameObject txtTie = null;
 
 		private int[,] chesss = new int[BOARD_WIDTH, BOARD_WIDTH];
 
@@ -57,6 +69,8 @@ namespace TicTacToe
 			}
 
 			ai = new MinMax(FuncGameOver, FuncEvaluate, FuncMoves, FuncBoardgen);
+
+			panelResult.SetActive(false);
 
 			status = GameStatus.RUNNING;
 		}
@@ -87,6 +101,29 @@ namespace TicTacToe
 
 				StartCoroutine(PlayerEnterTurn());
 			}
+		}
+
+		public void OnClickButtonPlay()
+		{
+			panelResult.SetActive(false);
+
+			playerIdx = -1;
+			playerThinking = false;
+			status = GameStatus.START;
+
+			for (int i = chessParent.childCount - 1; i >= 0; --i)
+			{
+				var child = chessParent.GetChild(i);
+				child.SetParent(null, false);
+				Destroy(child.gameObject);
+			}
+
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+					chesss[i,j] = ChessType.None;
+			}
+			status = GameStatus.RUNNING;
 		}
 
 		public void OnClickBoardCell(int cidx)
@@ -128,6 +165,34 @@ namespace TicTacToe
 			playerThinking = false;
 
 			// check end
+			int winner = GetWinner(chesss);
+			Debug.Log("winner is > " + winner);
+			if (winner == REALPLAYER_CHESS_TYPE)
+				EndGame(GameResult.WIN);
+			else if (winner == AI_CHESS_TYPE)
+				EndGame(GameResult.LOSE);
+
+			// check ChessType.None
+			bool existBlankCell = false;
+			for (int i = 0; i < BOARD_WIDTH; ++i)
+			{
+				for (int j = 0; j < BOARD_WIDTH; ++j)
+				{
+					if (chesss[i, j] == ChessType.None)
+					{
+						existBlankCell = true;
+						break;
+					}
+				}
+				
+				if (existBlankCell)
+					break;
+			}
+
+			if (!existBlankCell)
+			{
+				EndGame(GameResult.TIE);
+			}
 		}
 
 		public IEnumerator PlayerEnterTurn()
@@ -141,7 +206,7 @@ namespace TicTacToe
 				yield return new WaitForSeconds(0.5f);
 
 				Debug.Assert(ai != null, "CHECK");
-				var move = ai.Think(chesss, 9, AI_CHESS_TYPE, REALPLAYER_CHESS_TYPE);
+				var move = ai.Think(chesss, AI_THINK_DEPTH, AI_CHESS_TYPE, REALPLAYER_CHESS_TYPE);
 				
 				Debug.Assert(move.Length == 2, "CHECK");
 				Debug.Assert(move[0] >= 0 && move[0] < BOARD_WIDTH, "CHECK");
@@ -161,10 +226,20 @@ namespace TicTacToe
 			}
 		}
 
-		public void EndGame()
-		{
-			status = GameStatus.END;
-		}
+		// public bool IsGameOver()
+		// {
+		// 	if (GetWinner(chesss) != ChessType.None)
+		// 		return true;
+
+		// 	// check ChessType.None
+		// 	for (int i = 0; i < BOARD_WIDTH; ++i)
+		// 	{
+		// 		for (int j = 0; j < BOARD_WIDTH; ++j)
+		// 			if (chesss[i, j] == ChessType.None)
+		// 				return false;
+		// 	}
+		// 	return true;
+		// }
 
 		// AI Callback
 		public bool FuncGameOver(int[,] board, int player, int opp)
@@ -271,6 +346,16 @@ namespace TicTacToe
 			}
 
 			return ChessType.None;
+		}
+	
+		private void EndGame(GameResult ret)
+		{
+			status = GameStatus.END;
+
+			panelResult.SetActive(true);
+			txtWin.SetActive(ret == GameResult.WIN);
+			txtLose.SetActive(ret == GameResult.LOSE);
+			txtTie.SetActive(ret == GameResult.TIE);
 		}
 	}
 }
