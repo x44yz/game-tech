@@ -5,7 +5,7 @@ using UnityEngine;
 // https://diablo2.diablowiki.net/Diablo_Characters
 public static class PlayerConfig
 {
-	public const int[,] baseAttributes = new int[,]
+	public static readonly int[,] baseAttributes = new int[,]
 	{
 		// STR MAG DEX VIT
 		{30, 10, 20, 25},	// Warrior
@@ -13,7 +13,7 @@ public static class PlayerConfig
 		{15, 35, 15, 20}	// Sorcerer
 	};
 
-	public const int[,] maxAttributes = new int[,] 
+	public static readonly int[,] maxAttributes = new int[,] 
 	{
 		// STR MAG DEX VIT
 		{250, 50, 60, 100},	// Warrior
@@ -21,7 +21,7 @@ public static class PlayerConfig
 		{45, 250, 85, 80}	// Sorcerer
 	};
 
-	public string[] images = new string[]
+	public static readonly string[] images = new string[]
 	{
 		"",
 	};

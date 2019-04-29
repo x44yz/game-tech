@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PlayerClass
 {
-	Warrior,
+	Warrior = 0,
 	Rogue,
 	Sorcerer
 }
@@ -51,10 +51,38 @@ public class Player : Actor
 		stats.vitality = PlayerConfig.baseAttributes[pc][PlayerAttr.VIT];
 		stats.baseVitality = stats.vitality;
 
-		if (pc == PlayerClass.Rogue)
-			stats.damage = stats.level * (stats.strength + stats.dev) / 200;
+		//
+		stats.level = 1;
+		stats.maxLevel = 1;
+		stats.exp = 0;
+		stats.maxExp = 0;
+
+		if (stats.pclass == PlayerClass.Rogue)
+			stats.damage = stats.level * (stats.strength + stats.dexterity) / 200;
 		else
 			stats.damage = stats.strength * stats.level / 100;
+
+		// hp
+		stats.hp = (stats.vitality + 10) << 6;
+		if (stats.pclass == PlayerClass.Warrior)
+			stats.hp *= 2;
+		else if (stats.pclass == PlayerClass.Rogue)
+			stats.hp += stats.hp >> 1;
+
+		stats.maxHP = stats.hp;
+		stats.baseHP = stats.hp;
+		stats.baseMaxHP = stats.hp;
+
+		// mana
+		stats.mana = stats.magic << 6;
+		if (stats.pclass == PlayerClass.Sorcerer)
+			stats.mana *= 2;
+		else if (stats.pclass == PlayerClass.Rogue)
+			stats.mana += stats.mana >> 1;
+
+		stats.maxMana = stats.mana;
+		stats.baseMana = stats.mana;
+		stats.baseMaxMana = stats.mana;
 
 		return null;
 	}
