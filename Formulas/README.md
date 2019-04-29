@@ -65,3 +65,6 @@ https://www.reddit.com/r/sodadungeon/comments/3qcy3f/formulas_for_several_value_
 
 Attack Speed Formula
 https://dota2.gamepedia.com/Attack_speed#Attack_speed_representation
+
+// Raw/jarulf162-diablo.pdf
+http://www.lurkerlounge.com/diablo/jarulf/jarulf162.pdf

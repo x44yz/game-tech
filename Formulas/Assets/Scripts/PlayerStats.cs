@@ -2,7 +2,7 @@ using System;
 
 public class PlayerStats
 {
-	public PlayerClass pclass;
+	public int pclass;
 	public int strength;
 	public int magic;
 	public int dexterity;

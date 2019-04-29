@@ -2,19 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlayerClass
+public class PlayerClass
 {
-	Warrior = 0,
-	Rogue,
-	Sorcerer
+	public const int Warrior = 0;
+	public const int Rogue = 1;
+	public const int Sorcerer = 2;
 }
 
-public enum PlayerAttr : byte
+public class PlayerAttr
 {
-	STR = 0,	// strength
-	MAG = 1,	// magic
-	DEX = 2,	// dexterity
-	VIT = 3,	// vitality
+	public const int STR = 0; // strength
+	public const int MAG = 1; // magic
+	public const int DEX = 2; // dexterity
+	public const int VIT = 3; // vitality
 }
 
 public class Player : Actor
@@ -35,20 +35,20 @@ public class Player : Actor
 // 	private bool bAttack = false;
 //	private float atkCdTick = 0f;
 
-	public Player Create(PlayerClass pc)
+	public Player Create(int pc)
 	{
 		stats.pclass = pc;
 
-		stats.strength = PlayerConfig.baseAttributes[pc][PlayerAttr.STR];
+		stats.strength = PlayerConfig.baseAttributes[pc, PlayerAttr.STR];
 		stats.baseStrength = stats.strength;
 
-		stats.magic = PlayerConfig.baseAttributes[pc][PlayerAttr.MAG];
+		stats.magic = PlayerConfig.baseAttributes[pc, PlayerAttr.MAG];
 		stats.baseMagic = stats.magic;
 
-		stats.dexterity = PlayerConfig.baseAttributes[pc][PlayerAttr.DEX];
+		stats.dexterity = PlayerConfig.baseAttributes[pc, PlayerAttr.DEX];
 		stats.baseDexterity = stats.dexterity;
 
-		stats.vitality = PlayerConfig.baseAttributes[pc][PlayerAttr.VIT];
+		stats.vitality = PlayerConfig.baseAttributes[pc, PlayerAttr.VIT];
 		stats.baseVitality = stats.vitality;
 
 		//
