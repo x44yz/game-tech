@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // https://diablo2.diablowiki.net/Diablo_Characters
-public class PlayerConfig
+public static class PlayerConfig
 {
-	int[,] baseAttributes = new int[,]
+	public const int[,] baseAttributes = new int[,]
 	{
 		// STR MAG DEX VIT
 		{30, 10, 20, 25},	// Warrior
@@ -13,7 +13,7 @@ public class PlayerConfig
 		{15, 35, 15, 20}	// Sorcerer
 	};
 
-	int[,] maxAttributes = new int[,] 
+	public const int[,] maxAttributes = new int[,] 
 	{
 		// STR MAG DEX VIT
 		{250, 50, 60, 100},	// Warrior
@@ -21,7 +21,7 @@ public class PlayerConfig
 		{45, 250, 85, 80}	// Sorcerer
 	};
 
-	string[] images = new string[]
+	public string[] images = new string[]
 	{
 		"",
 	};

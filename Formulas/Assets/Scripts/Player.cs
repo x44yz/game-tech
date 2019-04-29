@@ -9,7 +9,7 @@ public enum PlayerClass
 	Sorcerer
 }
 
-public enum PlayerAttribute : byte
+public enum PlayerAttr : byte
 {
 	STR = 0,	// strength
 	MAG = 1,	// magic
@@ -23,21 +23,41 @@ public class Player : Actor
 	// 实际的 Cooldown 应该与攻击动画有关
 //	public const float TIME_ATK_COOLDOWN = 2;
 
-	public int strength;		// 力量
-	public int magic;				// 意志
-	public int dexterity;		// 敏捷
-	public int vitality;		// 活力
+	// public int strength;		// 力量
+	// public int magic;				// 意志
+	// public int dexterity;		// 敏捷
+	// public int vitality;		// 活力
 
 	// public int hp;
-	public int mana;
+	// public int mana;
+	public PlayerStats stats;
 
 // 	private bool bAttack = false;
 //	private float atkCdTick = 0f;
 
-	// public static Player Create(PlayerClass pc)
-	// {
-	// 	return null;
-	// }
+	public Player Create(PlayerClass pc)
+	{
+		stats.pclass = pc;
+
+		stats.strength = PlayerConfig.baseAttributes[pc][PlayerAttr.STR];
+		stats.baseStrength = stats.strength;
+
+		stats.magic = PlayerConfig.baseAttributes[pc][PlayerAttr.MAG];
+		stats.baseMagic = stats.magic;
+
+		stats.dexterity = PlayerConfig.baseAttributes[pc][PlayerAttr.DEX];
+		stats.baseDexterity = stats.dexterity;
+
+		stats.vitality = PlayerConfig.baseAttributes[pc][PlayerAttr.VIT];
+		stats.baseVitality = stats.vitality;
+
+		if (pc == PlayerClass.Rogue)
+			stats.damage = stats.level * (stats.strength + stats.dev) / 200;
+		else
+			stats.damage = stats.strength * stats.level / 100;
+
+		return null;
+	}
 
 	// http://bfed2.diablomods.ru/site/index.php?page=gm_damage
 	// Final Damage = (((Normal Damge x 1.5)(only if ethereal)
