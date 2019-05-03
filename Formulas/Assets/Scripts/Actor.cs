@@ -13,13 +13,13 @@ public enum ActorType
 public class Actor : Entity
 {
 	// 更复杂采用 FSM
-	public enum State
-	{
-		Normal,
-		Attack,
-		Hurt,
-		Dead,
-	} 
+	// public enum State
+	// {
+	// 	Normal,
+	// 	Attack,
+	// 	Hurt,
+	// 	Dead,
+	// } 
 
 	public SpriteRenderer spr;
 	public Vector3 healthBarOffset;
@@ -43,7 +43,7 @@ public class Actor : Entity
 		set;
 	}
 
-	protected State state;
+	// protected State state;
 	private FaceDir m_faceDir;
 	protected GameObject healthBar;
 
@@ -63,7 +63,7 @@ public class Actor : Entity
 
 	protected virtual void Start() 
 	{
-		state = State.Normal;
+		// state = State.Normal;
 		// ani = spr.GetComponent<Animator>();
 		ani.Init(this);
 	}

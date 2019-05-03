@@ -19,6 +19,15 @@ public class PlayerAttr
 
 public class Player : Actor
 {
+	public enum Status
+	{
+		STAND,
+		WALK,
+		ATTACK,
+		DEATH,
+		SPELL,
+	}
+
 	// NOTE:
 	// 实际的 Cooldown 应该与攻击动画有关
 //	public const float TIME_ATK_COOLDOWN = 2;
@@ -34,6 +43,8 @@ public class Player : Actor
 
 // 	private bool bAttack = false;
 //	private float atkCdTick = 0f;
+
+	public Status status = Status.STAND;
 
 	public Player Create(int pc)
 	{
@@ -109,19 +120,19 @@ public class Player : Actor
 
 	protected override void Update() 
 	{
-		if (state == State.Normal)
-		{
-			if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
-			{
-				DoAttack(target);
-			}
-		}
-		else if (state == State.Attack)
-		{
-			Debug.Assert(target, "CHECK: target cant be null.");
-			if (ani.curAniState != ActorAniState.Attack)
-				state = State.Normal;
-		}
+		// if (state == State.Normal)
+		// {
+		// 	if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
+		// 	{
+		// 		DoAttack(target);
+		// 	}
+		// }
+		// else if (state == State.Attack)
+		// {
+		// 	Debug.Assert(target, "CHECK: target cant be null.");
+		// 	if (ani.curAniState != ActorAniState.Attack)
+		// 		state = State.Normal;
+		// }
 
 		// if (bAttack)
 		// {
@@ -132,6 +143,16 @@ public class Player : Actor
 		// 		atkCdTick = 0f;
 		// 	}
 		// }
+
+		if (status == Status.ATTACK)
+		{
+			DoAttack(target);
+		}
+	}
+
+	public void StartAttack()
+	{
+		status = Status.ATTACK;
 	}
 
 	public void DoAttack(Actor enemy)
@@ -139,14 +160,27 @@ public class Player : Actor
 		// play sound
 		// play ani
 		// PlayAnimation("Attack");
-		state = State.Attack;
-		ani.PlayAnimation(ActorAniState.Attack);
+		// state = State.Attack;
+		// ani.PlayAnimation(ActorAniState.Attack);
 
-		if (CheckHitTarget(target))
+		// if (CheckHitTarget(target))
+		// {
+		// 	target.TakeDamage(damage);
+		// 	target.CheckDeath();
+		// }
+		// aniframe == num
+		if (true) 
 		{
-			target.TakeDamage(damage);
-			target.CheckDeath();
+			if (target != null)
+			{
+
+			}
 		}
+	}
+
+	private bool IsHitMonster(Monster mt)
+	{
+		
 	}
 
 	public bool CanAttack(Actor enemy)

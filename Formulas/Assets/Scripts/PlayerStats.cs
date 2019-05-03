@@ -26,4 +26,5 @@ public class PlayerStats
 	public int baseMaxMana;
 	public int exp;
 	public int maxExp;
+	public int bonusToHit;
 }
