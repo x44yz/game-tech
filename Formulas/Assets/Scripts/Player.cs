@@ -249,7 +249,7 @@ public class Player : Actor
 			}
 			else
 			{
-				mt.StartHit();
+				mt.StartHit(skdam);
 			}
 		}
 	}
@@ -269,5 +269,20 @@ public class Player : Actor
 		// TODO
 		// 计算敌人闪避
 		return true;
+	}
+
+	public void SetStrength(int v)
+	{
+		int dam;
+		if (pclass == PlayerClass.Rogue)
+		{
+			dam = level * (strength + dexterity) / 200;
+		}
+		else
+		{
+			dam  = level * strength / 100;
+		}
+
+		damageMod = dam;
 	}
 }
