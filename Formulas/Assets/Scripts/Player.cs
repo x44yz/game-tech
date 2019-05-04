@@ -39,61 +39,93 @@ public class Player : Actor
 
 	// public int hp;
 	// public int mana;
-	public PlayerStats stats;
+	// public PlayerStats stats;
 
 // 	private bool bAttack = false;
 //	private float atkCdTick = 0f;
 
 	public Status status = Status.STAND;
+	public int enac;	// enhanced accuracy
+
+	public int pclass;
+	public int strength;
+	public int magic;
+	public int dexterity;
+	public int vitality;
+	public int baseStrength;
+	public int baseMagic;
+	public int baseDexterity;
+	public int baseVitality;
+	public int level;
+	public int maxLevel;
+	public int damage;
+	// hp 与 vitality 有关
+	public int hp;
+	public int maxHP;
+	public int baseHP;
+	public int baseMaxHP;
+	// mana 与 magic 有关
+	public int mana;
+	public int maxMana;
+	public int baseMana;
+	public int baseMaxMana;
+	public int exp;
+	public int maxExp;
+	public int bonusToHit;
+	public int minDamage;
+	public int maxDamage;
+	public int damageMod;
+	public int bonusDamageMod;
+	public int bonusDamage;
 
 	public Player Create(int pc)
 	{
-		stats.pclass = pc;
+		pclass = pc;
 
-		stats.strength = PlayerConfig.baseAttributes[pc, PlayerAttr.STR];
-		stats.baseStrength = stats.strength;
+		strength = PlayerConfig.baseAttributes[pc, PlayerAttr.STR];
+		baseStrength = strength;
 
-		stats.magic = PlayerConfig.baseAttributes[pc, PlayerAttr.MAG];
-		stats.baseMagic = stats.magic;
+		magic = PlayerConfig.baseAttributes[pc, PlayerAttr.MAG];
+		baseMagic = magic;
 
-		stats.dexterity = PlayerConfig.baseAttributes[pc, PlayerAttr.DEX];
-		stats.baseDexterity = stats.dexterity;
+		dexterity = PlayerConfig.baseAttributes[pc, PlayerAttr.DEX];
+		baseDexterity = dexterity;
 
-		stats.vitality = PlayerConfig.baseAttributes[pc, PlayerAttr.VIT];
-		stats.baseVitality = stats.vitality;
+		vitality = PlayerConfig.baseAttributes[pc, PlayerAttr.VIT];
+		baseVitality = vitality;
 
 		//
-		stats.level = 1;
-		stats.maxLevel = 1;
-		stats.exp = 0;
-		stats.maxExp = 0;
+		level = 1;
+		maxLevel = 1;
+		exp = 0;
+		maxExp = 0;
 
-		if (stats.pclass == PlayerClass.Rogue)
-			stats.damage = stats.level * (stats.strength + stats.dexterity) / 200;
+		if (pclass == PlayerClass.Rogue)
+			damage = level * (strength + dexterity) / 200;
 		else
-			stats.damage = stats.strength * stats.level / 100;
+			damage = strength * level / 100;
 
 		// hp
-		stats.hp = (stats.vitality + 10) << 6;
-		if (stats.pclass == PlayerClass.Warrior)
-			stats.hp *= 2;
-		else if (stats.pclass == PlayerClass.Rogue)
-			stats.hp += stats.hp >> 1;
+		hp = (vitality + 10) << 6;
+		if (pclass == PlayerClass.Warrior)
+			hp *= 2;
+		else if (pclass == PlayerClass.Rogue)
+			hp += hp >> 1;
 
-		stats.maxHP = stats.hp;
-		stats.baseHP = stats.hp;
-		stats.baseMaxHP = stats.hp;
+		maxHP = hp;
+		baseHP = hp;
+		baseMaxHP = hp;
 
 		// mana
-		stats.mana = stats.magic << 6;
-		if (stats.pclass == PlayerClass.Sorcerer)
-			stats.mana *= 2;
-		else if (stats.pclass == PlayerClass.Rogue)
-			stats.mana += stats.mana >> 1;
+		mana = magic << 6;
+		if (pclass == PlayerClass.Sorcerer)
+			mana *= 2;
+		else if (pclass == PlayerClass.Rogue)
+			mana += mana >> 1;
 
-		stats.maxMana = stats.mana;
-		stats.baseMana = stats.mana;
-		stats.baseMaxMana = stats.mana;
+		maxMana = mana;
+		baseMana = mana;
+		baseMaxMana = mana;
 
 		return null;
 	}
@@ -104,12 +136,6 @@ public class Player : Actor
 	//							x(1 + Strength or Dexterity/100 + Off-Weapon Enhanced Damage/100 + Skill Damage Bonus%/100)+Elemental Damage)
 	//							x(1 - Skill Damage Penalty/100)
 	//							x2(only if a critical or deadly strike is scored)
-	public int damage { 
-		get {
-
-			return 5;
-		} 
-	}
 
 	protected override void Start() 
 	{
@@ -178,9 +204,54 @@ public class Player : Actor
 		}
 	}
 
-	private bool IsHitMonster(Monster mt)
+	private bool HitMonster(Monster mt)
 	{
-		
+		int hper = dexterity >> 1 + level + 50 - (mt.armorClass - enac);
+		if (pclass == PlayerClass.Warrior)
+		{
+			hper += 20;
+		}
+
+		hper += bonusToHit;
+		if (hper < 5)
+			hper = 5;
+		if (hp > 95)
+			hper = 95;
+
+		int hit = Utils.Rand(4, 100);
+		if (hit < hper)
+		{
+			int damage = minDamage + Utils.Rand(5, maxDamage - minDamage + 1);
+			damage += damageMod + bonusDamageMod + damage * bonusDamage / 100;
+			if (pclass == PlayerClass.Warrior)
+			{
+				// 6 级之后才有暴击
+				if (Utils.Rand(6, 100) < level)
+					damage *= 2;
+			}
+
+			// TODO:
+			// damage 修正，比如装备对某种怪物有暴击
+
+			// TODO:
+			// 倍乘 6 次原因？
+			int skdam = damage << 6;
+			mt.hp -= skdam;
+
+			// TODO:
+			// handle steal hp or mana
+
+			// 倍乘 6 是否将 float > int 计算? 
+			if ((mt.hp >> 6) <= 0)
+			{
+				// 需要马上更新状态，否则 monster 逻辑会在下一帧执行
+				mt.StartKill();
+			}
+			else
+			{
+				mt.StartHit();
+			}
+		}
 	}
 
 	public bool CanAttack(Actor enemy)

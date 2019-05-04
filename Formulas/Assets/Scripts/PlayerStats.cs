@@ -27,4 +27,6 @@ public class PlayerStats
 	public int exp;
 	public int maxExp;
 	public int bonusToHit;
+	public int minDamage;
+	public int maxDamage;
 }
