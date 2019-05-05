@@ -78,8 +78,13 @@ public class Player : Actor
 	public int bonusDamageMod;
 	public int bonusDamage;
 
-	public Item[] invBody = new Item[InvBodyLoc.INVLOC_COUNT];
+	public int itemMinDamage;
+	public int itemMaxDamage;
+	public int itemBonusDamage;
+	public int itemBonusDamageMod;
+	public int itemBonusToHit;
 
+	public Item[] invBody = new Item[(int)InvBodyLoc.INVLOC_COUNT];
 
 	public Player Create(int pc)
 	{
@@ -255,6 +260,8 @@ public class Player : Actor
 				mt.StartHit(skdam);
 			}
 		}
+
+		return true;
 	}
 
 	public bool CanAttack(Actor enemy)
@@ -294,6 +301,38 @@ public class Player : Actor
 	{
 		int mind = 0; // min damage
 		int maxd = 0; // max damage
+
+		int bdam = 0; // bonus damage
+		int btohit = 0; // bonus chance to hit
+		int bac = 0; // bonus accuracy
+		// TODO:
+		// accuracy 精准度，影响甚么？
+
+		for (int i = 0; i < (int)InvBodyLoc.INVLOC_COUNT; ++i)
+		{
+			Item it = invBody[i];
+			if (it.type == ItemType.NONE)
+				continue;
+
+			mind += it.minDamage;
+			maxd += it.maxDamage;
+
+			// TODO:
+			// 为什么要限定 Normal
+			if (it.quality == ItemQuality.NORMAL)
+			{
+				bdam += it.plDamage;
+				btohit += it.plToHit;
+			}
+		}
+
+		// TODO:
+		// 确保 > 0 的原因是？
+		if (mind == 0 && maxd == 0)
+		{
+			mind = 1;
+			maxd = 1;
+		}
 
 
 	}
