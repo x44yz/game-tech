@@ -78,6 +78,9 @@ public class Player : Actor
 	public int bonusDamageMod;
 	public int bonusDamage;
 
+	public Item[] invBody = new Item[InvBodyLoc.INVLOC_COUNT];
+
+
 	public Player Create(int pc)
 	{
 		pclass = pc;
@@ -284,5 +287,14 @@ public class Player : Actor
 		}
 
 		damageMod = dam;
+	}
+
+	// 计算 Item 对角色属性的影响
+	public void CalcItemVals()
+	{
+		int mind = 0; // min damage
+		int maxd = 0; // max damage
+
+
 	}
 }
