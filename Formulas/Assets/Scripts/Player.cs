@@ -24,8 +24,8 @@ public class Player : Actor
 		STAND,
 		WALK,
 		ATTACK,
+		GOTHIT,
 		DEATH,
-		SPELL,
 	}
 
 	// NOTE:
@@ -154,42 +154,33 @@ public class Player : Actor
 
 	protected override void Update() 
 	{
-		// if (state == State.Normal)
-		// {
-		// 	if (Input.GetKeyDown(KeyCode.J) && CanAttack(target))
-		// 	{
-		// 		DoAttack(target);
-		// 	}
-		// }
-		// else if (state == State.Attack)
-		// {
-		// 	Debug.Assert(target, "CHECK: target cant be null.");
-		// 	if (ani.curAniState != ActorAniState.Attack)
-		// 		state = State.Normal;
-		// }
-
-		// if (bAttack)
-		// {
-		// 	atkCdTick += dt;
-		// 	if (atkCdTick >= TIME_ATK_COOLDOWN)
-		// 	{
-		// 		bAttack = false;
-		// 		atkCdTick = 0f;
-		// 	}
-		// }
-
-		if (status == Status.ATTACK)
+		if (status == Status.STAND)
+		{
+			DoStand();
+		}
+		else if (status == Status.ATTACK)
 		{
 			DoAttack(target);
 		}
+		else if (status == Status.GOTHIT)
+		{
+
+		}
+		else if (status == Status.DEATH)
+		{
+
+		}
+
+		// TODO:
+		// Validate Player
 	}
 
-	public void StartAttack()
+	private bool DoStand()
 	{
-		status = Status.ATTACK;
+		return false;
 	}
 
-	public void DoAttack(Actor enemy)
+	private bool DoAttack(Actor enemy)
 	{
 		// play sound
 		// play ani
@@ -210,6 +201,27 @@ public class Player : Actor
 
 			}
 		}
+	}
+
+	private bool DoGotHit()
+	{
+		// check got hit anim frame end
+		StartStand();
+	}
+
+	private bool DoDeath()
+	{
+
+	}
+
+	public void StartStand()
+	{
+		
+	}
+
+	public void StartAttack()
+	{
+		status = Status.ATTACK;
 	}
 
 	private bool HitMonster(Monster mt)
@@ -283,17 +295,7 @@ public class Player : Actor
 
 	public void SetStrength(int v)
 	{
-		int dam;
-		if (pclass == PlayerClass.Rogue)
-		{
-			dam = level * (strength + dexterity) / 200;
-		}
-		else
-		{
-			dam  = level * strength / 100;
-		}
 
-		damageMod = dam;
 	}
 
 	// 计算 Item 对角色属性的影响
@@ -307,6 +309,7 @@ public class Player : Actor
 		int bac = 0; // bonus accuracy
 		// TODO:
 		// accuracy 精准度，影响甚么？
+		int dmod = 0; // bonus damage mod
 
 		for (int i = 0; i < (int)InvBodyLoc.INVLOC_COUNT; ++i)
 		{
@@ -323,6 +326,7 @@ public class Player : Actor
 			{
 				bdam += it.plDamage;
 				btohit += it.plToHit;
+				dmod += it.plDamageMod;
 			}
 		}
 
@@ -334,6 +338,23 @@ public class Player : Actor
 			maxd = 1;
 		}
 
+		//
+		itemMinDamage = mind;
+		itemMaxDamage = maxd;
+		itemBonusDamage = bdam;
+		itemBonusToHit = btohit;
+		itemBonusDamageMod = dmod;
 
+		CalcDamageMod();
+	}
+
+	private void CalcDamageMod()
+	{
+		int dam = 0;
+		if (pclass == PlayerClass.Rogue)
+			dam = level * (strength + dexterity) / 200;
+		else
+			dam  = level * strength / 100;
+		damageMod = dam;
 	}
 }
