@@ -24,6 +24,7 @@ public class Player : Actor
 		STAND,
 		WALK,
 		ATTACK,
+		BLOCK,
 		GOTHIT,
 		DEATH,
 	}
@@ -83,6 +84,9 @@ public class Player : Actor
 	public int itemBonusDamage;
 	public int itemBonusDamageMod;
 	public int itemBonusToHit;
+
+	// 
+	public int blockFrames;
 
 	public Item[] invBody = new Item[(int)InvBodyLoc.INVLOC_COUNT];
 
@@ -162,13 +166,17 @@ public class Player : Actor
 		{
 			DoAttack(target);
 		}
+		else if (status == Status.BLOCK)
+		{
+			DoBlock();
+		}
 		else if (status == Status.GOTHIT)
 		{
-
+			DoGotHit();
 		}
 		else if (status == Status.DEATH)
 		{
-
+			DoDeath();
 		}
 
 		// TODO:
@@ -201,17 +209,30 @@ public class Player : Actor
 
 			}
 		}
+
+		return false;
+	}
+
+	private bool DoBlock()
+	{
+		// TODO:
+		// if anim frame >= blockFrames
+		// 其实就是 anim 结束
+		StartStand();
+		
 	}
 
 	private bool DoGotHit()
 	{
 		// check got hit anim frame end
 		StartStand();
+		
+		return false;
 	}
 
 	private bool DoDeath()
 	{
-
+		return false;
 	}
 
 	public void StartStand()
