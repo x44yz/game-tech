@@ -226,6 +226,10 @@ public class Player : Actor
 	{
 		// check got hit anim frame end
 		StartStand();
+		if (Utils.Rand(4) > 0)
+		{
+			ArmorDurability();
+		}
 		
 		return false;
 	}
@@ -377,5 +381,22 @@ public class Player : Actor
 		else
 			dam  = level * strength / 100;
 		damageMod = dam;
+	}
+
+	// 护甲耐久度
+	private void ArmorDurability()
+	{
+		Item it = null;
+		if (invBody[InvBodyLoc.CHEST].type == ItemType.NONE &&
+			invBody[InvBodyLoc.HEAD].type == ItemType.NONE)
+			return;
+		
+		InvBodyLoc inv = Utils.Rand(3) == 0 ? InvBodyLoc.HEAD : InvBodyLoc.CHEST;
+		if (invBody[InvBodyLoc.CHEST].type == ItemType.NONE)
+			inv = InvBodyLoc.HEAD;
+		if (invBody[InvBodyLoc.HEAD].type == ItemType.NONE)
+			inv = InvBodyLoc.CHEST;
+
+		
 	}
 }
