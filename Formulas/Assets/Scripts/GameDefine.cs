@@ -18,14 +18,14 @@ public enum FaceDir
 
 // inv = inventory
 // logical equipment locations
-public enum InvBodyLoc
+public class InvBodyLoc
 {
-	HEAD = 0,
-	RING_LEFT = 1,
-	RING_RIGHT = 2,
-	AMULET = 3,
-	HAND_LEFT = 4,
-	HAND_RIGHT = 5,
-	CHEST = 6,
-	COUNT,
+	public const int HEAD = 0;
+	public const int RING_LEFT = 1;
+	public const int RING_RIGHT = 2;
+	public const int AMULET = 3;
+	public const int HAND_LEFT = 4;
+	public const int HAND_RIGHT = 5;
+	public const int CHEST = 6;
+	public const int COUNT = 7;
 } 

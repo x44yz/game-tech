@@ -88,7 +88,7 @@ public class Player : Actor
 	// 
 	public int blockFrames;
 
-	public Item[] invBody = new Item[(int)InvBodyLoc.INVLOC_COUNT];
+	public Item[] invBody = new Item[(int)InvBodyLoc.COUNT];
 
 	public Player Create(int pc)
 	{
@@ -220,6 +220,7 @@ public class Player : Actor
 		// 其实就是 anim 结束
 		StartStand();
 		
+		return false;
 	}
 
 	private bool DoGotHit()
@@ -336,7 +337,7 @@ public class Player : Actor
 		// accuracy 精准度，影响甚么？
 		int dmod = 0; // bonus damage mod
 
-		for (int i = 0; i < (int)InvBodyLoc.INVLOC_COUNT; ++i)
+		for (int i = 0; i < InvBodyLoc.COUNT; ++i)
 		{
 			Item it = invBody[i];
 			if (it.type == ItemType.NONE)
@@ -386,17 +387,27 @@ public class Player : Actor
 	// 护甲耐久度
 	private void ArmorDurability()
 	{
-		Item it = null;
 		if (invBody[InvBodyLoc.CHEST].type == ItemType.NONE &&
 			invBody[InvBodyLoc.HEAD].type == ItemType.NONE)
 			return;
 		
-		InvBodyLoc inv = Utils.Rand(3) == 0 ? InvBodyLoc.HEAD : InvBodyLoc.CHEST;
+		int inv = Utils.Rand(3) == 0 ? InvBodyLoc.HEAD : InvBodyLoc.CHEST;
 		if (invBody[InvBodyLoc.CHEST].type == ItemType.NONE)
 			inv = InvBodyLoc.HEAD;
 		if (invBody[InvBodyLoc.HEAD].type == ItemType.NONE)
 			inv = InvBodyLoc.CHEST;
 
+		Item it = invBody[inv];
+		it.durability -= 1;
+		if (it.durability > 0)
+			return;
+
+		invBody[inv].type = ItemType.NONE;
+		CalcInventory();
+	}
+
+	private void CalcInventory()
+	{
 		
 	}
 }
