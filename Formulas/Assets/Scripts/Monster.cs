@@ -16,7 +16,18 @@ public class Monster : Actor
 	public Actor target;
 	public int armorClass;
 
+	public int aniFrame;
+	public int aniFrameNum;
+
 	private void Update()
+	{
+		if (status == Status.STAND)
+			DoStand();
+		else if (status == Status.ATTACK)
+			DoAttack(target);
+	}
+
+	private void DoStand()
 	{
 
 	}
@@ -24,7 +35,10 @@ public class Monster : Actor
 	public void DoAttack(Actor atr)
 	{
 		// 确定攻击动画的第几帧造成伤害
-		
+		if (aniFrame == aniFrameNum)
+		{
+			TryHit();
+		}
 	}
 
 	public void StartKill()
@@ -38,5 +52,10 @@ public class Monster : Actor
 
 		// TODO:
 		// play got hit animation
+	}
+
+	private void TryHit(Actor atr, int hit, int minDamage, int maxDamage)
+	{
+		
 	}
 }
