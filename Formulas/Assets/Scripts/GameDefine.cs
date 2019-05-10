@@ -28,4 +28,10 @@ public class InvBodyLoc
 	public const int HAND_RIGHT = 5;
 	public const int CHEST = 6;
 	public const int COUNT = 7;
-} 
+}
+
+public class ActionType
+{
+	public const int NONE = 0;
+	public const int ATTACK = 1;
+}

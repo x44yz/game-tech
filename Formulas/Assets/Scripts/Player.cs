@@ -90,6 +90,8 @@ public class Player : Actor
 
 	public Item[] invBody = new Item[(int)InvBodyLoc.COUNT];
 
+	public int destAction = ActionType.NONE;
+
 	public Player Create(int pc)
 	{
 		pclass = pc;
@@ -409,5 +411,16 @@ public class Player : Actor
 	private void CalcInventory()
 	{
 		
+	}
+
+	private void UpdateAction()
+	{
+		if (status == Status.STAND)
+		{
+			if (destAction == ActionType.ATTACK)
+			{
+				
+			}
+		}
 	}
 }
