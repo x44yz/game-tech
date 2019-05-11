@@ -54,8 +54,12 @@ public class Monster : Actor
 		// play got hit animation
 	}
 
-	private void TryHit(Actor atr, int hit, int minDamage, int maxDamage)
+	private void TryHit(Player plr, int hit, int minDamage, int maxDamage)
 	{
-		
+		if (plr.hp >> 6 <= 0 || plr.invincible)
+			return;
+
+		// NOTE:
+		// 判断距离
 	}
 }

@@ -79,6 +79,8 @@ public class Player : Actor
 	public int bonusDamageMod;
 	public int bonusDamage;
 
+	public bool invincible; // 无敌的
+
 	public int itemMinDamage;
 	public int itemMaxDamage;
 	public int itemBonusDamage;
