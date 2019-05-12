@@ -17,7 +17,7 @@ public class PlayerAttr
 	public const int VIT = 3; // vitality
 }
 
-public class Player : Actor
+public class Player : MonoBehaviour
 {
 	public enum Status
 	{
@@ -92,6 +92,7 @@ public class Player : Actor
 
 	public Item[] invBody = new Item[(int)InvBodyLoc.COUNT];
 
+	public Monster mst = null;
 	public int destAction = ActionType.NONE;
 
 	public Player Create(int pc)
@@ -153,14 +154,12 @@ public class Player : Actor
 	//							x(1 - Skill Damage Penalty/100)
 	//							x2(only if a critical or deadly strike is scored)
 
-	protected override void Start() 
+	protected void Start() 
 	{
-		base.Start();
-
-		faceDir = FaceDir.RIGHT;
+		// faceDir = FaceDir.RIGHT;
 	}
 
-	protected override void Update() 
+	protected void Update() 
 	{
 		if (status == Status.STAND)
 		{
@@ -168,7 +167,7 @@ public class Player : Actor
 		}
 		else if (status == Status.ATTACK)
 		{
-			DoAttack(target);
+			DoAttack(mst);
 		}
 		else if (status == Status.BLOCK)
 		{
@@ -192,26 +191,10 @@ public class Player : Actor
 		return false;
 	}
 
-	private bool DoAttack(Actor enemy)
+	private bool DoAttack(Monster mst)
 	{
-		// play sound
-		// play ani
-		// PlayAnimation("Attack");
-		// state = State.Attack;
-		// ani.PlayAnimation(ActorAniState.Attack);
-
-		// if (CheckHitTarget(target))
-		// {
-		// 	target.TakeDamage(damage);
-		// 	target.CheckDeath();
-		// }
-		// aniframe == num
 		if (true) 
 		{
-			if (target != null)
-			{
-
-			}
 		}
 
 		return false;

@@ -24,8 +24,8 @@ public class Actor : Entity
 	public SpriteRenderer spr;
 	public Vector3 healthBarOffset;
 
-	public int hp;
-	protected int maxHP;
+	//public int hp;
+	//protected int maxHP;
 
 	// private Animator ani;
 	public ActorAnimation ani = new ActorAnimation();
@@ -58,7 +58,7 @@ public class Actor : Entity
 		healthBar.transform.SetParent(spr.transform, false);
 		healthBar.transform.localPosition = healthBarOffset;
 
-		maxHP = hp;
+		//maxHP = hp;
 	}
 
 	protected virtual void Start() 
@@ -76,7 +76,7 @@ public class Actor : Entity
 
 	public void TakeDamage(int damage)
 	{
-		hp = hp - damage;
+		//hp = hp - damage;
 		
 		UpdateHealthBar();
 	}
@@ -103,8 +103,8 @@ public class Actor : Entity
 
 	protected void UpdateHealthBar()
 	{
-		float sx = hp * 1.0f / maxHP;
-		sx = Mathf.Clamp(sx, 0, 1);
-		healthBar.transform.localScale = new Vector3(sx, 1, 1);
+		// float sx = hp * 1.0f / maxHP;
+		// sx = Mathf.Clamp(sx, 0, 1);
+		// healthBar.transform.localScale = new Vector3(sx, 1, 1);
 	}
 }

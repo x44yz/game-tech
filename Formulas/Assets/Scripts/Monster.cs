@@ -1,6 +1,7 @@
 using System;
+using UnityEngine;
 
-public class Monster : Actor
+public class Monster : MonoBehaviour
 {
 	public enum Status
 	{
@@ -11,9 +12,11 @@ public class Monster : Actor
 		DEATH,
 	}
 
+	public int hp;
+
 	public Status status;
 
-	public Actor target;
+	public Player atkTarget;
 	public int armorClass;
 
 	public int aniFrame;
@@ -24,7 +27,7 @@ public class Monster : Actor
 		if (status == Status.STAND)
 			DoStand();
 		else if (status == Status.ATTACK)
-			DoAttack(target);
+			DoAttack(atkTarget);
 	}
 
 	private void DoStand()
@@ -32,12 +35,12 @@ public class Monster : Actor
 
 	}
 
-	public void DoAttack(Actor atr)
+	public void DoAttack(Player plr)
 	{
 		// 确定攻击动画的第几帧造成伤害
 		if (aniFrame == aniFrameNum)
 		{
-			TryHit();
+			// TryHit(plr, );
 		}
 	}
 
@@ -61,5 +64,7 @@ public class Monster : Actor
 
 		// NOTE:
 		// 判断距离
+
+		
 	}
 }

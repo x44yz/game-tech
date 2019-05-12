@@ -20,6 +20,7 @@ public class Item
 	// TODO:
 	// pl = item effect > player ?
 	public int plDamage;
+	public int plDamageMod;
 	public int plToHit;
 	public int durability; // 耐久度
 }
