@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4810285820239878}
-  - component: {fileID: 114414863809577474}
+  - component: {fileID: 114728576586116492}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -88,7 +88,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114414863809577474
+--- !u!114 &114728576586116492
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -96,12 +96,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1985033831950952}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e60e5bf95e744d4bbee636173b6399, type: 3}
+  m_Script: {fileID: 11500000, guid: 77074439afdb8fd4bbf879a75d0b3f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spr: {fileID: 212444761294418310}
-  target: {fileID: 0}
-  baseAttackSpeed: 2
+  hp: 0
+  status: 0
+  atkTarget: {fileID: 0}
+  armorClass: 0
+  aniFrame: 0
+  aniFrameNum: 0
 --- !u!212 &212444761294418310
 SpriteRenderer:
   m_ObjectHideFlags: 1

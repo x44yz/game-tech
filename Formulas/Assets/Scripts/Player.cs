@@ -193,9 +193,9 @@ public class Player : MonoBehaviour
 
 	private bool DoAttack(Monster mst)
 	{
-		if (true) 
-		{
-		}
+		// TODO:
+		// 当处于快速攻击的时候，调快动画 Animator.speed
+		// 判断动画播放结束
 
 		return false;
 	}
