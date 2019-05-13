@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
 
 	public Item[] invBody = new Item[(int)InvBodyLoc.COUNT];
 
-	public Monster mst = null;
+	public Monster monster = null;
 	public int destAction = ActionType.NONE;
 
 	public Player Create(int pc)
@@ -167,7 +167,7 @@ public class Player : MonoBehaviour
 		}
 		else if (status == Status.ATTACK)
 		{
-			DoAttack(mst);
+			DoAttack();
 		}
 		else if (status == Status.BLOCK)
 		{
@@ -182,20 +182,32 @@ public class Player : MonoBehaviour
 			DoDeath();
 		}
 
+		
+
 		// TODO:
 		// Validate Player
 	}
 
 	private bool DoStand()
 	{
+		if (destAction == ActionType.ATTACK)
+			StartAttack();
+
 		return false;
 	}
 
-	private bool DoAttack(Monster mst)
+	private bool DoAttack()
 	{
 		// TODO:
 		// 当处于快速攻击的时候，调快动画 Animator.speed
 		// 判断动画播放结束
+		// TODO:
+		// 可以攻击 Monster, Player, Object
+		// 根据点击 x，y
+		if (monster != null)
+		{
+			HitMonster(monster);
+		}
 
 		return false;
 	}

@@ -35,3 +35,8 @@ public class ActionType
 	public const int NONE = 0;
 	public const int ATTACK = 1;
 }
+
+public enum CmdType
+{
+	START_ATTACK = 0,
+}
