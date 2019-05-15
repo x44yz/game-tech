@@ -94,6 +94,12 @@ public class Player : MonoBehaviour
 
 	public Monster monster = null;
 	public int destAction = ActionType.NONE;
+	// 使用模糊的名字参数，可以替代过多的变量声明，也是一种类似
+	// 联合体的功能，减少类的 size，但是这样如果出了问题追踪起来比较麻烦
+	// public int destParam1 = 0;
+	// public int destParam2 = 0;
+	public int destX = 0;
+	public int destY = 0;
 
 	public Player Create(int pc)
 	{

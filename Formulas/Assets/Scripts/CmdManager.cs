@@ -14,6 +14,10 @@ public class CmdManager : MonoSingleton<CmdManager>
 	private void Update()
 	{
 		// parse cmd
-		
+		while (cmds.Count > 0)
+		{
+			Command cmd = cmds.Dequeue();
+			cmd.Handle();
+		}
 	}
 }

@@ -8,7 +8,8 @@ public class InputManager : MonoSingleton<InputManager>
 	{
 		if (Input.GetMouseButtonDown(0))
 		{
-			CmdManager.Instance.SendCmd(CmdType.START_ATTACK);
+			Debug.Log("xx-- click left");	
+			//CmdManager.Instance.SendCmd(CmdType.START_ATTACK);
 		}
 	}
 }
