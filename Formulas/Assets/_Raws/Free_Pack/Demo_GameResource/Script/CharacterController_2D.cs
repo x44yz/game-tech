@@ -25,9 +25,9 @@ public class CharacterController_2D : MonoBehaviour {
     // Use this for initialization
     void Start () {
         m_rigidbody = this.GetComponent<Rigidbody2D>();
-        m_Animator = this.transform.FindChild("BURLY-MAN_1_swordsman_model").GetComponent<Animator>();
+        m_Animator = this.transform.Find("BURLY-MAN_1_swordsman_model").GetComponent<Animator>();
         m_tran = this.transform;
-        m_SpriteGroup = this.transform.FindChild("BURLY-MAN_1_swordsman_model").GetComponentsInChildren<SpriteRenderer>(true);
+        m_SpriteGroup = this.transform.Find("BURLY-MAN_1_swordsman_model").GetComponentsInChildren<SpriteRenderer>(true);
 
   
     }
