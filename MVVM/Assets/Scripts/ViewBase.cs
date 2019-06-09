@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class ViewBase<T> : MonoBehaviour where T : ViewModelBase
 {
-
-
 	public void Bind<T>(Property<T> pp, Property<T>.ValueChangedHandler valueChangedHandler)
 	{
-
+		pp.OnValueChanged += valueChangedHandler;
 	}
 
-	public void Unbind<T>()
+	public void Unbind<T>(Property<T> pp, Property<T>.ValueChangedHandler valueChangedHandler)
+	{
+		pp.OnValueChanged -= valueChangedHandler;
+	}
 }
