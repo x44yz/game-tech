@@ -19,8 +19,7 @@ public class Property<T>
 				T old = _value;
 				_value = value;
 				
-				if (OnValueChanged != null)
-					OnValueChanged(old, _value);
+				ValueChanged(old, _value);
 			}
 		}
 	}
@@ -28,6 +27,12 @@ public class Property<T>
 	public Property(T val)
 	{
 		Value = val;
+	}
+
+	public void ValueChanged(T oldValue, T newValue)
+	{
+		if (OnValueChanged != null)
+			OnValueChanged(oldValue, newValue);
 	}
 
 	// public static Property<T> operator= (Property<T> p1, T val)
