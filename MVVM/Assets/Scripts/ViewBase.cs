@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,14 +14,22 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 		}
 	}
 
-	protected virtual void OnEnable()
+	public virtual void Show(Action onAfterShow = null)
 	{
-		
+		// TODO:
+		// 中间可以添加过渡动画
+		OnBeforeShow();
+		DoShow();
+		// TODO:
+		// 这里可能有打开过渡动画，不能直接调用 OnAfterShow()
+		OnAfterShow();
 	}
 
-	protected virtual void OnDisable()
+	public virtual void Hide(Action onAfterHide = null)
 	{
-		
+		OnBeforeHide();
+		DoHide();
+		OnAfterHide();
 	}
 
 	// TODO:
@@ -40,5 +49,35 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 	public void Unbind<PT>(Property<PT> pp, Property<PT>.ValueChangedHandler valueChangedHandler)
 	{
 		pp.OnValueChanged -= valueChangedHandler;
+	}
+
+	protected void OnBeforeShow()
+	{
+	}
+
+	protected void DoShow()
+	{
+		Vector3 tpos = transform.position;
+		tpos.x -= Screen.width * 2;
+		transform.position = tpos;
+	}
+
+	protected void OnAfterShow()
+	{
+	}
+
+	protected void OnBeforeHide()
+	{
+	}
+
+	protected void DoHide()
+	{
+		Vector3 tpos = transform.position;
+		tpos.x += Screen.width * 2;
+		transform.position = tpos;
+	}
+
+	protected void OnAfterHide()
+	{
 	}
 }
