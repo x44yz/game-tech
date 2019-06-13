@@ -5,13 +5,24 @@ using UnityEngine;
 
 public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 {
-	protected T _viewModel = null;
+	protected T _viewModel = new T();
 	public T viewModel {
 		get {
-			if (_viewModel == null)
-				_viewModel = new T();
+			if (_viewModel)
 			return _viewModel;
 		}
+	}
+
+	private Vector3 hidePosOffset {
+		get {
+			return new Vector3(Screen.width * 2, 0, 0);
+		}
+	}
+
+	private void OnDestroy()
+	{
+		Hide();
+		viewModel.
 	}
 
 	public virtual void Show(Action onAfterShow = null)
@@ -30,6 +41,11 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 		OnBeforeHide();
 		DoHide();
 		OnAfterHide();
+	}
+
+	protected virtual void InitBinder()
+	{
+
 	}
 
 	// TODO:
@@ -57,8 +73,7 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 
 	protected void DoShow()
 	{
-		Vector3 tpos = transform.position;
-		tpos.x -= Screen.width * 2;
+		Vector3 tpos = transform.position - hidePosOffset;
 		transform.position = tpos;
 	}
 
@@ -72,8 +87,7 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 
 	protected void DoHide()
 	{
-		Vector3 tpos = transform.position;
-		tpos.x += Screen.width * 2;
+		Vector3 tpos = transform.position + hidePosOffset;
 		transform.position = tpos;
 	}
 
