@@ -9,9 +9,10 @@ public class Test1View : ViewBase<Test1ViewModel>
 
 	// public Test1ViewModel ViewModel { get { return null;} }
 
-	void Start()
+	protected override void InitBinder()
 	{
-		Bind<int>(viewModel.count, OnCountChanged);
+		base.InitBinder();
+		Bind(viewModel.count, OnCountChanged);
 	}
 
 	void Update()
@@ -23,8 +24,6 @@ public class Test1View : ViewBase<Test1ViewModel>
 	{
 		Debug.Log("xx-- click btn add.");
 		viewModel.count.Value += 1;
-
-		Unbind(viewModel.count, OnCountChanged);
 	}
 
 	public void OnCountChanged(int oldValue, int newValue)
