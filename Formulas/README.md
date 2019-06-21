@@ -68,3 +68,8 @@ https://dota2.gamepedia.com/Attack_speed#Attack_speed_representation
 
 // Raw/jarulf162-diablo.pdf
 http://www.lurkerlounge.com/diablo/jarulf/jarulf162.pdf
+
+//
+RPG Maker
+https://www.rpgmakercentral.com/
+https://rmvxace.fandom.com/wiki/RPG_Maker_VX_Ace_Wiki
