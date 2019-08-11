@@ -4,5 +4,7 @@ using UnityEngine;
 
 public class ViewModelBase
 {
-	
+	// public bool inited {
+	// 	get; set;
+	// }
 }

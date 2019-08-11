@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 {
+	private bool _init = false;
+
 	protected T _viewModel = new T();
 	public T viewModel {
 		get {
-			if (_viewModel)
+
 			return _viewModel;
+		}
+		protected set {
+			_viewModel = value;
 		}
 	}
 
@@ -22,7 +27,9 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 	private void OnDestroy()
 	{
 		Hide();
-		viewModel.
+		viewModel = null;
+		// TODO:
+		// remove all binder
 	}
 
 	public virtual void Show(Action onAfterShow = null)
@@ -43,10 +50,9 @@ public class ViewBase<T> : MonoBehaviour where T : ViewModelBase, new()
 		OnAfterHide();
 	}
 
-	protected virtual void InitBinder()
-	{
-
-	}
+	// protected virtual void InitBinder()
+	// {
+	// }
 
 	// TODO:
 	// Bind 是否只能在 Start, OnEnable 里面调用，如果在 Awake 里面调用？
