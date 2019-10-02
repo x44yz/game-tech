@@ -17,7 +17,7 @@ public class dpPlayerStatsStruct
 // base attributes
 public class dpWeaponBA
 {
-	int reqLvl;
+	int reqPlrLvl;
 	int DAM;
 	int ATK;
 	int RNG;
@@ -38,7 +38,7 @@ public class dpWeaponEA
 
 public class dpArmorBA
 {
-	int reqLvl;
+	int reqPlrLvl;
 	int DEF;
 	int HP;
 	int SPD;
@@ -53,4 +53,12 @@ public class dpArmorEA
 	int CRIT; // %
 	int DODGE; // %
 	int RESIST; // %
+}
+
+public class dpSkill
+{
+	public string name;
+	public string desc;
+	public int reqPlrLv;
+	public int maxLvl;
 }
