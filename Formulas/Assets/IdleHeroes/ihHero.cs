@@ -1,4 +1,7 @@
-namespace IdleHeros
+namespace IdleHeroes
 {
-	
+	public class ihHero
+	{
+		public ihHeroStruct config; 
+	}
 }
