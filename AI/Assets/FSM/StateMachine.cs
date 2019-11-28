@@ -1,43 +1,79 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
-public class StateMachine
+namespace FSM
 {
-	private State m_prevState = null;
-	private State m_curState = null;
-	private Dictionary<System.Type, State> states = new Dictionary<System.Type, State>();
-
-	public void Update()
+	public class StateMachine
 	{
-			if (m_curState != null)
-				m_curState.Update();
-	}
+		private State m_prevState = null;
+		private State m_currState = null;
+		private Dictionary<string, State> states = new Dictionary<string, State>();
 
-	public void AddState(State state)
-	{
-		states[state.GetType()] = state;
-	}
+		public State CurrState { get { return m_currState; } }
+		public State PrevState { get { return m_prevState; } }
 
-	public State ChangeState(System.Type stateType)
-	{
-		if (m_curState != null && m_curState.GetType() == stateType)
-			return m_curState;
-
-		if (!states.ContainsKey(stateType))
+		public void Update()
 		{
-			Debug.LogError("failed to find state > " + stateType);
-			return null;
+			if (m_currState != null)
+				m_currState.Update();
 		}
 
-		if (m_curState != null)
-			m_curState.OnExit();
-		m_prevState = m_curState;
+		public void AddState(State state)
+		{
+			AddState(state.GetType().ToString(), state);
+		}
 
-		m_curState = states[stateType];
-		m_curState.OnEnter();
+		public void AddState(string stype, State state)
+		{
+			if (states.ContainsKey(stype))
+			{
+				Debug.LogError("exist same state > " + stype);
+				return;
+			}
 
-		return m_curState;
+			states[stype] = state;
+		}
+
+		public State ChangeState(string stype)
+		{
+			if (m_currState != null && 
+					m_currState.Type == stype)
+			{
+				Debug.LogWarning("current state is still running.");
+				return m_currState;
+			}
+
+			if (!states.ContainsKey(stype))
+			{
+				Debug.LogError("failed to find state > " + stype);
+				return null;
+			}
+
+			if (m_currState != null)
+				m_currState.OnExit(stype);
+			m_prevState = m_currState;
+
+			m_currState = states[stype];
+			m_currState.OnEnter(m_prevState.Type);
+
+			return m_currState;
+		}
+
+		public void ChangeState(State newState)
+		{
+			string stype = newState.Type;
+			if (!states.ContainsKey(stype))
+			{
+				AddState(stype, newState);
+			}
+
+			this.ChangeState(stype);
+		}
+
+		public bool IsInState(string stype)
+		{
+			return m_currState != null && m_currState.Type == stype;
+		}
 	}
 }
