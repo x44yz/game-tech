@@ -16,7 +16,7 @@ namespace FSM
 		public void Update()
 		{
 			if (m_currState != null)
-				m_currState.Update();
+				m_currState.Execute();
 		}
 
 		public void AddState(State state)
@@ -51,11 +51,11 @@ namespace FSM
 			}
 
 			if (m_currState != null)
-				m_currState.OnExit(stype);
+				m_currState.Exit(stype);
 			m_prevState = m_currState;
 
 			m_currState = states[stype];
-			m_currState.OnEnter(m_prevState.Type);
+			m_currState.Enter(m_prevState.Type);
 
 			return m_currState;
 		}

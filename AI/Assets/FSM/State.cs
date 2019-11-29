@@ -5,15 +5,15 @@ namespace FSM
 	{
 		public string Type { get { return GetType().ToString(); } }
 
-		public virtual void OnEnter(string from)
+		public virtual void Enter(string from)
 		{
 		}
 
-		public virtual void OnExit(string to)
+		public virtual void Execute()
 		{
 		}
 
-		public virtual void Update()
+		public virtual void Exit(string to)
 		{
 		}
 	}
