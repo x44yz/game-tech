@@ -20,7 +20,11 @@ namespace Test
             WorkState work = new WorkState();
         
             fsm = new StateMachine();
-            fsm.AddTransition()
+            fsm.AddTransition(new EatToSleepTransition());
+            fsm.AddTransition(new SleepToEatTransition());
+
+            // set default
+            fsm.SetState(sleep);
         }
 
         void Update()

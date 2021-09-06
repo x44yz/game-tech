@@ -33,7 +33,7 @@ namespace AI.FSM
             curState = st;
         }
 
-        public void AddTransition()
+        public void AddTransition(Transition ts)
         {
             
         }
