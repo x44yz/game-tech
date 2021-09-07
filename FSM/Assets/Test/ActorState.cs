@@ -16,9 +16,13 @@ namespace Test
 
         public override void OnUpdate(float dt)
         {
-            if (Time.time >= beginTime + duration)
+        }
+
+        public bool IsEatDone
+        {
+            get
             {
-                
+                return Time.time >= beginTime + duration;
             }
         }
     }
@@ -34,15 +38,22 @@ namespace Test
 
     public class EatToSleepTransition : Transition
     {
+        public Actor owner;
+
         public EatToSleepTransition(State from, State to)
             :base(from, to)
         {
+        }
+
+        public override bool IsValid() 
+        {
+            return owner.Hungry > 0 && owner.Fatigue > 1;
         }
     }
 
     public class EatToWorkTransition : Transition
     {
-        public EatToWorkTransition(State from, State to)
+        public EatToWorkTransition(SleepState from, EatState to)
             :base(from, to)
         {
         }
@@ -50,9 +61,16 @@ namespace Test
 
     public class SleepToEatTransition : Transition
     {
+        public Actor owner;
+
         public SleepToEatTransition(State from, State to)
             :base(from, to)
         {
+        }
+
+        public override bool IsValid() 
+        {
+            return owner.Hungry > 0 && owner.Fatigue > 1;
         }
     }
 

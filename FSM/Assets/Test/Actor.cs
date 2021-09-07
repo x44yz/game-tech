@@ -13,6 +13,9 @@ namespace Test
 
         private StateMachine fsm;
 
+        public int Hungry;
+        public int Fatigue;
+
         void Awake()
         {
             EatState eat = new EatState();
@@ -20,8 +23,8 @@ namespace Test
             WorkState work = new WorkState();
         
             fsm = new StateMachine();
-            fsm.AddTransition(new EatToSleepTransition());
-            fsm.AddTransition(new SleepToEatTransition());
+            fsm.AddTransition(new EatToSleepTransition(eat, sleep));
+            fsm.AddTransition(new SleepToEatTransition(sleep, eat));
 
             // set default
             fsm.SetState(sleep);
