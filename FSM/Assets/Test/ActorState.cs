@@ -36,43 +36,43 @@ namespace Test
 
     }
 
-    public class EatToSleepTransition : Transition
-    {
-        public Actor owner;
+    // public class EatToSleepTransition : Transition
+    // {
+    //     public Actor owner;
 
-        public EatToSleepTransition(State from, State to)
-            :base(from, to)
-        {
-        }
+    //     public EatToSleepTransition(State from, State to)
+    //         :base(from, to)
+    //     {
+    //     }
 
-        public override bool IsValid() 
-        {
-            return owner.Hungry > 0 && owner.Fatigue > 1;
-        }
-    }
+    //     public override bool IsValid() 
+    //     {
+    //         return owner.Hungry > 0 && owner.Fatigue > 1;
+    //     }
+    // }
 
-    public class EatToWorkTransition : Transition
-    {
-        public EatToWorkTransition(SleepState from, EatState to)
-            :base(from, to)
-        {
-        }
-    }
+    // public class EatToWorkTransition : Transition
+    // {
+    //     public EatToWorkTransition(SleepState from, EatState to)
+    //         :base(from, to)
+    //     {
+    //     }
+    // }
 
-    public class SleepToEatTransition : Transition
-    {
-        public Actor owner;
+    // public class SleepToEatTransition : Transition
+    // {
+    //     public Actor owner;
 
-        public SleepToEatTransition(State from, State to)
-            :base(from, to)
-        {
-        }
+    //     public SleepToEatTransition(State from, State to)
+    //         :base(from, to)
+    //     {
+    //     }
 
-        public override bool IsValid() 
-        {
-            return owner.Hungry > 0 && owner.Fatigue > 1;
-        }
-    }
+    //     public override bool IsValid() 
+    //     {
+    //         return owner.Hungry > 0 && owner.Fatigue > 1;
+    //     }
+    // }
 
     // public class SleepToWorkTransition : Transition
     // {

@@ -23,8 +23,8 @@ namespace Test
             WorkState work = new WorkState();
         
             fsm = new StateMachine();
-            fsm.AddTransition(new EatToSleepTransition(eat, sleep));
-            fsm.AddTransition(new SleepToEatTransition(sleep, eat));
+            fsm.AddTransition(new Transition(eat, sleep, OnEatToSleepCond));
+            fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
 
             // set default
             fsm.SetState(sleep);
@@ -33,6 +33,16 @@ namespace Test
         void Update()
         {
             fsm.Update(Time.deltaTime);
+        }
+
+        bool OnEatToSleepCond()
+        {
+            return Hungry > 0 && Fatigue > 1;
+        }
+
+        bool OnSleepToEatCond()
+        {
+            return Hungry > 0 && Fatigue == 0;
         }
     }
 }
