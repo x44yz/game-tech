@@ -13,36 +13,63 @@ namespace Test
 
         private StateMachine fsm;
 
-        public int Hungry;
-        public int Fatigue;
+        public float hunger;
+        public float fatigue;
+        public float hungryRate;
+        public float fatigueRate;
 
         void Awake()
         {
-            EatState eat = new EatState();
-            SleepState sleep = new SleepState();
-            WorkState work = new WorkState();
+            EatState eat = new EatState(this);
+            SleepState sleep = new SleepState(this);
+            WorkState work = new WorkState(this);
+            IdleState idle = new IdleState(this);
+            WalkState walk = new WalkState(this);
         
             fsm = new StateMachine();
             fsm.AddTransition(new Transition(eat, sleep, OnEatToSleepCond));
             fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
 
             // set default
-            fsm.SetState(sleep);
+            fsm.SetState(idle);
         }
 
         void Update()
         {
             fsm.Update(Time.deltaTime);
+
+            float dt = Time.deltaTime;
+            
+            hunger += hungryRate * dt;
+            hunger = Mathf.Max(hunger, 0);
+
+            fatigue += fatigueRate * dt;
+            fatigue = Mathf.Max(fatigue, 0);
         }
 
         bool OnEatToSleepCond()
         {
-            return Hungry > 0 && Fatigue > 1;
+            return hunger > 0 && fatigue > 1;
+        }
+
+        bool OnEatToWorkCond()
+        {
+            return false;
         }
 
         bool OnSleepToEatCond()
         {
-            return Hungry > 0 && Fatigue == 0;
+            return hunger > 0 && fatigue == 0;
+        }
+
+        bool OnWorkToSleepCond()
+        {
+            return false;
+        }
+
+        bool OnWorkToEatCond()
+        {
+            return false;
         }
     }
 }

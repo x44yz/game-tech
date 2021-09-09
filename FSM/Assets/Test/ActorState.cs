@@ -3,89 +3,63 @@ using AI.FSM;
 
 namespace Test
 {
-    public class EatState : State
+    public class ActorState : State
     {
+        public Actor actor;
         public float beginTime;
-        public float duration;
+
+        public ActorState(Actor actor)
+        {
+            this.actor = actor;
+        }
 
         public override void OnEnter()
         {
             beginTime = Time.time;
-            duration = TestDef.RealHourToGameSeconds(0.5f);
         }
 
         public override void OnUpdate(float dt)
         {
         }
+    }
 
-        public bool IsEatDone
+    public class EatState : ActorState
+    {
+        public EatState(Actor actor) : base(actor)
         {
-            get
-            {
-                return Time.time >= beginTime + duration;
-            }
+
         }
     }
 
-    public class SleepState : State
+    public class SleepState : ActorState
     { 
+        public SleepState(Actor actor) : base(actor)
+        {
+            
+        }
     }
 
-    public class WorkState : State
+    public class WorkState : ActorState
     {
-
+        public WorkState(Actor actor) : base(actor)
+        {
+            
+        }
     }
 
-    // public class EatToSleepTransition : Transition
-    // {
-    //     public Actor owner;
+    public class IdleState : ActorState
+    {
+        public IdleState(Actor actor) : base(actor)
+        {
+            
+        }
+    }
 
-    //     public EatToSleepTransition(State from, State to)
-    //         :base(from, to)
-    //     {
-    //     }
-
-    //     public override bool IsValid() 
-    //     {
-    //         return owner.Hungry > 0 && owner.Fatigue > 1;
-    //     }
-    // }
-
-    // public class EatToWorkTransition : Transition
-    // {
-    //     public EatToWorkTransition(SleepState from, EatState to)
-    //         :base(from, to)
-    //     {
-    //     }
-    // }
-
-    // public class SleepToEatTransition : Transition
-    // {
-    //     public Actor owner;
-
-    //     public SleepToEatTransition(State from, State to)
-    //         :base(from, to)
-    //     {
-    //     }
-
-    //     public override bool IsValid() 
-    //     {
-    //         return owner.Hungry > 0 && owner.Fatigue > 1;
-    //     }
-    // }
-
-    // public class SleepToWorkTransition : Transition
-    // {
-
-    // }
-
-    // public class WorkToEatTransition : Transition
-    // {
-
-    // }
-
-    // public class WorkToSleepTransition : Transition
-    // {
-        
-    // }
+    public class WalkState : ActorState
+    {
+        public WalkState(Actor actor) : base(actor)
+        {
+            
+        }
+    }
 }
