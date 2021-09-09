@@ -6,20 +6,20 @@ namespace AI.FSM
     public class StateMachine
     {
         public State curState;
-        public Dictionary<State, Dictionary<Transition, State>> transitions = new Dictionary<State, Dictionary<Transition, State>>();
+        public Dictionary<State, List<Transition>> transitions = new Dictionary<State, List<Transition>>();
 
         public void Update(float dt)
         {
             if (curState == null)
                 return;
 
-            if (transitions.TryGetValue(curState, out Dictionary<Transition, State> ts))
+            if (transitions.TryGetValue(curState, out List<Transition> tsList))
             {
-                foreach (var kv in ts)
+                foreach (var ts in tsList)
                 {
-                    if (kv.Key.IsValid())
+                    if (ts.IsValid())
                     {
-                        SetState(kv.Value);
+                        SetState(ts.to);
                         break;
                     }
                 }
@@ -30,12 +30,22 @@ namespace AI.FSM
 
         public void SetState(State st)
         {
+            if (curState != null)
+                curState.OnExit();
+
             curState = st;
+            curState.OnEnter();
         }
 
         public void AddTransition(Transition ts)
         {
-            
+            List<Transition> tsList;
+            if (!transitions.TryGetValue(ts.from, out tsList))
+            {
+                tsList = new List<Transition>();
+                transitions.Add(ts.from, tsList);
+            }
+            tsList.Add(ts);
         }
     }
 }

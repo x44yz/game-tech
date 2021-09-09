@@ -143,6 +143,13 @@ MonoBehaviour:
   - {fileID: 1194268871}
   - {fileID: 1472187810}
   - {fileID: 8439293561673940977}
+  hunger: 10
+  fatigue: 10
+  hungryRate: -3
+  fatigueRate: -1
+  walkSpeed: 10
+  targetPT: -1
+  curState: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,6 +29,12 @@ namespace Test
         {
 
         }
+
+        public override void OnEnter()
+        {
+            Debug.Log("xx-- EatState.OnEnter");
+            actor.targetPT = PointType.Eat;
+        }
     }
 
     public class SleepState : ActorState
@@ -45,6 +51,8 @@ namespace Test
         {
             
         }
+
+     
     }
 
     public class IdleState : ActorState
@@ -57,9 +65,25 @@ namespace Test
 
     public class WalkState : ActorState
     {
+        public Vector3 dir;
+
         public WalkState(Actor actor) : base(actor)
         {
             
+        }
+
+        public override void OnEnter()
+        {
+            Debug.Assert(actor.targetPT != PointType.None);
+            Point pt = actor.GetPoint(actor.targetPT);
+            Vector3 dist = pt.transform.position - actor.transform.position;
+            dist.y = 0f;
+            dir = dist.normalized;
+        }
+
+        public override void OnUpdate(float dt)
+        {
+            actor.transform.position += dir * actor.walkSpeed * dt;
         }
     }
 }

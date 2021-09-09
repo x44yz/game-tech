@@ -6,6 +6,7 @@ namespace Test
 {
     public enum PointType
     {
+        None = -1,
         Eat,
         Sleep,
         Work,

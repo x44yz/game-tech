@@ -9,6 +9,8 @@ namespace Test
 
     public class Actor : MonoBehaviour
     {
+        public const float POINT_STOP_DIST = 1f;
+
         public List<Point> points = new List<Point>();
 
         private StateMachine fsm;
@@ -17,6 +19,11 @@ namespace Test
         public float fatigue;
         public float hungryRate;
         public float fatigueRate;
+        public float walkSpeed;
+
+        [Header("Runtime")]
+        public PointType targetPT = PointType.None;
+        public string curState = "";
 
         void Awake()
         {
@@ -27,8 +34,12 @@ namespace Test
             WalkState walk = new WalkState(this);
         
             fsm = new StateMachine();
-            fsm.AddTransition(new Transition(eat, sleep, OnEatToSleepCond));
-            fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
+            // fsm.AddTransition(new Transition(eat, sleep, OnEatToSleepCond));
+            // fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
+            fsm.AddTransition(new Transition(idle, eat, OnIdleToEatCond));
+            // fsm.AddTransition(new Transition(idle, sleep, OnIdleToSleepCond));
+            fsm.AddTransition(new Transition(eat, walk, OnXXXToWalkCond));
+            fsm.AddTransition(new Transition(walk, idle, OnWalkToIdleCond));
 
             // set default
             fsm.SetState(idle);
@@ -43,8 +54,50 @@ namespace Test
             hunger += hungryRate * dt;
             hunger = Mathf.Max(hunger, 0);
 
-            fatigue += fatigueRate * dt;
-            fatigue = Mathf.Max(fatigue, 0);
+            // fatigue += fatigueRate * dt;
+            // fatigue = Mathf.Max(fatigue, 0);
+
+            curState = fsm.curState.ToString();
+        }
+
+        public Point GetPoint(PointType pt)
+        {
+            foreach (var p in points)
+            {
+                if (p.pointType == pt)
+                    return p;
+            }
+            Debug.Assert(false, "Cant find point type > " + pt);
+            return null;
+        }
+
+        bool OnIdleToEatCond()
+        {
+            return hunger < 1f;
+        }
+
+        bool OnIdleToSleepCond()
+        {
+            return hunger < 1f;
+        }
+
+        bool OnXXXToWalkCond()
+        {
+            if (targetPT == PointType.None)
+                return false;
+
+            var pt = GetPoint(targetPT);
+            var dist = transform.position - pt.transform.position;
+            dist.y = 0f;
+            return dist.magnitude > POINT_STOP_DIST;
+        }
+
+        bool OnWalkToIdleCond()
+        {
+            var pt = GetPoint(targetPT);
+            var dist = transform.position - pt.transform.position;
+            dist.y = 0f;
+            return dist.magnitude <= POINT_STOP_DIST;
         }
 
         bool OnEatToSleepCond()
