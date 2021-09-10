@@ -143,11 +143,12 @@ MonoBehaviour:
   - {fileID: 1194268871}
   - {fileID: 1472187810}
   - {fileID: 8439293561673940977}
-  hunger: 10
+  hunger: 1
   fatigue: 10
-  hungryRate: -3
+  hungryRate: -0.1
   fatigueRate: -1
   walkSpeed: 10
+  eatRate: 10
   targetPT: -1
   curState: 
 --- !u!1 &705507993

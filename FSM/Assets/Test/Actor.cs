@@ -21,6 +21,8 @@ namespace Test
         public float fatigueRate;
         public float walkSpeed;
 
+        public float eatRate;
+
         [Header("Runtime")]
         public PointType targetPT = PointType.None;
         public string curState = "";
@@ -34,7 +36,7 @@ namespace Test
             WalkState walk = new WalkState(this);
         
             fsm = new StateMachine();
-            // fsm.AddTransition(new Transition(eat, sleep, OnEatToSleepCond));
+            fsm.AddTransition(new Transition(eat, idle, OnEatToIdleCond));
             // fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
             fsm.AddTransition(new Transition(idle, eat, OnIdleToEatCond));
             // fsm.AddTransition(new Transition(idle, sleep, OnIdleToSleepCond));
@@ -73,7 +75,7 @@ namespace Test
 
         bool OnIdleToEatCond()
         {
-            return hunger < 1f;
+            return hunger < 0.1f;
         }
 
         bool OnIdleToSleepCond()
@@ -100,9 +102,9 @@ namespace Test
             return dist.magnitude <= POINT_STOP_DIST;
         }
 
-        bool OnEatToSleepCond()
+        bool OnEatToIdleCond()
         {
-            return hunger > 0 && fatigue > 1;
+            return hunger >= 20;
         }
 
         bool OnEatToWorkCond()

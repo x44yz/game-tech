@@ -35,6 +35,11 @@ namespace Test
             Debug.Log("xx-- EatState.OnEnter");
             actor.targetPT = PointType.Eat;
         }
+
+        public override void OnUpdate(float dt)
+        {
+            actor.hunger += actor.eatRate * dt;
+        }
     }
 
     public class SleepState : ActorState
@@ -74,6 +79,7 @@ namespace Test
 
         public override void OnEnter()
         {
+            Debug.Log("xx-- WalkState.OnEnter");
             Debug.Assert(actor.targetPT != PointType.None);
             Point pt = actor.GetPoint(actor.targetPT);
             Vector3 dist = pt.transform.position - actor.transform.position;
