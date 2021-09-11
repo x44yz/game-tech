@@ -143,14 +143,21 @@ MonoBehaviour:
   - {fileID: 1194268871}
   - {fileID: 1472187810}
   - {fileID: 8439293561673940977}
-  hunger: 1
-  fatigue: 10
-  hungryRate: -0.1
-  fatigueRate: -1
-  walkSpeed: 10
-  eatRate: 10
+  hunger: 2.8532617
+  energy: 11.826567
+  walkSpeed: 4
+  defaultHungryDrain: -0.2
+  walkEnergyDrain: -0.4
+  eatHungrySupply: 10
+  workHungryDrain: -0.4
+  workEnergyDrain: -0.7
+  idleEnergySupply: 0.1
+  sleepEnergySupply: 2
+  sleepHungrySupplyMulti: 0.5
   targetPT: -1
   curState: 
+  _hungryRate: 0
+  _energyRate: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

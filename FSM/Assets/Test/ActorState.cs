@@ -34,11 +34,18 @@ namespace Test
         {
             Debug.Log("xx-- EatState.OnEnter");
             actor.targetPT = PointType.Eat;
+            actor.hungryRate += actor.eatHungrySupply;
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("xx-- EatState.OnExit");
+            actor.hungryRate -= actor.eatHungrySupply;
         }
 
         public override void OnUpdate(float dt)
         {
-            actor.hunger += actor.eatRate * dt;
+            // actor.hunger += actor.eatRate * dt;
         }
     }
 
@@ -48,6 +55,22 @@ namespace Test
         {
             
         }
+
+        public override void OnEnter()
+        {
+            Debug.Log("xx-- SleepState.OnEnter");
+            actor.targetPT = PointType.Sleep;
+            actor.energyRate += actor.sleepEnergySupply;
+            actor.hungryRate *= actor.sleepHungrySupplyMulti;
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("xx-- SleepState.OnExit");
+            actor.energyRate -= actor.sleepEnergySupply;
+            actor.hungryRate /= actor.sleepHungrySupplyMulti;
+        }
+
     }
 
     public class WorkState : ActorState
@@ -57,7 +80,20 @@ namespace Test
             
         }
 
-     
+        public override void OnEnter()
+        {
+            Debug.Log("xx-- WorkState.OnEnter");
+            actor.targetPT = PointType.Work;
+            actor.hungryRate += actor.workHungryDrain;
+            actor.energyRate += actor.workEnergyDrain;
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("xx-- WorkState.OnExit");
+            actor.hungryRate -= actor.workHungryDrain;
+            actor.energyRate -= actor.workEnergyDrain;
+        }
     }
 
     public class IdleState : ActorState
@@ -65,6 +101,18 @@ namespace Test
         public IdleState(Actor actor) : base(actor)
         {
             
+        }
+
+        public override void OnEnter()
+        {
+            Debug.Log("xx-- IdleState.OnEnter");
+            actor.energyRate += actor.idleEnergySupply;
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("xx-- IdleState.OnExit");
+            actor.energyRate -= actor.idleEnergySupply;
         }
     }
 
@@ -85,6 +133,14 @@ namespace Test
             Vector3 dist = pt.transform.position - actor.transform.position;
             dist.y = 0f;
             dir = dist.normalized;
+
+            actor.energyRate += actor.walkEnergyDrain;
+        }
+
+        public override void OnExit()
+        {
+            Debug.Log("xx-- WalkState.OnExit");
+            actor.energyRate -= actor.walkEnergyDrain;
         }
 
         public override void OnUpdate(float dt)

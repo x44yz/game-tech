@@ -16,19 +16,49 @@ namespace Test
         private StateMachine fsm;
 
         public float hunger;
-        public float fatigue;
-        public float hungryRate;
-        public float fatigueRate;
+        public float energy;
         public float walkSpeed;
-
-        public float eatRate;
+        public float defaultHungryDrain;
+        public float walkEnergyDrain;
+        public float eatHungrySupply;
+        public float workHungryDrain;
+        public float workEnergyDrain;
+        public float idleEnergySupply;
+        public float sleepEnergySupply;
+        public float sleepHungrySupplyMulti;
 
         [Header("Runtime")]
         public PointType targetPT = PointType.None;
         public string curState = "";
+        public float hungryRate
+        {
+            get { return _hungryRate; }
+            set 
+            {
+                Debug.Log("xx-- hungryRate > " + _hungryRate + " - " + value);
+                _hungryRate = value;
+            }
+        }
+        [SerializeField]
+        private float _hungryRate = 0f;
+
+        public float energyRate 
+        {
+            get { return _energyRate; }
+            set 
+            {
+                Debug.Log("xx-- energyRate > " + _energyRate + " - " + value);
+                _energyRate = value;
+            }
+        }
+        [SerializeField]
+        private float _energyRate = 0f;
 
         void Awake()
         {
+            hungryRate += defaultHungryDrain;
+            energyRate = 0f;
+
             EatState eat = new EatState(this);
             SleepState sleep = new SleepState(this);
             WorkState work = new WorkState(this);
@@ -36,11 +66,17 @@ namespace Test
             WalkState walk = new WalkState(this);
         
             fsm = new StateMachine();
-            fsm.AddTransition(new Transition(eat, idle, OnEatToIdleCond));
-            // fsm.AddTransition(new Transition(sleep, eat, OnSleepToEatCond));
             fsm.AddTransition(new Transition(idle, eat, OnIdleToEatCond));
-            // fsm.AddTransition(new Transition(idle, sleep, OnIdleToSleepCond));
+            fsm.AddTransition(new Transition(eat, idle, OnEatToIdleCond));
+            fsm.AddTransition(new Transition(idle, work, OnIdleToWorkCond));
+            fsm.AddTransition(new Transition(work, idle, OnWorkToIdleCond));
+            fsm.AddTransition(new Transition(idle, sleep, OnIdleToSleepCond));
+            fsm.AddTransition(new Transition(sleep, idle, OnSleepToIdleCond));
+            
             fsm.AddTransition(new Transition(eat, walk, OnXXXToWalkCond));
+            fsm.AddTransition(new Transition(work, walk, OnXXXToWalkCond));
+            fsm.AddTransition(new Transition(sleep, walk, OnXXXToWalkCond));
+
             fsm.AddTransition(new Transition(walk, idle, OnWalkToIdleCond));
 
             // set default
@@ -56,8 +92,8 @@ namespace Test
             hunger += hungryRate * dt;
             hunger = Mathf.Max(hunger, 0);
 
-            // fatigue += fatigueRate * dt;
-            // fatigue = Mathf.Max(fatigue, 0);
+            energy += energyRate * dt;
+            energy = Mathf.Max(energy, 0);
 
             curState = fsm.curState.ToString();
         }
@@ -78,9 +114,29 @@ namespace Test
             return hunger < 0.1f;
         }
 
+        bool OnEatToIdleCond()
+        {
+            return hunger >= 20;
+        }
+
+        bool OnIdleToWorkCond()
+        {
+            return hunger > 5f && energy > 5f;
+        }
+
+        bool OnWorkToIdleCond()
+        {
+            return hunger < 0.1f || energy < 0.5f;
+        }
+
         bool OnIdleToSleepCond()
         {
-            return hunger < 1f;
+            return energy < 1f;
+        }
+
+        bool OnSleepToIdleCond()
+        {
+            return energy > 10f;
         }
 
         bool OnXXXToWalkCond()
@@ -100,31 +156,6 @@ namespace Test
             var dist = transform.position - pt.transform.position;
             dist.y = 0f;
             return dist.magnitude <= POINT_STOP_DIST;
-        }
-
-        bool OnEatToIdleCond()
-        {
-            return hunger >= 20;
-        }
-
-        bool OnEatToWorkCond()
-        {
-            return false;
-        }
-
-        bool OnSleepToEatCond()
-        {
-            return hunger > 0 && fatigue == 0;
-        }
-
-        bool OnWorkToSleepCond()
-        {
-            return false;
-        }
-
-        bool OnWorkToEatCond()
-        {
-            return false;
         }
     }
 }
