@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Reflection;
 using AI.FSM;
 
 namespace AI.FSMTool
 {
-    public class BTUtils
+    public class FTUtils
     {
         public static System.Type GetType(string typeName)
         {
@@ -34,6 +36,34 @@ namespace AI.FSMTool
                 }
             }
             return type;
+        }
+
+        public static System.Type[] GetFSMStates(string fsmName)
+        {
+            List<System.Type> types = new List<System.Type>();
+            // System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            // foreach (Assembly assembly in assemblies) {
+            //     try {
+            //         types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+            //     } catch (ReflectionTypeLoadException) { }
+            // }
+            // return types.ToArray();
+
+            var baseType = typeof(State);
+
+            System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            foreach (System.Reflection.Assembly assembly in assemblies)
+            {
+                try
+                {
+                    types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+                } 
+                catch (System.Reflection.ReflectionTypeLoadException) 
+                {
+                }
+            }
+
+            return null;
         }
 
         // public static StateMachine LoadAIFromJson(string json)

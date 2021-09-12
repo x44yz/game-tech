@@ -14,7 +14,7 @@ namespace AI.FSMTool
             public uint uid = 0;
         }
 
-        public FTNode root;
+        // public FTNode root;
         public string id = "";
         public string title = "FSM";
         public string description = "";
@@ -27,23 +27,23 @@ namespace AI.FSMTool
             id = BTEditorUtils.NewGuid();
         }
 
-        public void SetRoot(FTNode node)
-        {
-            if (root != null)
-            {
-                root.IsRoot = false;
-            }
-            root = node;
-        }
+        // public void SetRoot(FTNode node)
+        // {
+        //     if (root != null)
+        //     {
+        //         root.IsRoot = false;
+        //     }
+        //     root = node;
+        // }
 
-        public void UnsetRoot(FTNode node)
-        {
-            // Only unset when the state passed is the same as the current one.
-            if (node == root)
-            {
-                root = null;
-            }
-        }
+        // public void UnsetRoot(FTNode node)
+        // {
+        //     // Only unset when the state passed is the same as the current one.
+        //     if (node == root)
+        //     {
+        //         root = null;
+        //     }
+        // }
 
         // runtime mode
         public void InitWithBTTree(FSM.StateMachine tree)

@@ -18,7 +18,7 @@ namespace AI.FSMTool
 
         [Input] public FTConnection From;
         [SerializeField] protected List<FTConnection> _children = new List<FTConnection>();
-        [SerializeField] private bool _isRoot;
+        // [SerializeField] private bool _isRoot;
         private System.Type _nodeSystemType = null;
         private FSM.State _tFTNode = null; // for runtime mode
 
@@ -62,35 +62,35 @@ namespace AI.FSMTool
 //             }
 //         }
 
-        public bool IsRoot
-        {
-            get { return _isRoot; }
-            set
-            {
-                FTGraph btGraph = graph as FTGraph;
-                if (value)
-                {
-                    btGraph.SetRoot(this);
-                    NodePort port = GetInputPort("parent");
-                    port.Disconnect(port.Connection);
-                }
-                else
-                {
-                    btGraph.UnsetRoot(this);
-                }
-                _isRoot = value;
-            }
-        }
+        // public bool IsRoot
+        // {
+        //     get { return _isRoot; }
+        //     set
+        //     {
+        //         FTGraph btGraph = graph as FTGraph;
+        //         if (value)
+        //         {
+        //             btGraph.SetRoot(this);
+        //             NodePort port = GetInputPort("parent");
+        //             port.Disconnect(port.Connection);
+        //         }
+        //         else
+        //         {
+        //             btGraph.UnsetRoot(this);
+        //         }
+        //         _isRoot = value;
+        //     }
+        // }
 
-        public void SetRoot()
-        {
-            IsRoot = true;
-        }
+        // public void SetRoot()
+        // {
+        //     IsRoot = true;
+        // }
 
-        public void UnsetRoot()
-        {
-            IsRoot = false;
-        }
+        // public void UnsetRoot()
+        // {
+        //     IsRoot = false;
+        // }
 
         public int ChildCount
         {

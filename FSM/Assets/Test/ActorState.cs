@@ -23,6 +23,7 @@ namespace Test
         }
     }
 
+    [FSMStateClass("ActorFSM")]
     public class EatState : ActorState
     {
         public EatState(Actor actor) : base(actor)
@@ -49,6 +50,7 @@ namespace Test
         }
     }
 
+    [FSMStateClass("ActorFSM")]
     public class SleepState : ActorState
     { 
         public SleepState(Actor actor) : base(actor)
@@ -73,6 +75,7 @@ namespace Test
 
     }
 
+    [FSMStateClass("ActorFSM")]
     public class WorkState : ActorState
     {
         public WorkState(Actor actor) : base(actor)
@@ -96,6 +99,7 @@ namespace Test
         }
     }
 
+    [FSMStateClass("ActorFSM")]
     public class IdleState : ActorState
     {
         public IdleState(Actor actor) : base(actor)
@@ -116,6 +120,7 @@ namespace Test
         }
     }
 
+    [FSMStateClass("ActorFSM")]
     public class WalkState : ActorState
     {
         public Vector3 dir;

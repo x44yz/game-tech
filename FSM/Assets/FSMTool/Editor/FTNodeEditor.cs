@@ -114,7 +114,7 @@ namespace AI.FSMTool
                 GUILayout.EndHorizontal();
                 // }
 
-                // DrawStateNode(int.MaxValue);
+                DrawStateNode(int.MaxValue);
             }
             catch (System.Exception ex)
             {
@@ -140,16 +140,18 @@ namespace AI.FSMTool
                 } 
                 else
                 {
-                    GUILayout.BeginVertical();
+                    //GUILayout.BeginArea(new Rect(50f, 50f + i * 100f, 100f, 100f));
+                    EditorGUILayout.BeginVertical("Box");
                     {
-                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.Space();
                         NodeEditorGUILayout.PortField(new GUIContent("To" + (i + 1)), port, GUILayout.Width(50));
                         GUILayout.EndHorizontal();
-                    
+
                         GUILayout.Button("XXX");
                     }
-                    GUILayout.EndVertical();
+                    EditorGUILayout.EndVertical();
+                    //GUILayout.EndArea();
                 }
             }
 
@@ -167,11 +169,6 @@ namespace AI.FSMTool
                     _FTNode.AddChildConnection(_outputNewChild.Connection);
                     _outputNewChild.Disconnect(_outputNewChild.Connection);
                     EditorUtility.SetDirty(target);
-
-                    if (BTEditorUtils.CheckExistDeadLoop(target as FTNode))
-                    {
-                        EditorUtility.DisplayDialog("Error", "Your father is still your father.", "OK");
-                    }
                 }
 
                 GUILayout.BeginHorizontal();

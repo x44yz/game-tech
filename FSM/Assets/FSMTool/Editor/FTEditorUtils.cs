@@ -73,7 +73,7 @@ namespace AI.FSMTool
 
             B3TreeData b3Tree = new B3TreeData();
             b3Tree.id = btGraph.id;
-            b3Tree.root = btGraph.root.id;
+            // b3Tree.root = btGraph.root.id;
             b3Tree.title = btGraph.title;
             // b3Tree.description = btGraph.description;
             

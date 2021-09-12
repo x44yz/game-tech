@@ -109,36 +109,43 @@ namespace Test
             return null;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnIdleToEatCond()
         {
             return hunger < 0.1f;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnEatToIdleCond()
         {
             return hunger >= 20;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnIdleToWorkCond()
         {
             return hunger > 5f && energy > 5f;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnWorkToIdleCond()
         {
             return hunger < 0.1f || energy < 0.5f;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnIdleToSleepCond()
         {
             return energy < 1f;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnSleepToIdleCond()
         {
             return energy > 10f;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnXXXToWalkCond()
         {
             if (targetPT == PointType.None)
@@ -150,6 +157,7 @@ namespace Test
             return dist.magnitude > POINT_STOP_DIST;
         }
 
+        [FSMTransitionMethod("ActorFSM")]
         bool OnWalkToIdleCond()
         {
             var pt = GetPoint(targetPT);
