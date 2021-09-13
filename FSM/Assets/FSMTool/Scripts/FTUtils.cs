@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AI.FSM;
+using UnityEngine;
 
 namespace AI.FSMTool
 {
@@ -40,30 +41,94 @@ namespace AI.FSMTool
 
         public static System.Type[] GetFSMStates(string fsmName)
         {
-            List<System.Type> types = new List<System.Type>();
-            // System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
-            // foreach (Assembly assembly in assemblies) {
-            //     try {
-            //         types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
-            //     } catch (ReflectionTypeLoadException) { }
-            // }
-            // return types.ToArray();
-
             var baseType = typeof(State);
 
+            List<System.Type> types = new List<System.Type>();
             System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
             foreach (System.Reflection.Assembly assembly in assemblies)
             {
                 try
                 {
-                    types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+                    // types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+                    var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
+                    foreach (var tp in tmpTypes)
+                    {
+                        System.Attribute[] attrs = System.Attribute.GetCustomAttributes(tp);
+                        foreach (System.Attribute attr in attrs)  
+                        {  
+                            if (attr is FSMAttrStateClass)
+                                types.Add(tp);
+                        }
+                    }
                 } 
-                catch (System.Reflection.ReflectionTypeLoadException) 
+                catch (System.Reflection.ReflectionTypeLoadException ex) 
                 {
+                    Debug.LogError("FSM: failed GetFSMStates > " + ex.ToString());
                 }
             }
 
-            return null;
+            return types.ToArray();
+        }
+
+        public static System.Type[] GetFSMTransitionClasses(string fsmName)
+        {
+            var baseType = typeof(State);
+
+            List<System.Type> types = new List<System.Type>();
+            System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            foreach (System.Reflection.Assembly assembly in assemblies)
+            {
+                try
+                {
+                    // types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
+                    var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
+                    foreach (var tp in tmpTypes)
+                    {
+                        System.Attribute[] attrs = System.Attribute.GetCustomAttributes(tp);
+                        foreach (System.Attribute attr in attrs)  
+                        {  
+                            if (attr is FSMAttrTransitionClass)
+                                types.Add(tp);
+                        }
+                    }
+                } 
+                catch (System.Reflection.ReflectionTypeLoadException ex) 
+                {
+                    Debug.LogError("FSM: failed GetFSMStates > " + ex.ToString());
+                }
+            }
+
+            return types.ToArray();
+        }
+
+        public static System.Type[] GetFSMTransitionMethod(string fsmName)
+        {
+            var baseType = typeof(State);
+
+            List<System.Type> types = new List<System.Type>();
+            System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+            foreach (System.Reflection.Assembly assembly in assemblies)
+            {
+                try
+                {
+                    var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
+                    foreach (var tp in tmpTypes)
+                    {
+                        System.Attribute[] attrs = System.Attribute.GetCustomAttributes(tp);
+                        foreach (System.Attribute attr in attrs)  
+                        {  
+                            if (attr is FSMAttrTransitionMethod)
+                                types.Add(tp);
+                        }
+                    }
+                } 
+                catch (System.Reflection.ReflectionTypeLoadException ex) 
+                {
+                    Debug.LogError("FSM: failed GetFSMStates > " + ex.ToString());
+                }
+            }
+
+            return types.ToArray();
         }
 
         // public static StateMachine LoadAIFromJson(string json)

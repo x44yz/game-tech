@@ -109,43 +109,43 @@ namespace Test
             return null;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnIdleToEatCond()
         {
             return hunger < 0.1f;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnEatToIdleCond()
         {
             return hunger >= 20;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnIdleToWorkCond()
         {
             return hunger > 5f && energy > 5f;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnWorkToIdleCond()
         {
             return hunger < 0.1f || energy < 0.5f;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnIdleToSleepCond()
         {
             return energy < 1f;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnSleepToIdleCond()
         {
             return energy > 10f;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnXXXToWalkCond()
         {
             if (targetPT == PointType.None)
@@ -157,7 +157,7 @@ namespace Test
             return dist.magnitude > POINT_STOP_DIST;
         }
 
-        [FSMTransitionMethod("ActorFSM")]
+        [FSMAttrTransitionMethod("ActorFSM")]
         bool OnWalkToIdleCond()
         {
             var pt = GetPoint(targetPT);

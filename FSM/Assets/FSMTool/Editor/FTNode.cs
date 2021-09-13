@@ -19,7 +19,7 @@ namespace AI.FSMTool
         [Input] public FTConnection From;
         [SerializeField] protected List<FTConnection> _children = new List<FTConnection>();
         // [SerializeField] private bool _isRoot;
-        private System.Type _nodeSystemType = null;
+        // private System.Type _nodeSystemType = null;
         private FSM.State _tFTNode = null; // for runtime mode
 
         public FSM.State StateNode

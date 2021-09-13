@@ -13,6 +13,9 @@ namespace AI.FSMTool
         // dont serializable connect node, because we can get this from portName
         private FTNode _connectNode;
 
+        // Transition
+        public 
+
         public FTConnection(FTNode node, string portName) 
         {
             this.node = node;
