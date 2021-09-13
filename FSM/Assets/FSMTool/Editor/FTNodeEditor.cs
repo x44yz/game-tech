@@ -146,9 +146,12 @@ namespace AI.FSMTool
                         EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.Space();
                         NodeEditorGUILayout.PortField(new GUIContent("To" + (i + 1)), port, GUILayout.Width(50));
-                        GUILayout.EndHorizontal();
+                        EditorGUILayout.EndHorizontal();
 
-                        GUILayout.Button("XXX");
+                        // GUILayout.Button("XXX");
+                        FTUtils.GetFSMTransitionMethod("ActorFSM");
+
+                        EditorGUILayout.Popup(0, new string[]{"1", "2"});
                     }
                     EditorGUILayout.EndVertical();
                     //GUILayout.EndArea();

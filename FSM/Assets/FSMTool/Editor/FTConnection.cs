@@ -14,7 +14,7 @@ namespace AI.FSMTool
         private FTNode _connectNode;
 
         // Transition
-        public 
+        // public 
 
         public FTConnection(FTNode node, string portName) 
         {
