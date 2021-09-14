@@ -149,9 +149,14 @@ namespace AI.FSMTool
                         EditorGUILayout.EndHorizontal();
 
                         // GUILayout.Button("XXX");
-                        FTUtils.GetFSMTransitionMethod("ActorFSM");
+                        var fsms = FTUtils.GetFSMTransitionMethod("ActorFSM");
+                        List<string> names = new List<string>();
+                        foreach (var tp  in fsms)
+                        {
+                            names.Add(tp.ToString());
+                        }
 
-                        EditorGUILayout.Popup(0, new string[]{"1", "2"});
+                        EditorGUILayout.Popup(0, names.ToArray());
                     }
                     EditorGUILayout.EndVertical();
                     //GUILayout.EndArea();

@@ -103,7 +103,7 @@ namespace AI.FSMTool
 
         public static System.Type[] GetFSMTransitionMethod(string fsmName)
         {
-            var baseType = typeof(State);
+            // var baseType = typeof(State);
 
             List<System.Type> types = new List<System.Type>();
             System.Reflection.Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
@@ -111,7 +111,8 @@ namespace AI.FSMTool
             {
                 try
                 {
-                    var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
+                    // var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
+                    var tmpTypes = assembly.GetTypes();
                     foreach (var tp in tmpTypes)
                     {
                         System.Attribute[] attrs = System.Attribute.GetCustomAttributes(tp);
