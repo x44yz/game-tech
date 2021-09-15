@@ -49,6 +49,8 @@ namespace AI.FSMTool
             {
                 try
                 {
+
+
                     // types.AddRange(assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray());
                     var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
                     foreach (var tp in tmpTypes)
@@ -111,16 +113,32 @@ namespace AI.FSMTool
             {
                 try
                 {
+                    if (!assembly.GetName().ToString().Contains("Assembly-CSharp"))
+                        continue;
+
                     // var tmpTypes = assembly.GetTypes().Where(t => !t.IsAbstract && baseType.IsAssignableFrom(t)).ToArray();
                     var tmpTypes = assembly.GetTypes();
                     foreach (var tp in tmpTypes)
                     {
-                        System.Attribute[] attrs = System.Attribute.GetCustomAttributes(tp);
-                        foreach (System.Attribute attr in attrs)  
-                        {  
-                            if (attr is FSMAttrTransitionMethod)
+                        if (tp != typeof(Test.Actor))
+                            continue;
+
+                        var mds = tp.GetMethods();
+                        foreach (var md in mds)
+                        {
+                            var attrs = md.GetCustomAttributes(typeof(FSMAttrTransitionMethod), true);
+                            if (attrs != null && attrs.Length > 0)
+                            {
                                 types.Add(tp);
+                            }
                         }
+
+                        
+                        // foreach (System.Attribute attr in attrs)  
+                        // {  
+                        //     if (attr is FSMAttrTransitionMethod)
+                        //         types.Add(tp);
+                        // }
                     }
                 } 
                 catch (System.Reflection.ReflectionTypeLoadException ex) 
