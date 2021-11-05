@@ -66,18 +66,20 @@ namespace Test
             WalkState walk = new WalkState(this);
         
             fsm = new StateMachine();
-            fsm.AddTransition(new Transition(idle, eat, OnIdleToEatCond));
-            fsm.AddTransition(new Transition(eat, idle, OnEatToIdleCond));
-            fsm.AddTransition(new Transition(idle, work, OnIdleToWorkCond));
-            fsm.AddTransition(new Transition(work, idle, OnWorkToIdleCond));
-            fsm.AddTransition(new Transition(idle, sleep, OnIdleToSleepCond));
-            fsm.AddTransition(new Transition(sleep, idle, OnSleepToIdleCond));
-            
-            fsm.AddTransition(new Transition(eat, walk, OnXXXToWalkCond));
-            fsm.AddTransition(new Transition(work, walk, OnXXXToWalkCond));
-            fsm.AddTransition(new Transition(sleep, walk, OnXXXToWalkCond));
+            fsm.AddTransition(new Transition(idle, eat, idle.IsTranslateToEat));
+            fsm.AddTransition(new Transition(idle, sleep, idle.IsTranslateToSleep));
+            fsm.AddTransition(new Transition(idle, work, idle.IsTranslateToWork));
+            fsm.AddTransition(new Transition(idle, walk, idle.IsTranslateToWalk));
 
             fsm.AddTransition(new Transition(walk, idle, OnWalkToIdleCond));
+
+            fsm.AddTransition(new Transition(eat, idle, OnEatToIdleCond));
+
+            fsm.AddTransition(new Transition(work, idle, OnWorkToIdleCond));
+            fsm.AddTransition(new Transition(work, walk, OnXXXToWalkCond));
+
+            fsm.AddTransition(new Transition(sleep, idle, OnSleepToIdleCond));
+            fsm.AddTransition(new Transition(sleep, walk, OnXXXToWalkCond));
 
             // set default
             fsm.SetState(idle);
@@ -109,62 +111,62 @@ namespace Test
             return null;
         }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnIdleToEatCond()
-        {
-            return hunger < 0.1f;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnIdleToEatCond()
+        // {
+        //     return hunger < 0.1f;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnEatToIdleCond()
-        {
-            return hunger >= 20;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnEatToIdleCond()
+        // {
+        //     return hunger >= 20;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnIdleToWorkCond()
-        {
-            return hunger > 5f && energy > 5f;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnIdleToWorkCond()
+        // {
+        //     return hunger > 5f && energy > 5f;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnWorkToIdleCond()
-        {
-            return hunger < 0.1f || energy < 0.5f;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnWorkToIdleCond()
+        // {
+        //     return hunger < 0.1f || energy < 0.5f;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnIdleToSleepCond()
-        {
-            return energy < 1f;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnIdleToSleepCond()
+        // {
+        //     return energy < 1f;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnSleepToIdleCond()
-        {
-            return energy > 10f;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnSleepToIdleCond()
+        // {
+        //     return energy > 10f;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnXXXToWalkCond()
-        {
-            if (targetPT == PointType.None)
-                return false;
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnXXXToWalkCond()
+        // {
+        //     if (targetPT == PointType.None)
+        //         return false;
 
-            var pt = GetPoint(targetPT);
-            var dist = transform.position - pt.transform.position;
-            dist.y = 0f;
-            return dist.magnitude > POINT_STOP_DIST;
-        }
+        //     var pt = GetPoint(targetPT);
+        //     var dist = transform.position - pt.transform.position;
+        //     dist.y = 0f;
+        //     return dist.magnitude > POINT_STOP_DIST;
+        // }
 
-        [FSMAttrTransitionMethod("ActorFSM")]
-        bool OnWalkToIdleCond()
-        {
-            var pt = GetPoint(targetPT);
-            var dist = transform.position - pt.transform.position;
-            dist.y = 0f;
-            return dist.magnitude <= POINT_STOP_DIST;
-        }
+        // [FSMAttrTransitionMethod("ActorFSM")]
+        // bool OnWalkToIdleCond()
+        // {
+        //     var pt = GetPoint(targetPT);
+        //     var dist = transform.position - pt.transform.position;
+        //     dist.y = 0f;
+        //     return dist.magnitude <= POINT_STOP_DIST;
+        // }
     }
 }
 

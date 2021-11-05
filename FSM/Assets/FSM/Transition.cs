@@ -9,21 +9,28 @@ namespace AI.FSM
     {
         public State from;
         public State to;
-        public Func<bool> condition;
+        protected Func<bool> condition;
+        protected Action onTransition;
 
-        public Transition(State from, State to, Func<bool> condition)
+        public Transition(State from, State to, Func<bool> condition, Action onTransition)
         {
             this.from = from;
             this.to = to;
             this.condition = condition;
+            this.onTransition = onTransition;
         }
         
         public virtual bool IsValid()
-        { 
-            return condition == null || condition.Invoke();
+        {
+            if (condition == null)
+                return false;
+            return condition.Invoke();
         }
 
-        // public virtual State GetNextState() { return null; }
-        public virtual void OnTransition() {}
+        public virtual void OnTransition()
+        {
+            if (onTransition != null)
+                onTransition.Invoke();
+        }
     }
 }

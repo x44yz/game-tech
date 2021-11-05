@@ -118,6 +118,25 @@ namespace Test
             Debug.Log("xx-- IdleState.OnExit");
             actor.energyRate -= actor.idleEnergySupply;
         }
+
+        // Transition
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToEat()
+        {
+            return actor.hunger < 0.1f;
+        }
+
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToSleep()
+        {
+            return actor.energy < 1f;
+        }
+
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToWork()
+        {
+            return actor.hunger > 5f && actor.energy > 5f;
+        }
     }
 
     [FSMAttrStateClass("ActorFSM")]
