@@ -48,6 +48,12 @@ namespace Test
         {
             // actor.hunger += actor.eatRate * dt;
         }
+
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToIdle()
+        {
+            return actor.hunger >= 20;
+        }
     }
 
     [FSMAttrStateClass("ActorFSM")]
@@ -73,6 +79,11 @@ namespace Test
             actor.hungryRate /= actor.sleepHungrySupplyMulti;
         }
 
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToIdle()
+        {
+            return actor.energy > 10f;
+        }
     }
 
     [FSMAttrStateClass("ActorFSM")]
@@ -96,6 +107,12 @@ namespace Test
             Debug.Log("xx-- WorkState.OnExit");
             actor.hungryRate -= actor.workHungryDrain;
             actor.energyRate -= actor.workEnergyDrain;
+        }
+
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToIdle()
+        {
+            return actor.hunger < 0.1f || actor.energy < 0.5f;
         }
     }
 
@@ -170,6 +187,15 @@ namespace Test
         public override void OnUpdate(float dt)
         {
             actor.transform.position += dir * actor.walkSpeed * dt;
+        }
+
+        [FSMAttrTransitionMethod("ActorFSM")]
+        public bool IsTranslateToIdle()
+        {
+            var pt = actor.GetPoint(actor.targetPT);
+            var dist = actor.transform.position - pt.transform.position;
+            dist.y = 0f;
+            return dist.magnitude <= Actor.POINT_STOP_DIST;
         }
     }
 }

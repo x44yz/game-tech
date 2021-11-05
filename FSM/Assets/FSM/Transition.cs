@@ -12,7 +12,7 @@ namespace AI.FSM
         protected Func<bool> condition;
         protected Action onTransition;
 
-        public Transition(State from, State to, Func<bool> condition, Action onTransition)
+        public Transition(State from, State to, Func<bool> condition, Action onTransition = null)
         {
             this.from = from;
             this.to = to;
