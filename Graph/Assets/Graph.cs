@@ -77,6 +77,11 @@ public class Graph : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        
+        Gizmos.color = Color.green;
+        foreach (var kv in adjacencyList)
+        {
+            foreach (var v in kv.Value)
+                Gizmos.DrawLine(kv.Key.transform.position, v.transform.position);
+        }
     }
 }

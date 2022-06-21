@@ -20,6 +20,7 @@ public static class BFS
         frontiers.Enqueue(startVertex);
         
         Dictionary<Vertex, Vertex> parents = new Dictionary<Vertex, Vertex>();
+        parents[startVertex] = null;
 
         while (frontiers.Count > 0)
         {
@@ -37,6 +38,7 @@ public static class BFS
 
                 visited.Add(neighbor);
                 frontiers.Enqueue(neighbor);
+                Debug.Log("xx-- parents > " + neighbor.name + " - " + current.name);
                 parents[neighbor] = current;
             }
         }
@@ -46,6 +48,7 @@ public static class BFS
         while (parent != null)
         {
             path.Add(parent);
+            Debug.Log("zz-- get parent > " + parent.name);
             parent = parents[parent];
         }
         path.Reverse();
