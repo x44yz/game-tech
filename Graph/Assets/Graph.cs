@@ -29,6 +29,15 @@ public class Graph : MonoBehaviour
         return true;
     }
 
+    public bool AddVertexs(List<Vertex> vertexs)
+    {
+        foreach (var v in vertexs)
+        {
+            AddVertex(v);
+        }
+        return true;
+    }
+
     public bool AddVertex(Vertex vertex)
     {
         if (adjacencyList.ContainsKey(vertex))
@@ -59,5 +68,15 @@ public class Graph : MonoBehaviour
     public bool HasVertex(Vertex v)
     {
         return adjacencyList.ContainsKey(v);
+    }
+
+    public List<Vertex> GetNeighbors(Vertex current)
+    {
+        return adjacencyList[current];
+    }
+
+    void OnDrawGizmos()
+    {
+        
     }
 }

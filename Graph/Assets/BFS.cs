@@ -5,7 +5,7 @@ using UnityEngine;
 // BreadthFirstSearcher
 public static class BFS
 {
-    public static Vertex FindFirstMatch(Graph graph, Vertex startVertex, Vertex matchVertex)
+    public static List<Vertex> Find(Graph graph, Vertex startVertex, Vertex matchVertex)
     {
         if (!graph.HasVertex(startVertex))
         {
@@ -13,16 +13,42 @@ public static class BFS
             return null;
         }
 
-        int level = 0;
-        var frontiers = new List<Vertex>();
-        var levels = new Dictionary<Vertex, int>(graph.VertexsCount);
-        var parents = new Dictionary<Vertex, object>(graph.VertexsCount);
+        var visited = new HashSet<Vertex>();
+        visited.Add(startVertex);
 
-        frontiers.Add(startVertex);
-        levels.Add(startVertex, 0);
-        parents.Add(startVertex, null);
+        var frontiers = new Queue<Vertex>();
+        frontiers.Enqueue(startVertex);
+        
+        Dictionary<Vertex, Vertex> parents = new Dictionary<Vertex, Vertex>();
 
-        if (startVertex == matchVertex)
-            return startVertex;
+        while (frontiers.Count > 0)
+        {
+            Vertex current = frontiers.Dequeue();
+            
+            if (current == matchVertex)
+            {
+                break;
+            }
+
+            foreach (var neighbor in graph.GetNeighbors(current))
+            {
+                if (visited.Contains(neighbor))
+                    continue;
+
+                visited.Add(neighbor);
+                frontiers.Enqueue(neighbor);
+                parents[neighbor] = current;
+            }
+        }
+
+        var path = new List<Vertex>();
+        var parent = matchVertex;
+        while (parent != null)
+        {
+            path.Add(parent);
+            parent = parents[parent];
+        }
+        path.Reverse();
+        return path;
     }
 }
