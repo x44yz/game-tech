@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Node : MonoBehaviour
+public class Vertex : MonoBehaviour
 {
-    public int id;
+    // public int id;
     // public float x;
     // public float y;
 
