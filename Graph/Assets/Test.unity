@@ -228,7 +228,7 @@ GameObject:
   - component: {fileID: 144149566}
   - component: {fileID: 144149568}
   m_Layer: 0
-  m_Name: TestBFS
+  m_Name: Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

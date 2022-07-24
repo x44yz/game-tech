@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBFS : MonoBehaviour
+public class Test : MonoBehaviour
 {
     public Graph graph;
 
