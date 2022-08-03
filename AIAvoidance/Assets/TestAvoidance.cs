@@ -39,9 +39,17 @@ public class TestAvoidance : MonoBehaviour
     {
         var obj = Instantiate(aiAgentPrefab);
         obj.SetActive(true);
-        obj.transform.position = RandPoint(spawnPoint.position, spawnRange);
         var agent = obj.GetComponent<AIAgent>();
         aIAgents.Add(agent);
+
+        agent.pos = RandPoint(spawnPoint.position, spawnRange);
+        agent.forward = RandRot() * agent.forward;
+    }
+
+    Quaternion RandRot(float min = 0f, float max = 360f)
+    {
+        float angle = Random.Range(min, max);
+        return Quaternion.AngleAxis(angle, Vector3.up);
     }
 
     Vector3 RandPoint(Vector3 pt, float radius)
