@@ -11,7 +11,7 @@ public class WallAvoidanceComp : MonoBehaviour
 
     [Header("RUNTIME")]
     public AIAgent agent;
-    public int forceId;
+    public int forceId = -1;
 
     [Header("DEBUG")]
     public Color headColor = Color.blue;

@@ -22,6 +22,8 @@ public class AIAgent : MonoBehaviour
     [Range(1f, 100f)]
     public float steerForceDebugScale = 1f;
 
+    public float maxMoveSpeed { get { return walkSpeed; } }
+
     public Vector3 pos
     {
         get { return transform.position; }
@@ -49,7 +51,7 @@ public class AIAgent : MonoBehaviour
         float dt = Time.deltaTime;
 
         var force = steerForce;
-        if (force.magnitude < 0.01f && velocity.magnitude < walkSpeed)
+        if (force.magnitude < 0.01f && velocity.magnitude < maxMoveSpeed)
             force = walkForce * forward;
 
         acc = force / mass;
@@ -68,7 +70,7 @@ public class AIAgent : MonoBehaviour
 
         RemoveForce(forceId);
 
-        if (forceId < 0)
+        if (forceId <= 0)
         {
             forceId = forceNextId;
             forceNextId += 1;

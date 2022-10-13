@@ -8,4 +8,10 @@ public static class Utils
     {
         return Mathf.Approximately(v.sqrMagnitude, 0f);
     }
+
+    public static Vector3 Vector3ZeroY(Vector3 v)
+    {
+        v.y = 0f;
+        return v;
+    }
 }
