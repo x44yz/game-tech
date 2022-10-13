@@ -7,6 +7,7 @@ public class AIAgent : MonoBehaviour
     public float walkSpeed = 4f;
     public float mass = 1f; // 模拟重量
     public float rotateLerp = 0.7f;
+    public float walkForce = 4f;
 
     [Header("RUNTIME")]
     public Vector3 velocity;
@@ -17,6 +18,9 @@ public class AIAgent : MonoBehaviour
     [Header("DEBUG")]
     public Color forwardColor = Color.red;
     public float forwardLength = 1f;
+    public Color steerForceColor = Color.green;
+    [Range(1f, 100f)]
+    public float steerForceDebugScale = 1f;
 
     public Vector3 pos
     {
@@ -30,6 +34,11 @@ public class AIAgent : MonoBehaviour
         set { transform.forward = value; }
     }
 
+    public Vector3 right
+    {
+        get { return transform.right; }
+    }
+
     private void Start()
     {
         velocity = walkSpeed * forward;
@@ -39,7 +48,11 @@ public class AIAgent : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        acc = steerForce / mass;
+        var force = steerForce;
+        if (force.magnitude < 0.01f && velocity.magnitude < walkSpeed)
+            force = walkForce * forward;
+
+        acc = force / mass;
         velocity += acc * dt;
         pos += velocity * dt;
 
@@ -86,5 +99,9 @@ public class AIAgent : MonoBehaviour
         Gizmos.color = forwardColor;
         Vector3 startPos = transform.position + Vector3.up * 1f;
         Gizmos.DrawLine(startPos, startPos + transform.forward * forwardLength);
+
+        Gizmos.color = steerForceColor;
+        startPos = transform.position + Vector3.up * 0f;
+        Gizmos.DrawLine(startPos, startPos + steerForce * steerForceDebugScale);
     }
 }

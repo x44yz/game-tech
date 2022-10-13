@@ -6,6 +6,7 @@ public class WallAvoidanceComp : MonoBehaviour
 {
     public Vector3 checkOffset = new Vector3(0f, 1f, 0f);
     public float headLength = 4f;
+    public float sideLength = 2f;
     public LayerMask avoidanceLayer;
 
     [Header("RUNTIME")]
@@ -27,24 +28,27 @@ public class WallAvoidanceComp : MonoBehaviour
         Vector3 steerForce = Vector3.zero;
         // check forward
         RaycastHit forwardHit;
-        // Debug.Log("xx-- hit > " + avoidanceLayer.value + " - " + (1 << 6));
         if (Physics.Raycast(checkStartPos, agent.forward, out forwardHit, headLength, avoidanceLayer.value))
         {
             // 作用力与相撞的深度成正比
             steerForce += (headLength - (agent.pos - forwardHit.point).magnitude) * forwardHit.normal;
         }
 
+        // 添加左右方向的检查是保证在角落是碰撞合理
+        RaycastHit rightHit;
+        if (Physics.Raycast(checkStartPos, agent.forward + agent.right, out rightHit, sideLength, avoidanceLayer.value))
+        {
+            steerForce += (sideLength - (agent.pos - rightHit.point).magnitude) * rightHit.normal;
+        }
+
+        RaycastHit leftHit;
+        if (Physics.Raycast(checkStartPos, agent.forward - agent.right, out leftHit, sideLength, avoidanceLayer.value))
+        {
+            steerForce += (sideLength - (agent.pos - leftHit.point).magnitude) * leftHit.normal;
+        }
+
         // Debug.Log("xx-- hit > " + steerForce);
         forceId = agent.AddForce(forceId, steerForce);
-
-        // transform.position += volocity * Time.deltaTime;
-
-        // if (volocity.magnitude > 0.01)
-        // {
-        //     Vector3 newForward = Vector3.Slerp(transform.forward, volocity, Time.deltaTime);
-        //     newForward.y = 0;
-        //     transform.forward = newForward;
-        // }
     }
 
     private void OnDrawGizmos() 
