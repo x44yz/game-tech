@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AIAgent : MonoBehaviour
 {
-    public float walkSpeed = 4f;
+    public float maxMoveSpeed = 4f;
     public float mass = 1f; // 模拟重量
     public float rotateLerp = 0.7f;
     public float walkForce = 4f;
@@ -14,6 +14,9 @@ public class AIAgent : MonoBehaviour
     public Vector3 acc;
     public Vector3 steerForce;
     public int forceNextId;
+    public float movePathTick = 0f;
+    public int movePathStartIdx = 0;
+    public List<Vector3> movePoints = new List<Vector3>();
 
     [Header("DEBUG")]
     public Color forwardColor = Color.red;
@@ -21,8 +24,10 @@ public class AIAgent : MonoBehaviour
     public Color steerForceColor = Color.green;
     [Range(1f, 100f)]
     public float steerForceDebugScale = 1f;
-
-    public float maxMoveSpeed { get { return walkSpeed; } }
+    public bool showMovePath;
+    public Color movePathColor = Color.red;
+    public float movePointInterval;
+    public int maxMovePoint;
 
     public Vector3 pos
     {
@@ -43,7 +48,7 @@ public class AIAgent : MonoBehaviour
 
     private void Start()
     {
-        velocity = walkSpeed * forward;
+        velocity = maxMoveSpeed * forward;
     }
     
     private void Update()
@@ -59,7 +64,30 @@ public class AIAgent : MonoBehaviour
         pos += velocity * dt;
 
         // forward
-        forward = Vector3.Lerp(forward, velocity, rotateLerp);
+        // 太小的速度值就不进行方向偏转
+        if (velocity.magnitude > 0.01f)
+        {
+            forward = Vector3.Lerp(forward, velocity, rotateLerp);
+        }
+
+        if (showMovePath)
+        {
+            movePathTick += Time.deltaTime;
+            if (movePathTick >= movePointInterval)
+            {
+                movePathTick = 0f;
+                if (movePoints.Count < maxMovePoint)
+                {
+                    movePoints.Add(pos);
+                }
+                else
+                {
+                    int idx = movePathStartIdx;
+                    movePoints[idx] = pos;
+                    movePathStartIdx = (movePathStartIdx + 1) % movePoints.Count;
+                }
+            }
+        }
     }
 
     Dictionary<int, Vector3> forceMap = new Dictionary<int, Vector3>();
@@ -98,6 +126,17 @@ public class AIAgent : MonoBehaviour
 
     private void OnDrawGizmos() 
     {
+        if (showMovePath)
+        {
+            Gizmos.color = movePathColor;
+            for (int i = 1; i < movePoints.Count; ++i)
+            {
+                var idx0 = (movePathStartIdx + i - 1) % movePoints.Count;
+                var idx1 = (movePathStartIdx + i) % movePoints.Count;
+                Gizmos.DrawLine(movePoints[idx0], movePoints[idx1]);
+            }
+        }
+
         Gizmos.color = forwardColor;
         Vector3 startPos = transform.position + Vector3.up * 1f;
         Gizmos.DrawLine(startPos, startPos + transform.forward * forwardLength);
