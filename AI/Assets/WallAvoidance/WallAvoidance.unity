@@ -502,7 +502,7 @@ Transform:
   m_LocalScale: {x: 4, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 221.886, z: 0}
 --- !u!1 &572141120
 GameObject:
@@ -785,7 +785,7 @@ Transform:
   m_LocalScale: {x: 4, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 145.687, z: 0}
 --- !u!1 &1395634543
 GameObject:
@@ -880,7 +880,7 @@ Transform:
   m_LocalScale: {x: 4, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 184.445, z: 0}
 --- !u!1 &1607517706
 GameObject:
@@ -979,7 +979,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1607517711
 MonoBehaviour:
@@ -993,18 +993,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b364cfd01e15e37459655675f6e39322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
-  mass: 1
-  rotateLerp: 0.4
-  walkForce: 4
+  maxMoveSpeed: 1
+  turnSpeed: 20
   velocity: {x: 0, y: 0, z: 0}
-  acc: {x: 0, y: 0, z: 0}
-  steerForce: {x: 0, y: 0, z: 0}
-  forceNextId: 0
+  accel: {x: 0, y: 0, z: 0}
+  movePathTick: 0
+  movePathStartIdx: 0
+  movePoints: []
   forwardColor: {r: 1, g: 0, b: 0, a: 1}
   forwardLength: 1
-  steerForceColor: {r: 0, g: 1, b: 0, a: 1}
-  steerForceDebugScale: 1
+  accelColor: {r: 0, g: 1, b: 0, a: 1}
+  accelDebugScale: 1
+  showMovePath: 0
+  movePathColor: {r: 1, g: 0, b: 0, a: 1}
+  movePointInterval: 0
+  maxMovePoint: 0
 --- !u!114 &1607517712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1018,14 +1021,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   checkOffset: {x: 0, y: -0.3, z: 0}
-  headLength: 5
-  sideLength: 0.7
+  headLength: 4
+  sideLength: 1
+  sideAngle: 45
   avoidanceLayer:
     serializedVersion: 2
     m_Bits: 64
+  wallAvoidDistance: 0.5
+  maxAccel: 1
   agent: {fileID: 0}
-  forceId: 0
   headColor: {r: 0, g: 0, b: 1, a: 1}
+  sideColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!54 &1607517713
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -7,48 +7,72 @@ public class WallAvoidanceComp : MonoBehaviour
     public Vector3 checkOffset = new Vector3(0f, 1f, 0f);
     public float headLength = 4f;
     public float sideLength = 2f;
+    public float sideAngle = 45f;
     public LayerMask avoidanceLayer;
+    public float wallAvoidDistance = 0.5f;
+    public float maxAccel = 1f;
 
     [Header("RUNTIME")]
     public AIAgent agent;
-    public int forceId = -1;
 
     [Header("DEBUG")]
     public Color headColor = Color.blue;
+    public Color sideColor = Color.green;
 
     private void Awake() 
     {
         agent = GetComponent<AIAgent>();
+        agent.velocity = agent.forward * agent.maxMoveSpeed;
     }
 
     private void Update()
     {
         var checkStartPos = agent.pos + checkOffset;
 
-        Vector3 steerForce = Vector3.zero;
+        Vector3 accel = Vector3.zero;
         // check forward
-        RaycastHit forwardHit;
-        if (Physics.Raycast(checkStartPos, agent.forward, out forwardHit, headLength, avoidanceLayer.value))
+        RaycastHit hit;
+        if (Physics.Raycast(checkStartPos, agent.forward, out hit, headLength, avoidanceLayer.value) == false)
         {
-            // 作用力与相撞的深度成正比
-            steerForce += (headLength - (agent.pos - forwardHit.point).magnitude) * forwardHit.normal;
+            if (Physics.Raycast(checkStartPos, Quaternion.Euler(0f, sideAngle, 0f) * agent.forward, out hit, sideLength, avoidanceLayer.value) == false)
+            {
+                Physics.Raycast(checkStartPos, Quaternion.Euler(0f, -sideAngle, 0f) * agent.forward, out hit, sideLength, avoidanceLayer.value);
+            }
         }
 
-        // 添加左右方向的检查是保证在角落是碰撞合理
-        RaycastHit rightHit;
-        if (Physics.Raycast(checkStartPos, agent.forward + agent.right, out rightHit, sideLength, avoidanceLayer.value))
+        if (hit.collider != null)
         {
-            steerForce += (sideLength - (agent.pos - rightHit.point).magnitude) * rightHit.normal;
+            Vector3 targetPos = hit.point + hit.normal * wallAvoidDistance;
+            // 当速度方向与墙碰撞法线平行的时候，在法线左右偏移一定距离
+            float angle = Vector3.Angle(agent.velocity, hit.normal);
+            Debug.Log("xx-- hit angle > " + angle);
+            // 165f 就看作平行，该值可以根据测试调整
+            if (angle > 165f)
+            {
+                // Vector3 perp = new Vector3(-hit.normal.z, hit.normal.y, hit.normal.x);
+                // Debug.DrawLine(hit.point, hit.point + perp * Mathf.Sin((angle - 165f) * Mathf.Deg2Rad) * 2f, Color.red, 10f);
+                // targetPos = targetPos + (perp * Mathf.Sin((angle - 165f) * Mathf.Deg2Rad) * 2f * wallAvoidDistance);
+                targetPos = hit.point + Quaternion.Euler(0f, 90f - angle, 0f) * hit.normal * wallAvoidDistance;
+            }
+
+            accel = Utils.Vector3ZeroY(targetPos - agent.pos).normalized * maxAccel;
+        }
+        else
+        {
+            accel = Vector3.zero;
         }
 
-        RaycastHit leftHit;
-        if (Physics.Raycast(checkStartPos, agent.forward - agent.right, out leftHit, sideLength, avoidanceLayer.value))
-        {
-            steerForce += (sideLength - (agent.pos - leftHit.point).magnitude) * leftHit.normal;
-        }
+        // Vector3 targetVelocity = distVec.normalized * targetSpeed;
+        // // 因为这边目标速度与当前速度计算的加速度缺少时间参数，所以自己设定时间来确定变化快慢
+        // Vector3 accel = targetVelocity - agent.velocity;
+        // accel *= 1f / timeToTargetSpeed;
 
-        // Debug.Log("xx-- hit > " + steerForce);
-        forceId = agent.AddForce(forceId, steerForce);
+        agent.accel = accel;
+        agent.velocity += accel * Time.deltaTime;
+        if (agent.velocity.magnitude > agent.maxMoveSpeed)
+        {
+            agent.velocity = agent.velocity.normalized * agent.maxMoveSpeed;
+        }
     }
 
     private void OnDrawGizmos() 
@@ -56,5 +80,9 @@ public class WallAvoidanceComp : MonoBehaviour
         Gizmos.color = headColor;
         Vector3 startPos = transform.position + checkOffset;
         Gizmos.DrawLine(startPos, startPos + transform.forward * headLength);
+
+        Gizmos.color = sideColor;
+        Gizmos.DrawLine(startPos, startPos + Quaternion.Euler(0f, sideAngle, 0f) * transform.forward * sideLength);
+        Gizmos.DrawLine(startPos, startPos + Quaternion.Euler(0f, -sideAngle, 0f) * transform.forward * sideLength);
     }
 }

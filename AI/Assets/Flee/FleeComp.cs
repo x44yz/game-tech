@@ -27,29 +27,29 @@ public class FleeComp : MonoBehaviour
 
     void Update()
     {
-        Vector3 dist = Utils.Vector3ZeroY(agent.pos - target.position);
-        Vector3 desiredVelocity = dist.normalized * agent.maxMoveSpeed;
-        Vector3 steerForce = desiredVelocity - agent.velocity;
-        forceId = agent.AddForce(forceId, steerForce);
+        // Vector3 dist = Utils.Vector3ZeroY(agent.pos - target.position);
+        // Vector3 desiredVelocity = dist.normalized * agent.maxMoveSpeed;
+        // Vector3 steerForce = desiredVelocity - agent.velocity;
+        // forceId = agent.AddForce(forceId, steerForce);
 
-        if (showFleePath)
-        {
-            fleePathTick += Time.deltaTime;
-            if (fleePathTick >= fleePointInterval)
-            {
-                fleePathTick = 0f;
-                if (fleePoints.Count < maxFleePoint)
-                {
-                    fleePoints.Add(agent.pos);
-                }
-                else
-                {
-                    int idx = fleePathStartIdx;
-                    fleePoints[idx] = agent.pos;
-                    fleePathStartIdx = (fleePathStartIdx + 1) % fleePoints.Count;
-                }
-            }
-        }
+        // if (showFleePath)
+        // {
+        //     fleePathTick += Time.deltaTime;
+        //     if (fleePathTick >= fleePointInterval)
+        //     {
+        //         fleePathTick = 0f;
+        //         if (fleePoints.Count < maxFleePoint)
+        //         {
+        //             fleePoints.Add(agent.pos);
+        //         }
+        //         else
+        //         {
+        //             int idx = fleePathStartIdx;
+        //             fleePoints[idx] = agent.pos;
+        //             fleePathStartIdx = (fleePathStartIdx + 1) % fleePoints.Count;
+        //         }
+        //     }
+        // }
     }
 
     void OnDrawGizmos()

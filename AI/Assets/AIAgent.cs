@@ -11,9 +11,9 @@ public class AIAgent : MonoBehaviour
 
     [Header("RUNTIME")]
     public Vector3 velocity;
-    public Vector3 acc;
-    public Vector3 steerForce;
-    public int forceNextId;
+    public Vector3 accel;
+    // public Vector3 steerForce;
+    // public int forceNextId;
     public float movePathTick = 0f;
     public int movePathStartIdx = 0;
     public List<Vector3> movePoints = new List<Vector3>();
@@ -21,9 +21,9 @@ public class AIAgent : MonoBehaviour
     [Header("DEBUG")]
     public Color forwardColor = Color.red;
     public float forwardLength = 1f;
-    public Color steerForceColor = Color.green;
+    public Color accelColor = Color.green;
     [Range(1f, 100f)]
-    public float steerForceDebugScale = 1f;
+    public float accelDebugScale = 1f;
     public bool showMovePath;
     public Color movePathColor = Color.red;
     public float movePointInterval;
@@ -90,39 +90,39 @@ public class AIAgent : MonoBehaviour
         }
     }
 
-    Dictionary<int, Vector3> forceMap = new Dictionary<int, Vector3>();
-    public int AddForce(int forceId, Vector3 force)
-    {
-        if (forceMap.ContainsKey(forceId) == false && Utils.IsZero(force))
-            return forceId;
+    // Dictionary<int, Vector3> forceMap = new Dictionary<int, Vector3>();
+    // public int AddForce(int forceId, Vector3 force)
+    // {
+    //     if (forceMap.ContainsKey(forceId) == false && Utils.IsZero(force))
+    //         return forceId;
 
-        RemoveForce(forceId);
+    //     RemoveForce(forceId);
 
-        if (forceId <= 0)
-        {
-            forceId = forceNextId;
-            forceNextId += 1;
-        }
-        forceMap[forceId] = force;
-        UpdateSteerForce();
-        return forceId;
-    }
+    //     if (forceId <= 0)
+    //     {
+    //         forceId = forceNextId;
+    //         forceNextId += 1;
+    //     }
+    //     forceMap[forceId] = force;
+    //     UpdateSteerForce();
+    //     return forceId;
+    // }
 
-    public bool RemoveForce(int forceId)
-    {
-        bool ret = forceMap.Remove(forceId);
-        UpdateSteerForce();
-        return ret;
-    }
+    // public bool RemoveForce(int forceId)
+    // {
+    //     bool ret = forceMap.Remove(forceId);
+    //     UpdateSteerForce();
+    //     return ret;
+    // }
 
-    private void UpdateSteerForce()
-    {
-        steerForce = Vector3.zero;
-        foreach (var kv in forceMap)
-        {
-            steerForce += kv.Value;
-        }
-    }
+    // private void UpdateSteerForce()
+    // {
+    //     steerForce = Vector3.zero;
+    //     foreach (var kv in forceMap)
+    //     {
+    //         steerForce += kv.Value;
+    //     }
+    // }
 
     private void OnDrawGizmos() 
     {
@@ -141,8 +141,8 @@ public class AIAgent : MonoBehaviour
         Vector3 startPos = transform.position + Vector3.up * 1f;
         Gizmos.DrawLine(startPos, startPos + transform.forward * forwardLength);
 
-        Gizmos.color = steerForceColor;
+        Gizmos.color = accelColor;
         startPos = transform.position + Vector3.up * 0f;
-        Gizmos.DrawLine(startPos, startPos + steerForce * steerForceDebugScale);
+        Gizmos.DrawLine(startPos, startPos + accel * accelDebugScale);
     }
 }

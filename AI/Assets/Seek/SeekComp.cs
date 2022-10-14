@@ -27,29 +27,29 @@ public class SeekComp : MonoBehaviour
 
     void Update()
     {
-        Vector3 dist = Utils.Vector3ZeroY(target.position - agent.pos);
-        Vector3 desiredVelocity = dist.normalized * agent.maxMoveSpeed;
-        Vector3 steerForce = desiredVelocity - agent.velocity;
-        forceId = agent.AddForce(forceId, steerForce);
+        // Vector3 dist = Utils.Vector3ZeroY(target.position - agent.pos);
+        // Vector3 desiredVelocity = dist.normalized * agent.maxMoveSpeed;
+        // Vector3 steerForce = desiredVelocity - agent.velocity;
+        // forceId = agent.AddForce(forceId, steerForce);
 
-        if (showSeekPath)
-        {
-            seekPathTick += Time.deltaTime;
-            if (seekPathTick >= seekPointInterval)
-            {
-                seekPathTick = 0f;
-                if (seekPoints.Count < maxSeekPoint)
-                {
-                    seekPoints.Add(agent.pos);
-                }
-                else
-                {
-                    int idx = seekPathStartIdx;
-                    seekPoints[idx] = agent.pos;
-                    seekPathStartIdx = (seekPathStartIdx + 1) % seekPoints.Count;
-                }
-            }
-        }
+        // if (showSeekPath)
+        // {
+        //     seekPathTick += Time.deltaTime;
+        //     if (seekPathTick >= seekPointInterval)
+        //     {
+        //         seekPathTick = 0f;
+        //         if (seekPoints.Count < maxSeekPoint)
+        //         {
+        //             seekPoints.Add(agent.pos);
+        //         }
+        //         else
+        //         {
+        //             int idx = seekPathStartIdx;
+        //             seekPoints[idx] = agent.pos;
+        //             seekPathStartIdx = (seekPathStartIdx + 1) % seekPoints.Count;
+        //         }
+        //     }
+        // }
     }
 
     void OnDrawGizmos()

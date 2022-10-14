@@ -1,6 +1,9 @@
 
 [x]wall avoidance
-https://www.jianshu.com/p/e618dc3f15c4
+[x]seek
+[x]feel
+[x]arrive
+[+]wall avoidance 斜坡
 
 // VO
 // RVO
