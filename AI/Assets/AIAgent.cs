@@ -55,17 +55,17 @@ public class AIAgent : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        var force = steerForce;
-        if (force.magnitude < 0.01f && velocity.magnitude < maxMoveSpeed)
-            force = walkForce * forward;
+        // var force = steerForce;
+        // if (force.magnitude < 0.01f && velocity.magnitude < maxMoveSpeed)
+        //     force = walkForce * forward;
 
-        acc = force / mass;
-        velocity += acc * dt;
+        // acc = force / mass;
+        // velocity += acc * dt;
         pos += velocity * dt;
 
         // forward
         // 太小的速度值就不进行方向偏转
-        if (velocity.magnitude > 0.01f)
+        if (velocity.magnitude > 0.001f)
         {
             forward = Vector3.Lerp(forward, velocity, rotateLerp);
         }

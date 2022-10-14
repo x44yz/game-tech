@@ -9,14 +9,15 @@ public class ArriveComp : MonoBehaviour
 {
     public Transform target;
     public float slowDownRadius;
-    public float timeToTargetSpeed;
+    public float timeToTargetSpeed; // 变化到目标速度的快慢
+    public float targetStopRadius;
 
     [Header("RUNTIME")]
     public AIAgent agent;
-    public int forceId = -1;
 
     [Header("DEBUG")]
     public Color slowDownColor = Color.blue;
+    public Color targetStopColor = Color.red;
 
     private void Awake() 
     {
@@ -27,6 +28,12 @@ public class ArriveComp : MonoBehaviour
     {
         Vector3 distVec = Utils.Vector3ZeroY(target.position - agent.pos);
         float dist = distVec.magnitude;
+
+        if (dist < targetStopRadius)
+        {
+            agent.velocity = Vector3.zero;
+            return;
+        }
         
         float targetSpeed;
         if (dist > slowDownRadius)
@@ -39,15 +46,19 @@ public class ArriveComp : MonoBehaviour
         }
 
         Vector3 targetVelocity = distVec.normalized * targetSpeed;
+        // 因为这边目标速度与当前速度计算的加速度缺少时间参数，所以自己设定时间来确定变化快慢
         Vector3 accel = targetVelocity - agent.velocity;
         accel *= 1f / timeToTargetSpeed;
 
-        forceId = agent.AddForce(forceId, steerForce);
+        agent.velocity += accel * Time.deltaTime;
     }
 
     void OnDrawGizmos()
     {
         Handles.color = slowDownColor;
         Handles.DrawWireDisc(target.position, Vector3.up, slowDownRadius);
+    
+        Handles.color = targetStopColor;
+        Handles.DrawWireDisc(target.position, Vector3.up, targetStopRadius);
     }
 }

@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b364cfd01e15e37459655675f6e39322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 4
+  maxMoveSpeed: 3
   mass: 1
   rotateLerp: 0.4
   walkForce: 4
@@ -1115,10 +1115,17 @@ MonoBehaviour:
   acc: {x: 0, y: 0, z: 0}
   steerForce: {x: 0, y: 0, z: 0}
   forceNextId: 0
+  movePathTick: 0
+  movePathStartIdx: 0
+  movePoints: []
   forwardColor: {r: 1, g: 0, b: 0, a: 1}
   forwardLength: 1
   steerForceColor: {r: 0, g: 1, b: 0, a: 1}
   steerForceDebugScale: 1
+  showMovePath: 0
+  movePathColor: {r: 1, g: 0, b: 0, a: 1}
+  movePointInterval: 0
+  maxMovePoint: 0
 --- !u!114 &1607517712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1133,17 +1140,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 192928178}
   slowDownRadius: 4
-  targetRadius: 0.1
+  timeToTargetSpeed: 1
+  targetStopRadius: 0.7
   agent: {fileID: 0}
-  forceId: -1
-  movePathTick: 0
-  movePathStartIdx: 0
-  movePoints: []
-  showMovePath: 0
-  movePathColor: {r: 1, g: 0, b: 0, a: 1}
-  movePointInterval: 0
-  maxMovePoint: 0
   slowDownColor: {r: 0, g: 0, b: 1, a: 1}
+  targetStopColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!54 &1607517713
 Rigidbody:
   m_ObjectHideFlags: 0
