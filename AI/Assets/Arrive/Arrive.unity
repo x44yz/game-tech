@@ -1107,10 +1107,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b364cfd01e15e37459655675f6e39322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoveSpeed: 3
-  mass: 1
-  rotateLerp: 0.4
-  walkForce: 4
+  maxMoveSpeed: 4
+  turnSpeed: 40
   velocity: {x: 0, y: 0, z: 0}
   acc: {x: 0, y: 0, z: 0}
   steerForce: {x: 0, y: 0, z: 0}

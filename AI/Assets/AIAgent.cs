@@ -5,9 +5,9 @@ using UnityEngine;
 public class AIAgent : MonoBehaviour
 {
     public float maxMoveSpeed = 4f;
-    public float mass = 1f; // 模拟重量
-    public float rotateLerp = 0.7f;
-    public float walkForce = 4f;
+    // public float mass = 1f; // 模拟重量
+    public float turnSpeed = 20f;
+    // public float walkForce = 4f;
 
     [Header("RUNTIME")]
     public Vector3 velocity;
@@ -48,7 +48,7 @@ public class AIAgent : MonoBehaviour
 
     private void Start()
     {
-        velocity = maxMoveSpeed * forward;
+        // velocity = maxMoveSpeed * forward;
     }
     
     private void Update()
@@ -67,7 +67,7 @@ public class AIAgent : MonoBehaviour
         // 太小的速度值就不进行方向偏转
         if (velocity.magnitude > 0.001f)
         {
-            forward = Vector3.Lerp(forward, velocity, rotateLerp);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(velocity), turnSpeed * Time.deltaTime);
         }
 
         if (showMovePath)
