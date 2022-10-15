@@ -8,6 +8,7 @@ public class AIAgent : MonoBehaviour
     // public float mass = 1f; // 模拟重量
     public float turnSpeed = 20f;
     // public float walkForce = 4f;
+    public float maxAccel = 1f;
 
     [Header("RUNTIME")]
     public Vector3 velocity;
@@ -26,8 +27,8 @@ public class AIAgent : MonoBehaviour
     public float accelDebugScale = 1f;
     public bool showMovePath;
     public Color movePathColor = Color.red;
-    public float movePointInterval;
-    public int maxMovePoint;
+    public float movePointInterval = 0.1f;
+    public int maxMovePoint = 100;
 
     public Vector3 pos
     {
@@ -88,6 +89,17 @@ public class AIAgent : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void LateUpdate() 
+    {
+        velocity += accel * Time.deltaTime;
+        if (velocity.magnitude > maxMoveSpeed)
+        {
+            velocity = velocity.normalized * maxMoveSpeed;
+        }
+
+        accel = Vector3.zero;
     }
 
     // Dictionary<int, Vector3> forceMap = new Dictionary<int, Vector3>();
