@@ -31,7 +31,7 @@ public class ArriveComp : MonoBehaviour
 
         if (dist < targetStopRadius)
         {
-            agent.velocity = Vector3.zero;
+            agent.accel = Vector3.zero;
             return;
         }
         
@@ -48,9 +48,9 @@ public class ArriveComp : MonoBehaviour
         Vector3 targetVelocity = distVec.normalized * targetSpeed;
         // 因为这边目标速度与当前速度计算的加速度缺少时间参数，所以自己设定时间来确定变化快慢
         Vector3 accel = targetVelocity - agent.velocity;
-        accel *= 1f / timeToTargetSpeed;
+        accel /= timeToTargetSpeed;
 
-        agent.velocity += accel * Time.deltaTime;
+        agent.accel = accel;
     }
 
     void OnDrawGizmos()

@@ -98,6 +98,11 @@ public class AIAgent : MonoBehaviour
         {
             velocity = velocity.normalized * maxMoveSpeed;
         }
+        // 没有收到力的作用
+        if (Utils.IsZero(accel))
+        {
+            velocity = Vector3.zero;
+        }
 
         accel = Vector3.zero;
     }
