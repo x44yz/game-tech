@@ -73,3 +73,7 @@ http://www.lurkerlounge.com/diablo/jarulf/jarulf162.pdf
 RPG Maker
 https://www.rpgmakercentral.com/
 https://rmvxace.fandom.com/wiki/RPG_Maker_VX_Ace_Wiki
+
+// 
+https://rpg.fandom.com/wiki/Damage_Formula
+damage = attack * (100 / (100 + def))
