@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 // 拦截
 // 与 Seek 的区别，不是沿着目标的当前方向，而是预测到目标
@@ -13,6 +14,8 @@ public class Pursue : AIBehavoir
     [Header("RUNTIME")]
     public AIAgent agent;
     public AIAgent targetAgent;
+    public float prediction;
+    public Vector3 targetPos;
 
     // [Header("DEBUG")]
 
@@ -27,7 +30,6 @@ public class Pursue : AIBehavoir
         Vector3 dir = Utils.Vector3ZeroY(targetAgent.pos - agent.pos);
         float dist = dir.magnitude;
         float speed = agent.velocity.magnitude;
-        float prediction;
         // 预测值，其实是在 target 的方向上偏移
         // 当两者距离近的时候，预测值就小，反之越大
         if (speed <= dist / maxPrediction)
@@ -35,7 +37,7 @@ public class Pursue : AIBehavoir
         else
             prediction = dist / speed;
 
-        Vector3 targetPos = targetAgent.pos + targetAgent.velocity * prediction;
+        targetPos = targetAgent.pos + targetAgent.velocity * prediction;
 
         // 以下与 seek 相同
         dir = Utils.Vector3ZeroY(targetPos - agent.pos);
@@ -44,6 +46,15 @@ public class Pursue : AIBehavoir
 
     void OnDrawGizmos()
     {
+        if (targetAgent == null)
+            return;
 
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(agent.pos, targetAgent.pos);
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(agent.pos, targetPos);
+
+        Handles.color = Color.blue;
+        Handles.DrawWireDisc(agent.pos, Vector3.up, maxPrediction);
     }
 }

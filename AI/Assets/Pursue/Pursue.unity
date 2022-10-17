@@ -231,6 +231,7 @@ GameObject:
   - component: {fileID: 192928177}
   - component: {fileID: 192928176}
   - component: {fileID: 192928175}
+  - component: {fileID: 192928180}
   - component: {fileID: 192928179}
   m_Layer: 0
   m_Name: Target
@@ -327,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b364cfd01e15e37459655675f6e39322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxMoveSpeed: 4
+  maxMoveSpeed: 1
   turnSpeed: 20
   maxAccel: 1
   velocity: {x: 0, y: 0, z: 0}
@@ -343,6 +344,19 @@ MonoBehaviour:
   movePathColor: {r: 1, g: 0, b: 0, a: 1}
   movePointInterval: 0.1
   maxMovePoint: 100
+--- !u!114 &192928180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192928174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc4c092817897414ea0f32f518da0bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
 --- !u!1 &378738332
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,8 +1132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxMoveSpeed: 4
-  turnSpeed: 20
-  maxAccel: 1
+  turnSpeed: 360
+  maxAccel: 2
   velocity: {x: 0, y: 0, z: 0}
   accel: {x: 0, y: 0, z: 0}
   movePathTick: 0
@@ -1142,11 +1156,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1607517706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 810ed337fe5fc984392a189de96904a7, type: 3}
+  m_Script: {fileID: 11500000, guid: c33c174f4c85bd74d915081e22118845, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 192928178}
+  maxPrediction: 15
   agent: {fileID: 0}
+  targetAgent: {fileID: 0}
+  prediction: 0
+  targetPos: {x: 0, y: 0, z: 0}
 --- !u!54 &1607517713
 Rigidbody:
   m_ObjectHideFlags: 0
