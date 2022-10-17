@@ -324,15 +324,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 192928174}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 895359b3827135446b3bcd80bef7030c, type: 3}
+  m_Script: {fileID: 11500000, guid: b364cfd01e15e37459655675f6e39322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collideLayer:
-    serializedVersion: 2
-    m_Bits: 128
-  showRayLine: 1
-  raylineColor: {r: 0, g: 0, b: 1, a: 1}
-  raylineDuration: 1
+  maxMoveSpeed: 4
+  turnSpeed: 20
+  maxAccel: 1
+  velocity: {x: 0, y: 0, z: 0}
+  accel: {x: 0, y: 0, z: 0}
+  movePathTick: 0
+  movePathStartIdx: 0
+  movePoints: []
+  forwardColor: {r: 1, g: 0, b: 0, a: 1}
+  forwardLength: 1
+  accelColor: {r: 0, g: 1, b: 0, a: 1}
+  accelDebugScale: 1
+  showMovePath: 0
+  movePathColor: {r: 1, g: 0, b: 0, a: 1}
+  movePointInterval: 0.1
+  maxMovePoint: 100
 --- !u!1 &378738332
 GameObject:
   m_ObjectHideFlags: 0
