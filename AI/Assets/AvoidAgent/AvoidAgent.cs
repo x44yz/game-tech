@@ -6,11 +6,11 @@ using UnityEditor;
 public class AvoidAgent : AIBehavoir
 {
     public float collisionRadius = 0.4f;
-    public float maxPrediction;
 
     [Header("RUNTIME")]
     public AIAgent agent;
     public AIAgent[] targets;
+    public AIAgent collisionAgent;
 
     [Header("DEBUG")]
     public Color collisionRadiusColor = Color.red;
@@ -23,6 +23,8 @@ public class AvoidAgent : AIBehavoir
 
     void Update()
     {
+        collisionAgent = null;
+
         // 找到最近的 target
         float shortestTime = float.MaxValue;
         AIAgent firstTarget = null;
@@ -57,18 +59,28 @@ public class AvoidAgent : AIBehavoir
         }
 
         if (firstTarget == null)
+        {
+            agent.accel = agent.forward * agent.maxAccel;
             return;
+        }
         if (firstMinSeparation <= 0.0f || firstDistance < 2 * collisionRadius)
             firstRelativePos = firstTarget.pos;
         else
             firstRelativePos += firstRelativeVel * shortestTime;
         
+        collisionAgent = firstTarget;
         agent.accel = -firstRelativePos.normalized * agent.maxAccel;
     }
 
     void OnDrawGizmos()
     {
         Handles.color = collisionRadiusColor;
-        Handles.DrawWireDisc(transform.position, Vector3.up, collisionRadius);
+        Handles.DrawWireDisc(transform.position, Vector3.up, collisionRadius * 2f);
+
+        if (collisionAgent != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(transform.position + Vector3.up * 0.5f, collisionAgent.pos + Vector3.up * 0.5f);
+        }
     }
 }
