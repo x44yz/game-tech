@@ -37,7 +37,7 @@ public class AvoidAgent : AIBehavoir
             if (t == agent)
                 continue;
 
-            Vector3 rpos = t.pos - agent.pos;
+            Vector3 rpos = Utils.Vector3ZeroY(t.pos - agent.pos);
             float rdist = rpos.magnitude;
             Vector3 rvel = t.velocity - agent.velocity;
             float rspeed = rvel.magnitude;
@@ -60,7 +60,6 @@ public class AvoidAgent : AIBehavoir
 
         if (firstTarget == null)
         {
-            agent.accel = agent.forward * agent.maxAccel;
             return;
         }
         if (firstMinSeparation <= 0.0f || firstDistance < 2 * collisionRadius)
@@ -69,7 +68,7 @@ public class AvoidAgent : AIBehavoir
             firstRelativePos += firstRelativeVel * shortestTime;
         
         collisionAgent = firstTarget;
-        agent.accel = -firstRelativePos.normalized * agent.maxAccel;
+        agent.accel = Utils.Vector3ZeroY(-firstRelativePos.normalized * agent.maxAccel);
     }
 
     void OnDrawGizmos()
