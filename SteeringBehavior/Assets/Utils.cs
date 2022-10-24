@@ -14,4 +14,13 @@ public static class Utils
         v.y = 0f;
         return v;
     }
+
+    public static Vector3 Vector3Truncate(Vector3 v, float maxLength)
+    {
+        float maxLengthSquard = maxLength * maxLength;
+        if (v.sqrMagnitude <= maxLengthSquard)
+            return v;
+        v = v.normalized * maxLength;
+        return v;
+    }
 }
