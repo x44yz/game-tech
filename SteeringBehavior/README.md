@@ -3,6 +3,9 @@ https://www.red3d.com/cwr/
 https://gamedevelopment.tutsplus.com/series/understanding-steering-behaviors--gamedev-12732
 
 
+Book 文件夹时参考 unity-5x-game-ai-programming-cookbook 书籍实现
+CWR 是参考 https://www.red3d.com/cwr/ 实现
+
 [x]wall avoidance
 [x]seek
 [x]feel
