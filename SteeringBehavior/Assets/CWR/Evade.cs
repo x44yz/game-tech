@@ -29,20 +29,20 @@ namespace CWR
         {
             float dt = Time.fixedDeltaTime;
 
-            Vector3 curDir = Utils.Vector3ZeroY(target.position - agent.pos);
+            Vector3 curDir = (target.position - agent.pos).ZeroY();
             float t = curDir.magnitude / agent.maxSpeed;
             Vector3 futurePos = targetAgent.pos + targetAgent.velocity * t;
             Debug.DrawLine(agent.pos, futurePos, Color.red, futureLineDuration);
 
             // Flee
-            Vector3 dir = Utils.Vector3ZeroY(futurePos - agent.pos) * -1;
+            Vector3 dir = (futurePos - agent.pos).ZeroY() * -1;
             var desiredVelocity = dir.normalized * agent.maxSpeed;
             var steering = desiredVelocity - agent.velocity;
-            steering = Utils.Vector3Truncate(steering, agent.maxForce);
+            steering = steering.Truncate(agent.maxForce);
             
             var accel = steering / agent.mass;
             agent.velocity = agent.velocity + accel * dt;
-            agent.velocity = Utils.Vector3Truncate(agent.velocity, agent.maxSpeed);
+            agent.velocity = agent.velocity.Truncate(agent.maxSpeed);
 
             agent.pos = agent.pos + agent.velocity * dt;
 

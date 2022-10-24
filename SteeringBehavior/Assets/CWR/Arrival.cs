@@ -32,7 +32,7 @@ namespace CWR
         {
             float dt = Time.fixedDeltaTime;
 
-            Vector3 dir = Utils.Vector3ZeroY(target.position - agent.pos);
+            Vector3 dir = (target.position - agent.pos).ZeroY();
             var desiredVelocity = Vector3.zero;
 
             float dist = dir.magnitude;
@@ -51,11 +51,11 @@ namespace CWR
                 desiredVelocity = dir.normalized * agent.maxSpeed;
 
             var steering = desiredVelocity - agent.velocity;
-            steering = Utils.Vector3Truncate(steering, agent.maxForce);
+            steering = steering.Truncate(agent.maxForce);
             
             var accel = steering / agent.mass;
             agent.velocity = agent.velocity + accel * dt;
-            agent.velocity = Utils.Vector3Truncate(agent.velocity, agent.maxSpeed);
+            agent.velocity = agent.velocity.Truncate(agent.maxSpeed);
 
             agent.pos = agent.pos + agent.velocity * dt;
 

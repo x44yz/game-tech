@@ -29,7 +29,7 @@ namespace Book
 
         void Update()
         {
-            Vector3 dir = Utils.Vector3ZeroY(targetAgent.pos - agent.pos);
+            Vector3 dir = (targetAgent.pos - agent.pos).ZeroY();
             float dist = dir.magnitude;
             float speed = agent.velocity.magnitude;
             // 预测值，其实是在 target 的方向上偏移
@@ -42,7 +42,7 @@ namespace Book
             targetPos = targetAgent.pos + targetAgent.velocity * prediction;
 
             // 以下与 seek 相同
-            dir = Utils.Vector3ZeroY(targetPos - agent.pos);
+            dir = (targetPos - agent.pos).ZeroY();
             agent.accel = dir.normalized * agent.maxAccel;
         }
 

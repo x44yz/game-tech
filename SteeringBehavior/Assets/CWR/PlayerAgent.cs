@@ -10,7 +10,7 @@ namespace CWR
         {
             velocity.x = Input.GetAxis("Horizontal");
             velocity.z = Input.GetAxis("Vertical");
-            velocity = Utils.Vector3Truncate(velocity, maxSpeed);
+            velocity = velocity.Truncate(maxSpeed);
 
             pos += velocity * Time.deltaTime;
         }

@@ -39,7 +39,7 @@ namespace Book
                 if (t == agent)
                     continue;
 
-                Vector3 rpos = Utils.Vector3ZeroY(t.pos - agent.pos);
+                Vector3 rpos = (t.pos - agent.pos).ZeroY();
                 float rdist = rpos.magnitude;
                 Vector3 rvel = t.velocity - agent.velocity;
                 float rspeed = rvel.magnitude;
@@ -70,7 +70,7 @@ namespace Book
                 firstRelativePos += firstRelativeVel * shortestTime;
             
             collisionAgent = firstTarget;
-            agent.accel = Utils.Vector3ZeroY(-firstRelativePos.normalized * agent.maxAccel);
+            agent.accel = (-firstRelativePos.normalized * agent.maxAccel).ZeroY();
         }
 
         void OnDrawGizmos()

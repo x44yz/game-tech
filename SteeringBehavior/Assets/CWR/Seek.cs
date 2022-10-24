@@ -22,7 +22,7 @@ namespace CWR
         {
             float dt = Time.fixedDeltaTime;
 
-            Vector3 dir = Utils.Vector3ZeroY(target.position - agent.pos);
+            Vector3 dir = (target.position - agent.pos).ZeroY();
             var desiredVelocity = dir.normalized * agent.maxSpeed;
             var steering = desiredVelocity - agent.velocity;
             if (steering.magnitude > agent.maxForce)

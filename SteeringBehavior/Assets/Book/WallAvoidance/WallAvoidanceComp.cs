@@ -57,7 +57,7 @@ namespace Book
                     targetPos = hit.point + Quaternion.Euler(0f, 90f - angle, 0f) * hit.normal * wallAvoidDistance;
                 }
 
-                accel = Utils.Vector3ZeroY(targetPos - agent.pos).normalized * maxAccel;
+                accel = (targetPos - agent.pos).ZeroY().normalized * maxAccel;
             }
             else
             {

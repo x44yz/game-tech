@@ -18,7 +18,7 @@ namespace Book
 
         void Update()
         {
-            Vector3 dist = Utils.Vector3ZeroY(agent.pos - target.position);
+            Vector3 dist = (agent.pos - target.position).ZeroY();
             Vector3 accel = dist.normalized * agent.maxAccel;
             
             agent.accel = accel;

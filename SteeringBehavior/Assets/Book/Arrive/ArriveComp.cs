@@ -28,7 +28,7 @@ namespace Book
 
         void Update()
         {
-            Vector3 distVec = Utils.Vector3ZeroY(target.position - agent.pos);
+            Vector3 distVec = (target.position - agent.pos).ZeroY();
             float dist = distVec.magnitude;
 
             if (dist < targetStopRadius)
