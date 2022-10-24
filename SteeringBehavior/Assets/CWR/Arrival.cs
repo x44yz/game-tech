@@ -5,10 +5,12 @@ using UnityEditor;
 
 namespace CWR
 {
-    public class Arrive : MonoBehaviour
+    // 如果使用 stop radius 就是急停的效果
+    public class Arrival : MonoBehaviour
     {
         public Transform target;
         public float slowRadius;
+        public bool useStopRadius;
         public float stopRadius;
 
         [Header("RUNTIME")]
@@ -34,7 +36,7 @@ namespace CWR
             var desiredVelocity = Vector3.zero;
 
             float dist = dir.magnitude;
-            if (dist <= stopRadius)
+            if (useStopRadius && dist <= stopRadius)
             {
                 agent.velocity = Vector3.zero;
                 steeringVal = 0f;
