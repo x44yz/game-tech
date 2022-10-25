@@ -6,6 +6,9 @@ https://gamedevelopment.tutsplus.com/series/understanding-steering-behaviors--ga
 Book 文件夹时参考 unity-5x-game-ai-programming-cookbook 书籍实现
 CWR 是参考 https://www.red3d.com/cwr/ 实现
 
+开源 unity 实现
+https://github.com/ricardojmendez/UnitySteer
+
 [x]wall avoidance
 [x]seek
 [x]feel
@@ -25,4 +28,5 @@ https://www.packtpub.com/product/unity-5x-game-ai-programming-cookbook/978178355
 http://www.gameaipro.com/
 https://www.jianshu.com/p/4d7a7b98cec2
 https://gamedevelopment.tutsplus.com/tutorials/3-simple-rules-of-flocking-behaviors-alignment-cohesion-and-separation--gamedev-3444
+
 
