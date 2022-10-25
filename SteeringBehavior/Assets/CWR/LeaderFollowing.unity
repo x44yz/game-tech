@@ -1007,6 +1007,8 @@ MonoBehaviour:
   leaderBehindDist: 1
   separationRadius: 1
   maxSeparationForce: 2
+  isEvadeLeaderRoute: 1
+  leaderSightRadius: 2
   agent: {fileID: 0}
   targetAgent: {fileID: 0}
   steeringVal: 0
@@ -1201,6 +1203,8 @@ MonoBehaviour:
   leaderBehindDist: 1
   separationRadius: 1
   maxSeparationForce: 2
+  isEvadeLeaderRoute: 1
+  leaderSightRadius: 2
   agent: {fileID: 0}
   targetAgent: {fileID: 0}
   steeringVal: 0
@@ -1314,6 +1318,8 @@ MonoBehaviour:
   leaderBehindDist: 1
   separationRadius: 1
   maxSeparationForce: 2
+  isEvadeLeaderRoute: 1
+  leaderSightRadius: 2
   agent: {fileID: 0}
   targetAgent: {fileID: 0}
   steeringVal: 0
@@ -1793,6 +1799,8 @@ MonoBehaviour:
   leaderBehindDist: 1
   separationRadius: 1
   maxSeparationForce: 2
+  isEvadeLeaderRoute: 1
+  leaderSightRadius: 2
   agent: {fileID: 0}
   targetAgent: {fileID: 0}
   steeringVal: 0

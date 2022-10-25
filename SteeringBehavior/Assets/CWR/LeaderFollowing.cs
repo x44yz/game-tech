@@ -15,6 +15,8 @@ namespace CWR
         public float leaderBehindDist;
         public float separationRadius;
         public float maxSeparationForce;
+        public bool isEvadeLeaderRoute = false;
+        public float leaderSightRadius;
 
         [Header("RUNTIME")]
         public Agent agent;
@@ -93,13 +95,40 @@ namespace CWR
             return force;
         }
 
+        private bool IsOnLeaderSight(Agent leader, Vector3 leaderAhead) 
+        {
+            // 可以只选择判断 leaderAhead
+            return (leaderAhead - agent.pos).ZeroYLength() <= leaderSightRadius || 
+                (leader.pos - agent.pos).ZeroYLength() <= leaderSightRadius;
+        }
+
+        private Vector3 Evade(Agent ta)
+        {
+            Vector3 curDir = (ta.pos - agent.pos).ZeroY();
+            float t = curDir.magnitude / agent.maxSpeed;
+            Vector3 futurePos = ta.pos + ta.velocity * t;
+            // Debug.DrawLine(agent.pos, futurePos, Color.red, futureLineDuration);
+
+            Vector3 dir = (futurePos - agent.pos).ZeroY() * -1;
+            var desiredVelocity = dir.normalized * agent.maxSpeed;
+            var steering = desiredVelocity - agent.velocity;
+            return steering;
+        }
+
         private void FixedUpdate()
         {
             float dt = Time.fixedDeltaTime;
 
             var behindPos = targetAgent.pos + (targetAgent.velocity * -1).normalized * leaderBehindDist;
+            var aheadPos = targetAgent.pos + targetAgent.velocity.normalized * leaderBehindDist;
 
-            var steering = Arrival(behindPos);
+            var steering = Vector3.zero;
+            if (isEvadeLeaderRoute && IsOnLeaderSight(targetAgent, aheadPos))
+            {
+                steering += Evade(targetAgent);
+            }
+
+            steering += Arrival(behindPos);
             steering += Separation();
             steering = steering.Truncate(agent.maxForce);
             
