@@ -24,4 +24,5 @@ https://github.com/sturdyspoon/unity-movement-ai
 https://www.packtpub.com/product/unity-5x-game-ai-programming-cookbook/9781783553570
 http://www.gameaipro.com/
 https://www.jianshu.com/p/4d7a7b98cec2
+https://gamedevelopment.tutsplus.com/tutorials/3-simple-rules-of-flocking-behaviors-alignment-cohesion-and-separation--gamedev-3444
 
