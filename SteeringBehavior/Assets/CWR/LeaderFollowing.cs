@@ -13,6 +13,8 @@ namespace CWR
         public bool useStopRadius;
         public float stopRadius;
         public float leaderBehindDist;
+        public float separationRadius;
+        public float maxSeparationForce;
 
         [Header("RUNTIME")]
         public Agent agent;
@@ -20,6 +22,7 @@ namespace CWR
         public float steeringVal;
         public float accelVal;
         public float velocityVal;
+        public List<Agent> followingAgents = new List<Agent>();
 
         [Header("DEBUG")]
         public Color slowRadiusColor;
@@ -29,6 +32,14 @@ namespace CWR
         {
             agent = GetComponent<Agent>();
             targetAgent = target.GetComponent<Agent>();
+            
+            var agents = GameObject.FindObjectsOfType<Agent>();
+            foreach (var a in agents)
+            {
+                if (a == targetAgent || a == this)
+                    continue;
+                followingAgents.Add(a);
+            }
         }
 
         private Vector3 Arrival(Vector3 targetPos)
@@ -55,6 +66,33 @@ namespace CWR
             return steering;
         }
 
+        private Vector3 Separation()
+        {
+            Vector3 force = Vector3.zero;
+            int neighborCount = 0;
+            foreach (var a in followingAgents)
+            {
+                if (a == null || a == targetAgent || a == this)
+                    continue;
+
+                var dist = (a.pos - agent.pos).ZeroYLength();
+                if (dist > separationRadius)
+                    continue;
+
+                neighborCount += 1;
+                force += a.pos - agent.pos;
+            }
+
+            if (neighborCount > 0)
+            {
+                force /= neighborCount;
+                force *= -1;
+            }
+
+            force = force.normalized * maxSeparationForce;
+            return force;
+        }
+
         private void FixedUpdate()
         {
             float dt = Time.fixedDeltaTime;
@@ -62,6 +100,7 @@ namespace CWR
             var behindPos = targetAgent.pos + (targetAgent.velocity * -1).normalized * leaderBehindDist;
 
             var steering = Arrival(behindPos);
+            steering += Separation();
             steering = steering.Truncate(agent.maxForce);
             
             var accel = steering / agent.mass;
