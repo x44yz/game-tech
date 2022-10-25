@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace CWR
 {
+    // https://gamedevelopment.tutsplus.com/tutorials/understanding-steering-behaviors-queue--gamedev-14365
     public class Queuing : MonoBehaviour
     {
         public Transform door;
