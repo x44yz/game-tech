@@ -42,7 +42,7 @@ public class CharacterController_2D : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             Once_Attack = false;
-            Debug.Log("Lclick");
+            // Debug.Log("Lclick");
             m_Animator.SetTrigger("Attack");
 
             m_rigidbody.velocity = new Vector3(0, 0, 0);
@@ -53,7 +53,7 @@ public class CharacterController_2D : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             Once_Attack = false;
-            Debug.Log("Rclick");
+            // Debug.Log("Rclick");
             m_Animator.SetTrigger("Attack2");
 
             m_rigidbody.velocity = new Vector3(0, 0, 0);
@@ -66,7 +66,7 @@ public class CharacterController_2D : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.Alpha9))
         {
           
-            Debug.Log("1");
+            // Debug.Log("1");
             m_Animator.Play("Hit");
 
 
@@ -75,7 +75,7 @@ public class CharacterController_2D : MonoBehaviour {
         }
         else if (Input.GetKeyDown(KeyCode.Alpha0))
         {
-            Debug.Log("2");
+            // Debug.Log("2");
             m_Animator.Play("Die");
 
 

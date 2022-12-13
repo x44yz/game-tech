@@ -1,357 +1,1053 @@
 fileFormatVersion: 2
 guid: 4c7a72f681f254f55b98b57b0b2b95a9
-timeCreated: 1545529592
-licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: creatures_0
-    21300002: creatures_1
-    21300004: creatures_2
-    21300006: creatures_3
-    21300008: creatures_4
-    21300010: creatures_5
-    21300012: creatures_6
-    21300014: creatures_7
-    21300016: creatures_8
-    21300018: creatures_9
-    21300020: creatures_10
-    21300022: creatures_11
-    21300024: creatures_12
-    21300026: creatures_13
-    21300028: creatures_14
-    21300030: creatures_15
-    21300032: creatures_16
-    21300034: creatures_17
-    21300036: creatures_18
-    21300038: creatures_19
-    21300040: creatures_20
-    21300042: creatures_21
-    21300044: creatures_22
-    21300046: creatures_23
-    21300048: creatures_24
-    21300050: creatures_25
-    21300052: creatures_26
-    21300054: creatures_27
-    21300056: creatures_28
-    21300058: creatures_29
-    21300060: creatures_30
-    21300062: creatures_31
-    21300064: creatures_32
-    21300066: creatures_33
-    21300068: creatures_34
-    21300070: creatures_35
-    21300072: creatures_36
-    21300074: creatures_37
-    21300076: creatures_38
-    21300078: creatures_39
-    21300080: creatures_40
-    21300082: creatures_41
-    21300084: creatures_42
-    21300086: creatures_43
-    21300088: creatures_44
-    21300090: creatures_45
-    21300092: creatures_46
-    21300094: creatures_47
-    21300096: creatures_48
-    21300098: creatures_49
-    21300100: creatures_50
-    21300102: creatures_51
-    21300104: creatures_52
-    21300106: creatures_53
-    21300108: creatures_54
-    21300110: creatures_55
-    21300112: creatures_56
-    21300114: creatures_57
-    21300116: creatures_58
-    21300118: creatures_59
-    21300120: creatures_60
-    21300122: creatures_61
-    21300124: creatures_62
-    21300126: creatures_63
-    21300128: creatures_64
-    21300130: creatures_65
-    21300132: creatures_66
-    21300134: creatures_67
-    21300136: creatures_68
-    21300138: creatures_69
-    21300140: creatures_70
-    21300142: creatures_71
-    21300144: creatures_72
-    21300146: creatures_73
-    21300148: creatures_74
-    21300150: creatures_75
-    21300152: creatures_76
-    21300154: creatures_77
-    21300156: creatures_78
-    21300158: creatures_79
-    21300160: creatures_80
-    21300162: creatures_81
-    21300164: creatures_82
-    21300166: creatures_83
-    21300168: creatures_84
-    21300170: creatures_85
-    21300172: creatures_86
-    21300174: creatures_87
-    21300176: creatures_88
-    21300178: creatures_89
-    21300180: creatures_90
-    21300182: creatures_91
-    21300184: creatures_92
-    21300186: creatures_93
-    21300188: creatures_94
-    21300190: creatures_95
-    21300192: creatures_96
-    21300194: creatures_97
-    21300196: creatures_98
-    21300198: creatures_99
-    21300200: creatures_100
-    21300202: creatures_101
-    21300204: creatures_102
-    21300206: creatures_103
-    21300208: creatures_104
-    21300210: creatures_105
-    21300212: creatures_106
-    21300214: creatures_107
-    21300216: creatures_108
-    21300218: creatures_109
-    21300220: creatures_110
-    21300222: creatures_111
-    21300224: creatures_112
-    21300226: creatures_113
-    21300228: creatures_114
-    21300230: creatures_115
-    21300232: creatures_116
-    21300234: creatures_117
-    21300236: creatures_118
-    21300238: creatures_119
-    21300240: creatures_120
-    21300242: creatures_121
-    21300244: creatures_122
-    21300246: creatures_123
-    21300248: creatures_124
-    21300250: creatures_125
-    21300252: creatures_126
-    21300254: creatures_127
-    21300256: creatures_128
-    21300258: creatures_129
-    21300260: creatures_130
-    21300262: creatures_131
-    21300264: creatures_132
-    21300266: creatures_133
-    21300268: creatures_134
-    21300270: creatures_135
-    21300272: creatures_136
-    21300274: creatures_137
-    21300276: creatures_138
-    21300278: creatures_139
-    21300280: creatures_140
-    21300282: creatures_141
-    21300284: creatures_142
-    21300286: creatures_143
-    21300288: creatures_144
-    21300290: creatures_145
-    21300292: creatures_146
-    21300294: creatures_147
-    21300296: creatures_148
-    21300298: creatures_149
-    21300300: creatures_150
-    21300302: creatures_151
-    21300304: creatures_152
-    21300306: creatures_153
-    21300308: creatures_154
-    21300310: creatures_155
-    21300312: creatures_156
-    21300314: creatures_157
-    21300316: creatures_158
-    21300318: creatures_159
-    21300320: creatures_160
-    21300322: creatures_161
-    21300324: creatures_162
-    21300326: creatures_163
-    21300328: creatures_164
-    21300330: creatures_165
-    21300332: creatures_166
-    21300334: creatures_167
-    21300336: creatures_168
-    21300338: creatures_169
-    21300340: creatures_170
-    21300342: creatures_171
-    21300344: creatures_172
-    21300346: creatures_173
-    21300348: s1
-    21300350: s2
-    21300352: sabretooth
-    21300354: ogre
-    21300356: yeti
-    21300358: treeant-small
-    21300360: treeant-medium
-    21300362: treeant-large
-    21300364: wolf-small
-    21300366: wolf-medium
-    21300368: wolf-large
-    21300370: wolf-dire
-    21300372: human01
-    21300374: human02
-    21300376: human03
-    21300378: human04
-    21300380: human05
-    21300382: spider
-    21300384: tiger
-    21300386: dwarf01
-    21300388: dwarf02
-    21300390: dwarf03
-    21300392: human06
-    21300394: human07
-    21300396: human08
-    21300398: human09
-    21300400: human10
-    21300402: human11
-    21300404: human12
-    21300406: human13
-    21300408: human14
-    21300410: human15
-    21300412: zombie01
-    21300414: zombie02
-    21300416: skeleton01
-    21300418: skeleton02
-    21300420: skeleton03
-    21300422: elf01
-    21300424: dwarf04
-    21300426: human16
-    21300428: human17
-    21300430: human18
-    21300432: human19
-    21300434: dwarf05
-    21300436: human20
-    21300438: human21
-    21300440: human22
-    21300442: rat
-    21300444: orc01
-    21300446: elemental
-    21300448: snake
-    21300450: lizard
-    21300452: human23
-    21300454: human24
-    21300456: human25
-    21300458: giantbat
-    21300460: ghoul
-    21300462: spectre
-    21300464: human26
-    21300466: human27
-    21300468: human28
-    21300470: human29
-    21300472: human30
-    21300474: bear
-    21300476: skeleton04
-    21300478: human31
-    21300480: scorpion
-    21300482: serpent
-    21300484: ghast1
-    21300486: drake
-    21300488: ghast2
-    21300490: fairy
-    21300492: firedrake
-    21300494: tentacle-beast
-    21300496: mushroom
-    21300498: gryphon
-    21300500: minotaur
-    21300502: human-male-fg
-    21300504: human-male-bg
-    21300506: human-female-fg
-    21300508: human-female-bg
-    21300510: dwarf-fg
-    21300512: dwarf-bg
-    21300514: bloodbeast
-    21300516: bloodserpent
-    21300518: werewolf01
-    21300520: werewolf02
-    21300522: magmaman
-    21300524: pixie
-    21300526: centaur
-    21300528: beetleman
-    21300530: killerbeetleman
-    21300532: human-male-clothes
-    21300534: human-female-clothes
-    21300536: dwarf-clothes
-    21300538: goblin01
-    21300540: goblin02
-    21300542: goblin03
-    21300544: serpent02
-    21300546: drake02
-    21300548: drake03
-    21300550: drake04
-    21300552: drake05
-    21300554: drake06
-    21300556: drake07
-    21300558: drake08
-    21300560: drake09
-    21300562: lizardling01
-    21300564: lizardling02
-    21300566: lizardling03
-    21300568: lizardling04
-    21300570: demon03
-    21300572: demon04
-    21300574: demon05
-    21300576: demon06
-    21300578: basilisk
-    21300580: demon07
-    21300582: ghost01
-    21300584: ghost02
-    21300586: ghost03
-    21300588: trollkin-fg
-    21300590: trollkin-bg
-    21300592: trollkin-clothes
-    21300594: crystal
-    21300596: theMaster
-    21300598: merling-male-fg
-    21300600: merling-male-bg
-    21300602: merling-male-clothes
-    21300604: merling-female-fg
-    21300606: merling-female-bg
-    21300608: merling-female-clothes
-    21300610: seasnake
-    21300612: demon08
-    21300614: dwarf06
-    21300616: dwarf07
-    21300618: witch
-    21300620: tentacle
-    21300622: dwarf08
-    21300624: shroumblue
-    21300626: shroumred
-    21300628: ratking01
-    21300630: ratking02
-    21300632: tentacle-eye
-    21300634: bigorc
-    21300636: golemstell
-    21300638: gluton
-    21300640: fossil
-    21300642: skeleton05
-    21300644: ratman01
-    21300646: ratman02
-    21300648: ratman03
-    21300650: ratman04
-    21300652: ratman05
-    21300654: golemearth
-    21300656: snakeman
-    21300658: dragon01
-    21300660: dragon02
-    21300662: dragon03
-    21300664: dragon04
-    21300666: dragonbaby
-    21300668: demon09
-    21300670: dragon05
-    21300672: orc02
-    21300674: orc03
-    21300676: werewolf03
-    21300678: demon10
-    21300680: dracona-fg
-    21300682: dracona-bg
-    21300684: dracona-clothes
-    21300686: furfoot-fg
-    21300688: furfoot-bg
-    21300690: furfoot-clothes
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: creatures_0
+  - first:
+      213: 21300002
+    second: creatures_1
+  - first:
+      213: 21300004
+    second: creatures_2
+  - first:
+      213: 21300006
+    second: creatures_3
+  - first:
+      213: 21300008
+    second: creatures_4
+  - first:
+      213: 21300010
+    second: creatures_5
+  - first:
+      213: 21300012
+    second: creatures_6
+  - first:
+      213: 21300014
+    second: creatures_7
+  - first:
+      213: 21300016
+    second: creatures_8
+  - first:
+      213: 21300018
+    second: creatures_9
+  - first:
+      213: 21300020
+    second: creatures_10
+  - first:
+      213: 21300022
+    second: creatures_11
+  - first:
+      213: 21300024
+    second: creatures_12
+  - first:
+      213: 21300026
+    second: creatures_13
+  - first:
+      213: 21300028
+    second: creatures_14
+  - first:
+      213: 21300030
+    second: creatures_15
+  - first:
+      213: 21300032
+    second: creatures_16
+  - first:
+      213: 21300034
+    second: creatures_17
+  - first:
+      213: 21300036
+    second: creatures_18
+  - first:
+      213: 21300038
+    second: creatures_19
+  - first:
+      213: 21300040
+    second: creatures_20
+  - first:
+      213: 21300042
+    second: creatures_21
+  - first:
+      213: 21300044
+    second: creatures_22
+  - first:
+      213: 21300046
+    second: creatures_23
+  - first:
+      213: 21300048
+    second: creatures_24
+  - first:
+      213: 21300050
+    second: creatures_25
+  - first:
+      213: 21300052
+    second: creatures_26
+  - first:
+      213: 21300054
+    second: creatures_27
+  - first:
+      213: 21300056
+    second: creatures_28
+  - first:
+      213: 21300058
+    second: creatures_29
+  - first:
+      213: 21300060
+    second: creatures_30
+  - first:
+      213: 21300062
+    second: creatures_31
+  - first:
+      213: 21300064
+    second: creatures_32
+  - first:
+      213: 21300066
+    second: creatures_33
+  - first:
+      213: 21300068
+    second: creatures_34
+  - first:
+      213: 21300070
+    second: creatures_35
+  - first:
+      213: 21300072
+    second: creatures_36
+  - first:
+      213: 21300074
+    second: creatures_37
+  - first:
+      213: 21300076
+    second: creatures_38
+  - first:
+      213: 21300078
+    second: creatures_39
+  - first:
+      213: 21300080
+    second: creatures_40
+  - first:
+      213: 21300082
+    second: creatures_41
+  - first:
+      213: 21300084
+    second: creatures_42
+  - first:
+      213: 21300086
+    second: creatures_43
+  - first:
+      213: 21300088
+    second: creatures_44
+  - first:
+      213: 21300090
+    second: creatures_45
+  - first:
+      213: 21300092
+    second: creatures_46
+  - first:
+      213: 21300094
+    second: creatures_47
+  - first:
+      213: 21300096
+    second: creatures_48
+  - first:
+      213: 21300098
+    second: creatures_49
+  - first:
+      213: 21300100
+    second: creatures_50
+  - first:
+      213: 21300102
+    second: creatures_51
+  - first:
+      213: 21300104
+    second: creatures_52
+  - first:
+      213: 21300106
+    second: creatures_53
+  - first:
+      213: 21300108
+    second: creatures_54
+  - first:
+      213: 21300110
+    second: creatures_55
+  - first:
+      213: 21300112
+    second: creatures_56
+  - first:
+      213: 21300114
+    second: creatures_57
+  - first:
+      213: 21300116
+    second: creatures_58
+  - first:
+      213: 21300118
+    second: creatures_59
+  - first:
+      213: 21300120
+    second: creatures_60
+  - first:
+      213: 21300122
+    second: creatures_61
+  - first:
+      213: 21300124
+    second: creatures_62
+  - first:
+      213: 21300126
+    second: creatures_63
+  - first:
+      213: 21300128
+    second: creatures_64
+  - first:
+      213: 21300130
+    second: creatures_65
+  - first:
+      213: 21300132
+    second: creatures_66
+  - first:
+      213: 21300134
+    second: creatures_67
+  - first:
+      213: 21300136
+    second: creatures_68
+  - first:
+      213: 21300138
+    second: creatures_69
+  - first:
+      213: 21300140
+    second: creatures_70
+  - first:
+      213: 21300142
+    second: creatures_71
+  - first:
+      213: 21300144
+    second: creatures_72
+  - first:
+      213: 21300146
+    second: creatures_73
+  - first:
+      213: 21300148
+    second: creatures_74
+  - first:
+      213: 21300150
+    second: creatures_75
+  - first:
+      213: 21300152
+    second: creatures_76
+  - first:
+      213: 21300154
+    second: creatures_77
+  - first:
+      213: 21300156
+    second: creatures_78
+  - first:
+      213: 21300158
+    second: creatures_79
+  - first:
+      213: 21300160
+    second: creatures_80
+  - first:
+      213: 21300162
+    second: creatures_81
+  - first:
+      213: 21300164
+    second: creatures_82
+  - first:
+      213: 21300166
+    second: creatures_83
+  - first:
+      213: 21300168
+    second: creatures_84
+  - first:
+      213: 21300170
+    second: creatures_85
+  - first:
+      213: 21300172
+    second: creatures_86
+  - first:
+      213: 21300174
+    second: creatures_87
+  - first:
+      213: 21300176
+    second: creatures_88
+  - first:
+      213: 21300178
+    second: creatures_89
+  - first:
+      213: 21300180
+    second: creatures_90
+  - first:
+      213: 21300182
+    second: creatures_91
+  - first:
+      213: 21300184
+    second: creatures_92
+  - first:
+      213: 21300186
+    second: creatures_93
+  - first:
+      213: 21300188
+    second: creatures_94
+  - first:
+      213: 21300190
+    second: creatures_95
+  - first:
+      213: 21300192
+    second: creatures_96
+  - first:
+      213: 21300194
+    second: creatures_97
+  - first:
+      213: 21300196
+    second: creatures_98
+  - first:
+      213: 21300198
+    second: creatures_99
+  - first:
+      213: 21300200
+    second: creatures_100
+  - first:
+      213: 21300202
+    second: creatures_101
+  - first:
+      213: 21300204
+    second: creatures_102
+  - first:
+      213: 21300206
+    second: creatures_103
+  - first:
+      213: 21300208
+    second: creatures_104
+  - first:
+      213: 21300210
+    second: creatures_105
+  - first:
+      213: 21300212
+    second: creatures_106
+  - first:
+      213: 21300214
+    second: creatures_107
+  - first:
+      213: 21300216
+    second: creatures_108
+  - first:
+      213: 21300218
+    second: creatures_109
+  - first:
+      213: 21300220
+    second: creatures_110
+  - first:
+      213: 21300222
+    second: creatures_111
+  - first:
+      213: 21300224
+    second: creatures_112
+  - first:
+      213: 21300226
+    second: creatures_113
+  - first:
+      213: 21300228
+    second: creatures_114
+  - first:
+      213: 21300230
+    second: creatures_115
+  - first:
+      213: 21300232
+    second: creatures_116
+  - first:
+      213: 21300234
+    second: creatures_117
+  - first:
+      213: 21300236
+    second: creatures_118
+  - first:
+      213: 21300238
+    second: creatures_119
+  - first:
+      213: 21300240
+    second: creatures_120
+  - first:
+      213: 21300242
+    second: creatures_121
+  - first:
+      213: 21300244
+    second: creatures_122
+  - first:
+      213: 21300246
+    second: creatures_123
+  - first:
+      213: 21300248
+    second: creatures_124
+  - first:
+      213: 21300250
+    second: creatures_125
+  - first:
+      213: 21300252
+    second: creatures_126
+  - first:
+      213: 21300254
+    second: creatures_127
+  - first:
+      213: 21300256
+    second: creatures_128
+  - first:
+      213: 21300258
+    second: creatures_129
+  - first:
+      213: 21300260
+    second: creatures_130
+  - first:
+      213: 21300262
+    second: creatures_131
+  - first:
+      213: 21300264
+    second: creatures_132
+  - first:
+      213: 21300266
+    second: creatures_133
+  - first:
+      213: 21300268
+    second: creatures_134
+  - first:
+      213: 21300270
+    second: creatures_135
+  - first:
+      213: 21300272
+    second: creatures_136
+  - first:
+      213: 21300274
+    second: creatures_137
+  - first:
+      213: 21300276
+    second: creatures_138
+  - first:
+      213: 21300278
+    second: creatures_139
+  - first:
+      213: 21300280
+    second: creatures_140
+  - first:
+      213: 21300282
+    second: creatures_141
+  - first:
+      213: 21300284
+    second: creatures_142
+  - first:
+      213: 21300286
+    second: creatures_143
+  - first:
+      213: 21300288
+    second: creatures_144
+  - first:
+      213: 21300290
+    second: creatures_145
+  - first:
+      213: 21300292
+    second: creatures_146
+  - first:
+      213: 21300294
+    second: creatures_147
+  - first:
+      213: 21300296
+    second: creatures_148
+  - first:
+      213: 21300298
+    second: creatures_149
+  - first:
+      213: 21300300
+    second: creatures_150
+  - first:
+      213: 21300302
+    second: creatures_151
+  - first:
+      213: 21300304
+    second: creatures_152
+  - first:
+      213: 21300306
+    second: creatures_153
+  - first:
+      213: 21300308
+    second: creatures_154
+  - first:
+      213: 21300310
+    second: creatures_155
+  - first:
+      213: 21300312
+    second: creatures_156
+  - first:
+      213: 21300314
+    second: creatures_157
+  - first:
+      213: 21300316
+    second: creatures_158
+  - first:
+      213: 21300318
+    second: creatures_159
+  - first:
+      213: 21300320
+    second: creatures_160
+  - first:
+      213: 21300322
+    second: creatures_161
+  - first:
+      213: 21300324
+    second: creatures_162
+  - first:
+      213: 21300326
+    second: creatures_163
+  - first:
+      213: 21300328
+    second: creatures_164
+  - first:
+      213: 21300330
+    second: creatures_165
+  - first:
+      213: 21300332
+    second: creatures_166
+  - first:
+      213: 21300334
+    second: creatures_167
+  - first:
+      213: 21300336
+    second: creatures_168
+  - first:
+      213: 21300338
+    second: creatures_169
+  - first:
+      213: 21300340
+    second: creatures_170
+  - first:
+      213: 21300342
+    second: creatures_171
+  - first:
+      213: 21300344
+    second: creatures_172
+  - first:
+      213: 21300346
+    second: creatures_173
+  - first:
+      213: 21300348
+    second: s1
+  - first:
+      213: 21300350
+    second: s2
+  - first:
+      213: 21300352
+    second: sabretooth
+  - first:
+      213: 21300354
+    second: ogre
+  - first:
+      213: 21300356
+    second: yeti
+  - first:
+      213: 21300358
+    second: treeant-small
+  - first:
+      213: 21300360
+    second: treeant-medium
+  - first:
+      213: 21300362
+    second: treeant-large
+  - first:
+      213: 21300364
+    second: wolf-small
+  - first:
+      213: 21300366
+    second: wolf-medium
+  - first:
+      213: 21300368
+    second: wolf-large
+  - first:
+      213: 21300370
+    second: wolf-dire
+  - first:
+      213: 21300372
+    second: human01
+  - first:
+      213: 21300374
+    second: human02
+  - first:
+      213: 21300376
+    second: human03
+  - first:
+      213: 21300378
+    second: human04
+  - first:
+      213: 21300380
+    second: human05
+  - first:
+      213: 21300382
+    second: spider
+  - first:
+      213: 21300384
+    second: tiger
+  - first:
+      213: 21300386
+    second: dwarf01
+  - first:
+      213: 21300388
+    second: dwarf02
+  - first:
+      213: 21300390
+    second: dwarf03
+  - first:
+      213: 21300392
+    second: human06
+  - first:
+      213: 21300394
+    second: human07
+  - first:
+      213: 21300396
+    second: human08
+  - first:
+      213: 21300398
+    second: human09
+  - first:
+      213: 21300400
+    second: human10
+  - first:
+      213: 21300402
+    second: human11
+  - first:
+      213: 21300404
+    second: human12
+  - first:
+      213: 21300406
+    second: human13
+  - first:
+      213: 21300408
+    second: human14
+  - first:
+      213: 21300410
+    second: human15
+  - first:
+      213: 21300412
+    second: zombie01
+  - first:
+      213: 21300414
+    second: zombie02
+  - first:
+      213: 21300416
+    second: skeleton01
+  - first:
+      213: 21300418
+    second: skeleton02
+  - first:
+      213: 21300420
+    second: skeleton03
+  - first:
+      213: 21300422
+    second: elf01
+  - first:
+      213: 21300424
+    second: dwarf04
+  - first:
+      213: 21300426
+    second: human16
+  - first:
+      213: 21300428
+    second: human17
+  - first:
+      213: 21300430
+    second: human18
+  - first:
+      213: 21300432
+    second: human19
+  - first:
+      213: 21300434
+    second: dwarf05
+  - first:
+      213: 21300436
+    second: human20
+  - first:
+      213: 21300438
+    second: human21
+  - first:
+      213: 21300440
+    second: human22
+  - first:
+      213: 21300442
+    second: rat
+  - first:
+      213: 21300444
+    second: orc01
+  - first:
+      213: 21300446
+    second: elemental
+  - first:
+      213: 21300448
+    second: snake
+  - first:
+      213: 21300450
+    second: lizard
+  - first:
+      213: 21300452
+    second: human23
+  - first:
+      213: 21300454
+    second: human24
+  - first:
+      213: 21300456
+    second: human25
+  - first:
+      213: 21300458
+    second: giantbat
+  - first:
+      213: 21300460
+    second: ghoul
+  - first:
+      213: 21300462
+    second: spectre
+  - first:
+      213: 21300464
+    second: human26
+  - first:
+      213: 21300466
+    second: human27
+  - first:
+      213: 21300468
+    second: human28
+  - first:
+      213: 21300470
+    second: human29
+  - first:
+      213: 21300472
+    second: human30
+  - first:
+      213: 21300474
+    second: bear
+  - first:
+      213: 21300476
+    second: skeleton04
+  - first:
+      213: 21300478
+    second: human31
+  - first:
+      213: 21300480
+    second: scorpion
+  - first:
+      213: 21300482
+    second: serpent
+  - first:
+      213: 21300484
+    second: ghast1
+  - first:
+      213: 21300486
+    second: drake
+  - first:
+      213: 21300488
+    second: ghast2
+  - first:
+      213: 21300490
+    second: fairy
+  - first:
+      213: 21300492
+    second: firedrake
+  - first:
+      213: 21300494
+    second: tentacle-beast
+  - first:
+      213: 21300496
+    second: mushroom
+  - first:
+      213: 21300498
+    second: gryphon
+  - first:
+      213: 21300500
+    second: minotaur
+  - first:
+      213: 21300502
+    second: human-male-fg
+  - first:
+      213: 21300504
+    second: human-male-bg
+  - first:
+      213: 21300506
+    second: human-female-fg
+  - first:
+      213: 21300508
+    second: human-female-bg
+  - first:
+      213: 21300510
+    second: dwarf-fg
+  - first:
+      213: 21300512
+    second: dwarf-bg
+  - first:
+      213: 21300514
+    second: bloodbeast
+  - first:
+      213: 21300516
+    second: bloodserpent
+  - first:
+      213: 21300518
+    second: werewolf01
+  - first:
+      213: 21300520
+    second: werewolf02
+  - first:
+      213: 21300522
+    second: magmaman
+  - first:
+      213: 21300524
+    second: pixie
+  - first:
+      213: 21300526
+    second: centaur
+  - first:
+      213: 21300528
+    second: beetleman
+  - first:
+      213: 21300530
+    second: killerbeetleman
+  - first:
+      213: 21300532
+    second: human-male-clothes
+  - first:
+      213: 21300534
+    second: human-female-clothes
+  - first:
+      213: 21300536
+    second: dwarf-clothes
+  - first:
+      213: 21300538
+    second: goblin01
+  - first:
+      213: 21300540
+    second: goblin02
+  - first:
+      213: 21300542
+    second: goblin03
+  - first:
+      213: 21300544
+    second: serpent02
+  - first:
+      213: 21300546
+    second: drake02
+  - first:
+      213: 21300548
+    second: drake03
+  - first:
+      213: 21300550
+    second: drake04
+  - first:
+      213: 21300552
+    second: drake05
+  - first:
+      213: 21300554
+    second: drake06
+  - first:
+      213: 21300556
+    second: drake07
+  - first:
+      213: 21300558
+    second: drake08
+  - first:
+      213: 21300560
+    second: drake09
+  - first:
+      213: 21300562
+    second: lizardling01
+  - first:
+      213: 21300564
+    second: lizardling02
+  - first:
+      213: 21300566
+    second: lizardling03
+  - first:
+      213: 21300568
+    second: lizardling04
+  - first:
+      213: 21300570
+    second: demon03
+  - first:
+      213: 21300572
+    second: demon04
+  - first:
+      213: 21300574
+    second: demon05
+  - first:
+      213: 21300576
+    second: demon06
+  - first:
+      213: 21300578
+    second: basilisk
+  - first:
+      213: 21300580
+    second: demon07
+  - first:
+      213: 21300582
+    second: ghost01
+  - first:
+      213: 21300584
+    second: ghost02
+  - first:
+      213: 21300586
+    second: ghost03
+  - first:
+      213: 21300588
+    second: trollkin-fg
+  - first:
+      213: 21300590
+    second: trollkin-bg
+  - first:
+      213: 21300592
+    second: trollkin-clothes
+  - first:
+      213: 21300594
+    second: crystal
+  - first:
+      213: 21300596
+    second: theMaster
+  - first:
+      213: 21300598
+    second: merling-male-fg
+  - first:
+      213: 21300600
+    second: merling-male-bg
+  - first:
+      213: 21300602
+    second: merling-male-clothes
+  - first:
+      213: 21300604
+    second: merling-female-fg
+  - first:
+      213: 21300606
+    second: merling-female-bg
+  - first:
+      213: 21300608
+    second: merling-female-clothes
+  - first:
+      213: 21300610
+    second: seasnake
+  - first:
+      213: 21300612
+    second: demon08
+  - first:
+      213: 21300614
+    second: dwarf06
+  - first:
+      213: 21300616
+    second: dwarf07
+  - first:
+      213: 21300618
+    second: witch
+  - first:
+      213: 21300620
+    second: tentacle
+  - first:
+      213: 21300622
+    second: dwarf08
+  - first:
+      213: 21300624
+    second: shroumblue
+  - first:
+      213: 21300626
+    second: shroumred
+  - first:
+      213: 21300628
+    second: ratking01
+  - first:
+      213: 21300630
+    second: ratking02
+  - first:
+      213: 21300632
+    second: tentacle-eye
+  - first:
+      213: 21300634
+    second: bigorc
+  - first:
+      213: 21300636
+    second: golemstell
+  - first:
+      213: 21300638
+    second: gluton
+  - first:
+      213: 21300640
+    second: fossil
+  - first:
+      213: 21300642
+    second: skeleton05
+  - first:
+      213: 21300644
+    second: ratman01
+  - first:
+      213: 21300646
+    second: ratman02
+  - first:
+      213: 21300648
+    second: ratman03
+  - first:
+      213: 21300650
+    second: ratman04
+  - first:
+      213: 21300652
+    second: ratman05
+  - first:
+      213: 21300654
+    second: golemearth
+  - first:
+      213: 21300656
+    second: snakeman
+  - first:
+      213: 21300658
+    second: dragon01
+  - first:
+      213: 21300660
+    second: dragon02
+  - first:
+      213: 21300662
+    second: dragon03
+  - first:
+      213: 21300664
+    second: dragon04
+  - first:
+      213: 21300666
+    second: dragonbaby
+  - first:
+      213: 21300668
+    second: demon09
+  - first:
+      213: 21300670
+    second: dragon05
+  - first:
+      213: 21300672
+    second: orc02
+  - first:
+      213: 21300674
+    second: orc03
+  - first:
+      213: 21300676
+    second: werewolf03
+  - first:
+      213: 21300678
+    second: demon10
+  - first:
+      213: 21300680
+    second: dracona-fg
+  - first:
+      213: 21300682
+    second: dracona-bg
+  - first:
+      213: 21300684
+    second: dracona-clothes
+  - first:
+      213: 21300686
+    second: furfoot-fg
+  - first:
+      213: 21300688
+    second: furfoot-bg
+  - first:
+      213: 21300690
+    second: furfoot-clothes
+  - first:
+      213: -3899521330152072762
+    second: demon01
+  - first:
+      213: -7779477606832621045
+    second: demon02
   externalObjects: {}
-  serializedVersion: 4
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -369,6 +1065,9 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -377,9 +1076,9 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
-    aniso: -1
-    mipBias: -1
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
     wrapU: 1
     wrapV: 1
     wrapW: 1
@@ -399,11 +1098,17 @@ TextureImporter:
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
-  - buildTarget: DefaultTexturePlatform
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -413,7 +1118,9 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-  - buildTarget: Standalone
+    forceMaximumCompressionQuality_BC6H_BC7: 1
+  - serializedVersion: 3
+    buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -423,6 +1130,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -440,6 +1148,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 08405410000000000800000000000000
+      internalID: 21300352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ogre
       rect:
@@ -454,6 +1169,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 28405410000000000800000000000000
+      internalID: 21300354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: yeti
       rect:
@@ -468,6 +1190,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 48405410000000000800000000000000
+      internalID: 21300356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: treeant-small
       rect:
@@ -482,6 +1211,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 68405410000000000800000000000000
+      internalID: 21300358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: treeant-medium
       rect:
@@ -496,6 +1232,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 88405410000000000800000000000000
+      internalID: 21300360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: treeant-large
       rect:
@@ -510,6 +1253,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a8405410000000000800000000000000
+      internalID: 21300362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wolf-small
       rect:
@@ -524,6 +1274,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c8405410000000000800000000000000
+      internalID: 21300364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wolf-medium
       rect:
@@ -538,6 +1295,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e8405410000000000800000000000000
+      internalID: 21300366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wolf-large
       rect:
@@ -552,6 +1316,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 09405410000000000800000000000000
+      internalID: 21300368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: wolf-dire
       rect:
@@ -566,6 +1337,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 29405410000000000800000000000000
+      internalID: 21300370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human01
       rect:
@@ -580,6 +1358,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 49405410000000000800000000000000
+      internalID: 21300372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human02
       rect:
@@ -594,6 +1379,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 69405410000000000800000000000000
+      internalID: 21300374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human03
       rect:
@@ -608,6 +1400,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 89405410000000000800000000000000
+      internalID: 21300376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human04
       rect:
@@ -622,6 +1421,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a9405410000000000800000000000000
+      internalID: 21300378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human05
       rect:
@@ -636,6 +1442,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c9405410000000000800000000000000
+      internalID: 21300380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: spider
       rect:
@@ -650,6 +1463,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e9405410000000000800000000000000
+      internalID: 21300382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: tiger
       rect:
@@ -664,6 +1484,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0a405410000000000800000000000000
+      internalID: 21300384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf01
       rect:
@@ -678,6 +1505,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2a405410000000000800000000000000
+      internalID: 21300386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf02
       rect:
@@ -692,6 +1526,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4a405410000000000800000000000000
+      internalID: 21300388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf03
       rect:
@@ -706,6 +1547,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6a405410000000000800000000000000
+      internalID: 21300390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human06
       rect:
@@ -720,6 +1568,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8a405410000000000800000000000000
+      internalID: 21300392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human07
       rect:
@@ -734,6 +1589,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: aa405410000000000800000000000000
+      internalID: 21300394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human08
       rect:
@@ -748,6 +1610,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ca405410000000000800000000000000
+      internalID: 21300396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human09
       rect:
@@ -762,6 +1631,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ea405410000000000800000000000000
+      internalID: 21300398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human10
       rect:
@@ -776,6 +1652,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0b405410000000000800000000000000
+      internalID: 21300400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human11
       rect:
@@ -790,6 +1673,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2b405410000000000800000000000000
+      internalID: 21300402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human12
       rect:
@@ -804,6 +1694,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4b405410000000000800000000000000
+      internalID: 21300404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human13
       rect:
@@ -818,6 +1715,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6b405410000000000800000000000000
+      internalID: 21300406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human14
       rect:
@@ -832,6 +1736,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8b405410000000000800000000000000
+      internalID: 21300408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human15
       rect:
@@ -846,6 +1757,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ab405410000000000800000000000000
+      internalID: 21300410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: zombie01
       rect:
@@ -860,6 +1778,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cb405410000000000800000000000000
+      internalID: 21300412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: zombie02
       rect:
@@ -874,6 +1799,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: eb405410000000000800000000000000
+      internalID: 21300414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: skeleton01
       rect:
@@ -888,6 +1820,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0c405410000000000800000000000000
+      internalID: 21300416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: skeleton02
       rect:
@@ -902,6 +1841,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2c405410000000000800000000000000
+      internalID: 21300418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: skeleton03
       rect:
@@ -916,6 +1862,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4c405410000000000800000000000000
+      internalID: 21300420
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: elf01
       rect:
@@ -930,6 +1883,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6c405410000000000800000000000000
+      internalID: 21300422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf04
       rect:
@@ -944,6 +1904,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8c405410000000000800000000000000
+      internalID: 21300424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human16
       rect:
@@ -958,6 +1925,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ac405410000000000800000000000000
+      internalID: 21300426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human17
       rect:
@@ -972,6 +1946,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cc405410000000000800000000000000
+      internalID: 21300428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human18
       rect:
@@ -986,6 +1967,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ec405410000000000800000000000000
+      internalID: 21300430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human19
       rect:
@@ -1000,6 +1988,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0d405410000000000800000000000000
+      internalID: 21300432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf05
       rect:
@@ -1014,6 +2009,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2d405410000000000800000000000000
+      internalID: 21300434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human20
       rect:
@@ -1028,6 +2030,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4d405410000000000800000000000000
+      internalID: 21300436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human21
       rect:
@@ -1042,6 +2051,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6d405410000000000800000000000000
+      internalID: 21300438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human22
       rect:
@@ -1056,6 +2072,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8d405410000000000800000000000000
+      internalID: 21300440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: rat
       rect:
@@ -1070,6 +2093,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ad405410000000000800000000000000
+      internalID: 21300442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: orc01
       rect:
@@ -1084,6 +2114,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cd405410000000000800000000000000
+      internalID: 21300444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: elemental
       rect:
@@ -1098,6 +2135,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ed405410000000000800000000000000
+      internalID: 21300446
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snake
       rect:
@@ -1112,6 +2156,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0e405410000000000800000000000000
+      internalID: 21300448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: lizard
       rect:
@@ -1126,6 +2177,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2e405410000000000800000000000000
+      internalID: 21300450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human23
       rect:
@@ -1140,6 +2198,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4e405410000000000800000000000000
+      internalID: 21300452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human24
       rect:
@@ -1154,6 +2219,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6e405410000000000800000000000000
+      internalID: 21300454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human25
       rect:
@@ -1168,6 +2240,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8e405410000000000800000000000000
+      internalID: 21300456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: giantbat
       rect:
@@ -1182,6 +2261,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ae405410000000000800000000000000
+      internalID: 21300458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghoul
       rect:
@@ -1196,6 +2282,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ce405410000000000800000000000000
+      internalID: 21300460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: spectre
       rect:
@@ -1210,6 +2303,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ee405410000000000800000000000000
+      internalID: 21300462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human26
       rect:
@@ -1224,6 +2324,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0f405410000000000800000000000000
+      internalID: 21300464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human27
       rect:
@@ -1238,6 +2345,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2f405410000000000800000000000000
+      internalID: 21300466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human28
       rect:
@@ -1252,6 +2366,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4f405410000000000800000000000000
+      internalID: 21300468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human29
       rect:
@@ -1266,6 +2387,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6f405410000000000800000000000000
+      internalID: 21300470
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human30
       rect:
@@ -1280,6 +2408,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8f405410000000000800000000000000
+      internalID: 21300472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: bear
       rect:
@@ -1294,6 +2429,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: af405410000000000800000000000000
+      internalID: 21300474
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: skeleton04
       rect:
@@ -1308,6 +2450,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cf405410000000000800000000000000
+      internalID: 21300476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human31
       rect:
@@ -1322,6 +2471,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ef405410000000000800000000000000
+      internalID: 21300478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: scorpion
       rect:
@@ -1336,6 +2492,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 00505410000000000800000000000000
+      internalID: 21300480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: serpent
       rect:
@@ -1350,6 +2513,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 20505410000000000800000000000000
+      internalID: 21300482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghast1
       rect:
@@ -1364,6 +2534,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 40505410000000000800000000000000
+      internalID: 21300484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake
       rect:
@@ -1378,6 +2555,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 60505410000000000800000000000000
+      internalID: 21300486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghast2
       rect:
@@ -1392,6 +2576,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 80505410000000000800000000000000
+      internalID: 21300488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: fairy
       rect:
@@ -1406,6 +2597,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a0505410000000000800000000000000
+      internalID: 21300490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: firedrake
       rect:
@@ -1420,6 +2618,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c0505410000000000800000000000000
+      internalID: 21300492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: tentacle-beast
       rect:
@@ -1434,6 +2639,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e0505410000000000800000000000000
+      internalID: 21300494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: mushroom
       rect:
@@ -1448,6 +2660,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 01505410000000000800000000000000
+      internalID: 21300496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: gryphon
       rect:
@@ -1462,6 +2681,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 21505410000000000800000000000000
+      internalID: 21300498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: minotaur
       rect:
@@ -1476,6 +2702,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 41505410000000000800000000000000
+      internalID: 21300500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-male-fg
       rect:
@@ -1490,6 +2723,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 61505410000000000800000000000000
+      internalID: 21300502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-male-bg
       rect:
@@ -1504,6 +2744,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 81505410000000000800000000000000
+      internalID: 21300504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-female-fg
       rect:
@@ -1518,6 +2765,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a1505410000000000800000000000000
+      internalID: 21300506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-female-bg
       rect:
@@ -1532,6 +2786,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c1505410000000000800000000000000
+      internalID: 21300508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf-fg
       rect:
@@ -1546,6 +2807,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e1505410000000000800000000000000
+      internalID: 21300510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf-bg
       rect:
@@ -1560,6 +2828,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 02505410000000000800000000000000
+      internalID: 21300512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: bloodbeast
       rect:
@@ -1574,6 +2849,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 22505410000000000800000000000000
+      internalID: 21300514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: bloodserpent
       rect:
@@ -1588,6 +2870,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 42505410000000000800000000000000
+      internalID: 21300516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: werewolf01
       rect:
@@ -1602,6 +2891,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 62505410000000000800000000000000
+      internalID: 21300518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: werewolf02
       rect:
@@ -1616,6 +2912,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 82505410000000000800000000000000
+      internalID: 21300520
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: magmaman
       rect:
@@ -1630,6 +2933,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a2505410000000000800000000000000
+      internalID: 21300522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: pixie
       rect:
@@ -1644,6 +2954,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c2505410000000000800000000000000
+      internalID: 21300524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: centaur
       rect:
@@ -1658,6 +2975,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e2505410000000000800000000000000
+      internalID: 21300526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: beetleman
       rect:
@@ -1672,6 +2996,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 03505410000000000800000000000000
+      internalID: 21300528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: killerbeetleman
       rect:
@@ -1686,6 +3017,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 23505410000000000800000000000000
+      internalID: 21300530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-male-clothes
       rect:
@@ -1700,6 +3038,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 43505410000000000800000000000000
+      internalID: 21300532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: human-female-clothes
       rect:
@@ -1714,6 +3059,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 63505410000000000800000000000000
+      internalID: 21300534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf-clothes
       rect:
@@ -1728,6 +3080,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 83505410000000000800000000000000
+      internalID: 21300536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: goblin01
       rect:
@@ -1742,6 +3101,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a3505410000000000800000000000000
+      internalID: 21300538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: goblin02
       rect:
@@ -1756,6 +3122,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c3505410000000000800000000000000
+      internalID: 21300540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: goblin03
       rect:
@@ -1770,6 +3143,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e3505410000000000800000000000000
+      internalID: 21300542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: serpent02
       rect:
@@ -1784,6 +3164,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 04505410000000000800000000000000
+      internalID: 21300544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake02
       rect:
@@ -1798,6 +3185,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 24505410000000000800000000000000
+      internalID: 21300546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake03
       rect:
@@ -1812,6 +3206,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 44505410000000000800000000000000
+      internalID: 21300548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake04
       rect:
@@ -1826,6 +3227,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 64505410000000000800000000000000
+      internalID: 21300550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake05
       rect:
@@ -1840,6 +3248,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 84505410000000000800000000000000
+      internalID: 21300552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake06
       rect:
@@ -1854,6 +3269,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a4505410000000000800000000000000
+      internalID: 21300554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake07
       rect:
@@ -1868,6 +3290,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c4505410000000000800000000000000
+      internalID: 21300556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake08
       rect:
@@ -1882,6 +3311,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e4505410000000000800000000000000
+      internalID: 21300558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: drake09
       rect:
@@ -1896,6 +3332,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 05505410000000000800000000000000
+      internalID: 21300560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: lizardling01
       rect:
@@ -1910,6 +3353,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 25505410000000000800000000000000
+      internalID: 21300562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: lizardling02
       rect:
@@ -1924,6 +3374,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 45505410000000000800000000000000
+      internalID: 21300564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: lizardling03
       rect:
@@ -1938,6 +3395,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 65505410000000000800000000000000
+      internalID: 21300566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: lizardling04
       rect:
@@ -1952,6 +3416,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 85505410000000000800000000000000
+      internalID: 21300568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon01
       rect:
@@ -1966,6 +3437,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6c91a32c20e12e9c0800000000000000
+      internalID: -3899521330152072762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon02
       rect:
@@ -1980,6 +3458,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: b0ab2a2855eb90490800000000000000
+      internalID: -7779477606832621045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon03
       rect:
@@ -1994,6 +3479,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a5505410000000000800000000000000
+      internalID: 21300570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon04
       rect:
@@ -2008,6 +3500,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c5505410000000000800000000000000
+      internalID: 21300572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon05
       rect:
@@ -2022,6 +3521,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e5505410000000000800000000000000
+      internalID: 21300574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon06
       rect:
@@ -2036,6 +3542,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 06505410000000000800000000000000
+      internalID: 21300576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: basilisk
       rect:
@@ -2050,6 +3563,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 26505410000000000800000000000000
+      internalID: 21300578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon07
       rect:
@@ -2064,6 +3584,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 46505410000000000800000000000000
+      internalID: 21300580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghost01
       rect:
@@ -2078,6 +3605,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 66505410000000000800000000000000
+      internalID: 21300582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghost02
       rect:
@@ -2092,6 +3626,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 86505410000000000800000000000000
+      internalID: 21300584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ghost03
       rect:
@@ -2106,6 +3647,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a6505410000000000800000000000000
+      internalID: 21300586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: trollkin-fg
       rect:
@@ -2120,6 +3668,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c6505410000000000800000000000000
+      internalID: 21300588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: trollkin-bg
       rect:
@@ -2134,6 +3689,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e6505410000000000800000000000000
+      internalID: 21300590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: trollkin-clothes
       rect:
@@ -2148,6 +3710,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 07505410000000000800000000000000
+      internalID: 21300592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: crystal
       rect:
@@ -2162,6 +3731,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 27505410000000000800000000000000
+      internalID: 21300594
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: theMaster
       rect:
@@ -2176,6 +3752,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 47505410000000000800000000000000
+      internalID: 21300596
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-male-fg
       rect:
@@ -2190,6 +3773,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 67505410000000000800000000000000
+      internalID: 21300598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-male-bg
       rect:
@@ -2204,6 +3794,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 87505410000000000800000000000000
+      internalID: 21300600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-male-clothes
       rect:
@@ -2218,6 +3815,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a7505410000000000800000000000000
+      internalID: 21300602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-female-fg
       rect:
@@ -2232,6 +3836,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c7505410000000000800000000000000
+      internalID: 21300604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-female-bg
       rect:
@@ -2246,6 +3857,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e7505410000000000800000000000000
+      internalID: 21300606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: merling-female-clothes
       rect:
@@ -2260,6 +3878,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 08505410000000000800000000000000
+      internalID: 21300608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: seasnake
       rect:
@@ -2274,6 +3899,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 28505410000000000800000000000000
+      internalID: 21300610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon08
       rect:
@@ -2288,6 +3920,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 48505410000000000800000000000000
+      internalID: 21300612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf06
       rect:
@@ -2302,6 +3941,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 68505410000000000800000000000000
+      internalID: 21300614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf07
       rect:
@@ -2316,6 +3962,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 88505410000000000800000000000000
+      internalID: 21300616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: witch
       rect:
@@ -2330,6 +3983,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a8505410000000000800000000000000
+      internalID: 21300618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: tentacle
       rect:
@@ -2344,6 +4004,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c8505410000000000800000000000000
+      internalID: 21300620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dwarf08
       rect:
@@ -2358,6 +4025,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e8505410000000000800000000000000
+      internalID: 21300622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: shroumblue
       rect:
@@ -2372,6 +4046,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 09505410000000000800000000000000
+      internalID: 21300624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: shroumred
       rect:
@@ -2386,6 +4067,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 29505410000000000800000000000000
+      internalID: 21300626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratking01
       rect:
@@ -2400,6 +4088,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 49505410000000000800000000000000
+      internalID: 21300628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratking02
       rect:
@@ -2414,6 +4109,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 69505410000000000800000000000000
+      internalID: 21300630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: tentacle-eye
       rect:
@@ -2428,6 +4130,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 89505410000000000800000000000000
+      internalID: 21300632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: bigorc
       rect:
@@ -2442,6 +4151,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: a9505410000000000800000000000000
+      internalID: 21300634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: golemstell
       rect:
@@ -2456,6 +4172,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: c9505410000000000800000000000000
+      internalID: 21300636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: gluton
       rect:
@@ -2470,6 +4193,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: e9505410000000000800000000000000
+      internalID: 21300638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: fossil
       rect:
@@ -2484,6 +4214,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0a505410000000000800000000000000
+      internalID: 21300640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: skeleton05
       rect:
@@ -2498,6 +4235,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2a505410000000000800000000000000
+      internalID: 21300642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratman01
       rect:
@@ -2512,6 +4256,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4a505410000000000800000000000000
+      internalID: 21300644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratman02
       rect:
@@ -2526,6 +4277,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6a505410000000000800000000000000
+      internalID: 21300646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratman03
       rect:
@@ -2540,6 +4298,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8a505410000000000800000000000000
+      internalID: 21300648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratman04
       rect:
@@ -2554,6 +4319,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: aa505410000000000800000000000000
+      internalID: 21300650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: ratman05
       rect:
@@ -2568,6 +4340,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ca505410000000000800000000000000
+      internalID: 21300652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: golemearth
       rect:
@@ -2582,6 +4361,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ea505410000000000800000000000000
+      internalID: 21300654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: snakeman
       rect:
@@ -2596,6 +4382,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0b505410000000000800000000000000
+      internalID: 21300656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragon01
       rect:
@@ -2610,6 +4403,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2b505410000000000800000000000000
+      internalID: 21300658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragon02
       rect:
@@ -2624,6 +4424,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4b505410000000000800000000000000
+      internalID: 21300660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragon03
       rect:
@@ -2638,6 +4445,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6b505410000000000800000000000000
+      internalID: 21300662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragon04
       rect:
@@ -2652,6 +4466,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8b505410000000000800000000000000
+      internalID: 21300664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragonbaby
       rect:
@@ -2666,6 +4487,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ab505410000000000800000000000000
+      internalID: 21300666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon09
       rect:
@@ -2680,6 +4508,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cb505410000000000800000000000000
+      internalID: 21300668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dragon05
       rect:
@@ -2694,6 +4529,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: eb505410000000000800000000000000
+      internalID: 21300670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: orc02
       rect:
@@ -2708,6 +4550,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0c505410000000000800000000000000
+      internalID: 21300672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: orc03
       rect:
@@ -2722,6 +4571,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2c505410000000000800000000000000
+      internalID: 21300674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: werewolf03
       rect:
@@ -2736,6 +4592,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 4c505410000000000800000000000000
+      internalID: 21300676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: demon10
       rect:
@@ -2750,6 +4613,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 6c505410000000000800000000000000
+      internalID: 21300678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dracona-fg
       rect:
@@ -2764,6 +4634,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 8c505410000000000800000000000000
+      internalID: 21300680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dracona-bg
       rect:
@@ -2778,6 +4655,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ac505410000000000800000000000000
+      internalID: 21300682
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: dracona-clothes
       rect:
@@ -2792,6 +4676,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: cc505410000000000800000000000000
+      internalID: 21300684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: furfoot-fg
       rect:
@@ -2806,6 +4697,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: ec505410000000000800000000000000
+      internalID: 21300686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: furfoot-bg
       rect:
@@ -2820,6 +4718,13 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 0d505410000000000800000000000000
+      internalID: 21300688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     - serializedVersion: 2
       name: furfoot-clothes
       rect:
@@ -2834,9 +4739,26 @@ TextureImporter:
       outline: []
       physicsShape: []
       tessellationDetail: -1
+      bones: []
+      spriteID: 2d505410000000000800000000000000
+      internalID: 21300690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
