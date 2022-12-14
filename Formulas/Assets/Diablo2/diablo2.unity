@@ -407,7 +407,6 @@ GameObject:
   - component: {fileID: 2035159521}
   - component: {fileID: 2035159519}
   - component: {fileID: 2035159518}
-  - component: {fileID: 2035159523}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -488,27 +487,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2035159523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2035159517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 480be3d39707fc6409376a6be0cd57b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UIImage:
-  - {fileID: 114355775509439066}
-  - {fileID: 114221625327024606}
-  - {fileID: 114341147094115348}
-  - {fileID: 114919108022764336}
-  - {fileID: 114181165216615190}
-  - {fileID: 114109632257816718}
-  - {fileID: 114238751071844204}
-  - {fileID: 114383240999081548}
 --- !u!1 &2078955856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,6 +1049,7 @@ MonoBehaviour:
   spriteOrderUpdateTick: 0
   m_SpriteGroup: []
   m_Animator: {fileID: 0}
+  attackTick: 0
 --- !u!1 &1264487583715257
 GameObject:
   m_ObjectHideFlags: 0
@@ -1777,6 +1756,7 @@ GameObject:
   - component: {fileID: 223434080095005560}
   - component: {fileID: 114595453739847706}
   - component: {fileID: 114044300740370280}
+  - component: {fileID: 1631295763470283}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1784,6 +1764,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1631295763470283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631295763470282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe29476c6e02714ca7c16fe20b011fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imgLeftMouse: {fileID: 114355775509439066}
+  imgRightMouse: {fileID: 114221625327024606}
 --- !u!1 &1656717766772969
 GameObject:
   m_ObjectHideFlags: 0
@@ -2408,6 +2402,7 @@ MonoBehaviour:
   spriteOrderUpdateTick: 0
   m_SpriteGroup: []
   m_Animator: {fileID: 0}
+  attackTick: 0
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0
@@ -3948,7 +3943,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1530035696978717}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

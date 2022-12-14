@@ -14,6 +14,8 @@ public class Unit : MonoBehaviour
     public float spriteOrderUpdateTick = 0f;
     public SpriteRenderer[] m_SpriteGroup;
     public Animator m_Animator;
+    public float attackTick = 0f;
+    public Weapon weapon = null;
 
     private void Start()
     {
@@ -25,21 +27,44 @@ public class Unit : MonoBehaviour
     {
         float dt = Time.deltaTime;
         UpdateSpriteOrder(dt);
+
+        if (isAttacking)
+        {
+            attackTick -= dt;
+            if (attackTick <= 0f)
+            {
+                attackTick = 0f;
+                isAttacking = false;
+            }
+        }
     }
 
     public virtual bool CanAttack(Unit target)
     {
-        return true;
+        return isAttacking && target != this;
     }
 
     public void Attack()
     {
+        if (isAttacking)
+            return;
+
+        isAttacking = true;
+        attackTick = 0.367f * 0.7f;
         m_Animator.SetTrigger("Attack");
+        weapon.StartAttack();
     }
 
     public void HeavyAttack()
     {
+        if (isAttacking)
+            return;
+
+        // Debug.Log("xx-- HeavyAttack > " + name);
+        isAttacking = true;
+        attackTick = 0.417f * 0.7f;
         m_Animator.SetTrigger("Attack2");
+        weapon.StartAttack();
     }
 
     public void TakeDamage(Unit attacker, float atk)

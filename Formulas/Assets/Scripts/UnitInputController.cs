@@ -16,6 +16,9 @@ public class UnitInputController : MonoBehaviour
 
     void Update()
     {
+        if (owner.isAttacking)
+            return;
+
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             owner.Attack();
@@ -26,9 +29,6 @@ public class UnitInputController : MonoBehaviour
             owner.HeavyAttack();
             m_rigidbody.velocity = new Vector3(0, 0, 0);
         }
-
-        if (owner.isAttacking)
-            return;
 
         if (Input.GetKey(KeyCode.A))
         {

@@ -5,10 +5,17 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
     public Unit owner;
+    public List<Unit> attackTargets = new List<Unit>();
 
     void Start()
     {
         owner = this.transform.root.transform.GetComponent<Unit>();
+        owner.weapon = this;
+    }
+
+    public void StartAttack()
+    {
+        attackTargets.Clear();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -20,10 +27,15 @@ public class Weapon : MonoBehaviour
         if (target == null) 
             return;
 
+        // 防止对象多个 collider 引起多次 enter
+        if (attackTargets.Contains(target))
+            return;
+        attackTargets.Add(target);
+
         if (owner.CanAttack(target) == false)
             return;
 
         target.TakeDamage(owner, owner.atk);
-        Debug.Log("hit::" + other.name);
+        Debug.Log("hit::" + other.name + " - " + other.GetInstanceID());
     }
 }
