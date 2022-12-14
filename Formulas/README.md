@@ -56,6 +56,7 @@ https://diablo2.diablowiki.net/Diablo_Monsters
 
 暗黑武器列表
 http://bfed2.diablomods.ru/site/index.php?page=itm_normal
+https://planetdiablo.eu/diablo2/calcs/dmgcalc/dmgcalc.php?patch=110&lang=eng
 
 辅助参考:
 Soda Dungeon
@@ -77,3 +78,9 @@ https://rmvxace.fandom.com/wiki/RPG_Maker_VX_Ace_Wiki
 // 
 https://rpg.fandom.com/wiki/Damage_Formula
 damage = attack * (100 / (100 + def))
+
+https://www.rpgmakercentral.com/topic/36290-damage-formulas-101-mv-edition/
+http://sumrndmdde.github.io/RPGMV-Damage-Calculator/
+
+// level system
+https://pavcreations.com/level-systems-and-character-growth-in-rpg-games/
