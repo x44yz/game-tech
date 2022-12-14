@@ -21,6 +21,13 @@ public class Unit : MonoBehaviour
     {
         m_Animator = transform.GetComponentInChildren<Animator>();
         m_SpriteGroup = model.GetComponentsInChildren<SpriteRenderer>(true);
+
+        OnStart();
+    }
+
+    protected virtual void OnStart()
+    {
+
     }
 
     private void Update()
@@ -37,6 +44,13 @@ public class Unit : MonoBehaviour
                 isAttacking = false;
             }
         }
+
+        OnUpdate(dt);
+    }
+
+    protected virtual void OnUpdate(float dt)
+    {
+        
     }
 
     public virtual bool CanAttack(Unit target)

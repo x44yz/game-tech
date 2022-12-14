@@ -2403,8 +2403,8 @@ GameObject:
   - component: {fileID: 4985777558087185}
   - component: {fileID: 50891965659343741}
   - component: {fileID: 70242907956040023}
-  - component: {fileID: 1892421001020669}
   - component: {fileID: 1892421001020668}
+  - component: {fileID: 1892421001020669}
   m_Layer: 0
   m_Name: BURLY-MAN_1_swordsman
   m_TagString: Untagged
@@ -2436,7 +2436,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1892421001020667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b722b1dfbfee149984af3950756809, type: 3}
+  m_Script: {fileID: 11500000, guid: 85605df70b58ac74fa8362a2591d40c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1797582712233961}
@@ -2449,6 +2449,9 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
+  charId: 0
+  weaponId: 0
+  armorId: 0
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0

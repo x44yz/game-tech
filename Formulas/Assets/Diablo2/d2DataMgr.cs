@@ -196,15 +196,11 @@ namespace d2
 
     public class DataMgr
     {
-        [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-        public class Sequence : Attribute
+        public static void LoadAll()
         {
-            public int length;
-        }
-
-        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-        public class Record : Attribute
-        {
+            ArmorCfg.Load();
+            CharStatsCfg.Load();
+            WeaponCfg.Load();
         }
 
         public static List<T> Load<T>(string filename, int headerLines, Action<T, DatasheetStream> loader) where T : new()

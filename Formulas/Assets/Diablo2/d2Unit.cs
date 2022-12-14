@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class d2Unit : Unit
+namespace d2
 {
-    // Start is called before the first frame update
-    void Start()
+    public class d2Unit : Unit
     {
-        
-    }
+        [Header("---- D2UNIT ----")]
+        public int charId;
+        public int weaponId;
+        public int armorId;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        protected override void OnStart()
+        {
+            base.OnStart();
+        }
+
+        protected override void OnUpdate(float dt)
+        {
+            base.OnUpdate(dt);
+        }
     }
 }
+
