@@ -1064,7 +1064,6 @@ GameObject:
   - component: {fileID: 60947801271730203}
   - component: {fileID: 61090751286492211}
   - component: {fileID: 95402056884903101}
-  - component: {fileID: 1256029246932884}
   m_Layer: 0
   m_Name: Wooden_Doll
   m_TagString: Untagged
@@ -1072,32 +1071,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1256029246932884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1256029246932883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85605df70b58ac74fa8362a2591d40c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 1256029246932883}
-  moveSpeed: 0
-  isAttacking: 0
-  atk: 0
-  sortingOrder: 0
-  spriteOrderUpdateTick: 0
-  m_SpriteGroup: []
-  m_Animator: {fileID: 0}
-  attackTick: 0
-  weapon: {fileID: 0}
-  unitType: 0
-  charId: 0
-  weaponId: 0
-  armorId: 0
 --- !u!1 &1264487583715257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2453,7 +2426,6 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
-  unitType: 0
   charId: 0
   weaponId: 0
   armorId: 0

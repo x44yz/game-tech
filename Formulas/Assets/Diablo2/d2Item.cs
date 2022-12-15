@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class d2Item : MonoBehaviour
+namespace d2
 {
-    // Start is called before the first frame update
-    void Start()
+    public class d2Item : MonoBehaviour
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public ItemType _itype;
     }
 }
