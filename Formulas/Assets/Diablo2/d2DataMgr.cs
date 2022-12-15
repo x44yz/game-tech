@@ -194,13 +194,13 @@ namespace d2
         }
     }
 
-    public class DataMgr
+    public class d2DataMgr
     {
         public static void LoadAll()
         {
-            ArmorCfg.Load();
-            CharStatsCfg.Load();
-            WeaponCfg.Load();
+            d2ArmorCfg.Load();
+            d2CharStatsCfg.Load();
+            d2WeaponCfg.Load();
         }
 
         public static List<T> Load<T>(string filename, int headerLines, Action<T, DatasheetStream> loader) where T : new()

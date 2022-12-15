@@ -16,7 +16,7 @@ namespace d2
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
-                ArmorCfg.Load();
+                d2ArmorCfg.Load();
         }
     }
 }

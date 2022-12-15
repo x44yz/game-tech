@@ -5,7 +5,7 @@ using UnityEngine;
 namespace d2
 {
     [System.Serializable]
-    public class ArmorCfg
+    public class d2ArmorCfg
     {
         public string _name;
         public string version;
@@ -63,14 +63,14 @@ namespace d2
         public bool _alwaysUnique;
         public string[] skipped2;
 
-        public static List<ArmorCfg> sheet;
+        public static List<d2ArmorCfg> sheet;
         public static void Load()
         {
             var filename = Application.dataPath + "/Diablo2/Configs/armor.csv";
-            sheet = DataMgr.Load<ArmorCfg>(filename, headerLines: 2, ArmorCfg.LoadRecord);
+            sheet = d2DataMgr.Load<d2ArmorCfg>(filename, headerLines: 2, d2ArmorCfg.LoadRecord);
         }
 
-        public static void LoadRecord(ArmorCfg record, DatasheetStream stream)
+        public static void LoadRecord(d2ArmorCfg record, DatasheetStream stream)
         {
             stream.Read(ref record._name);
             stream.Read(ref record.version);

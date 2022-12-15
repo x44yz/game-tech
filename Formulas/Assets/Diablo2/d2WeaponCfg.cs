@@ -5,7 +5,7 @@ using UnityEngine;
 namespace d2
 {
     [System.Serializable]
-    public class WeaponCfg
+    public class d2WeaponCfg
     {
         public string _name;
         public string _type1;
@@ -87,14 +87,14 @@ namespace d2
         // [System.NonSerialized]
         // public MissileInfo missileType;
 
-        public static List<WeaponCfg> sheet;
+        public static List<d2WeaponCfg> sheet;
         public static void Load()
         {
             var filename = Application.dataPath + "/Diablo2/Configs/weapons.csv";
-            sheet = DataMgr.Load<WeaponCfg>(filename, headerLines: 1, WeaponCfg.LoadRecord);
+            sheet = d2DataMgr.Load<d2WeaponCfg>(filename, headerLines: 1, d2WeaponCfg.LoadRecord);
         }
 
-        public static void LoadRecord(WeaponCfg record, DatasheetStream stream)
+        public static void LoadRecord(d2WeaponCfg record, DatasheetStream stream)
         {
             stream.Read(ref record._name);
             stream.Read(ref record._type1);

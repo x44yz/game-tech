@@ -5,7 +5,7 @@ using UnityEngine;
 namespace d2
 {
     [System.Serializable]
-    public class CharStatsCfg
+    public class d2CharStatsCfg
     {
         public string className;
         public int str;
@@ -56,14 +56,14 @@ namespace d2
         public string classNameLower;
 
 
-        public static List<CharStatsCfg> sheet;
+        public static List<d2CharStatsCfg> sheet;
 
-        public static CharStatsCfg Find(string className)
+        public static d2CharStatsCfg Find(string className)
         {
             return sheet.Find(info => info.className == className);
         }
 
-        public static CharStatsCfg FindByCode(string code)
+        public static d2CharStatsCfg FindByCode(string code)
         {
             return sheet.Find(info => info.code == code);
         }
@@ -75,7 +75,7 @@ namespace d2
             public string loc;
             public int count;
 
-            public static void LoadRecord(ref CharStatsCfg.StartingItem record, DatasheetStream stream)
+            public static void LoadRecord(ref d2CharStatsCfg.StartingItem record, DatasheetStream stream)
             {
                 stream.Read(ref record.code);
                 stream.Read(ref record.loc);
@@ -108,7 +108,7 @@ namespace d2
         public static void Load()
         {
             var filename = Application.dataPath + "/Diablo2/Configs/CharStats.csv";
-            sheet = DataMgr.Load<CharStatsCfg>(filename, 1, LoadRecord);
+            sheet = d2DataMgr.Load<d2CharStatsCfg>(filename, 1, LoadRecord);
             sheet.RemoveAll(row => row.baseWClass == null);
             foreach(var info in sheet)
             {
@@ -118,7 +118,7 @@ namespace d2
             }
         }
 
-        public static void LoadRecord(CharStatsCfg record, DatasheetStream stream)
+        public static void LoadRecord(d2CharStatsCfg record, DatasheetStream stream)
         {
                     stream.Read(ref record.className);
                     stream.Read(ref record.str);
@@ -170,7 +170,7 @@ namespace d2
                     stream.Read(ref record.strSkillTab3);
                     stream.Read(ref record.strClassOnly);
                     stream.Read(ref record.baseWClass);
-                    record.startingItems = new CharStatsCfg.StartingItem[10];
+                    record.startingItems = new d2CharStatsCfg.StartingItem[10];
                         StartingItem.LoadRecord(ref record.startingItems[0], stream);
                         StartingItem.LoadRecord(ref record.startingItems[1], stream);
                         StartingItem.LoadRecord(ref record.startingItems[2], stream);

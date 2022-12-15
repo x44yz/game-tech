@@ -81,9 +81,16 @@ public class Unit : MonoBehaviour
         weapon.StartAttack();
     }
 
-    public void TakeDamage(Unit attacker, float atk)
+    public void Hit(Unit attacker)
     {
         m_Animator.Play("Hit");
+
+        OnHit (attacker);
+    }
+
+    protected virtual void OnHit(Unit attacker)
+    {
+
     }
 
     private void UpdateSpriteOrder(float dt)

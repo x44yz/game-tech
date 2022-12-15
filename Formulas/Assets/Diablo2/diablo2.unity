@@ -1081,7 +1081,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1256029246932883}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b722b1dfbfee149984af3950756809, type: 3}
+  m_Script: {fileID: 11500000, guid: 85605df70b58ac74fa8362a2591d40c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   model: {fileID: 1256029246932883}
@@ -1094,6 +1094,10 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
+  unitType: 0
+  charId: 0
+  weaponId: 0
+  armorId: 0
 --- !u!1 &1264487583715257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2449,6 +2453,7 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
+  unitType: 0
   charId: 0
   weaponId: 0
   armorId: 0

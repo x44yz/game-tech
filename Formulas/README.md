@@ -1,3 +1,10 @@
+[+] Minecraft   
+[+] 饥荒  
+
+damage 
+level
+drop
+
 RPG 数值和公式
 
 物理 + 魔法

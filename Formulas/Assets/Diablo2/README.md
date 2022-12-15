@@ -1,0 +1,1 @@
+https://d2.lc/AB/wiki/index9c3b.html?title=Damage
