@@ -5,6 +5,49 @@ using UnityEngine;
 
 namespace d2
 {
+    public class monster_flag {
+        // clang-format off
+        public const int MFLAG_HIDDEN          = 1 << 0;
+        public const int MFLAG_LOCK_ANIMATION  = 1 << 1;
+        public const int MFLAG_ALLOW_SPECIAL   = 1 << 2;
+        public const int MFLAG_NOHEAL          = 1 << 3;
+        public const int MFLAG_TARGETS_MONSTER = 1 << 4;
+        public const int MFLAG_GOLEM           = 1 << 5;
+        public const int MFLAG_QUEST_COMPLETE  = 1 << 6;
+        public const int MFLAG_KNOCKBACK       = 1 << 7;
+        public const int MFLAG_SEARCH          = 1 << 8;
+        public const int MFLAG_CAN_OPEN_DOOR   = 1 << 9;
+        public const int MFLAG_NO_ENEMY        = 1 << 10;
+        public const int MFLAG_BERSERK         = 1 << 11;
+        public const int MFLAG_NOLIFESTEAL     = 1 << 12;
+        // clang-format on
+    };
+
+    public class monster_resistance 
+    {
+        // clang-format off
+        public const int RESIST_MAGIC     = 1 << 0;
+        public const int RESIST_FIRE      = 1 << 1;
+        public const int RESIST_LIGHTNING = 1 << 2;
+        public const int IMMUNE_MAGIC     = 1 << 3;
+        public const int IMMUNE_FIRE      = 1 << 4;
+        public const int IMMUNE_LIGHTNING = 1 << 5;
+        public const int IMMUNE_ACID      = 1 << 7;
+        // clang-format on
+    };
+
+    public enum Direction {
+        South,
+        SouthWest,
+        West,
+        NorthWest,
+        North,
+        NorthEast,
+        East,
+        SouthEast,
+        NoDirection
+    };
+
     public enum icreateinfo_flag2 {
         // clang-format off
         CF_HELLFIRE = 1,
@@ -556,6 +599,7 @@ namespace d2
     {
         public const int BaseHitChance = 50;
         public const bool gbIsHellfire = false;
+        public const bool gbIsMultiplayer = false;
     }
 
     public enum _monster_id
