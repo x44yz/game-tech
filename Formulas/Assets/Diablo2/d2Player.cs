@@ -7,45 +7,198 @@ namespace d2
 {
     public class d2Player : Unit
     {
-        [Header("---- D2UNIT ----")]
-        public int charId;
-        public int weaponId;
-        public int armorId;
+        /** Maps from player_class to starting stat in strength. */
+        static readonly int[] StrengthTbl = new int[]{
+            30,
+            20,
+            15,
+            25,
+            20,
+            40,
+        };
+        /** Maps from player_class to starting stat in magic. */
+        static readonly int[] MagicTbl = new int[]{
+            // clang-format off
+            10,
+            15,
+            35,
+            15,
+            20,
+            0,
+            // clang-format on
+        };
+        /** Maps from player_class to starting stat in dexterity. */
+        static readonly int[] DexterityTbl = new int[]{
+            20,
+            30,
+            15,
+            25,
+            25,
+            20,
+        };
+        /** Maps from player_class to starting stat in vitality. */
+        static readonly int[] VitalityTbl = new int[]{
+            25,
+            20,
+            20,
+            20,
+            20,
+            25,
+        };
+        /** Specifies the chance to block bonus of each player class.*/
+        static readonly int[] BlockBonuses = new int[] {
+            30,
+            20,
+            10,
+            25,
+            25,
+            30,
+        };
+
+        /** Specifies the experience point limit of each level. */
+        static readonly int[] ExpLvlsTbl = new int[] {
+            0,
+            2000,
+            4620,
+            8040,
+            12489,
+            18258,
+            25712,
+            35309,
+            47622,
+            63364,
+            83419,
+            108879,
+            141086,
+            181683,
+            231075,
+            313656,
+            424067,
+            571190,
+            766569,
+            1025154,
+            1366227,
+            1814568,
+            2401895,
+            3168651,
+            4166200,
+            5459523,
+            7130496,
+            9281874,
+            12042092,
+            15571031,
+            20066900,
+            25774405,
+            32994399,
+            42095202,
+            53525811,
+            67831218,
+            85670061,
+            107834823,
+            135274799,
+            169122009,
+            210720231,
+            261657253,
+            323800420,
+            399335440,
+            490808349,
+            601170414,
+            733825617,
+            892680222,
+            1082908612,
+            1310707109,
+            1583495809
+        };
 
         [Header("---- PLAYER ----")]
         public HeroClass _pClass;
         public int _pLevel;
+        public int armorId;
+
+
+        [Header("---- RUNTIME ----")]
+        public int _pStrength;
+        public int _pBaseStr;
+        public int _pMagic;
+        public int _pBaseMag;
         public int _pDexterity; // 敏捷
-        public int _pIEnAc;
-        public int _pIMinDam;
-        public int _pIMaxDam;
-        public int _pIBonusDam;
-        public int _pIBonusToHit;
-        public int _pIBonusAC;
-        public int _pIBonusDamMod;
+        public int _pBaseDex;
+        public int _pVitality;
+        public int _pBaseVit;
+         public int _pStatPts;
         public int _pDamageMod;
-        public int _pIFMinDam;
-        public int _pIFMaxDam;
-        public int _pILMinDam;
-        public int _pILMaxDam;
-        public int _pIGetHit;
+        public int _pBaseToBlk;
+        public int _pHPBase;
         public int _pMaxHPBase;
         public int _pHitPoints;
         public int _pMaxHP;
-        public int _pHPBase;
+        public int _pHPPer;
         public int _pManaBase;
         public int _pMaxManaBase;
         public int _pMana;
         public int _pMaxMana;
         public int _pManaPer;
+        public int _pIMinDam;
+        public int _pIMaxDam;
+        public int _pIAC;
+        public int _pIBonusDam;
+        public int _pIBonusToHit;
+        public int _pIBonusAC;
+        public int _pIBonusDamMod;
+        public int _pIGetHit;
+        public int _pISplDur;
+        public int _pIEnAc;
+        public int _pIFMinDam;
+        public int _pIFMaxDam;
+        public int _pILMinDam;
+        public int _pILMaxDam;
+        public int pTownWarps;
+        public int pDungMsgs;
+        public int pLvlLoad;
+	    public bool pBattleNet;
+	    public bool pManaShield;
+	    public int pDungMsgs2;
+        public int pDiabloKillLevel;
+        public int  wReflections;
+        public _difficulty pDifficulty;
+        public int _pMaxLvl;
+	    public int _pExperience;
+	    public int _pNextExper;
+        public int _pArmorClass;
+	    public int _pMagResist;
+	    public int _pFireResist;
+	    public int _pLghtResist;
+        public int _pLightRad;
+        public bool _pInfraFlag;
         /** @brief Bitmask using item_special_effect */
         public ItemSpecialEffect _pIFlags;
         public ItemSpecialEffectHf pDamAcFlags;
         public d2Item[] InvBody = new d2Item[(int)inv_body_loc.NUM_INVLOC];
 
+        public spell_type _pRSplType;
+        public spell_id _pRSpell;
+        /** @brief Bitmask of staff spell */
+        public UInt64 _pISpells;
+        /** @brief Bitmask of learned spells */
+        public UInt64 _pMemSpells;
+        /** @brief Bitmask of abilities */
+        public UInt64 _pAblSpells;
+        /** @brief Bitmask of spells available via scrolls */
+        public UInt64 _pScrlSpells;
+        public int[] _pSplLvl = new int[64];
+        public SpellFlag _pSpellFlags;
+
+        public const int NUMLEVELS = 25;
+        public bool[] _pLvlVisited = new bool[NUMLEVELS];
+        public bool[] _pSLvlVisited = new bool[NUMLEVELS]; // only 10 used
+        	/** @brief True when the player is transitioning between levels */
+	    public bool _pLvlChanging;
+
         protected override void OnStart()
         {
             base.OnStart();
+
+            InitPlayer(this, _pClass);
 
             var objInvBody = new GameObject("invbody");
             objInvBody.transform.SetParent(transform);
@@ -60,6 +213,280 @@ namespace d2
         protected override void OnUpdate(float dt)
         {
             base.OnUpdate(dt);
+        }
+
+        private void InitPlayer(d2Player player, HeroClass c)
+        {
+            player._pClass = c;
+
+            int ic = (int)c;
+
+            player._pBaseStr = StrengthTbl[ic];
+            player._pStrength = player._pBaseStr;
+
+            player._pBaseMag = MagicTbl[ic];
+            player._pMagic = player._pBaseMag;
+
+            player._pBaseDex = DexterityTbl[ic];
+            player._pDexterity = player._pBaseDex;
+
+            player._pBaseVit = VitalityTbl[ic];
+            player._pVitality = player._pBaseVit;
+
+            player._pStatPts = 0;
+            player.pTownWarps = 0;
+            player.pDungMsgs = 0;
+            player.pDungMsgs2 = 0;
+            player.pLvlLoad = 0;
+            player.pDiabloKillLevel = 0;
+            player.pDifficulty = _difficulty.DIFF_NORMAL;
+
+            player._pLevel = 1;
+
+            player._pBaseToBlk = BlockBonuses[ic];
+
+            player._pHitPoints = (player._pVitality + 10) << 6;
+            if (player._pClass == HeroClass.Warrior || player._pClass == HeroClass.Barbarian) {
+                player._pHitPoints *= 2;
+            } else if (player._pClass == HeroClass.Rogue || player._pClass == HeroClass.Monk || player._pClass == HeroClass.Bard) {
+                player._pHitPoints += player._pHitPoints / 2;
+            }
+
+            player._pMaxHP = player._pHitPoints;
+            player._pHPBase = player._pHitPoints;
+            player._pMaxHPBase = player._pHitPoints;
+
+            player._pMana = player._pMagic << 6;
+            if (player._pClass == HeroClass.Sorcerer) {
+                player._pMana *= 2;
+            } else if (player._pClass == HeroClass.Bard) {
+                player._pMana += player._pMana * 3 / 4;
+            } else if (player._pClass == HeroClass.Rogue || player._pClass == HeroClass.Monk) {
+                player._pMana += player._pMana / 2;
+            }
+
+            player._pMaxMana = player._pMana;
+            player._pManaBase = player._pMana;
+            player._pMaxManaBase = player._pMana;
+
+            player._pMaxLvl = player._pLevel;
+            player._pExperience = 0;
+            player._pNextExper = ExpLvlsTbl[1];
+            player._pArmorClass = 0;
+            player._pLightRad = 10;
+            player._pInfraFlag = false;
+
+            player._pRSplType = spell_type.RSPLTYPE_SKILL;
+            if (c == HeroClass.Warrior) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_REPAIR);
+                player._pRSpell = spell_id.SPL_REPAIR;
+            } else if (c == HeroClass.Rogue) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_DISARM);
+                player._pRSpell = spell_id.SPL_DISARM;
+            } else if (c == HeroClass.Sorcerer) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_RECHARGE);
+                player._pRSpell = spell_id.SPL_RECHARGE;
+            } else if (c == HeroClass.Monk) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_SEARCH);
+                player._pRSpell = spell_id.SPL_SEARCH;
+            } else if (c == HeroClass.Bard) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_IDENTIFY);
+                player._pRSpell = spell_id.SPL_IDENTIFY;
+            } else if (c == HeroClass.Barbarian) {
+                player._pAblSpells = GetSpellBitmask(spell_id.SPL_BLODBOIL);
+                player._pRSpell = spell_id.SPL_BLODBOIL;
+            }
+
+            if (c == HeroClass.Sorcerer) {
+                player._pMemSpells = GetSpellBitmask(spell_id.SPL_FIREBOLT);
+                player._pRSplType = spell_type.RSPLTYPE_SPELL;
+                player._pRSpell = spell_id.SPL_FIREBOLT;
+            } else {
+                player._pMemSpells = 0;
+            }
+
+            for (int i = 0; i < player._pSplLvl.Length; ++i) {
+                player._pSplLvl[i] = 0;
+            }
+
+            player._pSpellFlags = SpellFlag.None;
+
+            if (player._pClass == HeroClass.Sorcerer) {
+                player._pSplLvl[((int)spell_id.SPL_FIREBOLT)] = 2;
+            }
+
+            // Initializing the hotkey bindings to no selection
+            // std::fill(player._pSplHotKey, player._pSplHotKey + NumHotkeys, SPL_INVALID);
+
+            // 武器动画
+            // PlayerWeaponGraphic animWeaponId = PlayerWeaponGraphic::Unarmed;
+            // switch (c) {
+            // case HeroClass.Warrior:
+            // case HeroClass.Bard:
+            // case HeroClass.Barbarian:
+            //     animWeaponId = PlayerWeaponGraphic::SwordShield;
+            //     break;
+            // case HeroClass.Rogue:
+            //     animWeaponId = PlayerWeaponGraphic::Bow;
+            //     break;
+            // case HeroClass.Sorcerer:
+            // case HeroClass.Monk:
+            //     animWeaponId = PlayerWeaponGraphic::Staff;
+            //     break;
+            // }
+            // player._pgfxnum = static_cast<uint8_t>(animWeaponId);
+
+            for (int i = 0; i < player._pLvlVisited.Length; ++i) {
+                player._pLvlVisited[i] = false;
+            }
+
+            for (int i = 0; i < 10; i++) {
+                player._pSLvlVisited[i] = false;
+            }
+
+            player._pLvlChanging = false;
+            player.pTownWarps = 0;
+            player.pLvlLoad = 0;
+            player.pBattleNet = false;
+            player.pManaShield = false;
+            player.pDamAcFlags = ItemSpecialEffectHf.None;
+            player.wReflections = 0;
+
+            InitDungMsgs(player);
+            CreatePlrItems(player);
+            // SetRndSeed(0);
+        }
+
+        void InitDungMsgs(d2Player player)
+        {
+            player.pDungMsgs = 0;
+            player.pDungMsgs2 = 0;
+        }
+
+        void CreatePlrItems(d2Player player)
+        {
+            for (auto &item : player.InvBody) {
+                item.clear();
+            }
+
+            // converting this to a for loop creates a `rep stosd` instruction,
+            // so this probably actually was a memset
+            memset(&player.InvGrid, 0, sizeof(player.InvGrid));
+
+            for (auto &item : player.InvList) {
+                item.clear();
+            }
+
+            player._pNumInv = 0;
+
+            for (auto &item : player.SpdList) {
+                item.clear();
+            }
+
+            switch (player._pClass) {
+            case HeroClass::Warrior:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_WARRIOR);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+
+                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_WARRSHLD);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
+
+                {
+                    Item club;
+                    InitializeItem(club, IDI_WARRCLUB);
+                    GenerateNewSeed(club);
+                    AutoPlaceItemInInventorySlot(player, 0, club, true);
+                }
+
+                InitializeItem(player.SpdList[0], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+            case HeroClass::Rogue:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_ROGUE);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+
+                InitializeItem(player.SpdList[0], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+            case HeroClass::Sorcerer:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], gbIsHellfire ? IDI_SORCERER : IDI_SORCERER_DIABLO);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+
+                InitializeItem(player.SpdList[0], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+
+            case HeroClass::Monk:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_SHORTSTAFF);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+                InitializeItem(player.SpdList[0], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+            case HeroClass::Bard:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_BARDSWORD);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+
+                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_BARDDAGGER);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
+                InitializeItem(player.SpdList[0], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+            case HeroClass::Barbarian:
+                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_BARBARIAN);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+
+                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_WARRSHLD);
+                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
+                InitializeItem(player.SpdList[0], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[0]);
+
+                InitializeItem(player.SpdList[1], IDI_HEAL);
+                GenerateNewSeed(player.SpdList[1]);
+                break;
+            }
+
+            Item &goldItem = player.InvList[player._pNumInv];
+            MakeGoldStack(goldItem, 100);
+
+            player._pNumInv++;
+            player.InvGrid[30] = player._pNumInv;
+
+            player._pGold = goldItem._ivalue;
+
+            CalcPlrItemVals(player, false);
+        }
+
+
+        /**
+        * @brief Gets a value that represents the specified spellID in 64bit bitmask format.
+        * For example:
+        *  - spell ID  1: 0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000.0001
+        *  - spell ID 43: 0000.0000.0000.0000.0000.0100.0000.0000.0000.0000.0000.0000.0000.0000.0000.0000
+        * @param spellId The id of the spell to get a bitmask for.
+        * @return A 64bit bitmask representation for the specified spell.
+        */
+        public UInt64 GetSpellBitmask(spell_id spellId)
+        {
+            return GetSpellBitmask((int)spellId);
+        }
+        public UInt64 GetSpellBitmask(int spellId)
+        {
+            return 1ul << (spellId - 1);
         }
 
         public override void HitTarget(Unit target)
@@ -119,6 +546,8 @@ namespace d2
         // adjacentDamage: 临近伤害，可以理解为溅射伤害
         public bool PlayerHitMonster(d2Player player, d2Monster monster, bool adjacentDamage = false)
         {
+            // 击中概率，用于 miss 判定
+            // hper = hit percent?
             int hper = 0;
             
             if (!monster.isPossibleToHit)
@@ -141,15 +570,18 @@ namespace d2
             hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.armorClass, true);
             hper = Mathf.Clamp(hper, 5, 95);
 
-            if (monster.tryLiftGargoyle())
-            {
-                return true;
-            }
+            // if (monster.tryLiftGargoyle())
+            // {
+            //     return true;
+            // }
+
+            Debug.Log($"xx-- PlayerHitMonster > hit:{hit} hper:{hper}");
 
             if (hit >= hper) {
         #if _DEBUG
                 if (!DebugGodMode)
         #endif
+                Debug.LogWarning("xx-- PlayerHitMonster miss");
                 return false;
             }
 
@@ -167,8 +599,10 @@ namespace d2
             int dam2 = dam << 6;
             dam += player._pDamageMod;
             
+            // 暴击
             if (player._pClass == HeroClass.Warrior || player._pClass == HeroClass.Barbarian) 
             {
+                // 等级越高暴击概率越高
                 if (d2Utils.GenerateRnd(100) < player._pLevel) 
                 {
                     dam *= 2;
@@ -176,10 +610,12 @@ namespace d2
             }
 
             ItemType phanditype = ItemType.None;
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Sword || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Sword) {
+            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Sword || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Sword) 
+            {
                 phanditype = ItemType.Sword;
             }
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Mace || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Mace) {
+            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Mace || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Mace) 
+            {
                 phanditype = ItemType.Mace;
             }
 

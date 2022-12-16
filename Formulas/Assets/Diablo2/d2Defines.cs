@@ -5,6 +5,95 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum SpellFlag 
+    {
+        // clang-format off
+        None         = 0,
+        Etherealize  = 1 << 0,
+        RageActive   = 1 << 1,
+        RageCooldown = 1 << 2,
+        // bits 3-7 are unused
+        // clang-format on
+    };
+
+    public enum spell_type 
+    {
+        RSPLTYPE_SKILL,
+        RSPLTYPE_SPELL,
+        RSPLTYPE_SCROLL,
+        RSPLTYPE_CHARGES,
+        RSPLTYPE_INVALID,
+    };
+
+    public enum spell_id
+    {
+        SPL_NULL,
+        SPL_FIREBOLT,
+        SPL_HEAL,
+        SPL_LIGHTNING,
+        SPL_FLASH,
+        SPL_IDENTIFY,
+        SPL_FIREWALL,
+        SPL_TOWN,
+        SPL_STONE,
+        SPL_INFRA,
+        SPL_RNDTELEPORT,
+        SPL_MANASHIELD,
+        SPL_FIREBALL,
+        SPL_GUARDIAN,
+        SPL_CHAIN,
+        SPL_WAVE,
+        SPL_DOOMSERP,
+        SPL_BLODRIT,
+        SPL_NOVA,
+        SPL_INVISIBIL,
+        SPL_FLAME,
+        SPL_GOLEM,
+        SPL_BLODBOIL,
+        SPL_TELEPORT,
+        SPL_APOCA,
+        SPL_ETHEREALIZE,
+        SPL_REPAIR,
+        SPL_RECHARGE,
+        SPL_DISARM,
+        SPL_ELEMENT,
+        SPL_CBOLT,
+        SPL_HBOLT,
+        SPL_RESURRECT,
+        SPL_TELEKINESIS,
+        SPL_HEALOTHER,
+        SPL_FLARE,
+        SPL_BONESPIRIT,
+        SPL_LASTDIABLO = SPL_BONESPIRIT,
+        SPL_MANA,
+        SPL_MAGI,
+        SPL_JESTER,
+        SPL_LIGHTWALL,
+        SPL_IMMOLAT,
+        SPL_WARP,
+        SPL_REFLECT,
+        SPL_BERSERK,
+        SPL_FIRERING,
+        SPL_SEARCH,
+        SPL_RUNEFIRE,
+        SPL_RUNELIGHT,
+        SPL_RUNENOVA,
+        SPL_RUNEIMMOLAT,
+        SPL_RUNESTONE,
+
+        SPL_LAST = SPL_RUNESTONE,
+        SPL_INVALID = -1,
+    };
+
+    public enum _difficulty 
+    {
+        DIFF_NORMAL,
+        DIFF_NIGHTMARE,
+        DIFF_HELL,
+
+        DIFF_LAST = DIFF_HELL,
+    };
+
     public class d2DEF
     {
         public const int BaseHitChance = 50;
