@@ -15,5 +15,10 @@ namespace d2
             var item = obj.AddComponent<d2Item>();
             return item;
         }
+
+        public void clear()
+        {
+            _itype = ItemType.None;
+        }
     }
 }

@@ -199,15 +199,6 @@ namespace d2
             base.OnStart();
 
             InitPlayer(this, _pClass);
-
-            var objInvBody = new GameObject("invbody");
-            objInvBody.transform.SetParent(transform);
-            for (int i = 0; i < ((int)inv_body_loc.NUM_INVLOC); ++i)
-            {
-                var item = d2Item.Create(objInvBody.transform);
-                item.name = ((inv_body_loc)i).ToString();
-                InvBody[i] = item;
-            }
         }
 
         protected override void OnUpdate(float dt)
@@ -363,99 +354,137 @@ namespace d2
             player.pDungMsgs2 = 0;
         }
 
+        public const int InventoryGridCells = 40;
+        public const int MaxBeltItems = 8;
+        public int[] InvGrid = new int[InventoryGridCells];
+        public d2Item[] InvList = new d2Item[InventoryGridCells];
+        public int _pNumInv;
+        public d2Item[] SpdList = new d2Item[MaxBeltItems];
         void CreatePlrItems(d2Player player)
         {
-            for (auto &item : player.InvBody) {
+            var objInvBody = new GameObject("InvBody");
+            objInvBody.transform.SetParent(transform);
+            for (int i = 0; i < ((int)inv_body_loc.NUM_INVLOC); ++i)
+            {
+                var item = d2Item.Create(objInvBody.transform);
+                item.name = ((inv_body_loc)i).ToString();
+                InvBody[i] = item;
+            }
+            for (int i = 0; i < player.InvBody.Length; ++i) 
+            {
+                var item = player.InvBody[i];
                 item.clear();
             }
 
             // converting this to a for loop creates a `rep stosd` instruction,
             // so this probably actually was a memset
-            memset(&player.InvGrid, 0, sizeof(player.InvGrid));
+            for (int i = 0; i < player.InvGrid.Length; ++i)
+                player.InvGrid[i] = 0;
 
-            for (auto &item : player.InvList) {
+            var objInvList = new GameObject("InvList");
+            objInvList.transform.SetParent(transform);
+            for (int i = 0; i < player.InvList.Length; ++i)
+            {
+                var item = d2Item.Create(objInvList.transform);
+                item.name = "i" + i.ToString();
+                player.InvList[i] = item;
+            }
+            for (int i = 0; i < player.InvList.Length; ++i) 
+            {
+                var item = player.InvList[i];
                 item.clear();
             }
 
             player._pNumInv = 0;
 
-            for (auto &item : player.SpdList) {
+            var objSpdList = new GameObject("SpdList");
+            objSpdList.transform.SetParent(transform);
+            for (int i = 0; i < player.SpdList.Length; ++i)
+            {
+                var item = d2Item.Create(objSpdList.transform);
+                item.name = "i" + i.ToString();
+                player.SpdList[i] = item;
+            }
+            for (int i = 0; i < player.SpdList.Length; ++i) 
+            {
+                var item = player.SpdList[i];
                 item.clear();
             }
 
-            switch (player._pClass) {
-            case HeroClass::Warrior:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_WARRIOR);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+            switch (player._pClass) 
+            {
+            case HeroClass.Warrior:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_WARRIOR);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_WARRSHLD);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_WARRSHLD);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
 
                 {
                     Item club;
-                    InitializeItem(club, IDI_WARRCLUB);
+                    InitializeItem(club, _item_indexes.IDI_WARRCLUB);
                     GenerateNewSeed(club);
                     AutoPlaceItemInInventorySlot(player, 0, club, true);
                 }
 
-                InitializeItem(player.SpdList[0], IDI_HEAL);
+                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], IDI_HEAL);
+                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
-            case HeroClass::Rogue:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_ROGUE);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+            case HeroClass.Rogue:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_ROGUE);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.SpdList[0], IDI_HEAL);
+                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], IDI_HEAL);
+                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
-            case HeroClass::Sorcerer:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], gbIsHellfire ? IDI_SORCERER : IDI_SORCERER_DIABLO);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+            case HeroClass.Sorcerer:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], d2DEF.gbIsHellfire ? _item_indexes.IDI_SORCERER : _item_indexes.IDI_SORCERER_DIABLO);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.SpdList[0], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+                InitializeItem(player.SpdList[0], d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], gbIsHellfire ? IDI_HEAL : IDI_MANA);
+                InitializeItem(player.SpdList[1], d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
 
-            case HeroClass::Monk:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_SHORTSTAFF);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
-                InitializeItem(player.SpdList[0], IDI_HEAL);
+            case HeroClass.Monk:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_SHORTSTAFF);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], IDI_HEAL);
+                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
-            case HeroClass::Bard:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_BARDSWORD);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+            case HeroClass.Bard:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_BARDSWORD);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_BARDDAGGER);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
-                InitializeItem(player.SpdList[0], IDI_HEAL);
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_BARDDAGGER);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
+                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], IDI_HEAL);
+                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
-            case HeroClass::Barbarian:
-                InitializeItem(player.InvBody[INVLOC_HAND_LEFT], IDI_BARBARIAN);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_LEFT]);
+            case HeroClass.Barbarian:
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_BARBARIAN);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[INVLOC_HAND_RIGHT], IDI_WARRSHLD);
-                GenerateNewSeed(player.InvBody[INVLOC_HAND_RIGHT]);
-                InitializeItem(player.SpdList[0], IDI_HEAL);
+                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_WARRSHLD);
+                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
+                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], IDI_HEAL);
+                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             }
@@ -469,6 +498,45 @@ namespace d2
             player._pGold = goldItem._ivalue;
 
             CalcPlrItemVals(player, false);
+        }
+
+        void InitializeItem(d2Item item, _item_indexes itemData)
+        {
+            auto &pAllItem = AllItemsList[static_cast<size_t>(itemData)];
+
+            // zero-initialize struct
+            item = {};
+
+            item._itype = pAllItem.itype;
+            item._iCurs = pAllItem.iCurs;
+            CopyUtf8(item._iName, _(pAllItem.iName), sizeof(item._iName));
+            CopyUtf8(item._iIName, _(pAllItem.iName), sizeof(item._iIName));
+            item._iLoc = pAllItem.iLoc;
+            item._iClass = pAllItem.iClass;
+            item._iMinDam = pAllItem.iMinDam;
+            item._iMaxDam = pAllItem.iMaxDam;
+            item._iAC = pAllItem.iMinAC;
+            item._iMiscId = pAllItem.iMiscId;
+            item._iSpell = pAllItem.iSpell;
+
+            if (pAllItem.iMiscId == IMISC_STAFF) {
+                item._iCharges = gbIsHellfire ? 18 : 40;
+            }
+
+            item._iMaxCharges = item._iCharges;
+            item._iDurability = pAllItem.iDurability;
+            item._iMaxDur = pAllItem.iDurability;
+            item._iMinStr = pAllItem.iMinStr;
+            item._iMinMag = pAllItem.iMinMag;
+            item._iMinDex = pAllItem.iMinDex;
+            item._ivalue = pAllItem.iValue;
+            item._iIvalue = pAllItem.iValue;
+            item._iPrePower = IPL_INVALID;
+            item._iSufPower = IPL_INVALID;
+            item._iMagical = ITEM_QUALITY_NORMAL;
+            item.IDidx = static_cast<_item_indexes>(itemData);
+            if (gbIsHellfire)
+                item.dwBuff |= CF_HELLFIRE;
         }
 
 
