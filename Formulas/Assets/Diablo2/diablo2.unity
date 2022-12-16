@@ -1064,6 +1064,7 @@ GameObject:
   - component: {fileID: 60947801271730203}
   - component: {fileID: 61090751286492211}
   - component: {fileID: 95402056884903101}
+  - component: {fileID: 1256029246932884}
   m_Layer: 0
   m_Name: Wooden_Doll
   m_TagString: Untagged
@@ -1071,6 +1072,32 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1256029246932884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256029246932883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92814f8365b511e4585c24d144546fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  model: {fileID: 1256029246932883}
+  moveSpeed: 0
+  isAttacking: 0
+  atk: 0
+  sortingOrder: 0
+  spriteOrderUpdateTick: 0
+  m_SpriteGroup: []
+  m_Animator: {fileID: 0}
+  attackTick: 0
+  weapon: {fileID: 0}
+  mode: 0
+  armorClass: 0
+  maxHitPoints: 0
+  hitPoints: 0
 --- !u!1 &1264487583715257
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2456,41 @@ MonoBehaviour:
   charId: 0
   weaponId: 0
   armorId: 0
+  _pClass: 0
+  _pLevel: 0
+  _pDexterity: 0
+  _pIEnAc: 0
+  _pIMinDam: 0
+  _pIMaxDam: 0
+  _pIBonusDam: 0
+  _pIBonusToHit: 0
+  _pIBonusAC: 0
+  _pIBonusDamMod: 0
+  _pDamageMod: 0
+  _pIFMinDam: 0
+  _pIFMaxDam: 0
+  _pILMinDam: 0
+  _pILMaxDam: 0
+  _pIGetHit: 0
+  _pMaxHPBase: 0
+  _pHitPoints: 0
+  _pMaxHP: 0
+  _pHPBase: 0
+  _pManaBase: 0
+  _pMaxManaBase: 0
+  _pMana: 0
+  _pMaxMana: 0
+  _pManaPer: 0
+  _pIFlags: 0
+  pDamAcFlags: 0
+  InvBody:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0

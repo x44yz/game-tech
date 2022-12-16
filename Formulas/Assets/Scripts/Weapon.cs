@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour
         if (owner.CanAttack(target) == false)
             return;
 
-        target.Hit(owner);
+        owner.HitTarget(target);
         Debug.Log("hit::" + other.name + " - " + other.GetInstanceID());
     }
 }

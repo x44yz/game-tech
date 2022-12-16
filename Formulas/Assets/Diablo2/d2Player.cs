@@ -46,11 +46,30 @@ namespace d2
         protected override void OnStart()
         {
             base.OnStart();
+
+            var objInvBody = new GameObject("invbody");
+            objInvBody.transform.SetParent(transform);
+            for (int i = 0; i < ((int)inv_body_loc.NUM_INVLOC); ++i)
+            {
+                var item = d2Item.Create(objInvBody.transform);
+                item.name = ((inv_body_loc)i).ToString();
+                InvBody[i] = item;
+            }
         }
 
         protected override void OnUpdate(float dt)
         {
             base.OnUpdate(dt);
+        }
+
+        public override void HitTarget(Unit target)
+        {
+            base.HitTarget(target);
+            Debug.Log("xx-- d2Player.HitTarget");
+
+            var mon = target as d2Monster;
+            if (mon != null)
+                PlayerHitMonster(this, mon);
         }
 
         // 近战伤害
@@ -208,6 +227,7 @@ namespace d2
             if (adjacentDamage)
                 dam >>= 2;
 
+            // 本地玩家
             // if (&player == MyPlayer) 
             {
                 if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.Peril)) 
@@ -242,6 +262,7 @@ namespace d2
                 // RedrawComponent(PanelDrawComponent::Health);
             }
 
+            // 窃取魔法效果
             if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealMana3 | ItemSpecialEffect.StealMana5) && d2Utils.HasNoneOf(player._pIFlags, ItemSpecialEffect.NoMana)) 
             {
                 if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealMana3)) {
@@ -263,6 +284,7 @@ namespace d2
                 // RedrawComponent(PanelDrawComponent::Mana);
             }
 
+            // 窃取 hp 
             if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealLife3 | ItemSpecialEffect.StealLife5)) 
             {
                 if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealLife3)) {
@@ -284,6 +306,7 @@ namespace d2
                 // RedrawComponent(PanelDrawComponent::Health);
             }
 
+            // 播放特效
             if ((monster.hitPoints >> 6) <= 0)
             {
                 // M_StartKill(monster, player);
@@ -292,7 +315,7 @@ namespace d2
             {
                 // if (monster.mode != MonsterMode.Petrified && d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Knockback))
                 //     M_GetKnockback(monster);
-                M_StartHit(monster, player, dam);
+                // M_StartHit(monster, player, dam);
             }
             return true;
         }
@@ -349,13 +372,13 @@ namespace d2
 
             if (monster.hitPoints >> 6 <= 0) 
             {
-                delta_kill_monster(monster, monster.position.tile, *MyPlayer);
-                NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
+                // delta_kill_monster(monster, monster.position.tile, *MyPlayer);
+                // NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
                 return;
             }
 
-            delta_monster_hp(monster, *MyPlayer);
-            NetSendCmdMonDmg(false, monster.getId(), damage);
+            // delta_monster_hp(monster, *MyPlayer);
+            // NetSendCmdMonDmg(false, monster.getId(), damage);
         }
     }
 }

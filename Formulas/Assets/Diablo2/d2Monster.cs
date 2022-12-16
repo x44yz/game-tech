@@ -15,10 +15,7 @@ namespace d2
         protected override void OnHit(Unit attacker)
         {
             base.OnHit(attacker);
-
-            var d2Player = attacker as d2Player;
-            if (d2Player != null)
-                d2Player.PlayerHitMonster(d2Player, this);
+            Debug.Log("xx-- d2Monster.OnHit");
         }
 
         public bool isPossibleToHit
