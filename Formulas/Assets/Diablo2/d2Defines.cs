@@ -5,6 +5,105 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum icreateinfo_flag2 {
+        // clang-format off
+        CF_HELLFIRE = 1,
+        // clang-format on
+    };
+
+    public enum item_quality 
+    {
+        ITEM_QUALITY_NORMAL,
+        ITEM_QUALITY_MAGIC,
+        ITEM_QUALITY_UNIQUE,
+    };
+
+    public enum item_effect_type
+    {
+        IPL_TOHIT,
+        IPL_TOHIT_CURSE,
+        IPL_DAMP,
+        IPL_DAMP_CURSE,
+        IPL_TOHIT_DAMP,
+        IPL_TOHIT_DAMP_CURSE,
+        IPL_ACP,
+        IPL_ACP_CURSE,
+        IPL_FIRERES,
+        IPL_LIGHTRES,
+        IPL_MAGICRES,
+        IPL_ALLRES,
+        IPL_SPLLVLADD = 14,
+        IPL_CHARGES,
+        IPL_FIREDAM,
+        IPL_LIGHTDAM,
+        IPL_STR = 19,
+        IPL_STR_CURSE,
+        IPL_MAG,
+        IPL_MAG_CURSE,
+        IPL_DEX,
+        IPL_DEX_CURSE,
+        IPL_VIT,
+        IPL_VIT_CURSE,
+        IPL_ATTRIBS,
+        IPL_ATTRIBS_CURSE,
+        IPL_GETHIT_CURSE,
+        IPL_GETHIT,
+        IPL_LIFE,
+        IPL_LIFE_CURSE,
+        IPL_MANA,
+        IPL_MANA_CURSE,
+        IPL_DUR,
+        IPL_DUR_CURSE,
+        IPL_INDESTRUCTIBLE,
+        IPL_LIGHT,
+        IPL_LIGHT_CURSE,
+        IPL_MULT_ARROWS = 41, /* only used in hellfire */
+        IPL_FIRE_ARROWS,
+        IPL_LIGHT_ARROWS,
+        IPL_INVCURS,
+        IPL_THORNS,
+        IPL_NOMANA,
+        IPL_FIREBALL = 50, /* only used in hellfire */
+        IPL_ABSHALFTRAP = 52,
+        IPL_KNOCKBACK,
+        IPL_STEALMANA = 55,
+        IPL_STEALLIFE,
+        IPL_TARGAC,
+        IPL_FASTATTACK,
+        IPL_FASTRECOVER,
+        IPL_FASTBLOCK,
+        IPL_DAMMOD,
+        IPL_RNDARROWVEL,
+        IPL_SETDAM,
+        IPL_SETDUR,
+        IPL_NOMINSTR,
+        IPL_SPELL,
+        IPL_ONEHAND = 68,
+        IPL_3XDAMVDEM,
+        IPL_ALLRESZERO,
+        IPL_DRAINLIFE = 72,
+        IPL_RNDSTEALLIFE,
+        IPL_SETAC = 75,
+        IPL_ADDACLIFE,
+        IPL_ADDMANAAC,
+        IPL_AC_CURSE = 79,
+        IPL_LASTDIABLO = IPL_AC_CURSE,
+        IPL_FIRERES_CURSE,
+        IPL_LIGHTRES_CURSE,
+        IPL_MAGICRES_CURSE,
+        IPL_DEVASTATION = 84,
+        IPL_DECAY,
+        IPL_PERIL,
+        IPL_JESTERS,
+        IPL_CRYSTALLINE,
+        IPL_DOPPELGANGER,
+        IPL_ACDEMON,
+        IPL_ACUNDEAD,
+        IPL_MANATOLIFE,
+        IPL_LIFETOMANA,
+        IPL_INVALID = -1,
+    };
+
     public enum item_drop_rate 
     {
         IDROP_NEVER,

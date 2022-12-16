@@ -41,6 +41,70 @@ namespace d2
         {
             return !HasAnyOf((int)(object)lhs, (int)(object)test);
         }
+
+        public static bool IsAnyOf(Enum v, params Enum[] xs)
+        {
+            int[] ixs = new int[xs.Length];
+            for (int i = 0; i < xs.Length; ++i)
+            {
+                ixs[i] = (int)(object)xs[i];
+            }
+            return IsAnyOf((int)(object)v, ixs);
+        }
+
+        public static bool IsAnyOf(int v, int x)
+        {
+            return v == x;
+        }
+
+        public static bool IsAnyOf(int v, params int[] xs)
+        {
+            if (xs != null)
+            {
+                bool ret = false;
+                for (int i = 0; i < xs.Length; ++i)
+                {
+                    ret = ret || IsAnyOf(v, xs[i]);
+                    if (ret)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static bool IsNoneOf(Enum v, params Enum[] xs)
+        {
+            int[] ixs = new int[xs.Length];
+            for (int i = 0; i < xs.Length; ++i)
+            {
+                ixs[i] = (int)(object)xs[i];
+            }
+            return IsNoneOf((int)(object)v, ixs);
+        }
+
+        public static bool IsNoneOf(int v, int x)
+        {
+            return v != x;
+        }
+
+        public static bool IsNoneOf(int v, params int[] xs)
+        {
+            if (xs != null)
+            {
+                bool ret = true;
+                for (int i = 0; i < xs.Length; ++i)
+                {
+                    ret = ret && IsNoneOf(v, xs[i]);
+                    if (ret == false)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
 
