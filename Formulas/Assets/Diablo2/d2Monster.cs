@@ -77,6 +77,23 @@ namespace d2
             Debug.Log("xx-- d2Monster.OnHit");
         }
 
+        public override void TakeDamage(int damage)
+        {
+            hitPoints -= damage;
+
+            d2Test.Inst.ShowDamageText(this, damage);
+
+            if (hitPoints >> 6 <= 0) 
+            {
+                // delta_kill_monster(monster, monster.position.tile, *MyPlayer);
+                // NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
+                return;
+            }
+
+            // delta_monster_hp(monster, *MyPlayer);
+            // NetSendCmdMonDmg(false, monster.getId(), damage);
+        }
+
         public bool isPossibleToHit
         {
             // TODO

@@ -201,7 +201,13 @@ namespace d2
         {
             base.OnStart();
 
+            int newLvl = _pLevel;
             InitPlayer(this, _pClass);
+            
+            for (int i = 0; i <= newLvl - _pLevel + 1; ++i)
+            {
+                NextPlrLevel(this);
+            }
         }
 
         protected override void OnUpdate(float dt)
@@ -780,7 +786,8 @@ namespace d2
                     dam = monster.hitPoints; /* ensure monster is killed with one hit */
                 }
         #endif
-                ApplyMonsterDamage(monster, dam);
+                // ApplyMonsterDamage(monster, dam);
+                monster.TakeDamage(dam);
             }
 
             int skdam = 0;
@@ -900,21 +907,6 @@ namespace d2
             // if (player._pHitPoints >> 6 <= 0) {
             //     SyncPlrKill(player, earflag);
             // }
-        }
-
-        void ApplyMonsterDamage(d2Monster monster, int damage)
-        {
-            monster.hitPoints -= damage;
-
-            if (monster.hitPoints >> 6 <= 0) 
-            {
-                // delta_kill_monster(monster, monster.position.tile, *MyPlayer);
-                // NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
-                return;
-            }
-
-            // delta_monster_hp(monster, *MyPlayer);
-            // NetSendCmdMonDmg(false, monster.getId(), damage);
         }
 
         bool IsValidSpell(spell_id spl)
@@ -1301,6 +1293,80 @@ namespace d2
             if (_pClass == HeroClass.Barbarian && item._iLoc == item_equip_type.ILOC_TWOHAND && d2Utils.IsAnyOf(item._itype, ItemType.Sword, ItemType.Mace))
                 return item_equip_type.ILOC_ONEHAND;
             return item._iLoc;
+        }
+
+        void NextPlrLevel(d2Player player)
+        {
+            player._pLevel++;
+            player._pMaxLvl++;
+
+            CalcPlrInv(player, true);
+
+            // if (CalcStatDiff(player) < 5) 
+            // {
+            //     player._pStatPts = CalcStatDiff(player);
+            // } else {
+            //     player._pStatPts += 5;
+            // }
+
+            player._pNextExper = ExpLvlsTbl[player._pLevel];
+
+            int hp = player._pClass == HeroClass.Sorcerer ? 64 : 128;
+
+            player._pMaxHP += hp;
+            player._pHitPoints = player._pMaxHP;
+            player._pMaxHPBase += hp;
+            player._pHPBase = player._pMaxHPBase;
+
+            // if (&player == MyPlayer) {
+            //     RedrawComponent(PanelDrawComponent::Health);
+            // }
+
+            int mana = 128;
+            if (player._pClass == HeroClass.Warrior)
+                mana = 64;
+            else if (player._pClass == HeroClass.Barbarian)
+                mana = 0;
+
+            player._pMaxMana += mana;
+            player._pMaxManaBase += mana;
+
+            if (d2Utils.HasNoneOf(player._pIFlags, ItemSpecialEffect.NoMana)) {
+                player._pMana = player._pMaxMana;
+                player._pManaBase = player._pMaxManaBase;
+            }
+
+            // if (&player == MyPlayer) {
+            //     RedrawComponent(PanelDrawComponent::Mana);
+            // }
+
+            // if (ControlMode != ControlTypes::KeyboardAndMouse)
+            //     FocusOnCharInfo();
+
+            CalcPlrInv(player, true);
+        }
+
+        void CalcPlrInv(d2Player player, bool loadgfx)
+        {
+            // Determine the players current stats, this updates the statFlag on all equipped items that became unusable after
+            //  a change in equipment.
+            // CalcSelfItems(player);
+
+            // // Determine the current item bonuses gained from usable equipped items
+            // CalcPlrItemVals(player, loadgfx);
+
+            // if (&player == MyPlayer) {
+            //     // Now that stat gains from equipped items have been calculated, mark unusable scrolls etc
+            //     for (Item &item : InventoryAndBeltPlayerItemsRange { player }) {
+            //         item.updateRequiredStatsCacheForPlayer(player);
+            //     }
+            //     player.CalcScrolls();
+            //     CalcPlrStaff(player);
+            //     if (IsStashOpen) {
+            //         // If stash is open, ensure the items are displayed correctly
+            //         Stash.RefreshItemStatFlags();
+            //     }
+            // }
         }
     }
 }

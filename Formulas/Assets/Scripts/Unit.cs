@@ -91,6 +91,11 @@ public class Unit : MonoBehaviour
         m_Animator.Play("Hit");
     }
 
+    public virtual void TakeDamage(int damage)
+    {
+        
+    }
+
     private void UpdateSpriteOrder(float dt)
     {
         spriteOrderUpdateTick += dt;
