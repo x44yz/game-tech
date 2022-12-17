@@ -5,6 +5,110 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum _unique_items
+    {
+        UITEM_CLEAVER,
+        UITEM_SKCROWN,
+        UITEM_INFRARING,
+        UITEM_OPTAMULET,
+        UITEM_TRING,
+        UITEM_HARCREST,
+        UITEM_STEELVEIL,
+        UITEM_ARMOFVAL,
+        UITEM_GRISWOLD,
+        UITEM_BOVINE,
+        UITEM_RIFTBOW,
+        UITEM_NEEDLER,
+        UITEM_CELESTBOW,
+        UITEM_DEADLYHUNT,
+        UITEM_BOWOFDEAD,
+        UITEM_BLKOAKBOW,
+        UITEM_FLAMEDART,
+        UITEM_FLESHSTING,
+        UITEM_WINDFORCE,
+        UITEM_EAGLEHORN,
+        UITEM_GONNAGALDIRK,
+        UITEM_DEFENDER,
+        UITEM_GRYPHONCLAW,
+        UITEM_BLACKRAZOR,
+        UITEM_GIBBOUSMOON,
+        UITEM_ICESHANK,
+        UITEM_EXECUTIONER,
+        UITEM_BONESAW,
+        UITEM_SHADHAWK,
+        UITEM_WIZSPIKE,
+        UITEM_LGTSABRE,
+        UITEM_FALCONTALON,
+        UITEM_INFERNO,
+        UITEM_DOOMBRINGER,
+        UITEM_GRIZZLY,
+        UITEM_GRANDFATHER,
+        UITEM_MANGLER,
+        UITEM_SHARPBEAK,
+        UITEM_BLOODLSLAYER,
+        UITEM_CELESTAXE,
+        UITEM_WICKEDAXE,
+        UITEM_STONECLEAV,
+        UITEM_AGUHATCHET,
+        UITEM_HELLSLAYER,
+        UITEM_MESSERREAVER,
+        UITEM_CRACKRUST,
+        UITEM_JHOLMHAMM,
+        UITEM_CIVERBS,
+        UITEM_CELESTSTAR,
+        UITEM_BARANSTAR,
+        UITEM_GNARLROOT,
+        UITEM_CRANBASH,
+        UITEM_SCHAEFHAMM,
+        UITEM_DREAMFLANGE,
+        UITEM_STAFFOFSHAD,
+        UITEM_IMMOLATOR,
+        UITEM_STORMSPIRE,
+        UITEM_GLEAMSONG,
+        UITEM_THUNDERCALL,
+        UITEM_PROTECTOR,
+        UITEM_NAJPUZZLE,
+        UITEM_MINDCRY,
+        UITEM_RODOFONAN,
+        UITEM_SPIRITSHELM,
+        UITEM_THINKINGCAP,
+        UITEM_OVERLORDHELM,
+        UITEM_FOOLSCREST,
+        UITEM_GOTTERDAM,
+        UITEM_ROYCIRCLET,
+        UITEM_TORNFLESH,
+        UITEM_GLADBANE,
+        UITEM_RAINCLOAK,
+        UITEM_LEATHAUT,
+        UITEM_WISDWRAP,
+        UITEM_SPARKMAIL,
+        UITEM_SCAVCARAP,
+        UITEM_NIGHTSCAPE,
+        UITEM_NAJPLATE,
+        UITEM_DEMONSPIKE,
+        UITEM_DEFLECTOR,
+        UITEM_SKULLSHLD,
+        UITEM_DRAGONBRCH,
+        UITEM_BLKOAKSHLD,
+        UITEM_HOLYDEF,
+        UITEM_STORMSHLD,
+        UITEM_BRAMBLE,
+        UITEM_REGHA,
+        UITEM_BLEEDER,
+        UITEM_CONSTRICT,
+        UITEM_ENGAGE,
+        UITEM_INVALID = -1,
+    };
+
+    public enum monster_treasure
+    {
+        // clang-format off
+        T_MASK    = 0xFFF,
+        T_NODROP = 0x4000, // monster doesn't drop any loot
+        T_UNIQ    = 0x8000, // use combined with unique item's ID - for example butcher's cleaver = T_UNIQ+UITEM_CLEAVE
+        // clang-format on
+    };
+
     public class monster_flag {
         // clang-format off
         public const int MFLAG_HIDDEN          = 1 << 0;
@@ -600,6 +704,7 @@ namespace d2
         public const int BaseHitChance = 50;
         public const bool gbIsHellfire = false;
         public const bool gbIsMultiplayer = false;
+        public const _difficulty gbDifficulty = _difficulty.DIFF_NORMAL;
     }
 
     public enum _monster_id

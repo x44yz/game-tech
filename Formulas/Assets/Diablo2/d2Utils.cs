@@ -11,6 +11,12 @@ namespace d2
         // {
         //     return (int)(object)e;
         // }
+        public static int AdvanceRndSeed()
+        {
+            // sglGameSeed = (RndMult * sglGameSeed) + RndInc;
+            // return GetRndSeed();
+            return (int)Time.timeSinceLevelLoad;
+        }
 
         public static int GenerateRnd(int maxExclusive) 
         {

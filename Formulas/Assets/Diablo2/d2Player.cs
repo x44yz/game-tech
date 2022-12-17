@@ -530,14 +530,7 @@ namespace d2
 
         void GenerateNewSeed(d2Item item)
         {
-            item._iSeed = AdvanceRndSeed();
-        }
-
-        int AdvanceRndSeed()
-        {
-            // sglGameSeed = (RndMult * sglGameSeed) + RndInc;
-            // return GetRndSeed();
-            return (int)Time.timeSinceLevelLoad;
+            item._iSeed = d2Utils.AdvanceRndSeed();
         }
 
         bool AutoPlaceItemInInventorySlot(d2Player player, int slotIndex, d2Item item, bool persistItem)
