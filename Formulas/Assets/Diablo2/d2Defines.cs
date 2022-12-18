@@ -5,6 +5,17 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum CharacterAttribute
+    {
+        Strength,
+        Magic,
+        Dexterity,
+        Vitality,
+
+        FIRST = Strength,
+        LAST = Vitality
+    };
+
     public enum _unique_items
     {
         UITEM_CLEAVER,

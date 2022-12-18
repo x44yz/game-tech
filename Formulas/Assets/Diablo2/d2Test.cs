@@ -33,7 +33,10 @@ namespace d2
                 dmgText.transform.SetParent(dmgTextTmp.transform.parent);
             }
             dmgText.gameObject.SetActive(true);
-            dmgText.text = "+" + dmg.ToString();
+            if (dmg == 0)
+                dmgText.text = "MISS";
+            else
+                dmgText.text = "+" + dmg.ToString();
             var spos = Camera.main.WorldToScreenPoint(target.transform.position);
             dmgText.GetComponent<RectTransform>().anchoredPosition = new Vector2(spos.x, spos.y) + new Vector2(Random.Range(-40f, 40f), 120f);
             dmgText.transform.DOLocalMoveY(dmgText.transform.position.y + 40f, 0.5f).OnComplete(() => {

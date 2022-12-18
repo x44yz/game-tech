@@ -2590,7 +2590,7 @@ MonoBehaviour:
   attackTick: 0
   weapon: {fileID: 0}
   _pClass: 0
-  _pLevel: 4
+  _pLevel: 7
   armorId: 0
   _pStrength: 0
   _pBaseStr: 0

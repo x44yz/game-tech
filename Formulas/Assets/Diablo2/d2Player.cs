@@ -204,7 +204,8 @@ namespace d2
             int newLvl = _pLevel;
             InitPlayer(this, _pClass);
             
-            for (int i = 0; i <= newLvl - _pLevel + 1; ++i)
+            int lvCount = newLvl - _pLevel ;
+            for (int i = 0; i < lvCount; ++i)
             {
                 NextPlrLevel(this);
             }
@@ -668,6 +669,7 @@ namespace d2
             }
             
             int hit = d2Utils.GenerateRnd(100);
+            // 石化状态，必然命中
             if (monster.mode == MonsterMode.Petrified) 
             {
                 hit = 0;
@@ -688,6 +690,7 @@ namespace d2
                 if (!DebugGodMode)
         #endif
                 Debug.LogWarning("xx-- PlayerHitMonster miss");
+                d2Test.Inst.ShowDamageText(monster, 0);
                 return false;
             }
 
@@ -1302,12 +1305,12 @@ namespace d2
 
             CalcPlrInv(player, true);
 
-            // if (CalcStatDiff(player) < 5) 
-            // {
-            //     player._pStatPts = CalcStatDiff(player);
-            // } else {
-            //     player._pStatPts += 5;
-            // }
+            if (CalcStatDiff(player) < 5) 
+            {
+                player._pStatPts = CalcStatDiff(player);
+            } else {
+                player._pStatPts += 5;
+            }
 
             player._pNextExper = ExpLvlsTbl[player._pLevel];
 
@@ -1350,23 +1353,113 @@ namespace d2
         {
             // Determine the players current stats, this updates the statFlag on all equipped items that became unusable after
             //  a change in equipment.
-            // CalcSelfItems(player);
+            CalcSelfItems(player);
 
-            // // Determine the current item bonuses gained from usable equipped items
-            // CalcPlrItemVals(player, loadgfx);
+            // Determine the current item bonuses gained from usable equipped items
+            CalcPlrItemVals(player, loadgfx);
 
-            // if (&player == MyPlayer) {
-            //     // Now that stat gains from equipped items have been calculated, mark unusable scrolls etc
-            //     for (Item &item : InventoryAndBeltPlayerItemsRange { player }) {
-            //         item.updateRequiredStatsCacheForPlayer(player);
-            //     }
-            //     player.CalcScrolls();
-            //     CalcPlrStaff(player);
-            //     if (IsStashOpen) {
-            //         // If stash is open, ensure the items are displayed correctly
-            //         Stash.RefreshItemStatFlags();
-            //     }
-            // }
+            if (&player == MyPlayer) 
+            {
+                // Now that stat gains from equipped items have been calculated, mark unusable scrolls etc
+                for (Item &item : InventoryAndBeltPlayerItemsRange { player }) 
+                {
+                    item.updateRequiredStatsCacheForPlayer(player);
+                }
+                player.CalcScrolls();
+                CalcPlrStaff(player);
+                if (IsStashOpen) {
+                    // If stash is open, ensure the items are displayed correctly
+                    Stash.RefreshItemStatFlags();
+                }
+            }
+        }
+
+        void CalcSelfItems(d2Player player)
+        {
+            int sa = 0;
+            int ma = 0;
+            int da = 0;
+
+            // first iteration is used for collecting stat bonuses from items
+            for (Item &equipment : EquippedPlayerItemsRange(player)) {
+                equipment._iStatFlag = true;
+                if (equipment._iIdentified) {
+                    sa += equipment._iPLStr;
+                    ma += equipment._iPLMag;
+                    da += equipment._iPLDex;
+                }
+            }
+
+            bool changeflag;
+            do {
+                // cap stats to 0
+                const int currstr = std::max(0, sa + player._pBaseStr);
+                const int currmag = std::max(0, ma + player._pBaseMag);
+                const int currdex = std::max(0, da + player._pBaseDex);
+
+                changeflag = false;
+                for (Item &equipment : EquippedPlayerItemsRange(player)) {
+                    if (!equipment._iStatFlag)
+                        continue;
+
+                    if (currstr >= equipment._iMinStr
+                        && currmag >= equipment._iMinMag
+                        && currdex >= equipment._iMinDex)
+                        continue;
+
+                    changeflag = true;
+                    equipment._iStatFlag = false;
+                    if (equipment._iIdentified) {
+                        sa -= equipment._iPLStr;
+                        ma -= equipment._iPLMag;
+                        da -= equipment._iPLDex;
+                    }
+                }
+            } while (changeflag);
+        }
+
+        int CalcStatDiff(d2Player player)
+        {
+            int diff = 0;
+            for (int i = (int)CharacterAttribute.FIRST; i <= (int)CharacterAttribute.LAST; ++i)
+            {
+                var attribute = (CharacterAttribute)i;
+                diff += player.GetMaximumAttributeValue(attribute);
+                diff -= player.GetBaseAttributeValue(attribute);
+            }
+            return diff;
+        }
+
+        public static readonly int[,] MaxStats = {
+            // clang-format off
+            { 250,  50,  60, 100 },
+            {  55,  70, 250,  80 },
+            {  45, 250,  85,  80 },
+            { 150,  80, 150,  80 },
+            { 120, 120, 120, 100 },
+            { 255,   0,  55, 150 },
+            // clang-format on
+        };
+        int GetMaximumAttributeValue(CharacterAttribute attribute)
+        {
+            return MaxStats[(int)_pClass, (int)attribute];
+        }
+        int GetBaseAttributeValue(CharacterAttribute attribute)
+        {
+            switch (attribute) {
+            case CharacterAttribute.Dexterity:
+                return _pBaseDex;
+            case CharacterAttribute.Magic:
+                return _pBaseMag;
+            case CharacterAttribute.Strength:
+                return _pBaseStr;
+            case CharacterAttribute.Vitality:
+                return _pBaseVit;
+            default:
+                Debug.LogError("Unsupported attribute");
+                break;
+            }
+            return 0;
         }
     }
 }
