@@ -411,77 +411,77 @@ namespace d2
             switch (player._pClass) 
             {
             case HeroClass.Warrior:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_WARRIOR);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_WARRIOR);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_WARRSHLD);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
 
                 {
                     d2Item club = new d2Item();
-                    InitializeItem(club, _item_indexes.IDI_WARRCLUB);
+                    club.InitializeItem(_item_indexes.IDI_WARRCLUB);
                     GenerateNewSeed(club);
                     AutoPlaceItemInInventorySlot(player, 0, club, true);
                 }
 
-                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
+                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
+                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             case HeroClass.Rogue:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_ROGUE);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_ROGUE);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
+                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
+                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             case HeroClass.Sorcerer:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], d2DEF.gbIsHellfire ? _item_indexes.IDI_SORCERER : _item_indexes.IDI_SORCERER_DIABLO);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_SORCERER : _item_indexes.IDI_SORCERER_DIABLO);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.SpdList[0], d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
+                player.SpdList[0].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
+                player.SpdList[1].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
 
             case HeroClass.Monk:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_SHORTSTAFF);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_SHORTSTAFF);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
-                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
+                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
+                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             case HeroClass.Bard:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_BARDSWORD);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARDSWORD);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_BARDDAGGER);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_BARDDAGGER);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
-                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
+                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
+                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             case HeroClass.Barbarian:
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)], _item_indexes.IDI_BARBARIAN);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARBARIAN);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
 
-                InitializeItem(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)], _item_indexes.IDI_WARRSHLD);
+                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
                 GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
-                InitializeItem(player.SpdList[0], _item_indexes.IDI_HEAL);
+                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[0]);
 
-                InitializeItem(player.SpdList[1], _item_indexes.IDI_HEAL);
+                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
                 GenerateNewSeed(player.SpdList[1]);
                 break;
             }
@@ -495,44 +495,6 @@ namespace d2
             player._pGold = goldItem._ivalue;
 
             CalcPlrItemVals(player, false);
-        }
-
-        void InitializeItem(d2Item item, _item_indexes itemData)
-        {
-            var pAllItem = d2Data.AllItemsList[((int)itemData)];
-
-            // zero-initialize struct
-
-            item._itype = pAllItem.itype;
-            item._iCurs = pAllItem.iCurs;
-            item._iName = pAllItem.iName;
-            item._iIName = pAllItem.iName;
-            item._iLoc = pAllItem.iLoc;
-            item._iClass = pAllItem.iClass;
-            item._iMinDam = pAllItem.iMinDam;
-            item._iMaxDam = pAllItem.iMaxDam;
-            item._iAC = pAllItem.iMinAC;
-            item._iMiscId = pAllItem.iMiscId;
-            item._iSpell = pAllItem.iSpell;
-
-            if (pAllItem.iMiscId == item_misc_id.IMISC_STAFF) {
-                item._iCharges = d2DEF.gbIsHellfire ? 18 : 40;
-            }
-
-            item._iMaxCharges = item._iCharges;
-            item._iDurability = pAllItem.iDurability;
-            item._iMaxDur = pAllItem.iDurability;
-            item._iMinStr = pAllItem.iMinStr;
-            item._iMinMag = pAllItem.iMinMag;
-            item._iMinDex = pAllItem.iMinDex;
-            item._ivalue = pAllItem.iValue;
-            item._iIvalue = pAllItem.iValue;
-            item._iPrePower = item_effect_type.IPL_INVALID;
-            item._iSufPower = item_effect_type.IPL_INVALID;
-            item._iMagical = item_quality.ITEM_QUALITY_NORMAL;
-            item.IDidx = itemData;
-            if (d2DEF.gbIsHellfire)
-                item.dwBuff |= icreateinfo_flag2.CF_HELLFIRE;
         }
 
         void GenerateNewSeed(d2Item item)
@@ -572,7 +534,7 @@ namespace d2
 
         void MakeGoldStack(d2Item goldItem, int value)
         {
-            InitializeItem(goldItem, _item_indexes.IDI_GOLD);
+            goldItem.InitializeItem(_item_indexes.IDI_GOLD);
             GenerateNewSeed(goldItem);
             goldItem._iStatFlag = true;
             goldItem._ivalue = value;
@@ -1358,19 +1320,19 @@ namespace d2
             // Determine the current item bonuses gained from usable equipped items
             CalcPlrItemVals(player, loadgfx);
 
-            if (&player == MyPlayer) 
+            // if (&player == MyPlayer) 
             {
                 // Now that stat gains from equipped items have been calculated, mark unusable scrolls etc
-                for (Item &item : InventoryAndBeltPlayerItemsRange { player }) 
-                {
-                    item.updateRequiredStatsCacheForPlayer(player);
-                }
-                player.CalcScrolls();
-                CalcPlrStaff(player);
-                if (IsStashOpen) {
-                    // If stash is open, ensure the items are displayed correctly
-                    Stash.RefreshItemStatFlags();
-                }
+                // for (Item &item : InventoryAndBeltPlayerItemsRange { player }) 
+                // {
+                //     item.updateRequiredStatsCacheForPlayer(player);
+                // }
+                // player.CalcScrolls();
+                // CalcPlrStaff(player);
+                // if (IsStashOpen) {
+                //     // If stash is open, ensure the items are displayed correctly
+                //     Stash.RefreshItemStatFlags();
+                // }
             }
         }
 
@@ -1381,7 +1343,13 @@ namespace d2
             int da = 0;
 
             // first iteration is used for collecting stat bonuses from items
-            for (Item &equipment : EquippedPlayerItemsRange(player)) {
+            // for (Item &equipment : EquippedPlayerItemsRange(player)) {
+            for (int i = 0; i < player.InvBody.Length; ++i)
+            {
+                var equipment = player.InvBody[i];
+                if (equipment == null || equipment.isEmpty())
+                    continue;
+
                 equipment._iStatFlag = true;
                 if (equipment._iIdentified) {
                     sa += equipment._iPLStr;
@@ -1393,12 +1361,18 @@ namespace d2
             bool changeflag;
             do {
                 // cap stats to 0
-                const int currstr = std::max(0, sa + player._pBaseStr);
-                const int currmag = std::max(0, ma + player._pBaseMag);
-                const int currdex = std::max(0, da + player._pBaseDex);
+                int currstr = Math.Max(0, sa + player._pBaseStr);
+                int currmag = Math.Max(0, ma + player._pBaseMag);
+                int currdex = Math.Max(0, da + player._pBaseDex);
 
                 changeflag = false;
-                for (Item &equipment : EquippedPlayerItemsRange(player)) {
+                // for (Item &equipment : EquippedPlayerItemsRange(player)) {
+                for (int i = 0; i < player.InvBody.Length; ++i)
+                {
+                    var equipment = player.InvBody[i];
+                    if (equipment == null || equipment.isEmpty())
+                        continue;
+
                     if (!equipment._iStatFlag)
                         continue;
 
