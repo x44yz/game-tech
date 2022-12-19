@@ -5,6 +5,19 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum AffixItemType
+    {
+        // clang-format off
+        None      = 0,
+        Misc      = 1 << 0,
+        Bow       = 1 << 1,
+        Staff     = 1 << 2,
+        Weapon    = 1 << 3,
+        Shield    = 1 << 4,
+        Armor     = 1 << 5,
+        // clang-format on
+    };
+
     public enum CharacterAttribute
     {
         Strength,

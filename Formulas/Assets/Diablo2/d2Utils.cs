@@ -7,7 +7,7 @@ namespace d2
 {
     public static class d2Utils
     {
-        public static bool FlipCoin(int frequency)
+        public static bool FlipCoin(int frequency = 1)
         {
             // Casting here because GenerateRnd takes a signed argument when it should take and yield unsigned.
             return GenerateRnd(frequency) == 0;

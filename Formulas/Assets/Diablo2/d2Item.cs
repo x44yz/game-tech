@@ -466,20 +466,591 @@ namespace d2
                     iblvl = lvl + 4;
                 if (iblvl != -1) {
                     _unique_items uid = CheckUnique(item, iblvl, uper, recreate);
-                    if (uid == UITEM_INVALID) {
+                    if (uid == _unique_items.UITEM_INVALID) {
                         GetItemBonus(player, item, iblvl / 2, iblvl, onlygood, true);
                     } else {
                         GetUniqueItem(player, item, uid);
                     }
                 }
-                if (item._iMagical != ITEM_QUALITY_UNIQUE)
+                if (item._iMagical != item_quality.ITEM_QUALITY_UNIQUE)
                     ItemRndDur(item);
             } else {
-                if (item._iLoc != ILOC_UNEQUIPABLE) {
+                if (item._iLoc != item_equip_type.ILOC_UNEQUIPABLE) {
                     GetUniqueItem(player, item, (_unique_items)iseed); // uid is stored in iseed for uniques
                 }
             }
             SetupItem(item);
+        }
+
+        public static bool[] UniqueItemFlags = new bool[128];
+        /** Unique item ID, used as an index into UniqueItemList */
+        public int _iUid = 0;
+        void GetUniqueItem(d2Player player, d2Item item, _unique_items uid)
+        {
+            UniqueItemFlags[(int)uid] = true;
+
+            foreach (var power in d2Data.UniqueItems[(int)uid].powers) 
+            {
+                if (power.type == item_effect_type.IPL_INVALID)
+                    break;
+                SaveItemPower(player, item, power);
+            }
+
+            item._iIName = d2Data.UniqueItems[(int)uid].UIName;
+            item._iIvalue = d2Data.UniqueItems[(int)uid].UIValue;
+
+            if (item._iMiscId == item_misc_id.IMISC_UNIQUE)
+                item._iSeed = (int)uid;
+
+            item._iUid = (int)uid;
+            item._iMagical = item_quality.ITEM_QUALITY_UNIQUE;
+            item._iCreateInfo |= (int)icreateinfo_flag.CF_UNIQUE;
+        }
+
+        // Item indestructible durability
+        public const int DUR_INDESTRUCTIBLE = 255;
+        void ItemRndDur(d2Item item)
+        {
+            if (item._iDurability > 0 && item._iDurability != DUR_INDESTRUCTIBLE)
+                item._iDurability = d2Utils.GenerateRnd(item._iMaxDur / 2) + (item._iMaxDur / 4) + 1;
+        }
+
+        _unique_items CheckUnique(d2Item item, int lvl, int uper, bool recreate)
+        {
+            return _unique_items.UITEM_INVALID;
+
+            // std::bitset<128> uok = {};
+
+            // if (d2Utils.GenerateRnd(100) > uper)
+            //     return _unique_items.UITEM_INVALID;
+
+            // int numu = 0;
+            // for (int j = 0; UniqueItems[j].UIItemId != UITYPE_INVALID; j++) {
+            //     if (!IsUniqueAvailable(j))
+            //         break;
+            //     if (UniqueItems[j].UIItemId == AllItemsList[item.IDidx].iItemId
+            //         && lvl >= UniqueItems[j].UIMinLvl
+            //         && (recreate || !UniqueItemFlags[j] || gbIsMultiplayer)) {
+            //         uok[j] = true;
+            //         numu++;
+            //     }
+            // }
+
+            // if (numu == 0)
+            //     return _unique_items.UITEM_INVALID;
+
+            // d2Utils.AdvanceRndSeed();
+            // int itemData = 0;
+            // while (numu > 0) {
+            //     if (uok[itemData])
+            //         numu--;
+            //     if (numu > 0)
+            //         itemData = (itemData + 1) % 128;
+            // }
+
+            // return (_unique_items)itemData;
+        }
+
+        // item 加成
+        void GetItemBonus(d2Player player, d2Item item, int minlvl, int maxlvl, bool onlygood, bool allowspells)
+        {
+            if (minlvl > 25)
+                minlvl = 25;
+
+            switch (item._itype) {
+            case ItemType.Sword:
+            case ItemType.Axe:
+            case ItemType.Mace:
+                GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Weapon, onlygood);
+                break;
+            case ItemType.Bow:
+                GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Bow, onlygood);
+                break;
+            case ItemType.Shield:
+                GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Shield, onlygood);
+                break;
+            case ItemType.LightArmor:
+            case ItemType.Helm:
+            case ItemType.MediumArmor:
+            case ItemType.HeavyArmor:
+                GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Armor, onlygood);
+                break;
+            case ItemType.Staff:
+                if (allowspells)
+                    GetStaffSpell(player, item, maxlvl, onlygood);
+                else
+                    GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Staff, onlygood);
+                break;
+            case ItemType.Ring:
+            case ItemType.Amulet:
+                GetItemPower(player, item, minlvl, maxlvl, AffixItemType.Misc, onlygood);
+                break;
+            case ItemType.None:
+            case ItemType.Misc:
+            case ItemType.Gold:
+                break;
+            }
+        }
+
+        void GetItemPower(d2Player player, d2Item item, int minlvl, int maxlvl, AffixItemType flgs, bool onlygood)
+        {
+            int l[256];
+            goodorevil goe;
+
+            bool allocatePrefix = d2Utils.FlipCoin(4);
+            bool allocateSuffix = !d2Utils.FlipCoin(3);
+            if (!allocatePrefix && !allocateSuffix) {
+                // At least try and give each item a prefix or suffix
+                if (d2Utils.FlipCoin())
+                    allocatePrefix = true;
+                else
+                    allocateSuffix = true;
+            }
+            int preidx = -1;
+            int sufidx = -1;
+            goe = GOE_ANY;
+            if (!onlygood && !d2Utils.FlipCoin(3))
+                onlygood = true;
+            if (allocatePrefix) {
+                int nt = 0;
+                for (int j = 0; ItemPrefixes[j].power.type != IPL_INVALID; j++) {
+                    if (!IsPrefixValidForItemType(j, flgs))
+                        continue;
+                    if (ItemPrefixes[j].PLMinLvl < minlvl || ItemPrefixes[j].PLMinLvl > maxlvl)
+                        continue;
+                    if (onlygood && !ItemPrefixes[j].PLOk)
+                        continue;
+                    if (HasAnyOf(flgs, AffixItemType.Staff) && ItemPrefixes[j].power.type == IPL_CHARGES)
+                        continue;
+                    l[nt] = j;
+                    nt++;
+                    if (ItemPrefixes[j].PLDouble) {
+                        l[nt] = j;
+                        nt++;
+                    }
+                }
+                if (nt != 0) {
+                    preidx = l[GenerateRnd(nt)];
+                    item._iMagical = ITEM_QUALITY_MAGIC;
+                    SaveItemAffix(player, item, ItemPrefixes[preidx]);
+                    item._iPrePower = ItemPrefixes[preidx].power.type;
+                    goe = ItemPrefixes[preidx].PLGOE;
+                }
+            }
+            if (allocateSuffix) {
+                int nl = 0;
+                for (int j = 0; ItemSuffixes[j].power.type != IPL_INVALID; j++) {
+                    if (IsSuffixValidForItemType(j, flgs)
+                        && ItemSuffixes[j].PLMinLvl >= minlvl && ItemSuffixes[j].PLMinLvl <= maxlvl
+                        && !((goe == GOE_GOOD && ItemSuffixes[j].PLGOE == GOE_EVIL) || (goe == GOE_EVIL && ItemSuffixes[j].PLGOE == GOE_GOOD))
+                        && (!onlygood || ItemSuffixes[j].PLOk)) {
+                        l[nl] = j;
+                        nl++;
+                    }
+                }
+                if (nl != 0) {
+                    sufidx = l[GenerateRnd(nl)];
+                    item._iMagical = ITEM_QUALITY_MAGIC;
+                    SaveItemAffix(player, item, ItemSuffixes[sufidx]);
+                    item._iSufPower = ItemSuffixes[sufidx].power.type;
+                }
+            }
+
+            CopyUtf8(item._iIName, GenerateMagicItemName(item._iName, preidx, sufidx), sizeof(item._iIName));
+            if (!StringInPanel(item._iIName)) {
+                CopyUtf8(item._iIName, GenerateMagicItemName(_(AllItemsList[item.IDidx].iSName), preidx, sufidx), sizeof(item._iIName));
+            }
+            if (preidx != -1 || sufidx != -1)
+                CalcItemValue(item);
+        }
+
+        int SaveItemPower(d2Player player, d2Item item, ItemPower power)
+        {
+            if (!gbIsHellfire) {
+                if (power.type == IPL_TARGAC) {
+                    power.param1 = 1 << power.param1;
+                    power.param2 = 3 << power.param2;
+                }
+            }
+
+            int r = RndPL(power.param1, power.param2);
+
+            switch (power.type) {
+            case item_effect_type.IPL_TOHIT:
+                item._iPLToHit += r;
+                break;
+            case item_effect_type.IPL_TOHIT_CURSE:
+                item._iPLToHit -= r;
+                break;
+            case item_effect_type.IPL_DAMP:
+                item._iPLDam += r;
+                break;
+            case item_effect_type.IPL_DAMP_CURSE:
+                item._iPLDam -= r;
+                break;
+            case item_effect_type.IPL_DOPPELGANGER:
+                item._iDamAcFlags |= ItemSpecialEffectHf.Doppelganger;
+                [[fallthrough]];
+            case item_effect_type.IPL_TOHIT_DAMP:
+                r = RndPL(power.param1, power.param2);
+                item._iPLDam += r;
+                item._iPLToHit += CalculateToHitBonus(power.param1);
+                break;
+            case item_effect_type.IPL_TOHIT_DAMP_CURSE:
+                item._iPLDam -= r;
+                item._iPLToHit += CalculateToHitBonus(-power.param1);
+                break;
+            case item_effect_type.IPL_ACP:
+                item._iPLAC += r;
+                break;
+            case item_effect_type.IPL_ACP_CURSE:
+                item._iPLAC -= r;
+                break;
+            case item_effect_type.IPL_SETAC:
+                item._iAC = r;
+                break;
+            case item_effect_type.IPL_AC_CURSE:
+                item._iAC -= r;
+                break;
+            case item_effect_type.IPL_FIRERES:
+                item._iPLFR += r;
+                break;
+            case item_effect_type.IPL_LIGHTRES:
+                item._iPLLR += r;
+                break;
+            case item_effect_type.IPL_MAGICRES:
+                item._iPLMR += r;
+                break;
+            case item_effect_type.IPL_ALLRES:
+                item._iPLFR = Math.Max(item._iPLFR + r, 0);
+                item._iPLLR = Math.Max(item._iPLLR + r, 0);
+                item._iPLMR = Math.Max(item._iPLMR + r, 0);
+                break;
+            case item_effect_type.IPL_SPLLVLADD:
+                item._iSplLvlAdd = r;
+                break;
+            case item_effect_type.IPL_CHARGES:
+                item._iCharges *= power.param1;
+                item._iMaxCharges = item._iCharges;
+                break;
+            case item_effect_type.IPL_SPELL:
+                item._iSpell = static_cast<spell_id>(power.param1);
+                item._iCharges = power.param2;
+                item._iMaxCharges = power.param2;
+                break;
+            case item_effect_type.IPL_FIREDAM:
+                item._iFlags |= ItemSpecialEffect.FireDamage;
+                item._iFlags &= ~ItemSpecialEffect.LightningDamage;
+                item._iFMinDam = power.param1;
+                item._iFMaxDam = power.param2;
+                item._iLMinDam = 0;
+                item._iLMaxDam = 0;
+                break;
+            case item_effect_type.IPL_LIGHTDAM:
+                item._iFlags |= ItemSpecialEffect.LightningDamage;
+                item._iFlags &= ~ItemSpecialEffect.FireDamage;
+                item._iLMinDam = power.param1;
+                item._iLMaxDam = power.param2;
+                item._iFMinDam = 0;
+                item._iFMaxDam = 0;
+                break;
+            case item_effect_type.IPL_STR:
+                item._iPLStr += r;
+                break;
+            case item_effect_type.IPL_STR_CURSE:
+                item._iPLStr -= r;
+                break;
+            case item_effect_type.IPL_MAG:
+                item._iPLMag += r;
+                break;
+            case item_effect_type.IPL_MAG_CURSE:
+                item._iPLMag -= r;
+                break;
+            case item_effect_type.IPL_DEX:
+                item._iPLDex += r;
+                break;
+            case item_effect_type.IPL_DEX_CURSE:
+                item._iPLDex -= r;
+                break;
+            case item_effect_type.IPL_VIT:
+                item._iPLVit += r;
+                break;
+            case item_effect_type.IPL_VIT_CURSE:
+                item._iPLVit -= r;
+                break;
+            case item_effect_type.IPL_ATTRIBS:
+                item._iPLStr += r;
+                item._iPLMag += r;
+                item._iPLDex += r;
+                item._iPLVit += r;
+                break;
+            case item_effect_type.IPL_ATTRIBS_CURSE:
+                item._iPLStr -= r;
+                item._iPLMag -= r;
+                item._iPLDex -= r;
+                item._iPLVit -= r;
+                break;
+            case item_effect_type.IPL_GETHIT_CURSE:
+                item._iPLGetHit += r;
+                break;
+            case item_effect_type.IPL_GETHIT:
+                item._iPLGetHit -= r;
+                break;
+            case item_effect_type.IPL_LIFE:
+                item._iPLHP += r << 6;
+                break;
+            case item_effect_type.IPL_LIFE_CURSE:
+                item._iPLHP -= r << 6;
+                break;
+            case item_effect_type.IPL_MANA:
+                item._iPLMana += r << 6;
+                RedrawComponent(PanelDrawComponent::Mana);
+                break;
+            case item_effect_type.IPL_MANA_CURSE:
+                item._iPLMana -= r << 6;
+                RedrawComponent(PanelDrawComponent::Mana);
+                break;
+            case item_effect_type.IPL_DUR: {
+                int bonus = r * item._iMaxDur / 100;
+                item._iMaxDur += bonus;
+                item._iDurability += bonus;
+            } break;
+            case item_effect_type.IPL_CRYSTALLINE:
+                item._iPLDam += 140 + r * 2;
+                [[fallthrough]];
+            case item_effect_type.IPL_DUR_CURSE:
+                item._iMaxDur -= r * item._iMaxDur / 100;
+                item._iMaxDur = Math.Max<uint8_t>(item._iMaxDur, 1);
+                item._iDurability = item._iMaxDur;
+                break;
+            case item_effect_type.IPL_INDESTRUCTIBLE:
+                item._iDurability = DUR_INDESTRUCTIBLE;
+                item._iMaxDur = DUR_INDESTRUCTIBLE;
+                break;
+            case item_effect_type.IPL_LIGHT:
+                item._iPLLight += power.param1;
+                break;
+            case item_effect_type.IPL_LIGHT_CURSE:
+                item._iPLLight -= power.param1;
+                break;
+            case item_effect_type.IPL_MULT_ARROWS:
+                item._iFlags |= ItemSpecialEffect.MultipleArrows;
+                break;
+            case item_effect_type.IPL_FIRE_ARROWS:
+                item._iFlags |= ItemSpecialEffect.FireArrows;
+                item._iFlags &= ~ItemSpecialEffect.LightningArrows;
+                item._iFMinDam = power.param1;
+                item._iFMaxDam = power.param2;
+                item._iLMinDam = 0;
+                item._iLMaxDam = 0;
+                break;
+            case item_effect_type.IPL_LIGHT_ARROWS:
+                item._iFlags |= ItemSpecialEffect.LightningArrows;
+                item._iFlags &= ~ItemSpecialEffect.FireArrows;
+                item._iLMinDam = power.param1;
+                item._iLMaxDam = power.param2;
+                item._iFMinDam = 0;
+                item._iFMaxDam = 0;
+                break;
+            case item_effect_type.IPL_FIREBALL:
+                item._iFlags |= (ItemSpecialEffect.LightningArrows | ItemSpecialEffect.FireArrows);
+                item._iFMinDam = power.param1;
+                item._iFMaxDam = power.param2;
+                item._iLMinDam = 0;
+                item._iLMaxDam = 0;
+                break;
+            case item_effect_type.IPL_THORNS:
+                item._iFlags |= ItemSpecialEffect.Thorns;
+                break;
+            case item_effect_type.IPL_NOMANA:
+                item._iFlags |= ItemSpecialEffect.NoMana;
+                RedrawComponent(PanelDrawComponent::Mana);
+                break;
+            case item_effect_type.IPL_ABSHALFTRAP:
+                item._iFlags |= ItemSpecialEffect.HalfTrapDamage;
+                break;
+            case item_effect_type.IPL_KNOCKBACK:
+                item._iFlags |= ItemSpecialEffect.Knockback;
+                break;
+            case item_effect_type.IPL_3XDAMVDEM:
+                item._iFlags |= ItemSpecialEffect.TripleDemonDamage;
+                break;
+            case item_effect_type.IPL_ALLRESZERO:
+                item._iFlags |= ItemSpecialEffect.ZeroResistance;
+                break;
+            case item_effect_type.IPL_STEALMANA:
+                if (power.param1 == 3)
+                    item._iFlags |= ItemSpecialEffect.StealMana3;
+                if (power.param1 == 5)
+                    item._iFlags |= ItemSpecialEffect.StealMana5;
+                RedrawComponent(PanelDrawComponent::Mana);
+                break;
+            case item_effect_type.IPL_STEALLIFE:
+                if (power.param1 == 3)
+                    item._iFlags |= ItemSpecialEffect.StealLife3;
+                if (power.param1 == 5)
+                    item._iFlags |= ItemSpecialEffect.StealLife5;
+                RedrawComponent(PanelDrawComponent::Health);
+                break;
+            case item_effect_type.IPL_TARGAC:
+                if (gbIsHellfire)
+                    item._iPLEnAc = power.param1;
+                else
+                    item._iPLEnAc += r;
+                break;
+            case item_effect_type.IPL_FASTATTACK:
+                if (power.param1 == 1)
+                    item._iFlags |= ItemSpecialEffect.QuickAttack;
+                if (power.param1 == 2)
+                    item._iFlags |= ItemSpecialEffect.FastAttack;
+                if (power.param1 == 3)
+                    item._iFlags |= ItemSpecialEffect.FasterAttack;
+                if (power.param1 == 4)
+                    item._iFlags |= ItemSpecialEffect.FastestAttack;
+                break;
+            case item_effect_type.IPL_FASTRECOVER:
+                if (power.param1 == 1)
+                    item._iFlags |= ItemSpecialEffect.FastHitRecovery;
+                if (power.param1 == 2)
+                    item._iFlags |= ItemSpecialEffect.FasterHitRecovery;
+                if (power.param1 == 3)
+                    item._iFlags |= ItemSpecialEffect.FastestHitRecovery;
+                break;
+            case item_effect_type.IPL_FASTBLOCK:
+                item._iFlags |= ItemSpecialEffect.FastBlock;
+                break;
+            case item_effect_type.IPL_DAMMOD:
+                item._iPLDamMod += r;
+                break;
+            case item_effect_type.IPL_RNDARROWVEL:
+                item._iFlags |= ItemSpecialEffect.RandomArrowVelocity;
+                break;
+            case item_effect_type.IPL_SETDAM:
+                item._iMinDam = power.param1;
+                item._iMaxDam = power.param2;
+                break;
+            case item_effect_type.IPL_SETDUR:
+                item._iDurability = power.param1;
+                item._iMaxDur = power.param1;
+                break;
+            case item_effect_type.IPL_ONEHAND:
+                item._iLoc = ILOC_ONEHAND;
+                break;
+            case item_effect_type.IPL_DRAINLIFE:
+                item._iFlags |= ItemSpecialEffect.DrainLife;
+                break;
+            case item_effect_type.IPL_RNDSTEALLIFE:
+                item._iFlags |= ItemSpecialEffect.RandomStealLife;
+                break;
+            case item_effect_type.IPL_NOMINSTR:
+                item._iMinStr = 0;
+                break;
+            case item_effect_type.IPL_INVCURS:
+                item._iCurs = power.param1;
+                break;
+            case item_effect_type.IPL_ADDACLIFE:
+                item._iFlags |= (ItemSpecialEffect.LightningArrows | ItemSpecialEffect.FireArrows);
+                item._iFMinDam = power.param1;
+                item._iFMaxDam = power.param2;
+                item._iLMinDam = 1;
+                item._iLMaxDam = 0;
+                break;
+            case item_effect_type.IPL_ADDMANAAC:
+                item._iFlags |= (ItemSpecialEffect.LightningDamage | ItemSpecialEffect.FireDamage);
+                item._iFMinDam = power.param1;
+                item._iFMaxDam = power.param2;
+                item._iLMinDam = 2;
+                item._iLMaxDam = 0;
+                break;
+            case item_effect_type.IPL_FIRERES_CURSE:
+                item._iPLFR -= r;
+                break;
+            case item_effect_type.IPL_LIGHTRES_CURSE:
+                item._iPLLR -= r;
+                break;
+            case item_effect_type.IPL_MAGICRES_CURSE:
+                item._iPLMR -= r;
+                break;
+            case item_effect_type.IPL_DEVASTATION:
+                item._iDamAcFlags |= ItemSpecialEffectHf.Devastation;
+                break;
+            case item_effect_type.IPL_DECAY:
+                item._iDamAcFlags |= ItemSpecialEffectHf.Decay;
+                item._iPLDam += r;
+                break;
+            case item_effect_type.IPL_PERIL:
+                item._iDamAcFlags |= ItemSpecialEffectHf.Peril;
+                break;
+            case item_effect_type.IPL_JESTERS:
+                item._iDamAcFlags |= ItemSpecialEffectHf.Jesters;
+                break;
+            case item_effect_type.IPL_ACDEMON:
+                item._iDamAcFlags |= ItemSpecialEffectHf.ACAgainstDemons;
+                break;
+            case item_effect_type.IPL_ACUNDEAD:
+                item._iDamAcFlags |= ItemSpecialEffectHf.ACAgainstUndead;
+                break;
+            case item_effect_type.IPL_MANATOLIFE: {
+                int portion = ((player._pMaxManaBase >> 6) * 50 / 100) << 6;
+                item._iPLMana -= portion;
+                item._iPLHP += portion;
+            } break;
+            case item_effect_type.IPL_LIFETOMANA: {
+                int portion = ((player._pMaxHPBase >> 6) * 40 / 100) << 6;
+                item._iPLHP -= portion;
+                item._iPLMana += portion;
+            } break;
+            default:
+                break;
+            }
+
+            return r;
+        }
+
+        void GetStaffSpell(d2Player player, d2Item item, int lvl, bool onlygood)
+        {
+            if (!d2DEF.gbIsHellfire && d2Utils.FlipCoin(4)) {
+                GetItemPower(player, item, lvl / 2, lvl, AffixItemType.Staff, onlygood);
+                return;
+            }
+
+            int maxSpells = d2DEF.gbIsHellfire ? MAX_SPELLS : 37;
+            int l = lvl / 2;
+            if (l == 0)
+                l = 1;
+            int rv = d2Utils.GenerateRnd(maxSpells) + 1;
+
+            if (gbIsSpawn && lvl > 10)
+                lvl = 10;
+
+            int s = SPL_FIREBOLT;
+            enum spell_id bs = SPL_NULL;
+            while (rv > 0) {
+                int sLevel = GetSpellStaffLevel(static_cast<spell_id>(s));
+                if (sLevel != -1 && l >= sLevel) {
+                    rv--;
+                    bs = static_cast<spell_id>(s);
+                }
+                s++;
+                if (!gbIsMultiplayer && s == SPL_RESURRECT)
+                    s = SPL_TELEKINESIS;
+                if (!gbIsMultiplayer && s == SPL_HEALOTHER)
+                    s = SPL_FLARE;
+                if (s == maxSpells)
+                    s = SPL_FIREBOLT;
+            }
+
+            int minc = spelldata[bs].sStaffMin;
+            int maxc = spelldata[bs].sStaffMax - minc + 1;
+            item._iSpell = bs;
+            item._iCharges = minc + GenerateRnd(maxc);
+            item._iMaxCharges = item._iCharges;
+
+            item._iMinMag = spelldata[bs].sMinInt;
+            int v = item._iCharges * spelldata[bs].sStaffCost / 5;
+            item._ivalue += v;
+            item._iIvalue += v;
+            GetStaffPower(player, item, lvl, bs, onlygood);
         }
     }
 }
