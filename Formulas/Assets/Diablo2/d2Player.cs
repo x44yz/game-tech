@@ -113,8 +113,13 @@ namespace d2
         [Header("---- PLAYER ----")]
         public HeroClass _pClass;
         public int _pLevel;
-        public int armorId;
-
+        public _item_indexes headItemId = _item_indexes.IDI_NONE;
+        public _item_indexes lringItemId = _item_indexes.IDI_NONE;
+        public _item_indexes rringItemId = _item_indexes.IDI_NONE;
+        public _item_indexes amuletItemId = _item_indexes.IDI_NONE;
+        public _item_indexes lhandItemId = _item_indexes.IDI_NONE;
+        public _item_indexes rhandItemId = _item_indexes.IDI_NONE;
+        public _item_indexes chestItemId = _item_indexes.IDI_NONE;
 
         [Header("---- RUNTIME ----")]
         public int _pStrength;
@@ -209,6 +214,28 @@ namespace d2
             {
                 NextPlrLevel(this);
             }
+
+        // public _item_indexes headItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes lringItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes rringItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes amuletItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes lhandItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes rhandItemId = _item_indexes.IDI_NONE;
+        // public _item_indexes chestItemId = _item_indexes.IDI_NONE;
+            if (headItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_HEAD, headItemId);
+            if (lringItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_RING_LEFT, lringItemId);
+            if (rringItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_RING_RIGHT, rringItemId);
+            if (amuletItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_AMULET, amuletItemId);
+            if (lhandItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_HAND_LEFT, lhandItemId);
+            if (rhandItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_HAND_RIGHT, rhandItemId);
+            if (chestItemId != _item_indexes.IDI_NONE)
+                ChangePlayerItems(this, inv_body_loc.INVLOC_CHEST, chestItemId);
         }
 
         protected override void OnUpdate(float dt)
@@ -1434,6 +1461,29 @@ namespace d2
                 break;
             }
             return 0;
+        }
+
+        void ChangePlayerItems(d2Player player, inv_body_loc bodyLocation, _item_indexes idx)
+        {
+            var item = player.InvBody[(int)bodyLocation];
+            int curlvl = 1;
+            item.RecreateItem(player, item, idx, ((int)icreateinfo_flag.CF_TOWN) | curlvl, 0, 1);
+            CheckInvSwap(player, bodyLocation);
+
+            // player.ReadySpellFromEquipment(bodyLocation);
+        }
+
+        void CheckInvSwap(d2Player player, inv_body_loc bLoc)
+        {
+            var item = player.InvBody[(int)bLoc];
+
+            if (bLoc == inv_body_loc.INVLOC_HAND_LEFT && player.GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].clear();
+            } else if (bLoc == inv_body_loc.INVLOC_HAND_RIGHT && player.GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].clear();
+            }
+
+            CalcPlrInv(player, true);
         }
     }
 }

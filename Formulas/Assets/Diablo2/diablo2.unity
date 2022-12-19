@@ -1210,7 +1210,7 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
-  type: 54
+  type: 0
   mode: 0
   armorClass: 0
   maxHitPoints: 0
@@ -2591,7 +2591,13 @@ MonoBehaviour:
   weapon: {fileID: 0}
   _pClass: 0
   _pLevel: 1
-  armorId: 0
+  headItemId: -1
+  lringItemId: -1
+  rringItemId: -1
+  amuletItemId: -1
+  lhandItemId: -1
+  rhandItemId: 31
+  chestItemId: -1
   _pStrength: 0
   _pBaseStr: 0
   _pMagic: 0
