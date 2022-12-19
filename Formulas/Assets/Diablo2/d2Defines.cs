@@ -5,6 +5,13 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum goodorevil
+    {
+        GOE_ANY,
+        GOE_EVIL,
+        GOE_GOOD,
+    };
+
     public enum AffixItemType
     {
         // clang-format off
@@ -726,9 +733,12 @@ namespace d2
     public class d2DEF
     {
         public const int BaseHitChance = 50;
+        /** Indicate if we have loaded the Hellfire expansion data */
         public const bool gbIsHellfire = false;
         public const bool gbIsMultiplayer = false;
         public const _difficulty gbDifficulty = _difficulty.DIFF_NORMAL;
+        /** Indicate if we only have access to demo data */
+        public const bool gbIsSpawn = false;
     }
 
     public enum _monster_id

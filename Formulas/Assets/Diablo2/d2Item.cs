@@ -594,7 +594,7 @@ namespace d2
 
         void GetItemPower(d2Player player, d2Item item, int minlvl, int maxlvl, AffixItemType flgs, bool onlygood)
         {
-            int l[256];
+            int[] l = new int[256];
             goodorevil goe;
 
             bool allocatePrefix = d2Utils.FlipCoin(4);
@@ -608,19 +608,19 @@ namespace d2
             }
             int preidx = -1;
             int sufidx = -1;
-            goe = GOE_ANY;
+            goe = goodorevil.GOE_ANY;
             if (!onlygood && !d2Utils.FlipCoin(3))
                 onlygood = true;
             if (allocatePrefix) {
                 int nt = 0;
-                for (int j = 0; ItemPrefixes[j].power.type != IPL_INVALID; j++) {
+                for (int j = 0; ItemPrefixes[j].power.type != item_effect_type.IPL_INVALID; j++) {
                     if (!IsPrefixValidForItemType(j, flgs))
                         continue;
                     if (ItemPrefixes[j].PLMinLvl < minlvl || ItemPrefixes[j].PLMinLvl > maxlvl)
                         continue;
                     if (onlygood && !ItemPrefixes[j].PLOk)
                         continue;
-                    if (HasAnyOf(flgs, AffixItemType.Staff) && ItemPrefixes[j].power.type == IPL_CHARGES)
+                    if (HasAnyOf(flgs, AffixItemType.Staff) && ItemPrefixes[j].power.type == item_effect_type.IPL_CHARGES)
                         continue;
                     l[nt] = j;
                     nt++;
@@ -631,7 +631,7 @@ namespace d2
                 }
                 if (nt != 0) {
                     preidx = l[GenerateRnd(nt)];
-                    item._iMagical = ITEM_QUALITY_MAGIC;
+                    item._iMagical = item_quality.ITEM_QUALITY_MAGIC;
                     SaveItemAffix(player, item, ItemPrefixes[preidx]);
                     item._iPrePower = ItemPrefixes[preidx].power.type;
                     goe = ItemPrefixes[preidx].PLGOE;
@@ -666,8 +666,8 @@ namespace d2
 
         int SaveItemPower(d2Player player, d2Item item, ItemPower power)
         {
-            if (!gbIsHellfire) {
-                if (power.type == IPL_TARGAC) {
+            if (!d2DEF.gbIsHellfire) {
+                if (power.type == item_effect_type.IPL_TARGAC) {
                     power.param1 = 1 << power.param1;
                     power.param2 = 3 << power.param2;
                 }
@@ -690,7 +690,7 @@ namespace d2
                 break;
             case item_effect_type.IPL_DOPPELGANGER:
                 item._iDamAcFlags |= ItemSpecialEffectHf.Doppelganger;
-                [[fallthrough]];
+                break;
             case item_effect_type.IPL_TOHIT_DAMP:
                 r = RndPL(power.param1, power.param2);
                 item._iPLDam += r;
@@ -734,7 +734,7 @@ namespace d2
                 item._iMaxCharges = item._iCharges;
                 break;
             case item_effect_type.IPL_SPELL:
-                item._iSpell = static_cast<spell_id>(power.param1);
+                item._iSpell = (spell_id)(power.param1);
                 item._iCharges = power.param2;
                 item._iMaxCharges = power.param2;
                 break;
@@ -804,11 +804,11 @@ namespace d2
                 break;
             case item_effect_type.IPL_MANA:
                 item._iPLMana += r << 6;
-                RedrawComponent(PanelDrawComponent::Mana);
+                // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_MANA_CURSE:
                 item._iPLMana -= r << 6;
-                RedrawComponent(PanelDrawComponent::Mana);
+                // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_DUR: {
                 int bonus = r * item._iMaxDur / 100;
@@ -817,10 +817,10 @@ namespace d2
             } break;
             case item_effect_type.IPL_CRYSTALLINE:
                 item._iPLDam += 140 + r * 2;
-                [[fallthrough]];
+                break;
             case item_effect_type.IPL_DUR_CURSE:
                 item._iMaxDur -= r * item._iMaxDur / 100;
-                item._iMaxDur = Math.Max<uint8_t>(item._iMaxDur, 1);
+                item._iMaxDur = Math.Max(item._iMaxDur, 1);
                 item._iDurability = item._iMaxDur;
                 break;
             case item_effect_type.IPL_INDESTRUCTIBLE:
@@ -864,7 +864,7 @@ namespace d2
                 break;
             case item_effect_type.IPL_NOMANA:
                 item._iFlags |= ItemSpecialEffect.NoMana;
-                RedrawComponent(PanelDrawComponent::Mana);
+                // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_ABSHALFTRAP:
                 item._iFlags |= ItemSpecialEffect.HalfTrapDamage;
@@ -883,17 +883,17 @@ namespace d2
                     item._iFlags |= ItemSpecialEffect.StealMana3;
                 if (power.param1 == 5)
                     item._iFlags |= ItemSpecialEffect.StealMana5;
-                RedrawComponent(PanelDrawComponent::Mana);
+                // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_STEALLIFE:
                 if (power.param1 == 3)
                     item._iFlags |= ItemSpecialEffect.StealLife3;
                 if (power.param1 == 5)
                     item._iFlags |= ItemSpecialEffect.StealLife5;
-                RedrawComponent(PanelDrawComponent::Health);
+                // RedrawComponent(PanelDrawComponent::Health);
                 break;
             case item_effect_type.IPL_TARGAC:
-                if (gbIsHellfire)
+                if (d2DEF.gbIsHellfire)
                     item._iPLEnAc = power.param1;
                 else
                     item._iPLEnAc += r;
@@ -934,7 +934,7 @@ namespace d2
                 item._iMaxDur = power.param1;
                 break;
             case item_effect_type.IPL_ONEHAND:
-                item._iLoc = ILOC_ONEHAND;
+                item._iLoc = item_equip_type.ILOC_ONEHAND;
                 break;
             case item_effect_type.IPL_DRAINLIFE:
                 item._iFlags |= ItemSpecialEffect.DrainLife;
@@ -946,7 +946,7 @@ namespace d2
                 item._iMinStr = 0;
                 break;
             case item_effect_type.IPL_INVCURS:
-                item._iCurs = power.param1;
+                item._iCurs = (item_cursor_graphic)power.param1;
                 break;
             case item_effect_type.IPL_ADDACLIFE:
                 item._iFlags |= (ItemSpecialEffect.LightningArrows | ItemSpecialEffect.FireArrows);
@@ -1007,6 +1007,7 @@ namespace d2
             return r;
         }
 
+        public const int MAX_SPELLS = 52;
         void GetStaffSpell(d2Player player, d2Item item, int lvl, bool onlygood)
         {
             if (!d2DEF.gbIsHellfire && d2Utils.FlipCoin(4)) {
@@ -1020,30 +1021,30 @@ namespace d2
                 l = 1;
             int rv = d2Utils.GenerateRnd(maxSpells) + 1;
 
-            if (gbIsSpawn && lvl > 10)
+            if (d2DEF.gbIsSpawn && lvl > 10)
                 lvl = 10;
 
-            int s = SPL_FIREBOLT;
-            enum spell_id bs = SPL_NULL;
+            int s = (int)spell_id.SPL_FIREBOLT;
+            spell_id bs = spell_id.SPL_NULL;
             while (rv > 0) {
                 int sLevel = GetSpellStaffLevel(static_cast<spell_id>(s));
                 if (sLevel != -1 && l >= sLevel) {
                     rv--;
-                    bs = static_cast<spell_id>(s);
+                    bs = (spell_id)(s);
                 }
                 s++;
-                if (!gbIsMultiplayer && s == SPL_RESURRECT)
-                    s = SPL_TELEKINESIS;
-                if (!gbIsMultiplayer && s == SPL_HEALOTHER)
-                    s = SPL_FLARE;
+                if (!d2DEF.gbIsMultiplayer && s == (int)spell_id.SPL_RESURRECT)
+                    s = (int)spell_id.SPL_TELEKINESIS;
+                if (!d2DEF.gbIsMultiplayer && s == (int)spell_id.SPL_HEALOTHER)
+                    s = (int)spell_id.SPL_FLARE;
                 if (s == maxSpells)
-                    s = SPL_FIREBOLT;
+                    s = (int)spell_id.SPL_FIREBOLT;
             }
 
             int minc = spelldata[bs].sStaffMin;
             int maxc = spelldata[bs].sStaffMax - minc + 1;
             item._iSpell = bs;
-            item._iCharges = minc + GenerateRnd(maxc);
+            item._iCharges = minc + d2Utils.GenerateRnd(maxc);
             item._iMaxCharges = item._iCharges;
 
             item._iMinMag = spelldata[bs].sMinInt;
