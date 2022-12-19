@@ -613,52 +613,52 @@ namespace d2
                 onlygood = true;
             if (allocatePrefix) {
                 int nt = 0;
-                for (int j = 0; ItemPrefixes[j].power.type != item_effect_type.IPL_INVALID; j++) {
+                for (int j = 0; d2Data.ItemPrefixes[j].power.type != item_effect_type.IPL_INVALID; j++) {
                     if (!IsPrefixValidForItemType(j, flgs))
                         continue;
-                    if (ItemPrefixes[j].PLMinLvl < minlvl || ItemPrefixes[j].PLMinLvl > maxlvl)
+                    if (d2Data.ItemPrefixes[j].PLMinLvl < minlvl || d2Data.ItemPrefixes[j].PLMinLvl > maxlvl)
                         continue;
-                    if (onlygood && !ItemPrefixes[j].PLOk)
+                    if (onlygood && !d2Data.ItemPrefixes[j].PLOk)
                         continue;
-                    if (HasAnyOf(flgs, AffixItemType.Staff) && ItemPrefixes[j].power.type == item_effect_type.IPL_CHARGES)
+                    if (d2Utils.HasAnyOf(flgs, AffixItemType.Staff) && d2Data.ItemPrefixes[j].power.type == item_effect_type.IPL_CHARGES)
                         continue;
                     l[nt] = j;
                     nt++;
-                    if (ItemPrefixes[j].PLDouble) {
+                    if (d2Data.ItemPrefixes[j].PLDouble) {
                         l[nt] = j;
                         nt++;
                     }
                 }
                 if (nt != 0) {
-                    preidx = l[GenerateRnd(nt)];
+                    preidx = l[d2Utils.GenerateRnd(nt)];
                     item._iMagical = item_quality.ITEM_QUALITY_MAGIC;
-                    SaveItemAffix(player, item, ItemPrefixes[preidx]);
-                    item._iPrePower = ItemPrefixes[preidx].power.type;
-                    goe = ItemPrefixes[preidx].PLGOE;
+                    SaveItemAffix(player, item, d2Data.ItemPrefixes[preidx]);
+                    item._iPrePower = d2Data.ItemPrefixes[preidx].power.type;
+                    goe = d2Data.ItemPrefixes[preidx].PLGOE;
                 }
             }
             if (allocateSuffix) {
                 int nl = 0;
-                for (int j = 0; ItemSuffixes[j].power.type != IPL_INVALID; j++) {
+                for (int j = 0; d2Data.ItemSuffixes[j].power.type != item_effect_type.IPL_INVALID; j++) {
                     if (IsSuffixValidForItemType(j, flgs)
-                        && ItemSuffixes[j].PLMinLvl >= minlvl && ItemSuffixes[j].PLMinLvl <= maxlvl
-                        && !((goe == GOE_GOOD && ItemSuffixes[j].PLGOE == GOE_EVIL) || (goe == GOE_EVIL && ItemSuffixes[j].PLGOE == GOE_GOOD))
-                        && (!onlygood || ItemSuffixes[j].PLOk)) {
+                        && d2Data.ItemSuffixes[j].PLMinLvl >= minlvl && d2Data.ItemSuffixes[j].PLMinLvl <= maxlvl
+                        && !((goe == goodorevil.GOE_GOOD && d2Data.ItemSuffixes[j].PLGOE == goodorevil.GOE_EVIL) || (goe == goodorevil.GOE_EVIL && d2Data.ItemSuffixes[j].PLGOE == goodorevil.GOE_GOOD))
+                        && (!onlygood || d2Data.ItemSuffixes[j].PLOk)) {
                         l[nl] = j;
                         nl++;
                     }
                 }
                 if (nl != 0) {
-                    sufidx = l[GenerateRnd(nl)];
-                    item._iMagical = ITEM_QUALITY_MAGIC;
-                    SaveItemAffix(player, item, ItemSuffixes[sufidx]);
-                    item._iSufPower = ItemSuffixes[sufidx].power.type;
+                    sufidx = l[d2Utils.GenerateRnd(nl)];
+                    item._iMagical = item_quality.ITEM_QUALITY_MAGIC;
+                    SaveItemAffix(player, item, d2Data.ItemSuffixes[sufidx]);
+                    item._iSufPower = d2Data.ItemSuffixes[sufidx].power.type;
                 }
             }
 
-            CopyUtf8(item._iIName, GenerateMagicItemName(item._iName, preidx, sufidx), sizeof(item._iIName));
+            item._iIName = GenerateMagicItemName(item._iName, preidx, sufidx);
             if (!StringInPanel(item._iIName)) {
-                CopyUtf8(item._iIName, GenerateMagicItemName(_(AllItemsList[item.IDidx].iSName), preidx, sufidx), sizeof(item._iIName));
+                CopyUtf8(item._iIName, GenerateMagicItemName(_(d2Data.AllItemsList[(int)item.IDidx].iSName), preidx, sufidx), sizeof(item._iIName));
             }
             if (preidx != -1 || sufidx != -1)
                 CalcItemValue(item);
