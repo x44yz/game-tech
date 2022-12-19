@@ -7,6 +7,31 @@ namespace d2
 {
     public static class d2Utils
     {
+        public static bool FlipCoin(int frequency)
+        {
+            // Casting here because GenerateRnd takes a signed argument when it should take and yield unsigned.
+            return GenerateRnd(frequency) == 0;
+        }
+
+        public static T PickRandomlyAmong<T>(Array values)
+        {
+            var index = d2Utils.GenerateRnd(values.Length);
+
+            return (T)values.GetValue(index);
+        }
+
+        public static T PickRandomlyAmong<T>(List<T> values)
+        {
+            var index = d2Utils.GenerateRnd(values.Count);
+
+            return values[index];
+        }
+
+        public static void SetRndSeed(int seed)
+        {
+            // sglGameSeed = seed;
+        }
+
         // public static int ToInt(this System.Enum e)
         // {
         //     return (int)(object)e;

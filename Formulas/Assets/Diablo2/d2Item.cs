@@ -212,5 +212,274 @@ namespace d2
             SetupAllItems(player, item, idx, iseed, level, uper, onlygood, recreate, pregen);
         }
 
+        void RecreateTownItem(d2Player player, d2Item item, _item_indexes idx, int icreateinfo, int iseed)
+        {
+            if ((icreateinfo & (int)icreateinfo_flag.CF_SMITH) != 0)
+                RecreateSmithItem(player, item, icreateinfo & (int)icreateinfo_flag.CF_LEVEL, iseed);
+            // else if ((icreateinfo & (int)icreateinfo_flag.CF_SMITHPREMIUM) != 0)
+            //     RecreatePremiumItem(player, item, icreateinfo & (int)icreateinfo_flag.CF_LEVEL, iseed);
+            // else if ((icreateinfo & (int)icreateinfo_flag.CF_BOY) != 0)
+            //     RecreateBoyItem(player, item, icreateinfo & (int)icreateinfo_flag.CF_LEVEL, iseed);
+            // else if ((icreateinfo & (int)icreateinfo_flag.CF_WITCH) != 0)
+            //     RecreateWitchItem(player, item, idx, icreateinfo & (int)icreateinfo_flag.CF_LEVEL, iseed);
+            // else if ((icreateinfo & (int)icreateinfo_flag.CF_HEALER) != 0)
+            //     RecreateHealerItem(player, item, idx, icreateinfo & (int)icreateinfo_flag.CF_LEVEL, iseed);
+        }
+
+        void RecreateSmithItem(d2Player player, d2Item item, int lvl, int iseed)
+        {
+            d2Utils.SetRndSeed(iseed);
+            _item_indexes itype = RndSmithItem(player, lvl);
+            GetItemAttrs(item, itype, lvl);
+
+            item._iSeed = iseed;
+            item._iCreateInfo = lvl | (int)icreateinfo_flag.CF_SMITH;
+            item._iIdentified = true;
+        }
+
+        _item_indexes RndSmithItem(d2Player player, int lvl)
+        {
+            return RndVendorItem(SmithItemOk, true, player, 0, lvl);
+        }
+
+        bool SmithItemOk(d2Player player, int i)
+        {
+            if (d2Data.AllItemsList[i].itype == ItemType.Misc)
+                return false;
+            if (d2Data.AllItemsList[i].itype == ItemType.Gold)
+                return false;
+            if (d2Data.AllItemsList[i].itype == ItemType.Staff /*&& (!gbIsHellfire || IsValidSpell(AllItemsList[i].iSpell))*/)
+                return false;
+            if (d2Data.AllItemsList[i].itype == ItemType.Ring)
+                return false;
+            if (d2Data.AllItemsList[i].itype == ItemType.Amulet)
+                return false;
+
+            return true;
+        }
+
+        // template <bool (*Ok)(const Player &, int), bool ConsiderDropRate = false>
+        _item_indexes RndVendorItem(Func<d2Player, int, bool> Ok, bool ConsiderDropRate, d2Player player, int minlvl, int maxlvl)
+        {
+            var ril = new List<_item_indexes>();
+
+            for (int i = (int)_item_indexes.IDI_WARRIOR; i <= (int)_item_indexes.IDI_LAST; i++) 
+            {
+                if (!IsItemAvailable(i))
+                    continue;
+                if (d2Data.AllItemsList[i].iRnd == item_drop_rate.IDROP_NEVER)
+                    continue;
+                if (!Ok(player, i))
+                    continue;
+                if (d2Data.AllItemsList[i].iMinMLvl < minlvl || d2Data.AllItemsList[i].iMinMLvl > maxlvl)
+                    continue;
+
+                ril.Add((_item_indexes)i);
+                if (ril.Count >= 512) // limit rnd count
+                    break;
+
+                if (!ConsiderDropRate || d2Data.AllItemsList[i].iRnd != item_drop_rate.IDROP_DOUBLE)
+                    continue;
+
+                ril.Add((_item_indexes)i);
+                if (ril.Count >= 512) // limit rnd count
+                    break;
+            }
+
+            return ril[d2Utils.GenerateRnd(ril.Count)];
+        }
+
+        bool IsItemAvailable(int i)
+        {
+            if (i < 0 || i > (int)_item_indexes.IDI_LAST)
+                return false;
+
+        //     if (gbIsSpawn) {
+        //         if (i >= 62 && i <= 71)
+        //             return false; // Medium and heavy armors
+        //         if (IsAnyOf(i, 105, 107, 108, 110, 111, 113))
+        //             return false; // Unavailable scrolls
+        //     }
+
+        //     if (gbIsHellfire)
+        //         return true;
+
+        //     return (
+        //             i != IDI_MAPOFDOOM                   // Cathedral Map
+        //             && i != IDI_LGTFORGE                 // Bovine Plate
+        //             && (i < IDI_OIL || i > IDI_GREYSUIT) // Hellfire exclusive items
+        //             && (i < 83 || i > 86)                // Oils
+        //             && i != 92                           // Scroll of Search
+        //             && (i < 161 || i > 165)              // Runes
+        //             && i != IDI_SORCERER                 // Short Staff of Mana
+        //             )
+        //         || (
+        //             // Bard items are technically Hellfire-exclusive
+        //             // but are just normal items with adjusted stats.
+        //             *sgOptions.Gameplay.testBard && IsAnyOf(i, IDI_BARDSWORD, IDI_BARDDAGGER));
+        //
+            return true; 
+        }
+
+        void GetItemAttrs(d2Item item, _item_indexes itemData, int lvl)
+        {
+            var baseItemData = d2Data.AllItemsList[(int)(itemData)];
+            item._itype = baseItemData.itype;
+            item._iCurs = baseItemData.iCurs;
+            item._iName = baseItemData.iName;
+            item._iIName = baseItemData.iName;
+            item._iLoc = baseItemData.iLoc;
+            item._iClass = baseItemData.iClass;
+            item._iMinDam = baseItemData.iMinDam;
+            item._iMaxDam = baseItemData.iMaxDam;
+            item._iAC = baseItemData.iMinAC + d2Utils.GenerateRnd(baseItemData.iMaxAC - baseItemData.iMinAC + 1);
+            item._iFlags = baseItemData.iFlags;
+            item._iMiscId = baseItemData.iMiscId;
+            item._iSpell = baseItemData.iSpell;
+            item._iMagical = item_quality.ITEM_QUALITY_NORMAL;
+            item._ivalue = baseItemData.iValue;
+            item._iIvalue = baseItemData.iValue;
+            item._iDurability = baseItemData.iDurability;
+            item._iMaxDur = baseItemData.iDurability;
+            item._iMinStr = baseItemData.iMinStr;
+            item._iMinMag = baseItemData.iMinMag;
+            item._iMinDex = baseItemData.iMinDex;
+            item.IDidx = itemData;
+            if (d2DEF.gbIsHellfire)
+                item.dwBuff |= icreateinfo_flag2.CF_HELLFIRE;
+            item._iPrePower = item_effect_type.IPL_INVALID;
+            item._iSufPower = item_effect_type.IPL_INVALID;
+
+            // if (item._iMiscId == item_misc_id.IMISC_BOOK)
+            //     GetBookSpell(item, lvl);
+
+            // if (d2DEF.gbIsHellfire && item._iMiscId == item_misc_id.IMISC_OILOF)
+            //     GetOilType(item, lvl);
+
+            if (item._itype != ItemType.Gold)
+                return;
+
+            // 产生的金币根据关卡和难度决定
+            // int rndv;
+            // int itemlevel = ItemsGetCurrlevel();
+            // switch (sgGameInitInfo.nDifficulty) {
+            // case DIFF_NORMAL:
+            //     rndv = 5 * itemlevel + GenerateRnd(10 * itemlevel);
+            //     break;
+            // case DIFF_NIGHTMARE:
+            //     rndv = 5 * (itemlevel + 16) + GenerateRnd(10 * (itemlevel + 16));
+            //     break;
+            // case DIFF_HELL:
+            //     rndv = 5 * (itemlevel + 32) + GenerateRnd(10 * (itemlevel + 32));
+            //     break;
+            // }
+            // if (leveltype == DTYPE_HELL)
+            //     rndv += rndv / 8;
+
+            // item._ivalue = std::min(rndv, GOLD_MAX_LIMIT);
+            // SetPlrHandGoldCurs(item);
+        }
+
+        void SetupAllUseful(d2Item item, int iseed, int lvl)
+        {
+            item._iSeed = iseed;
+            d2Utils.SetRndSeed(iseed);
+
+            _item_indexes idx;
+
+            if (d2DEF.gbIsHellfire) {
+                switch (d2Utils.GenerateRnd(7)) {
+                case 0:
+                    idx = _item_indexes.IDI_PORTAL;
+                    if (lvl <= 1)
+                        idx = _item_indexes.IDI_HEAL;
+                    break;
+                case 1:
+                case 2:
+                    idx =_item_indexes. IDI_HEAL;
+                    break;
+                case 3:
+                    idx = _item_indexes.IDI_PORTAL;
+                    if (lvl <= 1)
+                        idx = _item_indexes.IDI_MANA;
+                    break;
+                case 4:
+                case 5:
+                    idx = _item_indexes.IDI_MANA;
+                    break;
+                default:
+                    idx = _item_indexes.IDI_OIL;
+                    break;
+                }
+            } else {
+                idx = d2Utils.PickRandomlyAmong<_item_indexes>(new List<_item_indexes>{ _item_indexes.IDI_MANA, _item_indexes.IDI_HEAL });
+
+                if (lvl > 1 && d2Utils.FlipCoin(3))
+                    idx = _item_indexes.IDI_PORTAL;
+            }
+
+            GetItemAttrs(item, idx, lvl);
+            item._iCreateInfo = lvl | (int)icreateinfo_flag.CF_USEFUL;
+            SetupItem(item);
+        }
+
+        void SetupItem(d2Item item)
+        {
+            // item.setNewAnimation(MyPlayer != nullptr && MyPlayer->pLvlLoad == 0);
+            item._iIdentified = false;
+        }
+
+        void SetupAllItems(d2Player player, d2Item item, _item_indexes idx, int iseed, int lvl, int uper, bool onlygood, bool recreate, bool pregen)
+        {
+            item._iSeed = iseed;
+            d2Utils.SetRndSeed(iseed);
+            GetItemAttrs(item, idx, lvl / 2);
+            item._iCreateInfo = lvl;
+
+            if (pregen)
+                item._iCreateInfo |= (int)icreateinfo_flag.CF_PREGEN;
+            if (onlygood)
+                item._iCreateInfo |= (int)icreateinfo_flag.CF_ONLYGOOD;
+
+            if (uper == 15)
+                item._iCreateInfo |= (int)icreateinfo_flag.CF_UPER15;
+            else if (uper == 1)
+                item._iCreateInfo |= (int)icreateinfo_flag.CF_UPER1;
+
+            if (item._iMiscId != item_misc_id.IMISC_UNIQUE) {
+                int iblvl = -1;
+                if (d2Utils.GenerateRnd(100) <= 10 || d2Utils.GenerateRnd(100) <= lvl) {
+                    iblvl = lvl;
+                }
+                if (iblvl == -1 && item._iMiscId == item_misc_id.IMISC_STAFF) {
+                    iblvl = lvl;
+                }
+                if (iblvl == -1 && item._iMiscId == item_misc_id.IMISC_RING) {
+                    iblvl = lvl;
+                }
+                if (iblvl == -1 && item._iMiscId == item_misc_id.IMISC_AMULET) {
+                    iblvl = lvl;
+                }
+                if (onlygood)
+                    iblvl = lvl;
+                if (uper == 15)
+                    iblvl = lvl + 4;
+                if (iblvl != -1) {
+                    _unique_items uid = CheckUnique(item, iblvl, uper, recreate);
+                    if (uid == UITEM_INVALID) {
+                        GetItemBonus(player, item, iblvl / 2, iblvl, onlygood, true);
+                    } else {
+                        GetUniqueItem(player, item, uid);
+                    }
+                }
+                if (item._iMagical != ITEM_QUALITY_UNIQUE)
+                    ItemRndDur(item);
+            } else {
+                if (item._iLoc != ILOC_UNEQUIPABLE) {
+                    GetUniqueItem(player, item, (_unique_items)iseed); // uid is stored in iseed for uniques
+                }
+            }
+            SetupItem(item);
+        }
     }
 }
