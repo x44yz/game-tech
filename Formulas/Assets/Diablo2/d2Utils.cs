@@ -7,6 +7,11 @@ namespace d2
 {
     public static class d2Utils
     {
+        public static int RndPL(int param1, int param2)
+        {
+            return param1 + GenerateRnd(param2 - param1 + 1);
+        }
+
         public static bool FlipCoin(int frequency = 1)
         {
             // Casting here because GenerateRnd takes a signed argument when it should take and yield unsigned.

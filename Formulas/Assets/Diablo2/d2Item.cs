@@ -657,11 +657,136 @@ namespace d2
             }
 
             item._iIName = GenerateMagicItemName(item._iName, preidx, sufidx);
-            if (!StringInPanel(item._iIName)) {
-                CopyUtf8(item._iIName, GenerateMagicItemName(_(d2Data.AllItemsList[(int)item.IDidx].iSName), preidx, sufidx), sizeof(item._iIName));
-            }
+            // if (!StringInPanel(item._iIName)) 
+            // {
+            //     CopyUtf8(item._iIName, GenerateMagicItemName(_(d2Data.AllItemsList[(int)item.IDidx].iSName), preidx, sufidx), sizeof(item._iIName));
+            // }
             if (preidx != -1 || sufidx != -1)
                 CalcItemValue(item);
+        }
+
+        void CalcItemValue(d2Item item)
+        {
+            int v = item._iVMult1 + item._iVMult2;
+            if (v > 0) {
+                v *= item._ivalue;
+            }
+            if (v < 0) {
+                v = item._ivalue / v;
+            }
+            v = item._iVAdd1 + item._iVAdd2 + v;
+            item._iIvalue = Math.Max(v, 1);
+        }
+
+        string GenerateMagicItemName(string baseNamel, int preidx, int sufidx)
+        {
+            // if (preidx != -1 && sufidx != -1) {
+            //     string_view fmt = _(/* TRANSLATORS: Constructs item names. Format: {Prefix} {Item} of {Suffix}. Example: King's Long Sword of the Whale */ "{0} {1} of {2}");
+            //     return fmt::format(fmt::runtime(fmt), _(ItemPrefixes[preidx].PLName), baseNamel, _(ItemSuffixes[sufidx].PLName));
+            // } else if (preidx != -1) {
+            //     string_view fmt = _(/* TRANSLATORS: Constructs item names. Format: {Prefix} {Item}. Example: King's Long Sword */ "{0} {1}");
+            //     return fmt::format(fmt::runtime(fmt), _(ItemPrefixes[preidx].PLName), baseNamel);
+            // } else if (sufidx != -1) {
+            //     string_view fmt = _(/* TRANSLATORS: Constructs item names. Format: {Item} of {Suffix}. Example: Long Sword of the Whale */ "{0} of {1}");
+            //     return fmt::format(fmt::runtime(fmt), baseNamel, _(ItemSuffixes[sufidx].PLName));
+            // }
+
+            return baseNamel;
+        }
+
+        bool IsSuffixValidForItemType(int i, AffixItemType flgs)
+        {
+            AffixItemType itemTypes = d2Data.ItemSuffixes[i].PLIType;
+
+            if (!d2DEF.gbIsHellfire) {
+                if (i > 94)
+                    return false;
+
+                if ((i >= 0 && i <= 1)
+                    || (i >= 14 && i <= 15)
+                    || (i >= 21 && i <= 22)
+                    || (i >= 34 && i <= 36)
+                    || (i >= 41 && i <= 44)
+                    || (i >= 60 && i <= 63))
+                    itemTypes &= ~AffixItemType.Staff;
+            }
+
+            return d2Utils.HasAnyOf(flgs, itemTypes);
+        }
+
+        bool IsPrefixValidForItemType(int i, AffixItemType flgs)
+        {
+            AffixItemType itemTypes = d2Data.ItemPrefixes[i].PLIType;
+
+            if (!d2DEF.gbIsHellfire) {
+                if (i > 82)
+                    return false;
+
+                if (i >= 12 && i <= 20)
+                    itemTypes &= ~AffixItemType.Staff;
+            }
+
+            return d2Utils.HasAnyOf(flgs, itemTypes);
+        }
+
+        int PLVal(int pv, int p1, int p2, int minv, int maxv)
+        {
+            if (p1 == p2)
+                return minv;
+            if (minv == maxv)
+                return minv;
+            return minv + (maxv - minv) * (100 * (pv - p1) / (p2 - p1)) / 100;
+        }
+
+        public int _iVAdd1 = 0;
+        public int _iVMult1 = 0;
+        public int _iVAdd2 = 0;
+        public int _iVMult2 = 0;
+
+        void SaveItemAffix(d2Player player, d2Item item, PLStruct affix)
+        {
+            var power = affix.power;
+            int value = SaveItemPower(player, item, power);
+
+            value = PLVal(value, power.param1, power.param2, affix.minVal, affix.maxVal);
+            if (item._iVAdd1 != 0 || item._iVMult1 != 0) {
+                item._iVAdd2 = value;
+                item._iVMult2 = affix.multVal;
+            } else {
+                item._iVAdd1 = value;
+                item._iVMult1 = affix.multVal;
+            }
+        }
+
+        int CalculateToHitBonus(int level)
+        {
+            switch (level) {
+            case -50:
+                return -d2Utils.RndPL(6, 10);
+            case -25:
+                return -d2Utils.RndPL(1, 5);
+            case 20:
+                return d2Utils.RndPL(1, 5);
+            case 36:
+                return d2Utils.RndPL(6, 10);
+            case 51:
+                return d2Utils.RndPL(11, 15);
+            case 66:
+                return d2Utils.RndPL(16, 20);
+            case 81:
+                return d2Utils.RndPL(21, 30);
+            case 96:
+                return d2Utils.RndPL(31, 40);
+            case 111:
+                return d2Utils.RndPL(41, 50);
+            case 126:
+                return d2Utils.RndPL(51, 75);
+            case 151:
+                return d2Utils.RndPL(76, 100);
+            default:
+                Debug.LogError("Unknown to hit bonus");
+                return 0;
+            }
         }
 
         int SaveItemPower(d2Player player, d2Item item, ItemPower power)
@@ -673,7 +798,7 @@ namespace d2
                 }
             }
 
-            int r = RndPL(power.param1, power.param2);
+            int r = d2Utils.RndPL(power.param1, power.param2);
 
             switch (power.type) {
             case item_effect_type.IPL_TOHIT:
@@ -692,7 +817,7 @@ namespace d2
                 item._iDamAcFlags |= ItemSpecialEffectHf.Doppelganger;
                 break;
             case item_effect_type.IPL_TOHIT_DAMP:
-                r = RndPL(power.param1, power.param2);
+                r = d2Utils.RndPL(power.param1, power.param2);
                 item._iPLDam += r;
                 item._iPLToHit += CalculateToHitBonus(power.param1);
                 break;
@@ -1007,6 +1132,29 @@ namespace d2
             return r;
         }
 
+        int GetSpellStaffLevel(spell_id s)
+        {
+            if (d2DEF.gbIsSpawn) {
+                switch (s) {
+                case spell_id.SPL_STONE:
+                case spell_id.SPL_GUARDIAN:
+                case spell_id.SPL_GOLEM:
+                case spell_id.SPL_APOCA:
+                case spell_id.SPL_ELEMENT:
+                case spell_id.SPL_FLARE:
+                case spell_id.SPL_BONESPIRIT:
+                    return -1;
+                default:
+                    break;
+                }
+            }
+
+            if (!d2DEF.gbIsHellfire && s > spell_id.SPL_LASTDIABLO)
+                return -1;
+
+            return d2Data.spelldata[(int)s].sStaffLvl;
+        }
+
         public const int MAX_SPELLS = 52;
         void GetStaffSpell(d2Player player, d2Item item, int lvl, bool onlygood)
         {
@@ -1027,7 +1175,7 @@ namespace d2
             int s = (int)spell_id.SPL_FIREBOLT;
             spell_id bs = spell_id.SPL_NULL;
             while (rv > 0) {
-                int sLevel = GetSpellStaffLevel(static_cast<spell_id>(s));
+                int sLevel = GetSpellStaffLevel((spell_id)(s));
                 if (sLevel != -1 && l >= sLevel) {
                     rv--;
                     bs = (spell_id)(s);
@@ -1041,17 +1189,69 @@ namespace d2
                     s = (int)spell_id.SPL_FIREBOLT;
             }
 
-            int minc = spelldata[bs].sStaffMin;
-            int maxc = spelldata[bs].sStaffMax - minc + 1;
+            int minc = d2Data.spelldata[(int)bs].sStaffMin;
+            int maxc = d2Data.spelldata[(int)bs].sStaffMax - minc + 1;
             item._iSpell = bs;
             item._iCharges = minc + d2Utils.GenerateRnd(maxc);
             item._iMaxCharges = item._iCharges;
 
-            item._iMinMag = spelldata[bs].sMinInt;
-            int v = item._iCharges * spelldata[bs].sStaffCost / 5;
+            item._iMinMag = d2Data.spelldata[(int)bs].sMinInt;
+            int v = item._iCharges * d2Data.spelldata[(int)bs].sStaffCost / 5;
             item._ivalue += v;
             item._iIvalue += v;
-            GetStaffPower(player, item, lvl, bs, onlygood);
+            GetStaffPower(player, item, lvl, (int)bs, onlygood);
+        }
+
+        void GetStaffPower(d2Player player, d2Item item, int lvl, int bs, bool onlygood)
+        {
+            int preidx = -1;
+            if (d2Utils.FlipCoin(10) || onlygood) 
+            {
+                int nl = 0;
+                int[] l = new int[256];
+                for (int j = 0; d2Data.ItemPrefixes[j].power.type != item_effect_type.IPL_INVALID; j++) 
+                {
+                    if (!IsPrefixValidForItemType(j, AffixItemType.Staff) || d2Data.ItemPrefixes[j].PLMinLvl > lvl)
+                        continue;
+                    if (onlygood && !d2Data.ItemPrefixes[j].PLOk)
+                        continue;
+                    l[nl] = j;
+                    nl++;
+                    if (d2Data.ItemPrefixes[j].PLDouble) {
+                        l[nl] = j;
+                        nl++;
+                    }
+                }
+                if (nl != 0) {
+                    preidx = l[d2Utils.GenerateRnd(nl)];
+                    item._iMagical = item_quality.ITEM_QUALITY_MAGIC;
+                    SaveItemAffix(player, item, d2Data.ItemPrefixes[preidx]);
+                    item._iPrePower = d2Data.ItemPrefixes[preidx].power.type;
+                }
+            }
+
+            // string baseName = _(AllItemsList[item.IDidx].iName);
+            // string shortName = _(AllItemsList[item.IDidx].iSName);
+            // string spellName = pgettext("spell", spelldata[bs].sNameText);
+            // string normalFmt = pgettext("spell", /* TRANSLATORS: Constructs item names. Format: {Item} of {Spell}. Example: War Staff of Firewall */ "{0} of {1}");
+
+            // CopyUtf8(item._iName, fmt::format(fmt::runtime(normalFmt), baseName, spellName), sizeof(item._iName));
+            // if (!StringInPanel(item._iName)) {
+            //     CopyUtf8(item._iName, fmt::format(fmt::runtime(normalFmt), shortName, spellName), sizeof(item._iName));
+            // }
+
+            // if (preidx != -1) {
+            //     string_view magicFmt = pgettext("spell", /* TRANSLATORS: Constructs item names. Format: {Prefix} {Item} of {Spell}. Example: King's War Staff of Firewall */ "{0} {1} of {2}");
+            //     string_view prefixName = _(ItemPrefixes[preidx].PLName);
+            //     CopyUtf8(item._iIName, fmt::format(fmt::runtime(magicFmt), prefixName, baseName, spellName), sizeof(item._iIName));
+            //     if (!StringInPanel(item._iIName)) {
+            //         CopyUtf8(item._iIName, fmt::format(fmt::runtime(magicFmt), prefixName, shortName, spellName), sizeof(item._iIName));
+            //     }
+            // } else {
+            //     CopyUtf8(item._iIName, item._iName, sizeof(item._iIName));
+            // }
+
+            CalcItemValue(item);
         }
     }
 }

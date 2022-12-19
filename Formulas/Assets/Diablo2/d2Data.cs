@@ -215,9 +215,9 @@ namespace d2
     };
 
     public struct ItemPower {
-        public item_effect_type type = item_effect_type.IPL_INVALID;
-        public int param1 = 0;
-        public int param2 = 0;
+        public item_effect_type type;
+        public int param1;
+        public int param2;
 
         public ItemPower(item_effect_type type = item_effect_type.IPL_INVALID, int p1 = 0, int p2 = 0)
         {
@@ -234,7 +234,7 @@ namespace d2
         public int UIMinLvl;
         public int UINumPL;
         public int UIValue;
-        public ItemPower[] powers = new ItemPower[6];
+        public ItemPower[] powers;
 
         public UniqueItem(string UIName,
                         unique_base_item UIItemId,
@@ -248,6 +248,7 @@ namespace d2
             this.UIMinLvl = UIMinLvl;
             this.UINumPL = UINumPL;
             this.UIValue = UIValue;
+            this.powers = new ItemPower[6];
             for (int i = 0; i < powers.Length; ++i)
             {
                 if (i < ps.Length)
@@ -291,6 +292,64 @@ namespace d2
             this.minVal = minVal;
             this.maxVal = maxVal;
             this.multVal = multVal;
+        }
+    };
+
+    public struct SpellData 
+    {
+        public spell_id sName;
+        public int sManaCost;
+        public magic_type sType;
+        public string sNameText;
+        public int sBookLvl;
+        public int sStaffLvl;
+        public bool sTargeted;
+        public bool sTownSpell;
+        public int sMinInt;
+        public _sfx_id sSFX;
+        public missile_id[] sMissiles;
+        public int sManaAdj;
+        public int sMinMana;
+        public int sStaffMin;
+        public int sStaffMax;
+        public int sBookCost;
+        public int sStaffCost;
+
+        public SpellData(spell_id sName,
+                        int sManaCost,
+                        magic_type sType,
+                        string sNameText,
+                        int sBookLvl,
+                        int sStaffLvl,
+                        bool sTargeted,
+                        bool sTownSpell,
+                        int sMinInt,
+                        _sfx_id sSFX,
+                        missile_id[] sMissiles,
+                        int sManaAdj,
+                        int sMinMana,
+                        int sStaffMin,
+                        int sStaffMax,
+                        int sBookCost,
+                        int sStaffCost)
+        {
+            this.sName = sName;
+            this.sManaCost = sManaCost;
+            this.sType = sType;
+            this.sNameText = sNameText;
+            this.sBookLvl = sBookLvl;
+            this.sStaffLvl = sStaffLvl;
+            this.sTargeted = sTargeted;
+            this.sTownSpell = sTownSpell;
+            this.sMinInt = sMinInt;
+            this.sSFX = sSFX;
+            this.sMissiles = sMissiles;
+            this.sManaAdj = sManaAdj;
+            this.sMinMana = sMinMana;
+            this.sStaffMin = sStaffMin;
+            this.sStaffMax = sStaffMax;
+            this.sBookCost = sBookCost;
+            this.sStaffCost = sStaffCost;
         }
     };
 
@@ -946,6 +1005,65 @@ namespace d2
             // TRANSLATORS: Item suffix section end.
             new PLStruct("peril",         new ItemPower(item_effect_type.IPL_PERIL,               1,        1),       5,                                                AffixItemType.Weapon | AffixItemType.Staff | AffixItemType.Bow                      , goodorevil.GOE_ANY,  false,    true,     500,    500,       1),
             new PLStruct(  "",            new ItemPower(                                     ),       0, AffixItemType.None                                                                                                                   , goodorevil.GOE_ANY,  false,    false,      0,      0,       0 ),
+            // clang-format on
+        };
+
+        /** Data related to each spell ID. */
+        public static readonly SpellData[] spelldata = {
+            // clang-format off
+            // sName,    sManaCost, sType,           sNameText,                         sBookLvl, sStaffLvl, sTargeted, sTownSpell, sMinInt, sSFX,     sMissiles[3],                                sManaAdj, sMinMana, sStaffMin, sStaffMax, sBookCost, sStaffCost
+            new SpellData( spell_id.SPL_NULL,          0, magic_type.STYPE_FIRE,      "",                                  0,         0, false,     false,            0, _sfx_id.SFX_NONE, new missile_id[]{ missile_id.MIS_NULL,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_FIREBOLT,      6, magic_type.STYPE_FIRE,      "Firebolt",                  1,         1, true,      false,           15, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FIREBOLT,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        3,        40,        80,      1000,         50 ),
+            new SpellData( spell_id.SPL_HEAL,          5, magic_type.STYPE_MAGIC,     "Healing",                   1,         1, false,     true,            17, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_HEAL,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,        1,        20,        40,      1000,         50 ),
+            new SpellData( spell_id.SPL_LIGHTNING,    10, magic_type.STYPE_LIGHTNING, "Lightning",                 4,         3, true,      false,           20, _sfx_id. IS_CAST4, new missile_id[]{ missile_id.MIS_LIGHTCTRL,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        6,        20,        60,      3000,        150 ),
+            new SpellData( spell_id.SPL_FLASH,        30, magic_type.STYPE_LIGHTNING, "Flash",                     5,         4, false,     false,           33, _sfx_id. IS_CAST4, new missile_id[]{ missile_id.MIS_FLASH,         missile_id.MIS_FLASH2, missile_id.MIS_NULL },        2,       16,        20,        40,      7500,        500 ),
+            new SpellData( spell_id.SPL_IDENTIFY,     13, magic_type.STYPE_MAGIC,     "Identify",                 -1,        -1, false,     true,            23, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_IDENTIFY,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,        1,         8,        12,         0,        100 ),
+            new SpellData( spell_id.SPL_FIREWALL,     28, magic_type.STYPE_FIRE,      "Fire Wall",                 3,         2, true,      false,           27, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FIREWALLC,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       16,         8,        16,      6000,        400 ),
+            new SpellData( spell_id.SPL_TOWN,         35, magic_type.STYPE_MAGIC,     "Town Portal",               3,         3, true,      false,           20, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_TOWN,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       18,         8,        12,      3000,        200 ),
+            new SpellData( spell_id.SPL_STONE,        60, magic_type.STYPE_MAGIC,     "Stone Curse",               6,         5, true,      false,           51, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_STONE,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       40,         8,        16,     12000,        800 ),
+            new SpellData( spell_id.SPL_INFRA,        40, magic_type.STYPE_MAGIC,     "Infravision",              -1,        -1, false,     false,           36, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_INFRA,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        5,       20,         0,         0,         0,        600 ),
+            new SpellData( spell_id.SPL_RNDTELEPORT,  12, magic_type.STYPE_MAGIC,     "Phasing",                   7,         6, false,     false,           39, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_RNDTELEPORT,   missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,        4,        40,        80,      3500,        200 ),
+            new SpellData( spell_id.SPL_MANASHIELD,   33, magic_type.STYPE_MAGIC,     "Mana Shield",               6,         5, false,     false,           25, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_MANASHIELD,    missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,       33,         4,        10,     16000,       1200 ),
+            new SpellData( spell_id.SPL_FIREBALL,     16, magic_type.STYPE_FIRE,      "Fireball",                  8,         7, true,      false,           48, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FIREBALL,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
+            new SpellData( spell_id.SPL_GUARDIAN,     50, magic_type.STYPE_FIRE,      "Guardian",                  9,         8, true,      false,           61, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_GUARDIAN,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       30,        16,        32,     14000,        950 ),
+            new SpellData( spell_id.SPL_CHAIN,        30, magic_type.STYPE_LIGHTNING, "Chain Lightning",           8,         7, false,     false,           54, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_CHAIN,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       18,        20,        60,     11000,        750 ),
+            new SpellData( spell_id.SPL_WAVE,         35, magic_type.STYPE_FIRE,      "Flame Wave",                9,         8, true,      false,           54, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_WAVE,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       20,        20,        40,     10000,        650 ),
+            new SpellData( spell_id.SPL_DOOMSERP,      0, magic_type.STYPE_LIGHTNING, "Doom Serpents",            -1,        -1, false,     false,            0, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_NULL,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_BLODRIT,       0, magic_type.STYPE_MAGIC,     "Blood Ritual",             -1,        -1, false,     false,            0, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_NULL,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_NOVA,         60, magic_type.STYPE_MAGIC,     "Nova",                     14,        10, false,     false,           87, _sfx_id. IS_CAST4, new missile_id[]{ missile_id.MIS_NOVA,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       35,        16,        32,     21000,       1300 ),
+            new SpellData( spell_id.SPL_INVISIBIL,     0, magic_type.STYPE_MAGIC,     "Invisibility",             -1,        -1, false,     false,            0, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_NULL,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_FLAME,        11, magic_type.STYPE_FIRE,      "Inferno",                   3,         2, true,      false,           20, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FLAMEC,        missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        6,        20,        40,      2000,        100 ),
+            new SpellData( spell_id.SPL_GOLEM,       100, magic_type.STYPE_FIRE,      "Golem",                    11,         9, false,     false,           81, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_GOLEM,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        6,       60,        16,        32,     18000,       1100 ),
+            new SpellData( spell_id.SPL_BLODBOIL,     15, magic_type.STYPE_MAGIC,     "Rage",                     -1,        -1, false,     false,            0, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_BLODBOIL,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        1,         0,         0,         0,          0 ),
+            new SpellData( spell_id.SPL_TELEPORT,     35, magic_type.STYPE_MAGIC,     "Teleport",                 14,        12, true,      false,          105, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_TELEPORT,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       15,        16,        32,     20000,       1250 ),
+            new SpellData( spell_id.SPL_APOCA,       150, magic_type.STYPE_FIRE,      "Apocalypse",               19,        15, false,     false,          149, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_APOCA,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        6,       90,         8,        12,     30000,       2000 ),
+            new SpellData( spell_id.SPL_ETHEREALIZE, 100, magic_type.STYPE_MAGIC,     "Etherealize",              -1,        -1, false,     false,           93, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_ETHEREALIZE,   missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,      100,         2,         6,     26000,       1600 ),
+            new SpellData( spell_id.SPL_REPAIR,        0, magic_type.STYPE_MAGIC,     "Item Repair",              -1,        -1, false,     true,            -1, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_REPAIR,        missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_RECHARGE,      0, magic_type.STYPE_MAGIC,     "Staff Recharge",           -1,        -1, false,     true,            -1, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_RECHARGE,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_DISARM,        0, magic_type.STYPE_MAGIC,     "Trap Disarm",              -1,        -1, false,     false,           -1, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_DISARM,        missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,        0,        40,        80,         0,          0 ),
+            new SpellData( spell_id.SPL_ELEMENT,      35, magic_type.STYPE_FIRE,      "Elemental",                 8,         6, false,     false,           68, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_ELEMENT,       missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       20,        20,        60,     10500,        700 ),
+            new SpellData( spell_id.SPL_CBOLT,         6, magic_type.STYPE_LIGHTNING, "Charged Bolt",              1,         1, true,      false,           25, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_CBOLT,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        6,        40,        80,      1000,         50 ),
+            new SpellData( spell_id.SPL_HBOLT,         7, magic_type.STYPE_MAGIC,     "Holy Bolt",                 1,         1, true,      false,           20, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_HBOLT,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        3,        40,        80,      1000,         50 ),
+            new SpellData( spell_id.SPL_RESURRECT,    20, magic_type.STYPE_MAGIC,     "Resurrect",                -1,         5, false,     true,            30, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RESURRECT,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        0,       20,         4,        10,      4000,        250 ),
+            new SpellData( spell_id.SPL_TELEKINESIS,  15, magic_type.STYPE_MAGIC,     "Telekinesis",               2,         2, false,     false,           33, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_TELEKINESIS,   missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,        8,        20,        40,      2500,        200 ),
+            new SpellData( spell_id.SPL_HEALOTHER,     5, magic_type.STYPE_MAGIC,     "Heal Other",                1,         1, false,     true,            17, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_HEALOTHER,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,        1,        20,        40,      1000,         50 ),
+            new SpellData( spell_id.SPL_FLARE,        25, magic_type.STYPE_MAGIC,     "Blood Star",               14,        13, false,     false,           70, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FLARE,         missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       14,        20,        60,     27500,       1800 ),
+            new SpellData( spell_id.SPL_BONESPIRIT,   24, magic_type.STYPE_MAGIC,     "Bone Spirit",               9,         7, false,     false,           34, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_BONESPIRIT,    missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       12,        20,        60,     11500,        800 ),
+            new SpellData( spell_id.SPL_MANA,        255, magic_type.STYPE_MAGIC,     "Mana",                     -1,         5, false,     true,            17, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_MANA,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,        1,        12,        24,      1000,         50 ),
+            new SpellData( spell_id.SPL_MAGI,        255, magic_type.STYPE_MAGIC,     "the Magi",                 -1,        20, false,     true,            45, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_MAGI,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,        1,        15,        30,    100000,        200 ),
+            new SpellData( spell_id.SPL_JESTER,      255, magic_type.STYPE_MAGIC,     "the Jester",               -1,         4, true,      false,           30, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_JESTER,        missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,        1,        15,        30,    100000,        200 ),
+            new SpellData( spell_id.SPL_LIGHTWALL,    28, magic_type.STYPE_LIGHTNING, "Lightning Wall",            3,         2, true,      false,           27, _sfx_id. IS_CAST4, new missile_id[]{ missile_id.MIS_LIGHTNINGWALL, missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       16,         8,        16,      6000,        400 ),
+            new SpellData( spell_id.SPL_IMMOLAT,      60, magic_type.STYPE_FIRE,      "Immolation",               14,        10, false,     false,           87, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_IMMOLATION,    missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       35,        16,        32,     21000,       1300 ),
+            new SpellData( spell_id.SPL_WARP,         35, magic_type.STYPE_MAGIC,     "Warp",                      3,         3, false,     false,           25, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_WARP,          missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       18,         8,        12,      3000,        200 ),
+            new SpellData( spell_id.SPL_REFLECT,      35, magic_type.STYPE_MAGIC,     "Reflect",                   3,         3, false,     false,           25, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_REFLECT,       missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       15,         8,        12,      3000,        200 ),
+            new SpellData( spell_id.SPL_BERSERK,      35, magic_type.STYPE_MAGIC,     "Berserk",                   3,         3, true,      false,           35, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_BERSERK,       missile_id.MIS_NULL,   missile_id.MIS_NULL },        3,       15,         8,        12,      3000,        200 ),
+            new SpellData( spell_id.SPL_FIRERING,     28, magic_type.STYPE_FIRE,      "Ring of Fire",              5,         5, false,     false,           27, _sfx_id. IS_CAST2, new missile_id[]{ missile_id.MIS_FIRERING,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        2,       16,         8,        16,      6000,        400 ),
+            new SpellData( spell_id.SPL_SEARCH,       15, magic_type.STYPE_MAGIC,     "Search",                    1,         3, false,     false,           25, _sfx_id. IS_CAST6, new missile_id[]{ missile_id.MIS_SEARCH,        missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,        1,         8,        12,      3000,        200 ),
+            new SpellData( spell_id.SPL_RUNEFIRE,    255, magic_type.STYPE_MAGIC,     "Rune of Fire",             -1,        -1, true,      false,           48, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RUNEFIRE,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
+            new SpellData( spell_id.SPL_RUNELIGHT,   255, magic_type.STYPE_MAGIC,     "Rune of Light",            -1,        -1, true,      false,           48, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RUNELIGHT,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
+            new SpellData( spell_id.SPL_RUNENOVA,    255, magic_type.STYPE_MAGIC,     "Rune of Nova",             -1,        -1, true,      false,           48, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RUNENOVA,      missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
+            new SpellData( spell_id.SPL_RUNEIMMOLAT, 255, magic_type.STYPE_MAGIC,     "Rune of Immolation",       -1,        -1, true,      false,           48, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RUNEIMMOLAT,   missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
+            new SpellData( spell_id.SPL_RUNESTONE,   255, magic_type.STYPE_MAGIC,     "Rune of Stone",            -1,        -1, true,      false,           48, _sfx_id. IS_CAST8, new missile_id[]{ missile_id.MIS_RUNESTONE,     missile_id.MIS_NULL,   missile_id.MIS_NULL },        1,       10,        40,        80,      8000,        300 ),
             // clang-format on
         };
     }
