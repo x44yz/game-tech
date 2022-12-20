@@ -130,8 +130,8 @@ namespace d2
         public unique_base_item iItemId;
         public string iName;
         public string iSName;
-        public int iMinMLvl;
-        public int iDurability;
+        public int iMinMLvl; // 出现最低关卡
+        public int iDurability; // 耐久
         public int iMinDam;
         public int iMaxDam;
         public int iMinAC;

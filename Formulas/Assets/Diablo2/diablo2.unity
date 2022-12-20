@@ -2596,7 +2596,7 @@ MonoBehaviour:
   rringItemId: -1
   amuletItemId: -1
   lhandItemId: -1
-  rhandItemId: 31
+  rhandItemId: 1
   chestItemId: -1
   _pStrength: 0
   _pBaseStr: 0

@@ -53,11 +53,11 @@ namespace d2
         public string _iName;
         public string _iIName;
         public int _iMinMLvl;
-        public int _iDurability;
-        public int _iMaxDur;
+        public int _iDurability; // 耐久
+        public int _iMaxDur; // 最大耐久
         public int _iMinDam;
         public int _iMaxDam;
-        public int _iAC;
+        public int _iAC; // accuracy 精准度
         public int _iMinAC;
         public int _iMaxAC;
         public int _iMinStr;

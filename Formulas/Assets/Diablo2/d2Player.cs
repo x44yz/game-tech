@@ -595,6 +595,11 @@ namespace d2
                 PlayerHitMonster(this, mon);
         }
 
+        public int GetArmor()
+        {
+            return _pIBonusAC + _pIAC + _pDexterity / 5;
+        }
+
         // 近战伤害
         public int GetMeleeToHit()
         {

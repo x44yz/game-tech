@@ -417,7 +417,7 @@ namespace d2
     {
         IDROP_NEVER,
         IDROP_REGULAR,
-        IDROP_DOUBLE,
+        IDROP_DOUBLE, // 双倍掉落，加入掉落池 2 次
     };
 
     public enum item_class 
