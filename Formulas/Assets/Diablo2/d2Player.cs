@@ -130,7 +130,7 @@ namespace d2
         public int _pBaseDex; 
         public int _pVitality; // 活力
         public int _pBaseVit;
-         public int _pStatPts;
+        public int _pStatPts;
         public int _pDamageMod;
         public int _pBaseToBlk;
         public int _pHPBase;
