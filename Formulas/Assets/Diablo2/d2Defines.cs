@@ -1116,12 +1116,12 @@ namespace d2
 
     public enum HeroClass
     {
-        Warrior,
-        Rogue,
-        Sorcerer,
-        Monk,
-        Bard,
-        Barbarian,
+        Warrior, // 战士
+        Rogue, // 弓箭手
+        Sorcerer, // 魔法师
+        Monk, // 武僧
+        Bard, // 游吟诗人
+        Barbarian, // 野蛮人
 
         LAST = Barbarian
     };

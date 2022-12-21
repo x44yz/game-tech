@@ -31,13 +31,26 @@ accuracy 精准度，来自于 item._iAC，会用于计算护甲 GetArmor，可�
 > player._pBaseDex  
 基础敏捷度 dexterity，来自于 DexterityTbl，只与职业相关，不随等级变化，但是使用物品可以改变该值 ModifyPlrDex  
 
-> player._pDexterity  
-实际的 dexterity，来自于 _pBaseDex + item 加成 + spell 技能加成  
-
 > player._pLevel  
 玩家等级，玩家升级的时候，影响只是 hp, mana 和加点  
 
+> player 属性
 
+| 属性 | 名字 | 说明 |
+|------|-----|------| 
+|_pDexterity| 敏捷 | 会影响击中概率和闪避概率，来自于 _pBaseDex + item 加成 + spell 技能加成 |
+|_pVitality | 活力 | 
+
+> player._pClass  
+
+| 职业 | 力量 | 意志 | 敏捷 | 活力 | 抗性 | 防御 | 精准 | 说明 |
+|------|-----|-----|------| -----|------|------|-----|------|
+|Warrior战士 | 20 | 10 | 20 | 25 | 0 | 0 | 0 | 近战命中概率+20 |
+|Rogue弓箭手 | 20 | 15 | 30 | 20 | 0 | 0 | 0 | 
+|Sorcerer魔法师 | 15 | 35 | 15 | 20 | 0 | 0 | 0 |
+|Monk武僧 | 25 | 15 | 25 | 20 | 0 | 7 | 62 | 擅长空手和杖类武器，属性平均  
+|Bard游吟诗人 | 20 | 20 | 25 | 20 | 0 | 5 | 62 | 属性平衡
+|Barbarian野蛮人 | 40 | 0 | 20 | 25 | 0 | 6 | 60 | 魔法为0，完全靠力量取胜，最适合 axe，maces，mauls 武器，可以同时打击三个目标，如果装备了盾牌反而降低伤害力和攻击速度，防御也将下降，同时没有多目标攻击能力
 
 
 

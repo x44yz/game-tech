@@ -128,7 +128,7 @@ namespace d2
         public int _pBaseMag;
         public int _pDexterity; // 敏捷
         public int _pBaseDex; 
-        public int _pVitality;
+        public int _pVitality; // 活力
         public int _pBaseVit;
          public int _pStatPts;
         public int _pDamageMod;
