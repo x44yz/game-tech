@@ -112,7 +112,7 @@ namespace d2
 
         [Header("---- PLAYER ----")]
         public HeroClass _pClass;
-        public int _pLevel;
+        public int _pLevel; // 角色等级 
         public _item_indexes headItemId = _item_indexes.IDI_NONE;
         public _item_indexes lringItemId = _item_indexes.IDI_NONE;
         public _item_indexes rringItemId = _item_indexes.IDI_NONE;
@@ -127,7 +127,7 @@ namespace d2
         public int _pMagic;
         public int _pBaseMag;
         public int _pDexterity; // 敏捷
-        public int _pBaseDex;
+        public int _pBaseDex; 
         public int _pVitality;
         public int _pBaseVit;
          public int _pStatPts;
