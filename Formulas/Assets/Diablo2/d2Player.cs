@@ -132,7 +132,7 @@ namespace d2
         public int _pBaseVit;
         public int _pStatPts;
         public int _pDamageMod;
-        public int _pBaseToBlk;
+        public int _pBaseToBlk; // 闪避（对攻击和陷阱）
         public int _pHPBase;
         public int _pMaxHPBase;
         public int _pHitPoints;
@@ -201,6 +201,9 @@ namespace d2
         public int _pGold;
         public bool _pBlockFlag;
         public int _pISplLvlAdd;
+        public bool _pInvincible; // 无敌的
+        public PLR_MODE _pmode;
+        public ActorPosition position = new ActorPosition();
 
         protected override void OnStart()
         {
@@ -860,7 +863,7 @@ namespace d2
             return true;
         }
 
-        void ApplyPlrDamage(d2Player player, int dam, int minHP = 0, int frac = 0, int earflag = 0)
+        public void ApplyPlrDamage(d2Player player, int dam, int minHP = 0, int frac = 0, int earflag = 0)
         {
             // int totalDamage = (dam << 6) + frac;
             // if (totalDamage > 0 && player.pManaShield) 
@@ -1489,6 +1492,82 @@ namespace d2
             }
 
             CalcPlrInv(player, true);
+        }
+
+        /**
+        * @brief Return block chance
+        * @param useLevel - indicate if player's level should be added to block chance (the only case where it isn't is blocking a trap)
+        */
+        public int GetBlockChance(bool useLevel = true)
+        {
+            int blkper = _pDexterity + _pBaseToBlk;
+            if (useLevel)
+                blkper += _pLevel * 2;
+            return blkper;
+        }
+
+        public void StartPlrBlock(d2Player player, Direction dir)
+        {
+            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
+            //     SyncPlrKill(player, -1);
+            //     return;
+            // }
+
+            // PlaySfxLoc(IS_ISWORD, player.position.tile);
+
+            // int8_t skippedAnimationFrames = 0;
+            // if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastBlock)) {
+            //     skippedAnimationFrames = (player._pBFrames - 2); // ISPL_FASTBLOCK means we cancel the animation if frame 2 was shown
+            // }
+
+            // NewPlrAnim(player, player_graphic::Block, dir, AnimationDistributionFlags::SkipsDelayOfLastFrame, skippedAnimationFrames);
+
+            // player._pmode = PM_BLOCK;
+            // FixPlayerLocation(player, dir);
+            // SetPlayerOld(player);
+        }
+
+        public void StartPlrHit(d2Player player, int dam, bool forcehit)
+        {
+            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
+            //     SyncPlrKill(player, -1);
+            //     return;
+            // }
+
+            // // player.Say(HeroSpeech::ArghClang);
+
+            // RedrawComponent(PanelDrawComponent::Health);
+            // if (player._pClass == HeroClass.Barbarian) {
+            //     if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
+            //         return;
+            //     }
+            // } else if (dam >> 6 < player._pLevel && !forcehit) {
+            //     return;
+            // }
+
+            // Direction pd = player._pdir;
+
+            // int8_t skippedAnimationFrames = 0;
+            // constexpr ItemSpecialEffect ZenFlags = ItemSpecialEffect::FastHitRecovery | ItemSpecialEffect::FasterHitRecovery | ItemSpecialEffect::FastestHitRecovery;
+            // if (HasAllOf(player._pIFlags, ZenFlags)) { // if multiple hitrecovery modes are present the skipping of frames can go so far, that they skip frames that would skip. so the additional skipping thats skipped. that means we can't add the different modes together.
+            //     skippedAnimationFrames = 4;
+            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastestHitRecovery)) {
+            //     skippedAnimationFrames = 3;
+            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FasterHitRecovery)) {
+            //     skippedAnimationFrames = 2;
+            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastHitRecovery)) {
+            //     skippedAnimationFrames = 1;
+            // } else {
+            //     skippedAnimationFrames = 0;
+            // }
+
+            // NewPlrAnim(player, player_graphic::Hit, pd, AnimationDistributionFlags::None, skippedAnimationFrames);
+
+            // player._pmode = PLR_MODE.PM_GOTHIT;
+            // FixPlayerLocation(player, pd);
+            // FixPlrWalkTags(player);
+            // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
+            // SetPlayerOld(player);
         }
     }
 }
