@@ -72,6 +72,16 @@ namespace d2
             InitMonster(this, ((int)type));
         }
 
+        protected override void OnUpdate(float dt)
+        {
+            // test
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                var plr = GameObject.FindObjectOfType<d2Player>();
+                MonsterAttackPlayer(this, plr, toHit, minDamage, maxDamage);
+            }
+        }
+
         protected override void OnHit(Unit attacker)
         {
             base.OnHit(attacker);
@@ -130,6 +140,8 @@ namespace d2
 
         void InitMonster(d2Monster monster, int typeIndex)
         {
+            monster.data = d2Data.MonstersData[typeIndex];
+
             // monster.direction = rd;
             // monster.position.tile = position;
             // monster.position.future = position;
@@ -330,7 +342,7 @@ namespace d2
             }
             int dam = (minDam << 6) + d2Utils.GenerateRnd(((maxDam - minDam) << 6) + 1);
             // 最小 64 点伤害？
-            TODO
+            // _pIGetHit 减伤
             dam = Math.Max(dam + (player._pIGetHit << 6), 64);
             // if (&player == MyPlayer) 
             {

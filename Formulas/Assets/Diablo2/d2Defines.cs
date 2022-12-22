@@ -1328,6 +1328,20 @@ namespace d2
         DIFF_LAST = DIFF_HELL,
     };
 
+    public enum dungeon_type
+    {
+        DTYPE_TOWN,
+        DTYPE_CATHEDRAL,
+        DTYPE_CATACOMBS,
+        DTYPE_CAVES,
+        DTYPE_HELL,
+        DTYPE_NEST,
+        DTYPE_CRYPT,
+
+        DTYPE_LAST = DTYPE_CRYPT,
+        DTYPE_NONE = -1,
+    };
+
     public class d2DEF
     {
         public const int BaseHitChance = 50;
@@ -1339,6 +1353,7 @@ namespace d2
         public static _difficulty gbDifficulty = _difficulty.DIFF_NORMAL;
         // 当前关卡等级
         public static int currlevel;
+        public static dungeon_type leveltype;
     }
 
     public enum _monster_id

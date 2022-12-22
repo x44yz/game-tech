@@ -161,7 +161,7 @@ namespace d2
         public int pDungMsgs;
         public int pLvlLoad;
 	    public bool pBattleNet;
-	    public bool pManaShield;
+	    public bool pManaShield; // 魔法盾
 	    public int pDungMsgs2;
         public int pDiabloKillLevel;
         public int  wReflections;
@@ -863,50 +863,73 @@ namespace d2
             return true;
         }
 
+        public int GetManaShieldDamageReduction()
+        {
+            int Max = 7;
+            // 3 - 21
+            return 24 - Math.Min(_pSplLvl[(int)spell_id.SPL_MANASHIELD], Max) * 3;
+        }
+
         public void ApplyPlrDamage(d2Player player, int dam, int minHP = 0, int frac = 0, int earflag = 0)
         {
-            // int totalDamage = (dam << 6) + frac;
-            // if (totalDamage > 0 && player.pManaShield) 
-            // {
-            //     int8_t manaShieldLevel = player._pSplLvl[SPL_MANASHIELD];
-            //     if (manaShieldLevel > 0) {
-            //         totalDamage += totalDamage / -player.GetManaShieldDamageReduction();
-            //     }
-            //     if (&player == MyPlayer)
-            //         RedrawComponent(PanelDrawComponent::Mana);
-            //     if (player._pMana >= totalDamage) {
-            //         player._pMana -= totalDamage;
-            //         player._pManaBase -= totalDamage;
-            //         totalDamage = 0;
-            //     } else {
-            //         totalDamage -= player._pMana;
-            //         if (manaShieldLevel > 0) {
-            //             totalDamage += totalDamage / (player.GetManaShieldDamageReduction() - 1);
-            //         }
-            //         player._pMana = 0;
-            //         player._pManaBase = player._pMaxManaBase - player._pMaxMana;
-            //         if (&player == MyPlayer)
-            //             NetSendCmd(true, CMD_REMSHIELD);
-            //     }
-            // }
+            int totalDamage = (dam << 6) + frac;
+            if (totalDamage > 0 && player.pManaShield) 
+            {
+                int manaShieldLevel = player._pSplLvl[(int)spell_id.SPL_MANASHIELD];
+                if (manaShieldLevel > 0) 
+                {
+                    totalDamage += totalDamage / -player.GetManaShieldDamageReduction();
+                }
+                // if (&player == MyPlayer)
+                    // RedrawComponent(PanelDrawComponent::Mana);
+                if (player._pMana >= totalDamage) 
+                {
+                    player._pMana -= totalDamage;
+                    player._pManaBase -= totalDamage;
+                    totalDamage = 0;
+                } 
+                else 
+                {
+                    totalDamage -= player._pMana;
+                    if (manaShieldLevel > 0) {
+                        totalDamage += totalDamage / (player.GetManaShieldDamageReduction() - 1);
+                    }
+                    player._pMana = 0;
+                    player._pManaBase = player._pMaxManaBase - player._pMaxMana;
+                    // if (&player == MyPlayer)
+                    //     NetSendCmd(true, CMD_REMSHIELD);
+                }
+            }
 
-            // if (totalDamage == 0)
-            //     return;
+            if (totalDamage == 0)
+                return;
 
             // RedrawComponent(PanelDrawComponent::Health);
-            // player._pHitPoints -= totalDamage;
-            // player._pHPBase -= totalDamage;
-            // if (player._pHitPoints > player._pMaxHP) {
-            //     player._pHitPoints = player._pMaxHP;
-            //     player._pHPBase = player._pMaxHPBase;
-            // }
-            // int minHitPoints = minHP << 6;
-            // if (player._pHitPoints < minHitPoints) {
-            //     SetPlayerHitPoints(player, minHitPoints);
-            // }
-            // if (player._pHitPoints >> 6 <= 0) {
-            //     SyncPlrKill(player, earflag);
-            // }
+            player._pHitPoints -= totalDamage;
+            player._pHPBase -= totalDamage;
+            if (player._pHitPoints > player._pMaxHP) {
+                player._pHitPoints = player._pMaxHP;
+                player._pHPBase = player._pMaxHPBase;
+            }
+            int minHitPoints = minHP << 6;
+            if (player._pHitPoints < minHitPoints) {
+                SetPlayerHitPoints(player, minHitPoints);
+            }
+            if (player._pHitPoints >> 6 <= 0) {
+                SyncPlrKill(player, earflag);
+            }
+        }
+
+        void SyncPlrKill(d2Player player, int earflag)
+        {
+            if (player._pHitPoints <= 0 && d2DEF.leveltype == dungeon_type.DTYPE_TOWN) 
+            {
+                SetPlayerHitPoints(player, 64);
+                return;
+            }
+
+            SetPlayerHitPoints(player, 0);
+            StartPlayerKill(player, earflag);
         }
 
         bool IsValidSpell(spell_id spl)
@@ -1568,6 +1591,103 @@ namespace d2
             // FixPlrWalkTags(player);
             // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
             // SetPlayerOld(player);
+        }
+
+        void StartPlayerKill(d2Player player, int earflag)
+        {
+            if (player._pHitPoints <= 0 && player._pmode == PLR_MODE.PM_DEATH) {
+                return;
+            }
+
+            // if (&player == MyPlayer) {
+            //     NetSendCmdParam1(true, CMD_PLRDEAD, earflag);
+            // }
+
+            // bool diablolevel = gbIsMultiplayer && (player.isOnLevel(16) || player.isOnArenaLevel());
+
+            // player.Say(HeroSpeech::AuughUh);
+
+            // if (player._pgfxnum != 0) {
+            //     if (diablolevel || earflag != 0)
+            //         player._pgfxnum &= ~0xFU;
+            //     else
+            //         player._pgfxnum = 0;
+            //     ResetPlayerGFX(player);
+            //     SetPlrAnims(player);
+            // }
+
+            // NewPlrAnim(player, player_graphic::Death, player._pdir);
+
+            // player._pBlockFlag = false;
+            // player._pmode = PM_DEATH;
+            // player._pInvincible = true;
+            // SetPlayerHitPoints(player, 0);
+
+            // if (&player != MyPlayer && earflag == 0 && !diablolevel) {
+            //     for (auto &item : player.InvBody) {
+            //         item.clear();
+            //     }
+            //     CalcPlrInv(player, false);
+            // }
+
+            // if (player.isOnActiveLevel()) {
+            //     FixPlayerLocation(player, player._pdir);
+            //     FixPlrWalkTags(player);
+            //     dFlags[player.position.tile.x][player.position.tile.y] |= DungeonFlag::DeadPlayer;
+            //     SetPlayerOld(player);
+
+            //     if (&player == MyPlayer) {
+            //         RedrawComponent(PanelDrawComponent::Health);
+
+            //         if (!player.HoldItem.isEmpty()) {
+            //             DeadItem(player, std::move(player.HoldItem), { 0, 0 });
+            //             NewCursor(CURSOR_HAND);
+            //         }
+
+            //         if (!diablolevel) {
+            //             DropHalfPlayersGold(player);
+            //             if (earflag != -1) {
+            //                 if (earflag != 0) {
+            //                     Item ear;
+            //                     InitializeItem(ear, IDI_EAR);
+            //                     CopyUtf8(ear._iName, fmt::format(fmt::runtime(_("Ear of {:s}")), player._pName), sizeof(ear._iName));
+            //                     CopyUtf8(ear._iIName, player._pName, sizeof(ear._iIName));
+            //                     switch (player._pClass) {
+            //                     case HeroClass::Sorcerer:
+            //                         ear._iCurs = ICURS_EAR_SORCERER;
+            //                         break;
+            //                     case HeroClass::Warrior:
+            //                         ear._iCurs = ICURS_EAR_WARRIOR;
+            //                         break;
+            //                     case HeroClass::Rogue:
+            //                     case HeroClass::Monk:
+            //                     case HeroClass::Bard:
+            //                     case HeroClass::Barbarian:
+            //                         ear._iCurs = ICURS_EAR_ROGUE;
+            //                         break;
+            //                     }
+
+            //                     ear._iCreateInfo = player._pName[0] << 8 | player._pName[1];
+            //                     ear._iSeed = player._pName[2] << 24 | player._pName[3] << 16 | player._pName[4] << 8 | player._pName[5];
+            //                     ear._ivalue = player._pLevel;
+
+            //                     if (FindGetItem(ear._iSeed, IDI_EAR, ear._iCreateInfo) == -1) {
+            //                         DeadItem(player, std::move(ear), { 0, 0 });
+            //                     }
+            //                 } else {
+            //                     Direction pdd = player._pdir;
+            //                     for (auto &item : player.InvBody) {
+            //                         pdd = Left(pdd);
+            //                         DeadItem(player, item.pop(), Displacement(pdd));
+            //                     }
+
+            //                     CalcPlrInv(player, false);
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
+            // SetPlayerHitPoints(player, 0);
         }
     }
 }
