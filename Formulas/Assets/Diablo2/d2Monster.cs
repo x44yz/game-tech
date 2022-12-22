@@ -283,7 +283,7 @@ namespace d2
                 ac += 40;
             if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.ACAgainstUndead) && monster.data.monsterClass == MonsterClass.Undead)
                 ac += 20;
-            // hit 越小 player 被击中的概率越高
+            // hit 越大 player 被击中的概率越高
             hit += 2 * (monster.level(d2DEF.gbDifficulty) - player._pLevel)
                 + 30
                 - ac;
@@ -312,6 +312,7 @@ namespace d2
                 }
                 return;
             }
+            // skip: 特殊处理
             if (monster.type == _monster_id.MT_YZOMBIE /*&& &player == MyPlayer*/) 
             {
                 if (player._pMaxHP > 64) {
@@ -328,6 +329,8 @@ namespace d2
                 }
             }
             int dam = (minDam << 6) + d2Utils.GenerateRnd(((maxDam - minDam) << 6) + 1);
+            // 最小 64 点伤害？
+            TODO
             dam = Math.Max(dam + (player._pIGetHit << 6), 64);
             // if (&player == MyPlayer) 
             {
