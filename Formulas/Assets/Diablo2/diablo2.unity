@@ -964,7 +964,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &495155704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5990,7 +5990,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99348a243dd0fb1439ecca3b69c9c0c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 0
+  testMode: 1
   dmgTextTmp: {fileID: 1556391803}
   leftPlayer: {fileID: 1892421001020669}
   rightPlayer: {fileID: 495155704}

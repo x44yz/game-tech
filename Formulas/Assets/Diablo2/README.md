@@ -6,7 +6,7 @@ TODO:
 [+]去除 class 区别  
 [+]去除 difficult 区别  
 [x]monster hit player
-[+]player hit player
+[x]player hit player
 [+]DamageArmor
 [+]DamageWeapon
 
@@ -20,6 +20,9 @@ http://www.baronsbazaar.ca/forum/ppr/damage_calc.html
 > 升级所需的经验值  
 ![excel](./../../Raw/diablo_%E7%BB%8F%E9%AA%8C%E5%80%BC.xlsx)  
 从 excel 中可以看出，是个类似前平后高的曲线，而 2 级之间的差值近似是条直线  
+
+> 玩家 A 攻击玩家 B 流程  
+A 广播 destAction=ACTION_ATTACKPLR，每个客户端更新攻击（为了表现一致，A 的攻击动画和 B 的受伤动画），实际触发攻击的关键帧在 A 计算，然后发送 B 受伤的消息到 B，，B 收到消息扣除数值，然后同步数据到其他玩家。
 
 > player 属性
 
