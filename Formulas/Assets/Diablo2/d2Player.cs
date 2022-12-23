@@ -647,6 +647,11 @@ namespace d2
             return tmac;
         }
 
+        public void AttackMonster(d2Monster monster)
+        {
+            PlayerHitMonster(this, monster);
+        }
+
         // adjacentDamage: 临近伤害，可以理解为溅射伤害
         public bool PlayerHitMonster(d2Player player, d2Monster monster, bool adjacentDamage = false)
         {
@@ -903,6 +908,8 @@ namespace d2
 
             if (totalDamage == 0)
                 return;
+
+            d2Test.Inst.ShowDamageText(this, totalDamage);
 
             // RedrawComponent(PanelDrawComponent::Health);
             player._pHitPoints -= totalDamage;

@@ -74,12 +74,8 @@ namespace d2
 
         protected override void OnUpdate(float dt)
         {
+            base.OnUpdate(dt);
             // test
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                var plr = GameObject.FindObjectOfType<d2Player>();
-                MonsterAttackPlayer(this, plr, toHit, minDamage, maxDamage);
-            }
         }
 
         protected override void OnHit(Unit attacker)
@@ -171,7 +167,7 @@ namespace d2
             monster.goalVar3 = 0;
             // monster.pathCount = 0;
             // monster.isInvalid = false;
-            // monster.uniqueType = UniqueMonsterType::None;
+            monster.uniqueType = UniqueMonsterType.None;
             // monster.activeForTicks = 0;
             // monster.lightId = NO_LIGHT; // BUGFIX monsters initial light id should be -1 (fixed)
             monster.rndItemSeed = d2Utils.AdvanceRndSeed();
@@ -276,6 +272,11 @@ namespace d2
             }
         }
 
+        public void AttackPlayer(d2Player player)
+        {
+            MonsterAttackPlayer(this, player, toHit, minDamage, maxDamage);
+        }
+
         void MonsterAttackPlayer(d2Monster monster, d2Player player, int hit, int minDam, int maxDam)
         {
             if (player._pHitPoints >> 6 <= 0 || player._pInvincible || d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.Etherealize))
@@ -302,7 +303,10 @@ namespace d2
             int minhit = GetMinHit();
             hit = Math.Max(hit, minhit);
             if (hper >= hit)
+            {
+                d2Test.Inst.ShowDamageText(player, 0);
                 return;
+            }
 
             // blkper 越小越容易闪避
             int blkper = 100;

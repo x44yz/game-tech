@@ -11,6 +11,7 @@ namespace d2
         public static d2Test Inst;
 
         public Text dmgTextTmp;
+        
         public Queue<Text> dmgTextPool = new Queue<Text>();
 
         private void Awake() 
@@ -18,6 +19,23 @@ namespace d2
             Inst = this;
 
             dmgTextTmp.gameObject.SetActive(false);
+        }
+
+        private void Update() 
+        {
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                var plr = GameObject.FindObjectOfType<d2Player>();
+                var mt = GameObject.FindObjectOfType<d2Monster>();
+                plr.AttackMonster(mt);
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                var plr = GameObject.FindObjectOfType<d2Player>();
+                var mt = GameObject.FindObjectOfType<d2Monster>();
+                mt.AttackPlayer(plr);
+            }
         }
 
         public void ShowDamageText(Unit target, int dmg)
