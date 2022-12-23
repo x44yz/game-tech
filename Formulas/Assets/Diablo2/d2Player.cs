@@ -1696,6 +1696,82 @@ namespace d2
             // }
             // SetPlayerHitPoints(player, 0);
         }
+
+        public bool AttackPlayer(d2Player target)
+        {
+            return PlrHitPlr(this, target);
+        }
+
+        public bool PlrHitPlr(d2Player attacker, d2Player target)
+        {
+            if (target._pInvincible) 
+            {
+                Debug.LogWarning("failed PlrHitPlr because target is invincible");
+                return false;
+            }
+
+            if (d2Utils.HasAnyOf(target._pSpellFlags, SpellFlag.Etherealize)) 
+            {
+                Debug.LogWarning("failed PlrHitPlr becase target is ethereal");
+                return false;
+            }
+
+            int hit = d2Utils.GenerateRnd(100);
+
+            int hper = attacker.GetMeleeToHit() - target.GetArmor();
+            hper = Mathf.Clamp(hper, 5, 95);
+
+            int blk = 100;
+            if ((target._pmode == PLR_MODE.PM_STAND || target._pmode == PLR_MODE.PM_ATTACK) && target._pBlockFlag) 
+            {
+                blk = d2Utils.GenerateRnd(100);
+            }
+
+            int blkper = target.GetBlockChance() - (attacker._pLevel * 2);
+            blkper = Mathf.Clamp(blkper, 0, 100);
+
+            if (hit >= hper) {
+                return false;
+            }
+
+            if (blk < blkper) {
+                Direction dir = d2Utils.GetDirection(target.position.tile, attacker.position.tile);
+                StartPlrBlock(target, dir);
+                return true;
+            }
+
+            int mind = attacker._pIMinDam;
+            int maxd = attacker._pIMaxDam;
+            int dam = d2Utils.GenerateRnd(maxd - mind + 1) + mind;
+            dam += (dam * attacker._pIBonusDam) / 100;
+            dam += attacker._pIBonusDamMod + attacker._pDamageMod;
+
+            if (attacker._pClass == HeroClass.Warrior || attacker._pClass == HeroClass.Barbarian) {
+                if (d2Utils.GenerateRnd(100) < attacker._pLevel) {
+                    dam *= 2;
+                }
+            }
+            int skdam = dam << 6;
+            if (d2Utils.HasAnyOf(attacker._pIFlags, ItemSpecialEffect.RandomStealLife)) {
+                int tac = d2Utils.GenerateRnd(skdam / 8);
+                attacker._pHitPoints += tac;
+                if (attacker._pHitPoints > attacker._pMaxHP) {
+                    attacker._pHitPoints = attacker._pMaxHP;
+                }
+                attacker._pHPBase += tac;
+                if (attacker._pHPBase > attacker._pMaxHPBase) {
+                    attacker._pHPBase = attacker._pMaxHPBase;
+                }
+                // RedrawComponent(PanelDrawComponent::Health);
+            }
+            // if (&attacker == MyPlayer) 
+            // {
+            //     NetSendCmdDamage(true, target.getId(), skdam);
+            // }
+            StartPlrHit(target, skdam, false);
+
+            return true;
+        }
     }
 }
 

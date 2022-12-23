@@ -5,7 +5,7 @@ TODO:
 [x]装备  
 [+]去除 class 区别  
 [+]去除 difficult 区别  
-[+]monster hit player
+[x]monster hit player
 [+]player hit player
 [+]DamageArmor
 [+]DamageWeapon

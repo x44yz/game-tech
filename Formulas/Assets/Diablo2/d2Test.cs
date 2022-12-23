@@ -8,9 +8,19 @@ namespace d2
 {
     public class d2Test : MonoBehaviour
     {
+        public enum TestMode
+        {
+            PLAYER_2_MONSTER,
+            PLAYER_2_PLAYER,
+        }
+
         public static d2Test Inst;
 
+        public TestMode testMode;
         public Text dmgTextTmp;
+        public d2Player leftPlayer;
+        public d2Player rightPlayer;
+        public d2Monster rightMonster;
         
         public Queue<Text> dmgTextPool = new Queue<Text>();
 
@@ -19,22 +29,42 @@ namespace d2
             Inst = this;
 
             dmgTextTmp.gameObject.SetActive(false);
+
+            leftPlayer.gameObject.SetActive(false);
+            rightPlayer.gameObject.SetActive(false);
+            rightMonster.gameObject.SetActive(false);
+            if (testMode == TestMode.PLAYER_2_MONSTER)
+            {
+                leftPlayer.gameObject.SetActive(true);
+                rightMonster.gameObject.SetActive(true);
+            }
+            else if (testMode == TestMode.PLAYER_2_PLAYER)
+            {
+                leftPlayer.gameObject.SetActive(true);
+                rightPlayer.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("not implement test mode > " + testMode);
+            }
         }
 
         private void Update() 
         {
             if (Input.GetKeyDown(KeyCode.J))
             {
-                var plr = GameObject.FindObjectOfType<d2Player>();
-                var mt = GameObject.FindObjectOfType<d2Monster>();
-                plr.AttackMonster(mt);
+                if (testMode == TestMode.PLAYER_2_MONSTER)
+                    leftPlayer.AttackMonster(rightMonster);
+                else if (testMode == TestMode.PLAYER_2_PLAYER)
+                    leftPlayer.AttackPlayer(rightPlayer);
             }
 
             if (Input.GetKeyDown(KeyCode.K))
             {
-                var plr = GameObject.FindObjectOfType<d2Player>();
-                var mt = GameObject.FindObjectOfType<d2Monster>();
-                mt.AttackPlayer(plr);
+                if (testMode == TestMode.PLAYER_2_MONSTER)
+                    rightMonster.AttackPlayer(leftPlayer);
+                else if (testMode == TestMode.PLAYER_2_PLAYER)
+                    rightPlayer.AttackPlayer(leftPlayer);
             }
         }
 
