@@ -160,19 +160,19 @@ namespace d2
         public int pTownWarps;
         public int pDungMsgs;
         public int pLvlLoad;
-	    public bool pBattleNet;
-	    public bool pManaShield; // 魔法盾
-	    public int pDungMsgs2;
+        public bool pBattleNet;
+        public bool pManaShield; // 魔法盾
+        public int pDungMsgs2;
         public int pDiabloKillLevel;
         public int  wReflections;
         public _difficulty pDifficulty;
         public int _pMaxLvl;
-	    public int _pExperience;
-	    public int _pNextExper;
+        public int _pExperience;
+        public int _pNextExper;
         public int _pArmorClass;
-	    public int _pMagResist;
-	    public int _pFireResist;
-	    public int _pLghtResist;
+        public int _pMagResist;
+        public int _pFireResist;
+        public int _pLghtResist;
         public int _pLightRad;
         public bool _pInfraFlag;
         /** @brief Bitmask using item_special_effect */
@@ -196,8 +196,8 @@ namespace d2
         public const int NUMLEVELS = 25;
         public bool[] _pLvlVisited = new bool[NUMLEVELS];
         public bool[] _pSLvlVisited = new bool[NUMLEVELS]; // only 10 used
-        	/** @brief True when the player is transitioning between levels */
-	    public bool _pLvlChanging;
+            /** @brief True when the player is transitioning between levels */
+        public bool _pLvlChanging;
         public int _pGold;
         public bool _pBlockFlag;
         public int _pISplLvlAdd;
@@ -241,9 +241,54 @@ namespace d2
                 ChangePlayerItems(this, inv_body_loc.INVLOC_CHEST, chestItemId);
         }
 
+        public int animationFrame = 0;
         protected override void OnUpdate(float dt)
         {
             base.OnUpdate(dt);
+
+            // update animation
+            if (animationFrame > 0)
+            {
+                animationFrame -= 1;
+                // Debug.Log("xx-- update ani frame > " + animationFrame);
+            }
+
+            // update state
+            bool tplayer = false;
+            do {
+                switch (_pmode) {
+                case PLR_MODE.PM_STAND:
+                case PLR_MODE.PM_NEWLVL:
+                case PLR_MODE.PM_QUIT:
+                    tplayer = false;
+                    break;
+                case PLR_MODE.PM_WALK_NORTHWARDS:
+                case PLR_MODE.PM_WALK_SOUTHWARDS:
+                case PLR_MODE.PM_WALK_SIDEWAYS:
+                    // tplayer = DoWalk(player, player._pmode);
+                    tplayer = false;
+                    break;
+                case PLR_MODE.PM_ATTACK:
+                    tplayer = DoAttack(this);
+                    break;
+                // case PLR_MODE.PM_RATTACK:
+                //     tplayer = DoRangeAttack(player);
+                //     break;
+                // case PLR_MODE.PM_BLOCK:
+                //     tplayer = DoBlock(player);
+                //     break;
+                // case PLR_MODE.PM_SPELL:
+                //     tplayer = DoSpell(player);
+                //     break;
+                case PLR_MODE.PM_GOTHIT:
+                    tplayer = DoGotHit(this);
+                    break;
+                // case PLR_MODE.PM_DEATH:
+                //     tplayer = DoDeath(player);
+                //     break;
+                }
+                // CheckNewPath(player, tplayer);
+            } while (tplayer);
         }
 
         private void InitPlayer(d2Player player, HeroClass c)
@@ -1561,21 +1606,22 @@ namespace d2
         {
             d2Test.Inst.ShowDamageText(player, dam);
 
-            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
-            //     SyncPlrKill(player, -1);
-            //     return;
-            // }
+            if (player._pInvincible && player._pHitPoints == 0 /*&& &player == MyPlayer8*/) 
+            {
+                SyncPlrKill(player, -1);
+                return;
+            }
 
             // // player.Say(HeroSpeech::ArghClang);
 
             // RedrawComponent(PanelDrawComponent::Health);
-            // if (player._pClass == HeroClass.Barbarian) {
-            //     if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
-            //         return;
-            //     }
-            // } else if (dam >> 6 < player._pLevel && !forcehit) {
-            //     return;
-            // }
+            if (player._pClass == HeroClass.Barbarian) {
+                if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
+                    return;
+                }
+            } else if (dam >> 6 < player._pLevel && !forcehit) {
+                return;
+            }
 
             // Direction pd = player._pdir;
 
@@ -1593,9 +1639,9 @@ namespace d2
             //     skippedAnimationFrames = 0;
             // }
 
-            // NewPlrAnim(player, player_graphic::Hit, pd, AnimationDistributionFlags::None, skippedAnimationFrames);
+            player.NewPlrAnim(player, player_graphic.Hit/*, pd, AnimationDistributionFlags::None, skippedAnimationFrames*/);
 
-            // player._pmode = PLR_MODE.PM_GOTHIT;
+            player._pmode = PLR_MODE.PM_GOTHIT;
             // FixPlayerLocation(player, pd);
             // FixPlrWalkTags(player);
             // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
@@ -1783,6 +1829,190 @@ namespace d2
             StartPlrHit(target, skdam, false);
 
             return true;
+        }
+
+        bool DoAttack(d2Player player)
+        {
+            // if (player.AnimInfo.currentFrame == player._pAFNum - 2) 
+            // {
+            //     PlaySfxLoc(PS_SWING, player.position.tile);
+            // }
+
+            // bool didhit = false;
+
+            // if (player.AnimInfo.currentFrame == player._pAFNum - 1) 
+            // {
+            //     Point position = player.position.tile + player._pdir;
+            //     Monster *monster = FindMonsterAtPosition(position);
+
+            //     if (monster != nullptr) {
+            //         if (CanTalkToMonst(*monster)) {
+            //             player.position.temp.x = 0; /** @todo Looks to be irrelevant, probably just remove it */
+            //             return false;
+            //         }
+            //     }
+
+            //     if (!gbIsHellfire || !HasAllOf(player._pIFlags, ItemSpecialEffect::FireDamage | ItemSpecialEffect::LightningDamage)) {
+            //         const size_t playerId = player.getId();
+            //         if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FireDamage)) {
+            //             AddMissile(position, { 1, 0 }, Direction::South, MIS_WEAPEXP, TARGET_MONSTERS, playerId, 0, 0);
+            //         }
+            //         if (HasAnyOf(player._pIFlags, ItemSpecialEffect::LightningDamage)) {
+            //             AddMissile(position, { 2, 0 }, Direction::South, MIS_WEAPEXP, TARGET_MONSTERS, playerId, 0, 0);
+            //         }
+            //     }
+
+            //     if (monster != nullptr) {
+            //         didhit = PlrHitMonst(player, *monster);
+            //     } else if (PlayerAtPosition(position) != nullptr && !player.friendlyMode) {
+            //         didhit = PlrHitPlr(player, *PlayerAtPosition(position));
+            //     } else {
+            //         Object *object = FindObjectAtPosition(position, false);
+            //         if (object != nullptr) {
+            //             didhit = PlrHitObj(player, *object);
+            //         }
+            //     }
+            //     if ((player._pClass == HeroClass::Monk
+            //             && (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Staff || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Staff))
+            //         || (player._pClass == HeroClass::Bard
+            //             && player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword)
+            //         || (player._pClass == HeroClass::Barbarian
+            //             && (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Axe || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Axe
+            //                 || (((player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Mace && player.InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
+            //                         || (player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Mace && player.InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND)
+            //                         || (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
+            //                         || (player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND))
+            //                     && !(player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Shield || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Shield))))) {
+            //         // playing as a class/weapon with cleave
+            //         position = player.position.tile + Right(player._pdir);
+            //         monster = FindMonsterAtPosition(position);
+            //         if (monster != nullptr) {
+            //             if (!CanTalkToMonst(*monster) && monster->position.old == position) {
+            //                 if (PlrHitMonst(player, *monster, true))
+            //                     didhit = true;
+            //             }
+            //         }
+            //         position = player.position.tile + Left(player._pdir);
+            //         monster = FindMonsterAtPosition(position);
+            //         if (monster != nullptr) {
+            //             if (!CanTalkToMonst(*monster) && monster->position.old == position) {
+            //                 if (PlrHitMonst(player, *monster, true))
+            //                     didhit = true;
+            //             }
+            //         }
+            //     }
+
+            //     if (didhit && DamageWeapon(player, 30)) {
+            //         StartStand(player, player._pdir);
+            //         ClearStateVariables(player);
+            //         return true;
+            //     }
+            // }
+
+            // if (player.AnimInfo.isLastFrame()) {
+            //     StartStand(player, player._pdir);
+            //     ClearStateVariables(player);
+            //     return true;
+            // }
+
+            return false;
+        }
+
+        void NewPlrAnim(d2Player player, player_graphic graphic)
+        {
+            animationFrame = 30;
+            if (graphic == player_graphic.Hit)
+                animationFrame = 30;
+        }
+
+        bool AnimInfoIsLastFrame()
+        {
+            return animationFrame <= 0;
+        }
+
+        public Direction _pdir;
+        bool DoGotHit(d2Player player)
+        {
+            // Debug.Log("xx-- do got hit > " + animationFrame);
+            if (player.AnimInfoIsLastFrame()) 
+            {
+                Debug.LogError("xx-- do got hit > " + animationFrame);
+                StartStand(player, player._pdir);
+                // ClearStateVariables(player);
+                // if (!d2Utils.FlipCoin(4)) 
+                {
+                    player.DamageArmor(player);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        void StartStand(d2Player player, Direction dir)
+        {
+            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
+            //     SyncPlrKill(player, -1);
+            //     return;
+            // }
+
+            // NewPlrAnim(player, player_graphic::Stand, dir);
+            player._pmode = PLR_MODE.PM_STAND;
+            // FixPlayerLocation(player, dir);
+            // FixPlrWalkTags(player);
+            // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
+            // SetPlayerOld(player);
+        }
+
+        void DamageArmor(d2Player player)
+        {
+            // if (&player != MyPlayer) {
+            //     return;
+            // }
+
+            if (player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+                Debug.Log("DamageArmor > chest & head is empty");
+                return;
+            }
+
+            bool targetHead = d2Utils.FlipCoin(3);
+            if (!player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+                targetHead = false;
+            }
+            if (player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && !player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+                targetHead = true;
+            }
+
+            d2Item pi;
+            if (targetHead) {
+                pi = player.InvBody[(int)inv_body_loc.INVLOC_HEAD];
+            } else {
+                pi = player.InvBody[(int)inv_body_loc.INVLOC_CHEST];
+            }
+            if (pi._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+                return;
+            }
+
+            pi._iDurability--;
+            Debug.Log($"DamageArmor > {(targetHead ? "head" : "chest")} dur - {pi._iDurability}");
+            if (pi._iDurability != 0) {
+                return;
+            }
+
+            if (targetHead) {
+                player.RemoveEquipment(player, inv_body_loc.INVLOC_HEAD, true);
+            } else {
+                player.RemoveEquipment(player, inv_body_loc.INVLOC_CHEST, true);
+            }
+            CalcPlrInv(player, true);
+        }
+
+        void RemoveEquipment(d2Player player, inv_body_loc bodyLocation, bool hiPri)
+        {
+            // if (&player == MyPlayer) {
+            //     NetSendCmdDelItem(hiPri, bodyLocation);
+            // }
+            Debug.Log("RemoveEquipment > " + bodyLocation);
+            player.InvBody[(int)bodyLocation].clear();
         }
     }
 }

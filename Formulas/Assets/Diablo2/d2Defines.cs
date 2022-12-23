@@ -5,6 +5,21 @@ using UnityEngine;
 
 namespace d2
 {
+    public enum player_graphic 
+    {
+        Stand,
+        Walk,
+        Attack,
+        Hit,
+        Lightning,
+        Fire,
+        Magic,
+        Death,
+        Block,
+
+        LAST = Block
+    };
+
     public enum PLR_MODE
     {
         PM_STAND,
