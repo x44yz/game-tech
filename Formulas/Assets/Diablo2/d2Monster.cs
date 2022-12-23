@@ -84,23 +84,6 @@ namespace d2
             Debug.Log("xx-- d2Monster.OnHit");
         }
 
-        public override void TakeDamage(int damage)
-        {
-            hitPoints -= damage;
-
-            d2Test.Inst.ShowDamageText(this, damage);
-
-            if (hitPoints >> 6 <= 0) 
-            {
-                // delta_kill_monster(monster, monster.position.tile, *MyPlayer);
-                // NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
-                return;
-            }
-
-            // delta_monster_hp(monster, *MyPlayer);
-            // NetSendCmdMonDmg(false, monster.getId(), damage);
-        }
-
         public bool isPossibleToHit
         {
             // TODO
@@ -361,7 +344,7 @@ namespace d2
                 int mdam = (d2Utils.GenerateRnd(3) + 1) << 6;
                 ApplyMonsterDamage(monster, mdam);
                 if (monster.hitPoints >> 6 <= 0)
-                    M_StartKill(monster, player);
+                    M_StartKill(monster, player, mdam);
                 else
                     M_StartHit(monster, player, mdam);
             }
@@ -401,12 +384,12 @@ namespace d2
             ApplyMonsterDamage(monster, mdam);
             dam = Math.Max(dam - mdam, 0);
             if (monster.hitPoints >> 6 <= 0)
-                M_StartKill(monster, player);
+                M_StartKill(monster, player, mdam);
             else
                 M_StartHit(monster, player, mdam);
         }
 
-        void ApplyMonsterDamage(d2Monster monster, int damage)
+        public void ApplyMonsterDamage(d2Monster monster, int damage)
         {
             monster.hitPoints -= damage;
 
@@ -435,13 +418,18 @@ namespace d2
             // UpdateEnemy(monster);
         }
 
-        void M_StartKill(d2Monster monster, d2Player player)
+        public void M_StartKill(d2Monster monster, d2Player player, int dam)
         {
             // StartMonsterDeath(monster, player, true);
+            d2Test.Inst.ShowDamageText(this, dam);
+            m_Animator.Play("Hit");
         }
 
-        void M_StartHit(d2Monster monster, int dam)
+        public void M_StartHit(d2Monster monster, int dam)
         {
+            d2Test.Inst.ShowDamageText(this, dam);
+            m_Animator.Play("Hit");
+
             // PlayEffect(monster, MonsterSound::Hit);
 
             // if (IsHardHit(monster, dam)) {
@@ -458,7 +446,7 @@ namespace d2
             // }
         }
 
-        void M_StartHit(d2Monster monster, d2Player player, int dam)
+        public void M_StartHit(d2Monster monster, d2Player player, int dam)
         {
             // monster.tag(player);
             // if (IsHardHit(monster, dam)) {

@@ -649,6 +649,7 @@ namespace d2
 
         public void AttackMonster(d2Monster monster)
         {
+            StartPlayerAttack();
             PlayerHitMonster(this, monster);
         }
 
@@ -691,8 +692,8 @@ namespace d2
         #if _DEBUG
                 if (!DebugGodMode)
         #endif
-                Debug.LogWarning("xx-- PlayerHitMonster miss");
-                d2Test.Inst.ShowDamageText(monster, 0);
+                // Debug.LogWarning("xx-- PlayerHitMonster miss");
+                d2Test.Inst.ShowMiss(monster);
                 return false;
             }
 
@@ -791,8 +792,7 @@ namespace d2
                     dam = monster.hitPoints; /* ensure monster is killed with one hit */
                 }
         #endif
-                // ApplyMonsterDamage(monster, dam);
-                monster.TakeDamage(dam);
+                monster.ApplyMonsterDamage(monster, dam);
             }
 
             int skdam = 0;
@@ -857,13 +857,13 @@ namespace d2
             // 播放特效
             if ((monster.hitPoints >> 6) <= 0)
             {
-                // M_StartKill(monster, player);
+                monster.M_StartKill(monster, player, dam);
             } 
             else 
             {
                 // if (monster.mode != MonsterMode.Petrified && d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Knockback))
                 //     M_GetKnockback(monster);
-                // M_StartHit(monster, player, dam);
+                monster.M_StartHit(monster, player, dam);
             }
             return true;
         }
@@ -908,8 +908,6 @@ namespace d2
 
             if (totalDamage == 0)
                 return;
-
-            d2Test.Inst.ShowDamageText(this, totalDamage);
 
             // RedrawComponent(PanelDrawComponent::Health);
             player._pHitPoints -= totalDamage;
@@ -1538,6 +1536,8 @@ namespace d2
 
         public void StartPlrBlock(d2Player player, Direction dir)
         {
+            d2Test.Inst.ShowUnitText(player, "BLOCK");
+
             // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
             //     SyncPlrKill(player, -1);
             //     return;
@@ -1559,6 +1559,8 @@ namespace d2
 
         public void StartPlrHit(d2Player player, int dam, bool forcehit)
         {
+            d2Test.Inst.ShowDamageText(player, dam);
+
             // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
             //     SyncPlrKill(player, -1);
             //     return;
@@ -1598,6 +1600,12 @@ namespace d2
             // FixPlrWalkTags(player);
             // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
             // SetPlayerOld(player);
+        }
+
+        void StartPlayerAttack()
+        {
+            m_Animator.SetTrigger("Attack");
+            weapon.StartAttack();
         }
 
         void StartPlayerKill(d2Player player, int earflag)
@@ -1699,6 +1707,7 @@ namespace d2
 
         public bool AttackPlayer(d2Player target)
         {
+            StartPlayerAttack();
             return PlrHitPlr(this, target);
         }
 
@@ -1730,11 +1739,14 @@ namespace d2
             int blkper = target.GetBlockChance() - (attacker._pLevel * 2);
             blkper = Mathf.Clamp(blkper, 0, 100);
 
-            if (hit >= hper) {
+            if (hit >= hper) 
+            {
+                d2Test.Inst.ShowMiss(target);
                 return false;
             }
 
-            if (blk < blkper) {
+            if (blk < blkper) 
+            {
                 Direction dir = d2Utils.GetDirection(target.position.tile, attacker.position.tile);
                 StartPlrBlock(target, dir);
                 return true;
