@@ -8,7 +8,8 @@ TODO:
 [x]monster hit player
 [x]player hit player
 [x]DamageArmor
-[+]DamageWeapon
+[x]DamageWeapon
+[+]info 面板
 
 https://diablo2.diablowiki.net/
 http://wiki.d.163.com/index.php?title=%E8%AF%8D%E7%BC%80_(Diablo_I)
