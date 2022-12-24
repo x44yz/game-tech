@@ -1939,7 +1939,7 @@ namespace d2
                 Debug.LogError("xx-- do got hit > " + animationFrame);
                 StartStand(player, player._pdir);
                 // ClearStateVariables(player);
-                // if (!d2Utils.FlipCoin(4)) 
+                if (!d2Utils.FlipCoin(4)) 
                 {
                     player.DamageArmor(player);
                 }
@@ -1994,7 +1994,7 @@ namespace d2
 
             pi._iDurability--;
             Debug.Log($"DamageArmor > {(targetHead ? "head" : "chest")} dur - {pi._iDurability}");
-            if (pi._iDurability != 0) {
+            if (pi._iDurability > 0) {
                 return;
             }
 

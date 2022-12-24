@@ -1192,6 +1192,7 @@ namespace d2
 
     public enum _item_indexes 
     { // TODO defines all indexes in AllItemsList
+        IDI_NONE = -1,
         IDI_GOLD,
         IDI_WARRIOR,
         IDI_WARRSHLD,
@@ -1251,7 +1252,6 @@ namespace d2
         IDI_SORCERER_DIABLO,
 
         IDI_LAST = IDI_SORCERER_DIABLO,
-        IDI_NONE = -1,
     };
 
     public enum SpellFlag 

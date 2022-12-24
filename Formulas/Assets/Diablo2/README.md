@@ -62,7 +62,7 @@ A 广播 destAction=ACTION_ATTACKPLR，每个客户端更新攻击（为了表�
 
 |属性|名字|说明|
 |----|----|----|
-|_iDurability|耐久|护甲格挡攻击成功会有概率损失耐久，但是用盾牌攻击的时候不会损失耐久，使用武器攻击成功时候也会损失耐久，可以参看 DamageArmor，DamageWeapon [ref](https://diablo2.diablowiki.net/Ethereal#Item_Durability_Loss)|
+|_iDurability|耐久|护甲格挡攻击成功会有概率损失耐久，但是用盾牌攻击的时候不会损失耐久，使用武器攻击成功时候也会损失耐久，可以参看 DamageArmor，DamageWeapon [ref](https://diablo2.diablowiki.net/Ethereal#Item_Durability_Loss),护甲每次扣一点，与伤害大小无关|
 |_iPLDam|额外伤害比|叠加到玩家 _pIBonusDam |
 
 

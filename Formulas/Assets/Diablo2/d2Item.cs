@@ -75,7 +75,7 @@ namespace d2
         public item_effect_type _iPrePower;
         public item_effect_type _iSufPower;
         public item_quality _iMagical;
-        public _item_indexes IDidx;
+        public _item_indexes IDidx = _item_indexes.IDI_NONE;
         public icreateinfo_flag2 dwBuff;
         public int _iSeed;
         public bool _iStatFlag;
@@ -118,8 +118,7 @@ namespace d2
 
         public bool isEmpty()
         {
-            // TODO
-            return false;
+            return _itype == ItemType.None;
         }
 
         public void InitializeItem(_item_indexes itemData)
