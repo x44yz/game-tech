@@ -69,7 +69,7 @@ namespace d2
         {
             base.OnStart();
 
-            InitMonster(this, ((int)type));
+            InitMonster(((int)type));
         }
 
         protected override void OnUpdate(float dt)
@@ -117,95 +117,95 @@ namespace d2
         /** Direction faced by monster (direction enum) */
         public Direction direction;
 
-        void InitMonster(d2Monster monster, int typeIndex)
+        void InitMonster(int typeIndex)
         {
-            monster.data = d2Data.MonstersData[typeIndex];
+            data = d2Data.MonstersData[typeIndex];
 
-            // monster.direction = rd;
-            // monster.position.tile = position;
-            // monster.position.future = position;
-            // monster.position.old = position;
-            monster.levelType = typeIndex;
-            monster.mode = MonsterMode.Stand;
-            // monster.animInfo = {};
-            // monster.changeAnimationData(MonsterGraphic::Stand);
-            // monster.animInfo.tickCounterOfCurrentFrame = GenerateRnd(monster.animInfo.ticksPerFrame - 1);
-            // monster.animInfo.currentFrame = GenerateRnd(monster.animInfo.numberOfFrames - 1);
+            // direction = rd;
+            // position.tile = position;
+            // position.future = position;
+            // position.old = position;
+            levelType = typeIndex;
+            mode = MonsterMode.Stand;
+            // animInfo = {};
+            // changeAnimationData(MonsterGraphic::Stand);
+            // animInfo.tickCounterOfCurrentFrame = GenerateRnd(animInfo.ticksPerFrame - 1);
+            // animInfo.currentFrame = GenerateRnd(animInfo.numberOfFrames - 1);
 
-            int maxhp = monster.data.hitPointsMinimum + d2Utils.GenerateRnd(monster.data.hitPointsMaximum - monster.data.hitPointsMinimum + 1);
-            if (monster.type == _monster_id.MT_DIABLO && !d2DEF.gbIsHellfire) {
+            int maxhp = data.hitPointsMinimum + d2Utils.GenerateRnd(data.hitPointsMaximum - data.hitPointsMinimum + 1);
+            if (type == _monster_id.MT_DIABLO && !d2DEF.gbIsHellfire) {
                 maxhp /= 2;
             }
-            monster.maxHitPoints = maxhp << 6;
+            maxHitPoints = maxhp << 6;
 
             if (!d2DEF.gbIsMultiplayer)
-                monster.maxHitPoints = Math.Max(monster.maxHitPoints / 2, 64);
+                maxHitPoints = Math.Max(maxHitPoints / 2, 64);
 
-            monster.hitPoints = monster.maxHitPoints;
-            monster.ai = monster.data.ai;
-            monster.intelligence = monster.data.intelligence;
-            monster.goal = MonsterGoal.Normal;
-            monster.goalVar1 = 0;
-            monster.goalVar2 = 0;
-            monster.goalVar3 = 0;
-            // monster.pathCount = 0;
-            // monster.isInvalid = false;
-            monster.uniqueType = UniqueMonsterType.None;
-            // monster.activeForTicks = 0;
-            // monster.lightId = NO_LIGHT; // BUGFIX monsters initial light id should be -1 (fixed)
-            monster.rndItemSeed = d2Utils.AdvanceRndSeed();
-            monster.aiSeed = d2Utils.AdvanceRndSeed();
-            monster.whoHit = 0;
-            monster.toHit = monster.data.toHit;
-            monster.minDamage = monster.data.minDamage;
-            monster.maxDamage = monster.data.maxDamage;
-            monster.minDamageSpecial = monster.data.minDamageSpecial;
-            monster.maxDamageSpecial = monster.data.maxDamageSpecial;
-            monster.armorClass = monster.data.armorClass;
-            monster.resistance = monster.data.resistance;
-            monster.leader = d2Monster.NoLeader;
-            monster.leaderRelation = LeaderRelation.None;
-            monster.flags = monster.data.abilityFlags;
-            // monster.talkMsg = TEXT_NONE;
+            hitPoints = maxHitPoints;
+            ai = data.ai;
+            intelligence = data.intelligence;
+            goal = MonsterGoal.Normal;
+            goalVar1 = 0;
+            goalVar2 = 0;
+            goalVar3 = 0;
+            // pathCount = 0;
+            // isInvalid = false;
+            uniqueType = UniqueMonsterType.None;
+            // activeForTicks = 0;
+            // lightId = NO_LIGHT; // BUGFIX monsters initial light id should be -1 (fixed)
+            rndItemSeed = d2Utils.AdvanceRndSeed();
+            aiSeed = d2Utils.AdvanceRndSeed();
+            whoHit = 0;
+            toHit = data.toHit;
+            minDamage = data.minDamage;
+            maxDamage = data.maxDamage;
+            minDamageSpecial = data.minDamageSpecial;
+            maxDamageSpecial = data.maxDamageSpecial;
+            armorClass = data.armorClass;
+            resistance = data.resistance;
+            leader = d2Monster.NoLeader;
+            leaderRelation = LeaderRelation.None;
+            flags = data.abilityFlags;
+            // talkMsg = TEXT_NONE;
 
-            if (monster.ai == _mai_id.AI_GARG) 
+            if (ai == _mai_id.AI_GARG) 
             {
-                // monster.changeAnimationData(MonsterGraphic::Special);
-                // monster.animInfo.currentFrame = 0;
-                monster.flags |= monster_flag.MFLAG_ALLOW_SPECIAL;
-                monster.mode = MonsterMode.SpecialMeleeAttack;
+                // changeAnimationData(MonsterGraphic::Special);
+                // animInfo.currentFrame = 0;
+                flags |= monster_flag.MFLAG_ALLOW_SPECIAL;
+                mode = MonsterMode.SpecialMeleeAttack;
             }
 
             if (d2DEF.gbDifficulty == _difficulty.DIFF_NIGHTMARE) 
             {
-                monster.maxHitPoints = 3 * monster.maxHitPoints;
+                maxHitPoints = 3 * maxHitPoints;
                 if (d2DEF.gbIsHellfire)
-                    monster.maxHitPoints += (d2DEF.gbIsMultiplayer ? 100 : 50) << 6;
+                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 100 : 50) << 6;
                 else
-                    monster.maxHitPoints += 64;
-                monster.hitPoints = monster.maxHitPoints;
-                monster.toHit += NightmareToHitBonus;
-                monster.minDamage = 2 * (monster.minDamage + 2);
-                monster.maxDamage = 2 * (monster.maxDamage + 2);
-                monster.minDamageSpecial = 2 * (monster.minDamageSpecial + 2);
-                monster.maxDamageSpecial = 2 * (monster.maxDamageSpecial + 2);
-                monster.armorClass += NightmareAcBonus;
+                    maxHitPoints += 64;
+                hitPoints = maxHitPoints;
+                toHit += NightmareToHitBonus;
+                minDamage = 2 * (minDamage + 2);
+                maxDamage = 2 * (maxDamage + 2);
+                minDamageSpecial = 2 * (minDamageSpecial + 2);
+                maxDamageSpecial = 2 * (maxDamageSpecial + 2);
+                armorClass += NightmareAcBonus;
             } 
             else if (d2DEF.gbDifficulty == _difficulty.DIFF_HELL) 
             {
-                monster.maxHitPoints = 4 * monster.maxHitPoints;
+                maxHitPoints = 4 * maxHitPoints;
                 if (d2DEF.gbIsHellfire)
-                    monster.maxHitPoints += (d2DEF.gbIsMultiplayer ? 200 : 100) << 6;
+                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 200 : 100) << 6;
                 else
-                    monster.maxHitPoints += 192;
-                monster.hitPoints = monster.maxHitPoints;
-                monster.toHit += HellToHitBonus;
-                monster.minDamage = 4 * monster.minDamage + 6;
-                monster.maxDamage = 4 * monster.maxDamage + 6;
-                monster.minDamageSpecial = 4 * monster.minDamageSpecial + 6;
-                monster.maxDamageSpecial = 4 * monster.maxDamageSpecial + 6;
-                monster.armorClass += HellAcBonus;
-                monster.resistance = monster.data.resistanceHell;
+                    maxHitPoints += 192;
+                hitPoints = maxHitPoints;
+                toHit += HellToHitBonus;
+                minDamage = 4 * minDamage + 6;
+                maxDamage = 4 * maxDamage + 6;
+                minDamageSpecial = 4 * minDamageSpecial + 6;
+                maxDamageSpecial = 4 * maxDamageSpecial + 6;
+                armorClass += HellAcBonus;
+                resistance = data.resistanceHell;
             }
         }
 
@@ -257,15 +257,15 @@ namespace d2
 
         public void AttackPlayer(d2Player player)
         {
-            MonsterAttackPlayer(this, player, toHit, minDamage, maxDamage);
+            MonsterAttackPlayer(player, toHit, minDamage, maxDamage);
         }
 
-        void MonsterAttackPlayer(d2Monster monster, d2Player player, int hit, int minDam, int maxDam)
+        void MonsterAttackPlayer(d2Player player, int hit, int minDam, int maxDam)
         {
             if (player._pHitPoints >> 6 <= 0 || player._pInvincible || d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.Etherealize))
                 return;
             // 判断距离
-            // if (monster.position.tile.WalkingDistance(player.position.tile) >= 2)
+            // if (position.tile.WalkingDistance(player.position.tile) >= 2)
             //     return;
 
             int hper = d2Utils.GenerateRnd(100);
@@ -275,12 +275,12 @@ namespace d2
         #endif
             int ac = player.GetArmor();
             // 针对
-            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.ACAgainstDemons) && monster.data.monsterClass == MonsterClass.Demon)
+            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.ACAgainstDemons) && data.monsterClass == MonsterClass.Demon)
                 ac += 40;
-            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.ACAgainstUndead) && monster.data.monsterClass == MonsterClass.Undead)
+            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.ACAgainstUndead) && data.monsterClass == MonsterClass.Undead)
                 ac += 20;
             // hit 越大 player 被击中的概率越高
-            hit += 2 * (monster.level(d2DEF.gbDifficulty) - player._pLevel)
+            hit += 2 * (level(d2DEF.gbDifficulty) - player._pLevel)
                 + 30
                 - ac;
             int minhit = GetMinHit();
@@ -297,22 +297,22 @@ namespace d2
                 blkper = d2Utils.GenerateRnd(100);
             }
             // blk 越大越容易闪避
-            int blk = player.GetBlockChance() - (monster.level(d2DEF.gbDifficulty) * 2);
+            int blk = player.GetBlockChance() - (level(d2DEF.gbDifficulty) * 2);
             blk = Mathf.Clamp(blk, 0, 100);
             if (blkper < blk) 
             {
-                Direction dir = d2Utils.GetDirection(player.position.tile, monster.position.tile);
-                player.StartPlrBlock(player, dir);
+                Direction dir = d2Utils.GetDirection(player.position.tile, position.tile);
+                player.StartPlrBlock(dir);
                 if (/*player == MyPlayer &&*/ player.wReflections > 0) 
                 {
                     int kdam = d2Utils.GenerateRnd(((maxDam - minDam) << 6) + 1) + (minDam << 6);
                     kdam = Math.Max(kdam + (player._pIGetHit << 6), 64);
-                    CheckReflect(monster, player, ref kdam);
+                    CheckReflect(player, ref kdam);
                 }
                 return;
             }
             // skip: 特殊处理
-            if (monster.type == _monster_id.MT_YZOMBIE /*&& &player == MyPlayer*/) 
+            if (type == _monster_id.MT_YZOMBIE /*&& &player == MyPlayer*/) 
             {
                 if (player._pMaxHP > 64) {
                     if (player._pMaxHPBase > 64) {
@@ -334,36 +334,36 @@ namespace d2
             // if (&player == MyPlayer) 
             {
                 if (player.wReflections > 0)
-                    CheckReflect(monster, player, ref dam);
-                player.ApplyPlrDamage(player, 0, 0, dam);
+                    CheckReflect(player, ref dam);
+                player.ApplyPlrDamage(0, 0, dam);
             }
 
             // Reflect can also kill a monster, so make sure the monster is still alive
-            if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Thorns) && monster.mode != MonsterMode.Death) 
+            if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Thorns) && mode != MonsterMode.Death) 
             {
                 int mdam = (d2Utils.GenerateRnd(3) + 1) << 6;
-                ApplyMonsterDamage(monster, mdam);
-                if (monster.hitPoints >> 6 <= 0)
-                    M_StartKill(monster, player, mdam);
+                ApplyMonsterDamage(mdam);
+                if (hitPoints >> 6 <= 0)
+                    M_StartKill(player, mdam);
                 else
-                    M_StartHit(monster, player, mdam);
+                    M_StartHit(player, mdam);
             }
 
-            if ((monster.flags & monster_flag.MFLAG_NOLIFESTEAL) == 0 && monster.type == _monster_id.MT_SKING && d2DEF.gbIsMultiplayer)
-                monster.hitPoints += dam;
+            if ((flags & monster_flag.MFLAG_NOLIFESTEAL) == 0 && type == _monster_id.MT_SKING && d2DEF.gbIsMultiplayer)
+                hitPoints += dam;
             if (player._pHitPoints >> 6 <= 0) 
             {
                 if (d2DEF.gbIsHellfire)
-                    M_StartStand(monster, monster.direction);
+                    M_StartStand(direction);
                 return;
             }
 
-            player.StartPlrHit(player, dam, false);
-            if ((monster.flags & monster_flag.MFLAG_KNOCKBACK) != 0) {
+            player.StartPlrHit(dam, false);
+            if ((flags & monster_flag.MFLAG_KNOCKBACK) != 0) {
                 if (player._pmode != PLR_MODE.PM_GOTHIT)
-                    player.StartPlrHit(player, 0, true);
+                    player.StartPlrHit(0, true);
 
-                // Point newPosition = player.position.tile + monster.direction;
+                // Point newPosition = player.position.tile + direction;
                 // if (PosOkPlayer(player, newPosition)) {
                 //     player.position.tile = newPosition;
                 //     FixPlayerLocation(player, player._pdir);
@@ -374,58 +374,58 @@ namespace d2
             }
         }
 
-        void CheckReflect(d2Monster monster, d2Player player, ref int dam)
+        void CheckReflect(d2Player player, ref int dam)
         {
             player.wReflections--;
             // if (player.wReflections <= 0)
             //     NetSendCmdParam1(true, CMD_SETREFLECT, 0);
             // reflects 20-30% damage
             int mdam = dam * (d2Utils.GenerateRnd(10) + 20) / 100;
-            ApplyMonsterDamage(monster, mdam);
+            ApplyMonsterDamage(mdam);
             dam = Math.Max(dam - mdam, 0);
-            if (monster.hitPoints >> 6 <= 0)
-                M_StartKill(monster, player, mdam);
+            if (hitPoints >> 6 <= 0)
+                M_StartKill(player, mdam);
             else
-                M_StartHit(monster, player, mdam);
+                M_StartHit(player, mdam);
         }
 
-        public void ApplyMonsterDamage(d2Monster monster, int damage)
+        public void ApplyMonsterDamage(int damage)
         {
-            monster.hitPoints -= damage;
+            hitPoints -= damage;
 
-            // if (monster.hitPoints >> 6 <= 0) {
-            //     delta_kill_monster(monster, monster.position.tile, *MyPlayer);
-            //     NetSendCmdLocParam1(false, CMD_MONSTDEATH, monster.position.tile, monster.getId());
+            // if (hitPoints >> 6 <= 0) {
+            //     delta_kill_monster(monster, position.tile, *MyPlayer);
+            //     NetSendCmdLocParam1(false, CMD_MONSTDEATH, position.tile, getId());
             //     return;
             // }
 
             // delta_monster_hp(monster, *MyPlayer);
-            // NetSendCmdMonDmg(false, monster.getId(), damage);
+            // NetSendCmdMonDmg(false, getId(), damage);
         }
 
-        void M_StartStand(d2Monster monster, Direction md)
+        void M_StartStand(Direction md)
         {
             // ClearMVars(monster);
-            // if (monster.type().type == MT_GOLEM)
+            // if (type().type == MT_GOLEM)
             //     NewMonsterAnim(monster, MonsterGraphic::Walk, md);
             // else
             //     NewMonsterAnim(monster, MonsterGraphic::Stand, md);
-            // monster.var1 = static_cast<int>(monster.mode);
-            // monster.var2 = 0;
-            // monster.mode = MonsterMode::Stand;
-            // monster.position.future = monster.position.tile;
-            // monster.position.old = monster.position.tile;
+            // var1 = static_cast<int>(mode);
+            // var2 = 0;
+            // mode = MonsterMode::Stand;
+            // position.future = position.tile;
+            // position.old = position.tile;
             // UpdateEnemy(monster);
         }
 
-        public void M_StartKill(d2Monster monster, d2Player player, int dam)
+        public void M_StartKill(d2Player player, int dam)
         {
             // StartMonsterDeath(monster, player, true);
             d2Test.Inst.ShowDamageText(this, dam);
             m_Animator.Play("Hit");
         }
 
-        public void M_StartHit(d2Monster monster, int dam)
+        public void M_StartHit(int dam)
         {
             d2Test.Inst.ShowDamageText(this, dam);
             m_Animator.Play("Hit");
@@ -433,30 +433,30 @@ namespace d2
             // PlayEffect(monster, MonsterSound::Hit);
 
             // if (IsHardHit(monster, dam)) {
-            //     if (monster.type().type == MT_BLINK) {
+            //     if (type().type == MT_BLINK) {
             //         Teleport(monster);
-            //     } else if (IsAnyOf(monster.type().type, MT_NSCAV, MT_BSCAV, MT_WSCAV, MT_YSCAV, MT_GRAVEDIG)) {
-            //         monster.goal = MonsterGoal::Normal;
-            //         monster.goalVar1 = 0;
-            //         monster.goalVar2 = 0;
+            //     } else if (IsAnyOf(type().type, MT_NSCAV, MT_BSCAV, MT_WSCAV, MT_YSCAV, MT_GRAVEDIG)) {
+            //         goal = MonsterGoal::Normal;
+            //         goalVar1 = 0;
+            //         goalVar2 = 0;
             //     }
-            //     if (monster.mode != MonsterMode::Petrified) {
+            //     if (mode != MonsterMode::Petrified) {
             //         StartMonsterGotHit(monster);
             //     }
             // }
         }
 
-        public void M_StartHit(d2Monster monster, d2Player player, int dam)
+        public void M_StartHit(d2Player player, int dam)
         {
-            // monster.tag(player);
+            // tag(player);
             // if (IsHardHit(monster, dam)) {
-            //     monster.enemy = player.getId();
-            //     monster.enemyPosition = player.position.future;
-            //     monster.flags &= ~MFLAG_TARGETS_MONSTER;
-            //     monster.direction = GetMonsterDirection(monster);
+            //     enemy = player.getId();
+            //     enemyPosition = player.position.future;
+            //     flags &= ~MFLAG_TARGETS_MONSTER;
+            //     direction = GetMonsterDirection(monster);
             // }
 
-            M_StartHit(monster, dam);
+            M_StartHit(dam);
         }
 
     }

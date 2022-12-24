@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace d2
 {
@@ -205,17 +206,23 @@ namespace d2
         public PLR_MODE _pmode;
         public ActorPosition position = new ActorPosition();
 
+        [Button("LevelUp", EButtonEnableMode.Playmode)]
+        private void TestLevelUp()
+        {
+            NextPlrLevel();
+        }
+
         protected override void OnStart()
         {
             base.OnStart();
 
             int newLvl = _pLevel;
-            InitPlayer(this, _pClass);
+            InitPlayer(_pClass);
             
             int lvCount = newLvl - _pLevel ;
             for (int i = 0; i < lvCount; ++i)
             {
-                NextPlrLevel(this);
+                NextPlrLevel();
             }
 
         // public _item_indexes headItemId = _item_indexes.IDI_NONE;
@@ -226,19 +233,19 @@ namespace d2
         // public _item_indexes rhandItemId = _item_indexes.IDI_NONE;
         // public _item_indexes chestItemId = _item_indexes.IDI_NONE;
             if (headItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_HEAD, headItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_HEAD, headItemId);
             if (lringItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_RING_LEFT, lringItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_RING_LEFT, lringItemId);
             if (rringItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_RING_RIGHT, rringItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_RING_RIGHT, rringItemId);
             if (amuletItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_AMULET, amuletItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_AMULET, amuletItemId);
             if (lhandItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_HAND_LEFT, lhandItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_HAND_LEFT, lhandItemId);
             if (rhandItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_HAND_RIGHT, rhandItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_HAND_RIGHT, rhandItemId);
             if (chestItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(this, inv_body_loc.INVLOC_CHEST, chestItemId);
+                ChangePlayerItems(inv_body_loc.INVLOC_CHEST, chestItemId);
         }
 
         public int animationFrame = 0;
@@ -266,11 +273,11 @@ namespace d2
                 case PLR_MODE.PM_WALK_NORTHWARDS:
                 case PLR_MODE.PM_WALK_SOUTHWARDS:
                 case PLR_MODE.PM_WALK_SIDEWAYS:
-                    // tplayer = DoWalk(player, player._pmode);
+                    // tplayer = DoWalk(player, _pmode);
                     tplayer = false;
                     break;
                 case PLR_MODE.PM_ATTACK:
-                    tplayer = DoAttack(this);
+                    tplayer = DoAttack();
                     break;
                 // case PLR_MODE.PM_RATTACK:
                 //     tplayer = DoRangeAttack(player);
@@ -282,7 +289,7 @@ namespace d2
                 //     tplayer = DoSpell(player);
                 //     break;
                 case PLR_MODE.PM_GOTHIT:
-                    tplayer = DoGotHit(this);
+                    tplayer = DoGotHit();
                     break;
                 // case PLR_MODE.PM_DEATH:
                 //     tplayer = DoDeath(player);
@@ -292,108 +299,108 @@ namespace d2
             } while (tplayer);
         }
 
-        private void InitPlayer(d2Player player, HeroClass c)
+        private void InitPlayer(HeroClass c)
         {
-            player._pClass = c;
+            _pClass = c;
 
             int ic = (int)c;
 
-            player._pBaseStr = StrengthTbl[ic];
-            player._pStrength = player._pBaseStr;
+            _pBaseStr = StrengthTbl[ic];
+            _pStrength = _pBaseStr;
 
-            player._pBaseMag = MagicTbl[ic];
-            player._pMagic = player._pBaseMag;
+            _pBaseMag = MagicTbl[ic];
+            _pMagic = _pBaseMag;
 
-            player._pBaseDex = DexterityTbl[ic];
-            player._pDexterity = player._pBaseDex;
+            _pBaseDex = DexterityTbl[ic];
+            _pDexterity = _pBaseDex;
 
-            player._pBaseVit = VitalityTbl[ic];
-            player._pVitality = player._pBaseVit;
+            _pBaseVit = VitalityTbl[ic];
+            _pVitality = _pBaseVit;
 
-            player._pStatPts = 0;
-            player.pTownWarps = 0;
-            player.pDungMsgs = 0;
-            player.pDungMsgs2 = 0;
-            player.pLvlLoad = 0;
-            player.pDiabloKillLevel = 0;
-            player.pDifficulty = _difficulty.DIFF_NORMAL;
+            _pStatPts = 0;
+            pTownWarps = 0;
+            pDungMsgs = 0;
+            pDungMsgs2 = 0;
+            pLvlLoad = 0;
+            pDiabloKillLevel = 0;
+            pDifficulty = _difficulty.DIFF_NORMAL;
 
-            player._pLevel = 1;
+            _pLevel = 1;
 
-            player._pBaseToBlk = BlockBonuses[ic];
+            _pBaseToBlk = BlockBonuses[ic];
 
-            player._pHitPoints = (player._pVitality + 10) << 6;
-            if (player._pClass == HeroClass.Warrior || player._pClass == HeroClass.Barbarian) {
-                player._pHitPoints *= 2;
-            } else if (player._pClass == HeroClass.Rogue || player._pClass == HeroClass.Monk || player._pClass == HeroClass.Bard) {
-                player._pHitPoints += player._pHitPoints / 2;
+            _pHitPoints = (_pVitality + 10) << 6;
+            if (_pClass == HeroClass.Warrior || _pClass == HeroClass.Barbarian) {
+                _pHitPoints *= 2;
+            } else if (_pClass == HeroClass.Rogue || _pClass == HeroClass.Monk || _pClass == HeroClass.Bard) {
+                _pHitPoints += _pHitPoints / 2;
             }
 
-            player._pMaxHP = player._pHitPoints;
-            player._pHPBase = player._pHitPoints;
-            player._pMaxHPBase = player._pHitPoints;
+            _pMaxHP = _pHitPoints;
+            _pHPBase = _pHitPoints;
+            _pMaxHPBase = _pHitPoints;
 
-            player._pMana = player._pMagic << 6;
-            if (player._pClass == HeroClass.Sorcerer) {
-                player._pMana *= 2;
-            } else if (player._pClass == HeroClass.Bard) {
-                player._pMana += player._pMana * 3 / 4;
-            } else if (player._pClass == HeroClass.Rogue || player._pClass == HeroClass.Monk) {
-                player._pMana += player._pMana / 2;
+            _pMana = _pMagic << 6;
+            if (_pClass == HeroClass.Sorcerer) {
+                _pMana *= 2;
+            } else if (_pClass == HeroClass.Bard) {
+                _pMana += _pMana * 3 / 4;
+            } else if (_pClass == HeroClass.Rogue || _pClass == HeroClass.Monk) {
+                _pMana += _pMana / 2;
             }
 
-            player._pMaxMana = player._pMana;
-            player._pManaBase = player._pMana;
-            player._pMaxManaBase = player._pMana;
+            _pMaxMana = _pMana;
+            _pManaBase = _pMana;
+            _pMaxManaBase = _pMana;
 
-            player._pMaxLvl = player._pLevel;
-            player._pExperience = 0;
-            player._pNextExper = ExpLvlsTbl[1];
-            player._pArmorClass = 0;
-            player._pLightRad = 10;
-            player._pInfraFlag = false;
+            _pMaxLvl = _pLevel;
+            _pExperience = 0;
+            _pNextExper = ExpLvlsTbl[1];
+            _pArmorClass = 0;
+            _pLightRad = 10;
+            _pInfraFlag = false;
 
-            player._pRSplType = spell_type.RSPLTYPE_SKILL;
+            _pRSplType = spell_type.RSPLTYPE_SKILL;
             if (c == HeroClass.Warrior) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_REPAIR);
-                player._pRSpell = spell_id.SPL_REPAIR;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_REPAIR);
+                _pRSpell = spell_id.SPL_REPAIR;
             } else if (c == HeroClass.Rogue) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_DISARM);
-                player._pRSpell = spell_id.SPL_DISARM;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_DISARM);
+                _pRSpell = spell_id.SPL_DISARM;
             } else if (c == HeroClass.Sorcerer) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_RECHARGE);
-                player._pRSpell = spell_id.SPL_RECHARGE;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_RECHARGE);
+                _pRSpell = spell_id.SPL_RECHARGE;
             } else if (c == HeroClass.Monk) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_SEARCH);
-                player._pRSpell = spell_id.SPL_SEARCH;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_SEARCH);
+                _pRSpell = spell_id.SPL_SEARCH;
             } else if (c == HeroClass.Bard) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_IDENTIFY);
-                player._pRSpell = spell_id.SPL_IDENTIFY;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_IDENTIFY);
+                _pRSpell = spell_id.SPL_IDENTIFY;
             } else if (c == HeroClass.Barbarian) {
-                player._pAblSpells = GetSpellBitmask(spell_id.SPL_BLODBOIL);
-                player._pRSpell = spell_id.SPL_BLODBOIL;
+                _pAblSpells = GetSpellBitmask(spell_id.SPL_BLODBOIL);
+                _pRSpell = spell_id.SPL_BLODBOIL;
             }
 
             if (c == HeroClass.Sorcerer) {
-                player._pMemSpells = GetSpellBitmask(spell_id.SPL_FIREBOLT);
-                player._pRSplType = spell_type.RSPLTYPE_SPELL;
-                player._pRSpell = spell_id.SPL_FIREBOLT;
+                _pMemSpells = GetSpellBitmask(spell_id.SPL_FIREBOLT);
+                _pRSplType = spell_type.RSPLTYPE_SPELL;
+                _pRSpell = spell_id.SPL_FIREBOLT;
             } else {
-                player._pMemSpells = 0;
+                _pMemSpells = 0;
             }
 
-            for (int i = 0; i < player._pSplLvl.Length; ++i) {
-                player._pSplLvl[i] = 0;
+            for (int i = 0; i < _pSplLvl.Length; ++i) {
+                _pSplLvl[i] = 0;
             }
 
-            player._pSpellFlags = SpellFlag.None;
+            _pSpellFlags = SpellFlag.None;
 
-            if (player._pClass == HeroClass.Sorcerer) {
-                player._pSplLvl[((int)spell_id.SPL_FIREBOLT)] = 2;
+            if (_pClass == HeroClass.Sorcerer) {
+                _pSplLvl[((int)spell_id.SPL_FIREBOLT)] = 2;
             }
 
             // Initializing the hotkey bindings to no selection
-            // std::fill(player._pSplHotKey, player._pSplHotKey + NumHotkeys, SPL_INVALID);
+            // std::fill(_pSplHotKey, _pSplHotKey + NumHotkeys, SPL_INVALID);
 
             // 武器动画
             // PlayerWeaponGraphic animWeaponId = PlayerWeaponGraphic::Unarmed;
@@ -411,33 +418,33 @@ namespace d2
             //     animWeaponId = PlayerWeaponGraphic::Staff;
             //     break;
             // }
-            // player._pgfxnum = static_cast<uint8_t>(animWeaponId);
+            // _pgfxnum = static_cast<uint8_t>(animWeaponId);
 
-            for (int i = 0; i < player._pLvlVisited.Length; ++i) {
-                player._pLvlVisited[i] = false;
+            for (int i = 0; i < _pLvlVisited.Length; ++i) {
+                _pLvlVisited[i] = false;
             }
 
             for (int i = 0; i < 10; i++) {
-                player._pSLvlVisited[i] = false;
+                _pSLvlVisited[i] = false;
             }
 
-            player._pLvlChanging = false;
-            player.pTownWarps = 0;
-            player.pLvlLoad = 0;
-            player.pBattleNet = false;
-            player.pManaShield = false;
-            player.pDamAcFlags = ItemSpecialEffectHf.None;
-            player.wReflections = 0;
+            _pLvlChanging = false;
+            pTownWarps = 0;
+            pLvlLoad = 0;
+            pBattleNet = false;
+            pManaShield = false;
+            pDamAcFlags = ItemSpecialEffectHf.None;
+            wReflections = 0;
 
-            InitDungMsgs(player);
-            CreatePlrItems(player);
+            InitDungMsgs();
+            CreatePlrItems();
             // SetRndSeed(0);
         }
 
-        void InitDungMsgs(d2Player player)
+        void InitDungMsgs()
         {
-            player.pDungMsgs = 0;
-            player.pDungMsgs2 = 0;
+            pDungMsgs = 0;
+            pDungMsgs2 = 0;
         }
 
         public const int InventoryGridCells = 40;
@@ -446,7 +453,7 @@ namespace d2
         public d2Item[] InvList = new d2Item[InventoryGridCells];
         public int _pNumInv;
         public d2Item[] SpdList = new d2Item[MaxBeltItems];
-        void CreatePlrItems(d2Player player)
+        void CreatePlrItems()
         {
             // var objInvBody = new GameObject("InvBody");
             // objInvBody.transform.SetParent(transform);
@@ -456,129 +463,124 @@ namespace d2
             //     item.name = ((inv_body_loc)i).ToString();
             //     InvBody[i] = item;
             // }
-            for (int i = 0; i < player.InvBody.Length; ++i) 
+            for (int i = 0; i < InvBody.Length; ++i) 
             {
                 var item = new d2Item();
-                player.InvBody[i] = item;
+                InvBody[i] = item;
                 item.clear();
             }
 
             // converting this to a for loop creates a `rep stosd` instruction,
             // so this probably actually was a memset
-            for (int i = 0; i < player.InvGrid.Length; ++i)
-                player.InvGrid[i] = 0;
+            for (int i = 0; i < InvGrid.Length; ++i)
+                InvGrid[i] = 0;
 
-            for (int i = 0; i < player.InvList.Length; ++i) 
+            for (int i = 0; i < InvList.Length; ++i) 
             {
                 var item = new d2Item();
-                player.InvList[i] = item;
+                InvList[i] = item;
                 item.clear();
             }
 
-            player._pNumInv = 0;
+            _pNumInv = 0;
 
-            for (int i = 0; i < player.SpdList.Length; ++i) 
+            for (int i = 0; i < SpdList.Length; ++i) 
             {
                 var item = new d2Item();
-                player.SpdList[i] = item;
+                SpdList[i] = item;
                 item.clear();
             }
 
-            switch (player._pClass) 
+            switch (_pClass) 
             {
             case HeroClass.Warrior:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_WARRIOR);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_WARRIOR);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
 
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].GenerateNewSeed();
 
                 {
                     d2Item club = new d2Item();
                     club.InitializeItem(_item_indexes.IDI_WARRCLUB);
-                    GenerateNewSeed(club);
-                    AutoPlaceItemInInventorySlot(player, 0, club, true);
+                    club.GenerateNewSeed();
+                    AutoPlaceItemInInventorySlot(0, club, true);
                 }
 
-                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[0]);
+                SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[1].GenerateNewSeed();
                 break;
             case HeroClass.Rogue:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_ROGUE);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_ROGUE);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
 
-                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[0]);
+                SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[1].GenerateNewSeed();
                 break;
             case HeroClass.Sorcerer:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_SORCERER : _item_indexes.IDI_SORCERER_DIABLO);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_SORCERER : _item_indexes.IDI_SORCERER_DIABLO);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
 
-                player.SpdList[0].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
-                GenerateNewSeed(player.SpdList[0]);
+                SpdList[0].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(d2DEF.gbIsHellfire ? _item_indexes.IDI_HEAL : _item_indexes.IDI_MANA);
+                SpdList[1].GenerateNewSeed();
                 break;
 
             case HeroClass.Monk:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_SHORTSTAFF);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
-                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[0]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_SHORTSTAFF);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
+                SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[1].GenerateNewSeed();
                 break;
             case HeroClass.Bard:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARDSWORD);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARDSWORD);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
 
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_BARDDAGGER);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
-                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[0]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_BARDDAGGER);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].GenerateNewSeed();
+                SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[1].GenerateNewSeed();
                 break;
             case HeroClass.Barbarian:
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARBARIAN);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].InitializeItem(_item_indexes.IDI_BARBARIAN);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].GenerateNewSeed();
 
-                player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
-                GenerateNewSeed(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]);
-                player.SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[0]);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].InitializeItem(_item_indexes.IDI_WARRSHLD);
+                InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].GenerateNewSeed();
+                SpdList[0].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[0].GenerateNewSeed();
 
-                player.SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
-                GenerateNewSeed(player.SpdList[1]);
+                SpdList[1].InitializeItem(_item_indexes.IDI_HEAL);
+                SpdList[1].GenerateNewSeed();
                 break;
             }
 
-            d2Item goldItem = player.InvList[player._pNumInv];
+            d2Item goldItem = InvList[_pNumInv];
             MakeGoldStack(goldItem, 100);
 
-            player._pNumInv++;
-            player.InvGrid[30] = player._pNumInv;
+            _pNumInv++;
+            InvGrid[30] = _pNumInv;
 
-            player._pGold = goldItem._ivalue;
+            _pGold = goldItem._ivalue;
 
-            CalcPlrItemVals(player, false);
+            CalcPlrItemVals(false);
         }
 
-        void GenerateNewSeed(d2Item item)
-        {
-            item._iSeed = d2Utils.AdvanceRndSeed();
-        }
-
-        bool AutoPlaceItemInInventorySlot(d2Player player, int slotIndex, d2Item item, bool persistItem)
+        bool AutoPlaceItemInInventorySlot(int slotIndex, d2Item item, bool persistItem)
         {
             // int yy = (slotIndex > 0) ? (10 * (slotIndex / 10)) : 0;
 
@@ -589,7 +591,7 @@ namespace d2
             //     }
             //     int xx = (slotIndex > 0) ? (slotIndex % 10) : 0;
             //     for (int i = 0; i < itemSize.width; i++) {
-            //         if (xx >= 10 || player.InvGrid[xx + yy] != 0) {
+            //         if (xx >= 10 || InvGrid[xx + yy] != 0) {
             //             return false;
             //         }
             //         xx++;
@@ -598,11 +600,11 @@ namespace d2
             // }
 
             // if (persistItem) {
-            //     player.InvList[player._pNumInv] = item;
-            //     player._pNumInv++;
+            //     InvList[_pNumInv] = item;
+            //     _pNumInv++;
 
-            //     AddItemToInvGrid(player, slotIndex, player._pNumInv, itemSize);
-            //     player.CalcScrolls();
+            //     AddItemToInvGrid(player, slotIndex, _pNumInv, itemSize);
+            //     CalcScrolls();
             // }
 
             return true;
@@ -611,7 +613,7 @@ namespace d2
         void MakeGoldStack(d2Item goldItem, int value)
         {
             goldItem.InitializeItem(_item_indexes.IDI_GOLD);
-            GenerateNewSeed(goldItem);
+            goldItem.GenerateNewSeed();
             goldItem._iStatFlag = true;
             goldItem._ivalue = value;
             // SetPlrHandGoldCurs(goldItem);
@@ -637,11 +639,11 @@ namespace d2
         public override void HitTarget(Unit target)
         {
             base.HitTarget(target);
-            Debug.Log("xx-- d2Player.HitTarget");
+            Debug.Log("xx-- d2HitTarget");
 
             var mon = target as d2Monster;
             if (mon != null)
-                PlayerHitMonster(this, mon);
+                PlrHitMonster(mon);
         }
 
         public int GetArmor()
@@ -696,11 +698,11 @@ namespace d2
         public void AttackMonster(d2Monster monster)
         {
             StartPlayerAttack();
-            PlayerHitMonster(this, monster);
+            PlrHitMonster(monster);
         }
 
         // adjacentDamage: 临近伤害，可以理解为溅射伤害
-        public bool PlayerHitMonster(d2Player player, d2Monster monster, bool adjacentDamage = false)
+        public bool PlrHitMonster(d2Monster monster, bool adjacentDamage = false)
         {
             // 击中概率，用于 miss 判定
             // hper = hit percent?
@@ -711,10 +713,10 @@ namespace d2
 
             if (adjacentDamage)
             {
-                if (player._pLevel > 20)
+                if (_pLevel > 20)
                     hper -= 30;
                 else
-                    hper -= (35 - player._pLevel) * 2;
+                    hper -= (35 - _pLevel) * 2;
             }
             
             int hit = d2Utils.GenerateRnd(100);
@@ -724,7 +726,7 @@ namespace d2
                 hit = 0;
             }
 
-            hper += player.GetMeleePiercingToHit() - player.CalculateArmorPierce(monster.armorClass, true);
+            hper += GetMeleePiercingToHit() - CalculateArmorPierce(monster.armorClass, true);
             hper = Mathf.Clamp(hper, 5, 95);
 
             // if (monster.tryLiftGargoyle())
@@ -743,36 +745,36 @@ namespace d2
                 return false;
             }
 
-            if (d2DEF.gbIsHellfire && d2Utils.HasAllOf(player._pIFlags, ItemSpecialEffect.FireDamage | ItemSpecialEffect.LightningDamage)) 
+            if (d2DEF.gbIsHellfire && d2Utils.HasAllOf(_pIFlags, ItemSpecialEffect.FireDamage | ItemSpecialEffect.LightningDamage)) 
             {
-                int midam = player._pIFMinDam + d2Utils.GenerateRnd(player._pIFMaxDam - player._pIFMinDam);
-                // AddMissile(player.position.tile, player.position.temp, player._pdir, MIS_SPECARROW, TARGET_MONSTERS, player.getId(), midam, 0);
+                int midam = _pIFMinDam + d2Utils.GenerateRnd(_pIFMaxDam - _pIFMinDam);
+                // AddMissile(position.tile, position.temp, _pdir, MIS_SPECARROW, TARGET_MONSTERS, getId(), midam, 0);
             }
 
-            int mind = player._pIMinDam;
-            int maxd = player._pIMaxDam;
+            int mind = _pIMinDam;
+            int maxd = _pIMaxDam;
             int dam = d2Utils.GenerateRnd(maxd - mind + 1) + mind;
-            dam += dam * player._pIBonusDam / 100;
-            dam += player._pIBonusDamMod;
+            dam += dam * _pIBonusDam / 100;
+            dam += _pIBonusDamMod;
             int dam2 = dam << 6;
-            dam += player._pDamageMod;
+            dam += _pDamageMod;
             
             // 暴击
-            if (player._pClass == HeroClass.Warrior || player._pClass == HeroClass.Barbarian) 
+            if (_pClass == HeroClass.Warrior || _pClass == HeroClass.Barbarian) 
             {
                 // 等级越高暴击概率越高
-                if (d2Utils.GenerateRnd(100) < player._pLevel) 
+                if (d2Utils.GenerateRnd(100) < _pLevel) 
                 {
                     dam *= 2;
                 }
             }
 
             ItemType phanditype = ItemType.None;
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Sword || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Sword) 
+            if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Sword || InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Sword) 
             {
                 phanditype = ItemType.Sword;
             }
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Mace || player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Mace) 
+            if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Mace || InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Mace) 
             {
                 phanditype = ItemType.Mace;
             }
@@ -794,23 +796,23 @@ namespace d2
                 }
                 break;
             case MonsterClass.Demon:
-                if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.TripleDemonDamage)) {
+                if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.TripleDemonDamage)) {
                     dam *= 3;
                 }
                 break;
             }
 
-            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.Devastation) && d2Utils.GenerateRnd(100) < 5) {
+            if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Devastation) && d2Utils.GenerateRnd(100) < 5) {
                 dam *= 3;
             }
 
-            // if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.Doppelganger) && monster.type().type != MT_DIABLO && !monster.isUnique() && d2Utils.GenerateRnd(100) < 10) 
+            // if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Doppelganger) && monster.type().type != MT_DIABLO && !monster.isUnique() && d2Utils.GenerateRnd(100) < 10) 
             // {
             //     AddDoppelganger(monster);
             // }
 
             dam <<= 6;
-            if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.Jesters)) 
+            if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Jesters)) 
             {
                 int r = d2Utils.GenerateRnd(201);
                 if (r >= 100)
@@ -824,12 +826,12 @@ namespace d2
             // 本地玩家
             // if (&player == MyPlayer) 
             {
-                if (d2Utils.HasAnyOf(player.pDamAcFlags, ItemSpecialEffectHf.Peril)) 
+                if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Peril)) 
                 {
-                    dam2 += player._pIGetHit << 6;
+                    dam2 += _pIGetHit << 6;
                     if (dam2 >= 0)
                     {
-                        ApplyPlrDamage(player, 0, 1, dam2);
+                        ApplyPlrDamage(0, 1, dam2);
                     }
                     dam *= 2;
                 }
@@ -838,64 +840,64 @@ namespace d2
                     dam = monster.hitPoints; /* ensure monster is killed with one hit */
                 }
         #endif
-                monster.ApplyMonsterDamage(monster, dam);
+                monster.ApplyMonsterDamage(dam);
             }
 
             int skdam = 0;
-            if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.RandomStealLife)) 
+            if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.RandomStealLife)) 
             {
                 skdam = d2Utils.GenerateRnd(dam / 8);
-                player._pHitPoints += skdam;
-                if (player._pHitPoints > player._pMaxHP) {
-                    player._pHitPoints = player._pMaxHP;
+                _pHitPoints += skdam;
+                if (_pHitPoints > _pMaxHP) {
+                    _pHitPoints = _pMaxHP;
                 }
-                player._pHPBase += skdam;
-                if (player._pHPBase > player._pMaxHPBase) {
-                    player._pHPBase = player._pMaxHPBase;
+                _pHPBase += skdam;
+                if (_pHPBase > _pMaxHPBase) {
+                    _pHPBase = _pMaxHPBase;
                 }
                 // RedrawComponent(PanelDrawComponent::Health);
             }
 
             // 窃取魔法效果
-            if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealMana3 | ItemSpecialEffect.StealMana5) && d2Utils.HasNoneOf(player._pIFlags, ItemSpecialEffect.NoMana)) 
+            if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealMana3 | ItemSpecialEffect.StealMana5) && d2Utils.HasNoneOf(_pIFlags, ItemSpecialEffect.NoMana)) 
             {
-                if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealMana3)) {
+                if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealMana3)) {
                     skdam = 3 * dam / 100;
                 }
-                if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealMana5)) {
+                if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealMana5)) {
                     skdam = 5 * dam / 100;
                 }
-                player._pMana += skdam;
-                if (player._pMana > player._pMaxMana) 
+                _pMana += skdam;
+                if (_pMana > _pMaxMana) 
                 {
-                    player._pMana = player._pMaxMana;
+                    _pMana = _pMaxMana;
                 }
-                player._pManaBase += skdam;
-                if (player._pManaBase > player._pMaxManaBase) 
+                _pManaBase += skdam;
+                if (_pManaBase > _pMaxManaBase) 
                 {
-                    player._pManaBase = player._pMaxManaBase;
+                    _pManaBase = _pMaxManaBase;
                 }
                 // RedrawComponent(PanelDrawComponent::Mana);
             }
 
             // 窃取 hp 
-            if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealLife3 | ItemSpecialEffect.StealLife5)) 
+            if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealLife3 | ItemSpecialEffect.StealLife5)) 
             {
-                if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealLife3)) {
+                if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealLife3)) {
                     skdam = 3 * dam / 100;
                 }
-                if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.StealLife5)) {
+                if (d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.StealLife5)) {
                     skdam = 5 * dam / 100;
                 }
-                player._pHitPoints += skdam;
-                if (player._pHitPoints > player._pMaxHP) 
+                _pHitPoints += skdam;
+                if (_pHitPoints > _pMaxHP) 
                 {
-                    player._pHitPoints = player._pMaxHP;
+                    _pHitPoints = _pMaxHP;
                 }
-                player._pHPBase += skdam;
-                if (player._pHPBase > player._pMaxHPBase) 
+                _pHPBase += skdam;
+                if (_pHPBase > _pMaxHPBase) 
                 {
-                    player._pHPBase = player._pMaxHPBase;
+                    _pHPBase = _pMaxHPBase;
                 }
                 // RedrawComponent(PanelDrawComponent::Health);
             }
@@ -903,13 +905,13 @@ namespace d2
             // 播放特效
             if ((monster.hitPoints >> 6) <= 0)
             {
-                monster.M_StartKill(monster, player, dam);
+                monster.M_StartKill(this, dam);
             } 
             else 
             {
-                // if (monster.mode != MonsterMode.Petrified && d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Knockback))
+                // if (monster.mode != MonsterMode.Petrified && d2Utils.HasAnyOf(_pIFlags, ItemSpecialEffect.Knockback))
                 //     M_GetKnockback(monster);
-                monster.M_StartHit(monster, player, dam);
+                monster.M_StartHit(this, dam);
             }
             return true;
         }
@@ -921,32 +923,32 @@ namespace d2
             return 24 - Math.Min(_pSplLvl[(int)spell_id.SPL_MANASHIELD], Max) * 3;
         }
 
-        public void ApplyPlrDamage(d2Player player, int dam, int minHP = 0, int frac = 0, int earflag = 0)
+        public void ApplyPlrDamage(int dam, int minHP = 0, int frac = 0, int earflag = 0)
         {
             int totalDamage = (dam << 6) + frac;
-            if (totalDamage > 0 && player.pManaShield) 
+            if (totalDamage > 0 && pManaShield) 
             {
-                int manaShieldLevel = player._pSplLvl[(int)spell_id.SPL_MANASHIELD];
+                int manaShieldLevel = _pSplLvl[(int)spell_id.SPL_MANASHIELD];
                 if (manaShieldLevel > 0) 
                 {
-                    totalDamage += totalDamage / -player.GetManaShieldDamageReduction();
+                    totalDamage += totalDamage / -GetManaShieldDamageReduction();
                 }
                 // if (&player == MyPlayer)
                     // RedrawComponent(PanelDrawComponent::Mana);
-                if (player._pMana >= totalDamage) 
+                if (_pMana >= totalDamage) 
                 {
-                    player._pMana -= totalDamage;
-                    player._pManaBase -= totalDamage;
+                    _pMana -= totalDamage;
+                    _pManaBase -= totalDamage;
                     totalDamage = 0;
                 } 
                 else 
                 {
-                    totalDamage -= player._pMana;
+                    totalDamage -= _pMana;
                     if (manaShieldLevel > 0) {
-                        totalDamage += totalDamage / (player.GetManaShieldDamageReduction() - 1);
+                        totalDamage += totalDamage / (GetManaShieldDamageReduction() - 1);
                     }
-                    player._pMana = 0;
-                    player._pManaBase = player._pMaxManaBase - player._pMaxMana;
+                    _pMana = 0;
+                    _pManaBase = _pMaxManaBase - _pMaxMana;
                     // if (&player == MyPlayer)
                     //     NetSendCmd(true, CMD_REMSHIELD);
                 }
@@ -956,31 +958,31 @@ namespace d2
                 return;
 
             // RedrawComponent(PanelDrawComponent::Health);
-            player._pHitPoints -= totalDamage;
-            player._pHPBase -= totalDamage;
-            if (player._pHitPoints > player._pMaxHP) {
-                player._pHitPoints = player._pMaxHP;
-                player._pHPBase = player._pMaxHPBase;
+            _pHitPoints -= totalDamage;
+            _pHPBase -= totalDamage;
+            if (_pHitPoints > _pMaxHP) {
+                _pHitPoints = _pMaxHP;
+                _pHPBase = _pMaxHPBase;
             }
             int minHitPoints = minHP << 6;
-            if (player._pHitPoints < minHitPoints) {
-                SetPlayerHitPoints(player, minHitPoints);
+            if (_pHitPoints < minHitPoints) {
+                SetPlayerHitPoints(minHitPoints);
             }
-            if (player._pHitPoints >> 6 <= 0) {
-                SyncPlrKill(player, earflag);
+            if (_pHitPoints >> 6 <= 0) {
+                SyncPlrKill(earflag);
             }
         }
 
-        void SyncPlrKill(d2Player player, int earflag)
+        void SyncPlrKill(int earflag)
         {
-            if (player._pHitPoints <= 0 && d2DEF.leveltype == dungeon_type.DTYPE_TOWN) 
+            if (_pHitPoints <= 0 && d2DEF.leveltype == dungeon_type.DTYPE_TOWN) 
             {
-                SetPlayerHitPoints(player, 64);
+                SetPlayerHitPoints(64);
                 return;
             }
 
-            SetPlayerHitPoints(player, 0);
-            StartPlayerKill(player, earflag);
+            SetPlayerHitPoints(0);
+            StartPlayerKill(earflag);
         }
 
         bool IsValidSpell(spell_id spl)
@@ -993,7 +995,7 @@ namespace d2
         public const int MaxResistance = 75;
         public const int GOLD_MAX_LIMIT = 5000;
         public int MaxGold = GOLD_MAX_LIMIT;
-        void CalcPlrItemVals(d2Player player, bool loadgfx)
+        void CalcPlrItemVals(bool loadgfx)
         {
             int mind = 0; // min damage
             int maxd = 0; // max damage
@@ -1034,7 +1036,7 @@ namespace d2
             int lmin = 0; // minimum lightning damage
             int lmax = 0; // maximum lightning damage
 
-            foreach (var item in player.InvBody) 
+            foreach (var item in InvBody) 
             {
                 if (!item.isEmpty() && item._iStatFlag) {
 
@@ -1085,111 +1087,111 @@ namespace d2
                 mind = 1;
                 maxd = 1;
 
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
                     maxd = 3;
                 }
 
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
                     maxd = 3;
                 }
 
-                if (player._pClass == HeroClass.Monk) {
-                    mind = Math.Max(mind, player._pLevel / 2);
-                    maxd = Math.Max(maxd, (int)player._pLevel);
+                if (_pClass == HeroClass.Monk) {
+                    mind = Math.Max(mind, _pLevel / 2);
+                    maxd = Math.Max(maxd, (int)_pLevel);
                 }
             }
 
-            if (d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.RageActive)) {
-                sadd += 2 * player._pLevel;
-                dadd += player._pLevel + player._pLevel / 2;
-                vadd += 2 * player._pLevel;
+            if (d2Utils.HasAnyOf(_pSpellFlags, SpellFlag.RageActive)) {
+                sadd += 2 * _pLevel;
+                dadd += _pLevel + _pLevel / 2;
+                vadd += 2 * _pLevel;
             }
-            if (d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.RageCooldown)) {
-                sadd -= 2 * player._pLevel;
-                dadd -= player._pLevel + player._pLevel / 2;
-                vadd -= 2 * player._pLevel;
+            if (d2Utils.HasAnyOf(_pSpellFlags, SpellFlag.RageCooldown)) {
+                sadd -= 2 * _pLevel;
+                dadd -= _pLevel + _pLevel / 2;
+                vadd -= 2 * _pLevel;
             }
 
-            player._pIMinDam = mind;
-            player._pIMaxDam = maxd;
-            player._pIAC = tac;
-            player._pIBonusDam = bdam;
-            player._pIBonusToHit = btohit;
-            player._pIBonusAC = bac;
-            player._pIFlags = iflgs;
-            player.pDamAcFlags = pDamAcFlags;
-            player._pIBonusDamMod = dmod;
-            player._pIGetHit = ghit;
+            _pIMinDam = mind;
+            _pIMaxDam = maxd;
+            _pIAC = tac;
+            _pIBonusDam = bdam;
+            _pIBonusToHit = btohit;
+            _pIBonusAC = bac;
+            _pIFlags = iflgs;
+            this.pDamAcFlags = pDamAcFlags;
+            _pIBonusDamMod = dmod;
+            _pIGetHit = ghit;
 
             lrad = Mathf.Clamp(lrad, 2, 15);
 
-            if (player._pLightRad != lrad) {
-                // ChangeLightRadius(player._plid, lrad);
-                // ChangeVisionRadius(player._pvid, lrad);
-                player._pLightRad = lrad;
+            if (_pLightRad != lrad) {
+                // ChangeLightRadius(_plid, lrad);
+                // ChangeVisionRadius(_pvid, lrad);
+                _pLightRad = lrad;
             }
 
-            player._pStrength = Math.Max(0, sadd + player._pBaseStr);
-            player._pMagic = Math.Max(0, madd + player._pBaseMag);
-            player._pDexterity = Math.Max(0, dadd + player._pBaseDex);
-            player._pVitality = Math.Max(0, vadd + player._pBaseVit);
+            _pStrength = Math.Max(0, sadd + _pBaseStr);
+            _pMagic = Math.Max(0, madd + _pBaseMag);
+            _pDexterity = Math.Max(0, dadd + _pBaseDex);
+            _pVitality = Math.Max(0, vadd + _pBaseVit);
 
-            if (player._pClass == HeroClass.Rogue) {
-                player._pDamageMod = player._pLevel * (player._pStrength + player._pDexterity) / 200;
-            } else if (player._pClass == HeroClass.Monk) {
-                player._pDamageMod = player._pLevel * (player._pStrength + player._pDexterity) / 150;
-                if ((!player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty() && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype != ItemType.Staff) || (!player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty() && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype != ItemType.Staff))
-                    player._pDamageMod /= 2; // Monks get half the normal damage bonus if they're holding a non-staff weapon
-            } else if (player._pClass == HeroClass.Bard) {
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Sword || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Sword)
-                    player._pDamageMod = player._pLevel * (player._pStrength + player._pDexterity) / 150;
-                else if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Bow || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Bow) {
-                    player._pDamageMod = player._pLevel * (player._pStrength + player._pDexterity) / 250;
+            if (_pClass == HeroClass.Rogue) {
+                _pDamageMod = _pLevel * (_pStrength + _pDexterity) / 200;
+            } else if (_pClass == HeroClass.Monk) {
+                _pDamageMod = _pLevel * (_pStrength + _pDexterity) / 150;
+                if ((!InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty() && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype != ItemType.Staff) || (!InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty() && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype != ItemType.Staff))
+                    _pDamageMod /= 2; // Monks get half the normal damage bonus if they're holding a non-staff weapon
+            } else if (_pClass == HeroClass.Bard) {
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Sword || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Sword)
+                    _pDamageMod = _pLevel * (_pStrength + _pDexterity) / 150;
+                else if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Bow || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Bow) {
+                    _pDamageMod = _pLevel * (_pStrength + _pDexterity) / 250;
                 } else {
-                    player._pDamageMod = player._pLevel * player._pStrength / 100;
+                    _pDamageMod = _pLevel * _pStrength / 100;
                 }
-            } else if (player._pClass == HeroClass.Barbarian) {
+            } else if (_pClass == HeroClass.Barbarian) {
 
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Axe || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Axe) {
-                    player._pDamageMod = player._pLevel * player._pStrength / 75;
-                } else if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Mace || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Mace) {
-                    player._pDamageMod = player._pLevel * player._pStrength / 75;
-                } else if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Bow || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Bow) {
-                    player._pDamageMod = player._pLevel * player._pStrength / 300;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Axe || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Axe) {
+                    _pDamageMod = _pLevel * _pStrength / 75;
+                } else if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Mace || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Mace) {
+                    _pDamageMod = _pLevel * _pStrength / 75;
+                } else if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Bow || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Bow) {
+                    _pDamageMod = _pLevel * _pStrength / 300;
                 } else {
-                    player._pDamageMod = player._pLevel * player._pStrength / 100;
+                    _pDamageMod = _pLevel * _pStrength / 100;
                 }
 
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield || player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield) {
-                    if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield)
-                        player._pIAC -= player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iAC / 2;
-                    else if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield)
-                        player._pIAC -= player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iAC / 2;
-                } else if (d2Utils.IsNoneOf(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype, ItemType.Staff, ItemType.Bow) && d2Utils.IsNoneOf(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype, ItemType.Staff, ItemType.Bow)) {
-                    player._pDamageMod += player._pLevel * player._pVitality / 100;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield || InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield) {
+                    if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield)
+                        _pIAC -= InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iAC / 2;
+                    else if (InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield)
+                        _pIAC -= InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iAC / 2;
+                } else if (d2Utils.IsNoneOf(InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype, ItemType.Staff, ItemType.Bow) && d2Utils.IsNoneOf(InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype, ItemType.Staff, ItemType.Bow)) {
+                    _pDamageMod += _pLevel * _pVitality / 100;
                 }
-                player._pIAC += player._pLevel / 4;
+                _pIAC += _pLevel / 4;
             } else {
-                player._pDamageMod = player._pLevel * player._pStrength / 100;
+                _pDamageMod = _pLevel * _pStrength / 100;
             }
 
-            player._pISpells = spl;
+            _pISpells = spl;
 
             // EnsureValidReadiedSpell(player);
 
-            player._pISplLvlAdd = spllvladd;
-            player._pIEnAc = enac;
+            _pISplLvlAdd = spllvladd;
+            _pIEnAc = enac;
 
-            if (player._pClass == HeroClass.Barbarian) {
-                mr += player._pLevel;
-                fr += player._pLevel;
-                lr += player._pLevel;
+            if (_pClass == HeroClass.Barbarian) {
+                mr += _pLevel;
+                fr += _pLevel;
+                lr += _pLevel;
             }
 
-            if (d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.RageCooldown)) {
-                mr -= player._pLevel;
-                fr -= player._pLevel;
-                lr -= player._pLevel;
+            if (d2Utils.HasAnyOf(_pSpellFlags, SpellFlag.RageCooldown)) {
+                mr -= _pLevel;
+                fr -= _pLevel;
+                lr -= _pLevel;
             }
 
             if (d2Utils.HasAnyOf(iflgs, ItemSpecialEffect.ZeroResistance)) {
@@ -1199,85 +1201,85 @@ namespace d2
                 lr = 0;
             }
 
-            player._pMagResist = Mathf.Clamp(mr, 0, MaxResistance);
-            player._pFireResist = Mathf.Clamp(fr, 0, MaxResistance);
-            player._pLghtResist = Mathf.Clamp(lr, 0, MaxResistance);
+            _pMagResist = Mathf.Clamp(mr, 0, MaxResistance);
+            _pFireResist = Mathf.Clamp(fr, 0, MaxResistance);
+            _pLghtResist = Mathf.Clamp(lr, 0, MaxResistance);
 
-            if (player._pClass == HeroClass.Warrior) {
+            if (_pClass == HeroClass.Warrior) {
                 vadd *= 2;
-            } else if (player._pClass == HeroClass.Barbarian) {
+            } else if (_pClass == HeroClass.Barbarian) {
                 vadd += vadd;
                 vadd += (vadd / 4);
-            } else if (d2Utils.IsAnyOf(player._pClass, HeroClass.Rogue, HeroClass.Monk, HeroClass.Bard)) {
+            } else if (d2Utils.IsAnyOf(_pClass, HeroClass.Rogue, HeroClass.Monk, HeroClass.Bard)) {
                 vadd += vadd / 2;
             }
             ihp += (vadd << 6); // BUGFIX: blood boil can cause negative shifts here (see line 757)
 
-            if (player._pClass == HeroClass.Sorcerer) {
+            if (_pClass == HeroClass.Sorcerer) {
                 madd *= 2;
             }
-            if (d2Utils.IsAnyOf(player._pClass, HeroClass.Rogue, HeroClass.Monk)) {
+            if (d2Utils.IsAnyOf(_pClass, HeroClass.Rogue, HeroClass.Monk)) {
                 madd += madd / 2;
-            } else if (player._pClass == HeroClass.Bard) {
+            } else if (_pClass == HeroClass.Bard) {
                 madd += (madd / 4) + (madd / 2);
             }
             imana += (madd << 6);
 
-            player._pMaxHP = ihp + player._pMaxHPBase;
-            player._pHitPoints = Math.Min(ihp + player._pHPBase, player._pMaxHP);
+            _pMaxHP = ihp + _pMaxHPBase;
+            _pHitPoints = Math.Min(ihp + _pHPBase, _pMaxHP);
 
-            if (/*&player == MyPlayer &&*/ (player._pHitPoints >> 6) <= 0) {
-                SetPlayerHitPoints(player, 0);
+            if (/*&player == MyPlayer &&*/ (_pHitPoints >> 6) <= 0) {
+                SetPlayerHitPoints(0);
             }
 
-            player._pMaxMana = imana + player._pMaxManaBase;
-            player._pMana = Math.Min(imana + player._pManaBase, player._pMaxMana);
+            _pMaxMana = imana + _pMaxManaBase;
+            _pMana = Math.Min(imana + _pManaBase, _pMaxMana);         
+            _pIFMinDam = fmin;
+            _pIFMaxDam = fmax;
+            _pILMinDam = lmin;
+            _pILMaxDam = lmax;
 
-            player._pIFMinDam = fmin;
-            player._pIFMaxDam = fmax;
-            player._pILMinDam = lmin;
-            player._pILMaxDam = lmax;
+            _pInfraFlag = false;
 
-            player._pInfraFlag = false;
-
-            player._pBlockFlag = false;
-            if (player._pClass == HeroClass.Monk) {
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Staff && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
-                    player._pBlockFlag = true;
-                    player._pIFlags |= ItemSpecialEffect.FastBlock;
+            _pBlockFlag = false;
+            if (_pClass == HeroClass.Monk) 
+            {
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Staff && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
+                    _pBlockFlag = true;
+                    _pIFlags |= ItemSpecialEffect.FastBlock;
                 }
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Staff && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
-                    player._pBlockFlag = true;
-                    player._pIFlags |= ItemSpecialEffect.FastBlock;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Staff && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
+                    _pBlockFlag = true;
+                    _pIFlags |= ItemSpecialEffect.FastBlock;
                 }
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty() && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty())
-                    player._pBlockFlag = true;
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iClass == item_class.ICLASS_WEAPON && player.GetItemLocation(player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]) != item_equip_type.ILOC_TWOHAND && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty())
-                    player._pBlockFlag = true;
-                if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iClass == item_class.ICLASS_WEAPON && player.GetItemLocation(player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]) != item_equip_type.ILOC_TWOHAND && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty())
-                    player._pBlockFlag = true;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty() && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty())
+                    _pBlockFlag = true;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iClass == item_class.ICLASS_WEAPON && GetItemLocation(InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]) != item_equip_type.ILOC_TWOHAND && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty())
+                    _pBlockFlag = true;
+                if (InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iClass == item_class.ICLASS_WEAPON && GetItemLocation(InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]) != item_equip_type.ILOC_TWOHAND && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty())
+                    _pBlockFlag = true;
             }
 
             ItemType weaponItemType = ItemType.None;
             bool holdsShield = false;
-            if (!player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty()
-                && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iClass == item_class.ICLASS_WEAPON
-                && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
-                weaponItemType = player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype;
+            if (!InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)].isEmpty()
+                && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iClass == item_class.ICLASS_WEAPON
+                && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
+                weaponItemType = InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype;
             }
 
-            if (!player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty()
-                && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iClass == item_class.ICLASS_WEAPON
-                && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
-                weaponItemType = player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype;
+            if (!InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)].isEmpty()
+                && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iClass == item_class.ICLASS_WEAPON
+                && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
+                weaponItemType = InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype;
             }
 
-            if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield && player.InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
-                player._pBlockFlag = true;
+            if (InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._itype == ItemType.Shield && InvBody[((int)inv_body_loc.INVLOC_HAND_LEFT)]._iStatFlag) {
+                _pBlockFlag = true;
                 holdsShield = true;
             }
-            if (player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield && player.InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
-                player._pBlockFlag = true;
+            if (InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._itype == ItemType.Shield && InvBody[((int)inv_body_loc.INVLOC_HAND_RIGHT)]._iStatFlag) {
+                _pBlockFlag = true;
                 holdsShield = true;
             }
 
@@ -1303,41 +1305,41 @@ namespace d2
             // }
 
             // PlayerArmorGraphic animArmorId = PlayerArmorGraphic::Light;
-            if (player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._itype == ItemType.HeavyArmor && player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iStatFlag) {
-                if (player._pClass == HeroClass.Monk && player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iMagical == item_quality.ITEM_QUALITY_UNIQUE)
-                    player._pIAC += player._pLevel / 2;
+            if (InvBody[((int)inv_body_loc.INVLOC_CHEST)]._itype == ItemType.HeavyArmor && InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iStatFlag) {
+                if (_pClass == HeroClass.Monk && InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iMagical == item_quality.ITEM_QUALITY_UNIQUE)
+                    _pIAC += _pLevel / 2;
                 // animArmorId = PlayerArmorGraphic::Heavy;
-            } else if (player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._itype == ItemType.MediumArmor && player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iStatFlag) {
-                if (player._pClass == HeroClass.Monk) {
-                    if (player.InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iMagical == item_quality.ITEM_QUALITY_UNIQUE)
-                        player._pIAC += player._pLevel * 2;
+            } else if (InvBody[((int)inv_body_loc.INVLOC_CHEST)]._itype == ItemType.MediumArmor && InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iStatFlag) {
+                if (_pClass == HeroClass.Monk) {
+                    if (InvBody[((int)inv_body_loc.INVLOC_CHEST)]._iMagical == item_quality.ITEM_QUALITY_UNIQUE)
+                        _pIAC += _pLevel * 2;
                     else
-                        player._pIAC += player._pLevel / 2;
+                        _pIAC += _pLevel / 2;
                 }
                 // animArmorId = PlayerArmorGraphic::Medium;
-            } else if (player._pClass == HeroClass.Monk) {
-                player._pIAC += player._pLevel * 2;
+            } else if (_pClass == HeroClass.Monk) {
+                _pIAC += _pLevel * 2;
             }
 
             // const uint8_t gfxNum = static_cast<uint8_t>(animWeaponId) | static_cast<uint8_t>(animArmorId);
-            // if (player._pgfxnum != gfxNum && loadgfx) {
-            //     player._pgfxnum = gfxNum;
+            // if (_pgfxnum != gfxNum && loadgfx) {
+            //     _pgfxnum = gfxNum;
             //     ResetPlayerGFX(player);
             //     SetPlrAnims(player);
-            //     player.previewCelSprite = std::nullopt;
-            //     player_graphic graphic = player.getGraphic();
+            //     previewCelSprite = std::nullopt;
+            //     player_graphic graphic = getGraphic();
             //     int8_t numberOfFrames;
             //     int8_t ticksPerFrame;
-            //     player.getAnimationFramesAndTicksPerFrame(graphic, numberOfFrames, ticksPerFrame);
+            //     getAnimationFramesAndTicksPerFrame(graphic, numberOfFrames, ticksPerFrame);
             //     LoadPlrGFX(player, graphic);
-            //     player.AnimInfo.changeAnimationData(player.AnimationData[static_cast<size_t>(graphic)].spritesForDirection(player._pdir), numberOfFrames, ticksPerFrame);
+            //     AnimInfo.changeAnimationData(AnimationData[static_cast<size_t>(graphic)].spritesForDirection(_pdir), numberOfFrames, ticksPerFrame);
             // } else {
-            //     player._pgfxnum = gfxNum;
+            //     _pgfxnum = gfxNum;
             // }
 
             // if (&player == MyPlayer) 
             {
-                // if (player.InvBody[((int)inv_body_loc.INVLOC_AMULET)].isEmpty() || player.InvBody[((int)inv_body_loc.INVLOC_AMULET)].IDidx != _item_indexes.IDI_AURIC) {
+                // if (InvBody[((int)inv_body_loc.INVLOC_AMULET)].isEmpty() || InvBody[((int)inv_body_loc.INVLOC_AMULET)].IDidx != _item_indexes.IDI_AURIC) {
                 //     int half = MaxGold;
                 //     MaxGold = GOLD_MAX_LIMIT;
 
@@ -1352,10 +1354,10 @@ namespace d2
             // RedrawComponent(PanelDrawComponent::Health);
         }
 
-        void SetPlayerHitPoints(d2Player player, int val)
+        void SetPlayerHitPoints(int val)
         {
-            player._pHitPoints = val;
-            player._pHPBase = val + player._pMaxHPBase - player._pMaxHP;
+            _pHitPoints = val;
+            _pHPBase = val + _pMaxHPBase - _pMaxHP;
 
             // if (&player == MyPlayer) {
             //     RedrawComponent(PanelDrawComponent::Health);
@@ -1369,45 +1371,45 @@ namespace d2
             return item._iLoc;
         }
 
-        void NextPlrLevel(d2Player player)
+        void NextPlrLevel()
         {
-            player._pLevel++;
-            player._pMaxLvl++;
+            _pLevel++;
+            _pMaxLvl++;
 
-            CalcPlrInv(player, true);
+            CalcPlrInv(true);
 
-            if (CalcStatDiff(player) < 5) 
+            if (CalcStatDiff() < 5) 
             {
-                player._pStatPts = CalcStatDiff(player);
+                _pStatPts = CalcStatDiff();
             } else {
-                player._pStatPts += 5;
+                _pStatPts += 5;
             }
 
-            player._pNextExper = ExpLvlsTbl[player._pLevel];
+            _pNextExper = ExpLvlsTbl[_pLevel];
 
-            int hp = player._pClass == HeroClass.Sorcerer ? 64 : 128;
+            int hp = _pClass == HeroClass.Sorcerer ? 64 : 128;
 
-            player._pMaxHP += hp;
-            player._pHitPoints = player._pMaxHP;
-            player._pMaxHPBase += hp;
-            player._pHPBase = player._pMaxHPBase;
+            _pMaxHP += hp;
+            _pHitPoints = _pMaxHP;
+            _pMaxHPBase += hp;
+            _pHPBase = _pMaxHPBase;
 
             // if (&player == MyPlayer) {
             //     RedrawComponent(PanelDrawComponent::Health);
             // }
 
             int mana = 128;
-            if (player._pClass == HeroClass.Warrior)
+            if (_pClass == HeroClass.Warrior)
                 mana = 64;
-            else if (player._pClass == HeroClass.Barbarian)
+            else if (_pClass == HeroClass.Barbarian)
                 mana = 0;
 
-            player._pMaxMana += mana;
-            player._pMaxManaBase += mana;
+            _pMaxMana += mana;
+            _pMaxManaBase += mana;
 
-            if (d2Utils.HasNoneOf(player._pIFlags, ItemSpecialEffect.NoMana)) {
-                player._pMana = player._pMaxMana;
-                player._pManaBase = player._pMaxManaBase;
+            if (d2Utils.HasNoneOf(_pIFlags, ItemSpecialEffect.NoMana)) {
+                _pMana = _pMaxMana;
+                _pManaBase = _pMaxManaBase;
             }
 
             // if (&player == MyPlayer) {
@@ -1417,17 +1419,17 @@ namespace d2
             // if (ControlMode != ControlTypes::KeyboardAndMouse)
             //     FocusOnCharInfo();
 
-            CalcPlrInv(player, true);
+            CalcPlrInv(true);
         }
 
-        void CalcPlrInv(d2Player player, bool loadgfx)
+        void CalcPlrInv(bool loadgfx)
         {
             // Determine the players current stats, this updates the statFlag on all equipped items that became unusable after
             //  a change in equipment.
-            CalcSelfItems(player);
+            CalcSelfItems();
 
             // Determine the current item bonuses gained from usable equipped items
-            CalcPlrItemVals(player, loadgfx);
+            CalcPlrItemVals(loadgfx);
 
             // if (&player == MyPlayer) 
             {
@@ -1436,7 +1438,7 @@ namespace d2
                 // {
                 //     item.updateRequiredStatsCacheForPlayer(player);
                 // }
-                // player.CalcScrolls();
+                // CalcScrolls();
                 // CalcPlrStaff(player);
                 // if (IsStashOpen) {
                 //     // If stash is open, ensure the items are displayed correctly
@@ -1445,7 +1447,7 @@ namespace d2
             }
         }
 
-        void CalcSelfItems(d2Player player)
+        void CalcSelfItems()
         {
             int sa = 0;
             int ma = 0;
@@ -1453,9 +1455,9 @@ namespace d2
 
             // first iteration is used for collecting stat bonuses from items
             // for (Item &equipment : EquippedPlayerItemsRange(player)) {
-            for (int i = 0; i < player.InvBody.Length; ++i)
+            for (int i = 0; i < InvBody.Length; ++i)
             {
-                var equipment = player.InvBody[i];
+                var equipment = InvBody[i];
                 if (equipment == null || equipment.isEmpty())
                     continue;
 
@@ -1470,15 +1472,15 @@ namespace d2
             bool changeflag;
             do {
                 // cap stats to 0
-                int currstr = Math.Max(0, sa + player._pBaseStr);
-                int currmag = Math.Max(0, ma + player._pBaseMag);
-                int currdex = Math.Max(0, da + player._pBaseDex);
+                int currstr = Math.Max(0, sa + _pBaseStr);
+                int currmag = Math.Max(0, ma + _pBaseMag);
+                int currdex = Math.Max(0, da + _pBaseDex);
 
                 changeflag = false;
                 // for (Item &equipment : EquippedPlayerItemsRange(player)) {
-                for (int i = 0; i < player.InvBody.Length; ++i)
+                for (int i = 0; i < InvBody.Length; ++i)
                 {
-                    var equipment = player.InvBody[i];
+                    var equipment = InvBody[i];
                     if (equipment == null || equipment.isEmpty())
                         continue;
 
@@ -1501,14 +1503,14 @@ namespace d2
             } while (changeflag);
         }
 
-        int CalcStatDiff(d2Player player)
+        int CalcStatDiff()
         {
             int diff = 0;
             for (int i = (int)CharacterAttribute.FIRST; i <= (int)CharacterAttribute.LAST; ++i)
             {
                 var attribute = (CharacterAttribute)i;
-                diff += player.GetMaximumAttributeValue(attribute);
-                diff -= player.GetBaseAttributeValue(attribute);
+                diff += GetMaximumAttributeValue(attribute);
+                diff -= GetBaseAttributeValue(attribute);
             }
             return diff;
         }
@@ -1545,27 +1547,27 @@ namespace d2
             return 0;
         }
 
-        void ChangePlayerItems(d2Player player, inv_body_loc bodyLocation, _item_indexes idx)
+        void ChangePlayerItems(inv_body_loc bodyLocation, _item_indexes idx)
         {
-            var item = player.InvBody[(int)bodyLocation];
+            var item = InvBody[(int)bodyLocation];
             int curlvl = 1;
-            item.RecreateItem(player, item, idx, ((int)icreateinfo_flag.CF_TOWN) | curlvl, 0, 1);
-            CheckInvSwap(player, bodyLocation);
+            item.RecreateItem(this, item, idx, ((int)icreateinfo_flag.CF_TOWN) | curlvl, 0, 1);
+            CheckInvSwap(bodyLocation);
 
-            // player.ReadySpellFromEquipment(bodyLocation);
+            // ReadySpellFromEquipment(bodyLocation);
         }
 
-        void CheckInvSwap(d2Player player, inv_body_loc bLoc)
+        void CheckInvSwap(inv_body_loc bLoc)
         {
-            var item = player.InvBody[(int)bLoc];
+            var item = InvBody[(int)bLoc];
 
-            if (bLoc == inv_body_loc.INVLOC_HAND_LEFT && player.GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].clear();
-            } else if (bLoc == inv_body_loc.INVLOC_HAND_RIGHT && player.GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].clear();
+            if (bLoc == inv_body_loc.INVLOC_HAND_LEFT && GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
+                InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].clear();
+            } else if (bLoc == inv_body_loc.INVLOC_HAND_RIGHT && GetItemLocation(item) == item_equip_type.ILOC_TWOHAND) {
+                InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].clear();
             }
 
-            CalcPlrInv(player, true);
+            CalcPlrInv(true);
         }
 
         /**
@@ -1580,72 +1582,72 @@ namespace d2
             return blkper;
         }
 
-        public void StartPlrBlock(d2Player player, Direction dir)
+        public void StartPlrBlock(Direction dir)
         {
-            d2Test.Inst.ShowUnitText(player, "BLOCK");
+            d2Test.Inst.ShowUnitText(this, "BLOCK");
 
-            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
+            // if (_pInvincible && _pHitPoints == 0 && &player == MyPlayer) {
             //     SyncPlrKill(player, -1);
             //     return;
             // }
 
-            // PlaySfxLoc(IS_ISWORD, player.position.tile);
+            // PlaySfxLoc(IS_ISWORD, position.tile);
 
             // int8_t skippedAnimationFrames = 0;
-            // if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastBlock)) {
-            //     skippedAnimationFrames = (player._pBFrames - 2); // ISPL_FASTBLOCK means we cancel the animation if frame 2 was shown
+            // if (HasAnyOf(_pIFlags, ItemSpecialEffect::FastBlock)) {
+            //     skippedAnimationFrames = (_pBFrames - 2); // ISPL_FASTBLOCK means we cancel the animation if frame 2 was shown
             // }
 
             // NewPlrAnim(player, player_graphic::Block, dir, AnimationDistributionFlags::SkipsDelayOfLastFrame, skippedAnimationFrames);
 
-            // player._pmode = PM_BLOCK;
+            // _pmode = PM_BLOCK;
             // FixPlayerLocation(player, dir);
             // SetPlayerOld(player);
         }
 
-        public void StartPlrHit(d2Player player, int dam, bool forcehit)
+        public void StartPlrHit(int dam, bool forcehit)
         {
-            d2Test.Inst.ShowDamageText(player, dam);
+            d2Test.Inst.ShowDamageText(this, dam);
 
-            if (player._pInvincible && player._pHitPoints == 0 /*&& &player == MyPlayer8*/) 
+            if (_pInvincible && _pHitPoints == 0 /*&& &player == MyPlayer8*/) 
             {
-                SyncPlrKill(player, -1);
+                SyncPlrKill(-1);
                 return;
             }
 
-            // // player.Say(HeroSpeech::ArghClang);
+            // // Say(HeroSpeech::ArghClang);
 
             // RedrawComponent(PanelDrawComponent::Health);
-            if (player._pClass == HeroClass.Barbarian) {
-                if (dam >> 6 < player._pLevel + player._pLevel / 4 && !forcehit) {
+            if (_pClass == HeroClass.Barbarian) {
+                if (dam >> 6 < _pLevel + _pLevel / 4 && !forcehit) {
                     return;
                 }
-            } else if (dam >> 6 < player._pLevel && !forcehit) {
+            } else if (dam >> 6 < _pLevel && !forcehit) {
                 return;
             }
 
-            // Direction pd = player._pdir;
+            // Direction pd = _pdir;
 
             // int8_t skippedAnimationFrames = 0;
             // constexpr ItemSpecialEffect ZenFlags = ItemSpecialEffect::FastHitRecovery | ItemSpecialEffect::FasterHitRecovery | ItemSpecialEffect::FastestHitRecovery;
-            // if (HasAllOf(player._pIFlags, ZenFlags)) { // if multiple hitrecovery modes are present the skipping of frames can go so far, that they skip frames that would skip. so the additional skipping thats skipped. that means we can't add the different modes together.
+            // if (HasAllOf(_pIFlags, ZenFlags)) { // if multiple hitrecovery modes are present the skipping of frames can go so far, that they skip frames that would skip. so the additional skipping thats skipped. that means we can't add the different modes together.
             //     skippedAnimationFrames = 4;
-            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastestHitRecovery)) {
+            // } else if (HasAnyOf(_pIFlags, ItemSpecialEffect::FastestHitRecovery)) {
             //     skippedAnimationFrames = 3;
-            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FasterHitRecovery)) {
+            // } else if (HasAnyOf(_pIFlags, ItemSpecialEffect::FasterHitRecovery)) {
             //     skippedAnimationFrames = 2;
-            // } else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastHitRecovery)) {
+            // } else if (HasAnyOf(_pIFlags, ItemSpecialEffect::FastHitRecovery)) {
             //     skippedAnimationFrames = 1;
             // } else {
             //     skippedAnimationFrames = 0;
             // }
 
-            player.NewPlrAnim(player, player_graphic.Hit/*, pd, AnimationDistributionFlags::None, skippedAnimationFrames*/);
+            NewPlrAnim(player_graphic.Hit/*, pd, AnimationDistributionFlags::None, skippedAnimationFrames*/);
 
-            player._pmode = PLR_MODE.PM_GOTHIT;
+            _pmode = PLR_MODE.PM_GOTHIT;
             // FixPlayerLocation(player, pd);
             // FixPlrWalkTags(player);
-            // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
+            // dPlayer[position.tile.x][position.tile.y] = getId() + 1;
             // SetPlayerOld(player);
         }
 
@@ -1654,12 +1656,12 @@ namespace d2
             m_Animator.SetTrigger("Attack");
             weapon.StartAttack();
             _pmode = PLR_MODE.PM_ATTACK;
-            NewPlrAnim(this, player_graphic.Attack);
+            NewPlrAnim(player_graphic.Attack);
         }
 
-        void StartPlayerKill(d2Player player, int earflag)
+        void StartPlayerKill(int earflag)
         {
-            if (player._pHitPoints <= 0 && player._pmode == PLR_MODE.PM_DEATH) {
+            if (_pHitPoints <= 0 && _pmode == PLR_MODE.PM_DEATH) {
                 return;
             }
 
@@ -1667,44 +1669,44 @@ namespace d2
             //     NetSendCmdParam1(true, CMD_PLRDEAD, earflag);
             // }
 
-            // bool diablolevel = gbIsMultiplayer && (player.isOnLevel(16) || player.isOnArenaLevel());
+            // bool diablolevel = gbIsMultiplayer && (isOnLevel(16) || isOnArenaLevel());
 
-            // player.Say(HeroSpeech::AuughUh);
+            // Say(HeroSpeech::AuughUh);
 
-            // if (player._pgfxnum != 0) {
+            // if (_pgfxnum != 0) {
             //     if (diablolevel || earflag != 0)
-            //         player._pgfxnum &= ~0xFU;
+            //         _pgfxnum &= ~0xFU;
             //     else
-            //         player._pgfxnum = 0;
+            //         _pgfxnum = 0;
             //     ResetPlayerGFX(player);
             //     SetPlrAnims(player);
             // }
 
-            // NewPlrAnim(player, player_graphic::Death, player._pdir);
+            // NewPlrAnim(player, player_graphic::Death, _pdir);
 
-            // player._pBlockFlag = false;
-            // player._pmode = PM_DEATH;
-            // player._pInvincible = true;
+            // _pBlockFlag = false;
+            // _pmode = PM_DEATH;
+            // _pInvincible = true;
             // SetPlayerHitPoints(player, 0);
 
             // if (&player != MyPlayer && earflag == 0 && !diablolevel) {
-            //     for (auto &item : player.InvBody) {
+            //     for (auto &item : InvBody) {
             //         item.clear();
             //     }
             //     CalcPlrInv(player, false);
             // }
 
-            // if (player.isOnActiveLevel()) {
-            //     FixPlayerLocation(player, player._pdir);
+            // if (isOnActiveLevel()) {
+            //     FixPlayerLocation(player, _pdir);
             //     FixPlrWalkTags(player);
-            //     dFlags[player.position.tile.x][player.position.tile.y] |= DungeonFlag::DeadPlayer;
+            //     dFlags[position.tile.x][position.tile.y] |= DungeonFlag::DeadPlayer;
             //     SetPlayerOld(player);
 
             //     if (&player == MyPlayer) {
             //         RedrawComponent(PanelDrawComponent::Health);
 
-            //         if (!player.HoldItem.isEmpty()) {
-            //             DeadItem(player, std::move(player.HoldItem), { 0, 0 });
+            //         if (!HoldItem.isEmpty()) {
+            //             DeadItem(player, std::move(HoldItem), { 0, 0 });
             //             NewCursor(CURSOR_HAND);
             //         }
 
@@ -1714,9 +1716,9 @@ namespace d2
             //                 if (earflag != 0) {
             //                     Item ear;
             //                     InitializeItem(ear, IDI_EAR);
-            //                     CopyUtf8(ear._iName, fmt::format(fmt::runtime(_("Ear of {:s}")), player._pName), sizeof(ear._iName));
-            //                     CopyUtf8(ear._iIName, player._pName, sizeof(ear._iIName));
-            //                     switch (player._pClass) {
+            //                     CopyUtf8(ear._iName, fmt::format(fmt::runtime(_("Ear of {:s}")), _pName), sizeof(ear._iName));
+            //                     CopyUtf8(ear._iIName, _pName, sizeof(ear._iIName));
+            //                     switch (_pClass) {
             //                     case HeroClass::Sorcerer:
             //                         ear._iCurs = ICURS_EAR_SORCERER;
             //                         break;
@@ -1731,16 +1733,16 @@ namespace d2
             //                         break;
             //                     }
 
-            //                     ear._iCreateInfo = player._pName[0] << 8 | player._pName[1];
-            //                     ear._iSeed = player._pName[2] << 24 | player._pName[3] << 16 | player._pName[4] << 8 | player._pName[5];
-            //                     ear._ivalue = player._pLevel;
+            //                     ear._iCreateInfo = _pName[0] << 8 | _pName[1];
+            //                     ear._iSeed = _pName[2] << 24 | _pName[3] << 16 | _pName[4] << 8 | _pName[5];
+            //                     ear._ivalue = _pLevel;
 
             //                     if (FindGetItem(ear._iSeed, IDI_EAR, ear._iCreateInfo) == -1) {
             //                         DeadItem(player, std::move(ear), { 0, 0 });
             //                     }
             //                 } else {
-            //                     Direction pdd = player._pdir;
-            //                     for (auto &item : player.InvBody) {
+            //                     Direction pdd = _pdir;
+            //                     for (auto &item : InvBody) {
             //                         pdd = Left(pdd);
             //                         DeadItem(player, item.pop(), Displacement(pdd));
             //                     }
@@ -1757,11 +1759,13 @@ namespace d2
         public bool AttackPlayer(d2Player target)
         {
             StartPlayerAttack();
-            return PlrHitPlr(this, target);
+            return PlrHitPlr(target);
         }
 
-        public bool PlrHitPlr(d2Player attacker, d2Player target)
+        public bool PlrHitPlr(d2Player target)
         {
+            var attacker = this;
+
             if (target._pInvincible) 
             {
                 Debug.LogWarning("failed PlrHitPlr because target is invincible");
@@ -1797,7 +1801,7 @@ namespace d2
             if (blk < blkper) 
             {
                 Direction dir = d2Utils.GetDirection(target.position.tile, attacker.position.tile);
-                StartPlrBlock(target, dir);
+                target.StartPlrBlock(dir);
                 return true;
             }
 
@@ -1829,45 +1833,45 @@ namespace d2
             // {
             //     NetSendCmdDamage(true, target.getId(), skdam);
             // }
-            StartPlrHit(target, skdam, false);
+            target.StartPlrHit(skdam, false);
 
             return true;
         }
 
-        bool DoAttack(d2Player player)
+        bool DoAttack()
         {
-            // if (player.AnimInfo.currentFrame == player._pAFNum - 2) 
+            // if (AnimInfo.currentFrame == _pAFNum - 2) 
             // {
-            //     PlaySfxLoc(PS_SWING, player.position.tile);
+            //     PlaySfxLoc(PS_SWING, position.tile);
             // }
 
             // bool didhit = false;
 
-            // if (player.AnimInfo.currentFrame == player._pAFNum - 1) 
+            // if (AnimInfo.currentFrame == _pAFNum - 1) 
             // {
-            //     Point position = player.position.tile + player._pdir;
+            //     Point position = position.tile + _pdir;
             //     Monster *monster = FindMonsterAtPosition(position);
 
             //     if (monster != nullptr) {
             //         if (CanTalkToMonst(*monster)) {
-            //             player.position.temp.x = 0; /** @todo Looks to be irrelevant, probably just remove it */
+            //             position.temp.x = 0; /** @todo Looks to be irrelevant, probably just remove it */
             //             return false;
             //         }
             //     }
 
-            //     if (!gbIsHellfire || !HasAllOf(player._pIFlags, ItemSpecialEffect::FireDamage | ItemSpecialEffect::LightningDamage)) {
-            //         const size_t playerId = player.getId();
-            //         if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FireDamage)) {
+            //     if (!gbIsHellfire || !HasAllOf(_pIFlags, ItemSpecialEffect::FireDamage | ItemSpecialEffect::LightningDamage)) {
+            //         const size_t playerId = getId();
+            //         if (HasAnyOf(_pIFlags, ItemSpecialEffect::FireDamage)) {
             //             AddMissile(position, { 1, 0 }, Direction::South, MIS_WEAPEXP, TARGET_MONSTERS, playerId, 0, 0);
             //         }
-            //         if (HasAnyOf(player._pIFlags, ItemSpecialEffect::LightningDamage)) {
+            //         if (HasAnyOf(_pIFlags, ItemSpecialEffect::LightningDamage)) {
             //             AddMissile(position, { 2, 0 }, Direction::South, MIS_WEAPEXP, TARGET_MONSTERS, playerId, 0, 0);
             //         }
             //     }
 
             //     if (monster != nullptr) {
             //         didhit = PlrHitMonst(player, *monster);
-            //     } else if (PlayerAtPosition(position) != nullptr && !player.friendlyMode) {
+            //     } else if (PlayerAtPosition(position) != nullptr && !friendlyMode) {
             //         didhit = PlrHitPlr(player, *PlayerAtPosition(position));
             //     } else {
             //         Object *object = FindObjectAtPosition(position, false);
@@ -1875,19 +1879,19 @@ namespace d2
             //             didhit = PlrHitObj(player, *object);
             //         }
             //     }
-            //     if ((player._pClass == HeroClass::Monk
-            //             && (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Staff || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Staff))
-            //         || (player._pClass == HeroClass::Bard
-            //             && player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword)
-            //         || (player._pClass == HeroClass::Barbarian
-            //             && (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Axe || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Axe
-            //                 || (((player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Mace && player.InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
-            //                         || (player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Mace && player.InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND)
-            //                         || (player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
-            //                         || (player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword && player.InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND))
-            //                     && !(player.InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Shield || player.InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Shield))))) {
+            //     if ((_pClass == HeroClass::Monk
+            //             && (InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Staff || InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Staff))
+            //         || (_pClass == HeroClass::Bard
+            //             && InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword)
+            //         || (_pClass == HeroClass::Barbarian
+            //             && (InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Axe || InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Axe
+            //                 || (((InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Mace && InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
+            //                         || (InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Mace && InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND)
+            //                         || (InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Sword && InvBody[INVLOC_HAND_LEFT]._iLoc == ILOC_TWOHAND)
+            //                         || (InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Sword && InvBody[INVLOC_HAND_RIGHT]._iLoc == ILOC_TWOHAND))
+            //                     && !(InvBody[INVLOC_HAND_LEFT]._itype == ItemType::Shield || InvBody[INVLOC_HAND_RIGHT]._itype == ItemType::Shield))))) {
             //         // playing as a class/weapon with cleave
-            //         position = player.position.tile + Right(player._pdir);
+            //         position = position.tile + Right(_pdir);
             //         monster = FindMonsterAtPosition(position);
             //         if (monster != nullptr) {
             //             if (!CanTalkToMonst(*monster) && monster->position.old == position) {
@@ -1895,7 +1899,7 @@ namespace d2
             //                     didhit = true;
             //             }
             //         }
-            //         position = player.position.tile + Left(player._pdir);
+            //         position = position.tile + Left(_pdir);
             //         monster = FindMonsterAtPosition(position);
             //         if (monster != nullptr) {
             //             if (!CanTalkToMonst(*monster) && monster->position.old == position) {
@@ -1906,25 +1910,25 @@ namespace d2
             //     }
 
             //     if (didhit && DamageWeapon(player, 30)) {
-            //         StartStand(player, player._pdir);
+            //         StartStand(player, _pdir);
             //         ClearStateVariables(player);
             //         return true;
             //     }
             // }
 
-            if (player.AnimInfoRemainFrame() == 1)
+            if (AnimInfoRemainFrame() == 1)
             {
-                if (player.DamageWeapon(player, 30)) 
+                if (DamageWeapon(30)) 
                 {
-                    player.StartStand(player, player._pdir);
+                    StartStand(_pdir);
                     // ClearStateVariables(player);
                     return true;
                 }
             }
 
-            if (player.AnimInfoIsLastFrame()) 
+            if (AnimInfoIsLastFrame()) 
             {
-                player.StartStand(player, player._pdir);
+                StartStand(_pdir);
                 // ClearStateVariables(player);
                 return true;
             }
@@ -1932,7 +1936,7 @@ namespace d2
             return false;
         }
 
-        void NewPlrAnim(d2Player player, player_graphic graphic)
+        void NewPlrAnim(player_graphic graphic)
         {
             animationFrameTick = 0;
 
@@ -1959,62 +1963,62 @@ namespace d2
         }
 
         public Direction _pdir;
-        bool DoGotHit(d2Player player)
+        bool DoGotHit()
         {
             // Debug.Log("xx-- do got hit > " + animationFrame);
-            if (player.AnimInfoIsLastFrame()) 
+            if (AnimInfoIsLastFrame()) 
             {
                 Debug.LogError("xx-- do got hit > " + animationFrame);
-                StartStand(player, player._pdir);
+                StartStand(_pdir);
                 // ClearStateVariables(player);
                 if (!d2Utils.FlipCoin(4)) 
                 {
-                    player.DamageArmor(player);
+                    DamageArmor();
                 }
                 return true;
             }
             return false;
         }
 
-        void StartStand(d2Player player, Direction dir)
+        void StartStand(Direction dir)
         {
-            // if (player._pInvincible && player._pHitPoints == 0 && &player == MyPlayer) {
+            // if (_pInvincible && _pHitPoints == 0 && &player == MyPlayer) {
             //     SyncPlrKill(player, -1);
             //     return;
             // }
 
             // NewPlrAnim(player, player_graphic::Stand, dir);
-            player._pmode = PLR_MODE.PM_STAND;
+            _pmode = PLR_MODE.PM_STAND;
             // FixPlayerLocation(player, dir);
             // FixPlrWalkTags(player);
-            // dPlayer[player.position.tile.x][player.position.tile.y] = player.getId() + 1;
+            // dPlayer[position.tile.x][position.tile.y] = getId() + 1;
             // SetPlayerOld(player);
         }
 
-        void DamageArmor(d2Player player)
+        void DamageArmor()
         {
             // if (&player != MyPlayer) {
             //     return;
             // }
 
-            if (player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+            if (InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
                 Debug.Log("DamageArmor > chest & head is empty");
                 return;
             }
 
             bool targetHead = d2Utils.FlipCoin(3);
-            if (!player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+            if (!InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
                 targetHead = false;
             }
-            if (player.InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && !player.InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
+            if (InvBody[(int)inv_body_loc.INVLOC_CHEST].isEmpty() && !InvBody[(int)inv_body_loc.INVLOC_HEAD].isEmpty()) {
                 targetHead = true;
             }
 
             d2Item pi;
             if (targetHead) {
-                pi = player.InvBody[(int)inv_body_loc.INVLOC_HEAD];
+                pi = InvBody[(int)inv_body_loc.INVLOC_HEAD];
             } else {
-                pi = player.InvBody[(int)inv_body_loc.INVLOC_CHEST];
+                pi = InvBody[(int)inv_body_loc.INVLOC_CHEST];
             }
             if (pi._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
                 return;
@@ -2027,101 +2031,101 @@ namespace d2
             }
 
             if (targetHead) {
-                player.RemoveEquipment(player, inv_body_loc.INVLOC_HEAD, true);
+                RemoveEquipment(inv_body_loc.INVLOC_HEAD, true);
             } else {
-                player.RemoveEquipment(player, inv_body_loc.INVLOC_CHEST, true);
+                RemoveEquipment(inv_body_loc.INVLOC_CHEST, true);
             }
-            CalcPlrInv(player, true);
+            CalcPlrInv(true);
         }
 
-        void RemoveEquipment(d2Player player, inv_body_loc bodyLocation, bool hiPri)
+        void RemoveEquipment(inv_body_loc bodyLocation, bool hiPri)
         {
             // if (&player == MyPlayer) {
             //     NetSendCmdDelItem(hiPri, bodyLocation);
             // }
             Debug.Log("RemoveEquipment > " + bodyLocation);
-            player.InvBody[(int)bodyLocation].clear();
+            InvBody[(int)bodyLocation].clear();
         }
 
         // 每次攻击物品损坏，与耐久无关
-        bool WeaponDecay(d2Player player, int ii)
+        bool WeaponDecay(int ii)
         {
-            if (!player.InvBody[ii].isEmpty() && player.InvBody[ii]._iClass == item_class.ICLASS_WEAPON && d2Utils.HasAnyOf(player.InvBody[ii]._iDamAcFlags, ItemSpecialEffectHf.Decay)) {
-                player.InvBody[ii]._iPLDam -= 5;
-                if (player.InvBody[ii]._iPLDam <= -100) {
-                    RemoveEquipment(player, (inv_body_loc)(ii), true);
-                    CalcPlrInv(player, true);
+            if (!InvBody[ii].isEmpty() && InvBody[ii]._iClass == item_class.ICLASS_WEAPON && d2Utils.HasAnyOf(InvBody[ii]._iDamAcFlags, ItemSpecialEffectHf.Decay)) {
+                InvBody[ii]._iPLDam -= 5;
+                if (InvBody[ii]._iPLDam <= -100) {
+                    RemoveEquipment((inv_body_loc)(ii), true);
+                    CalcPlrInv(true);
                     return true;
                 }
-                CalcPlrInv(player, true);
+                CalcPlrInv(true);
             }
             return false;
         }
 
-        bool DamageWeapon(d2Player player, int damageFrequency)
+        bool DamageWeapon(int damageFrequency)
         {
             // Debug.Log("xx-- DamageWeapon");
             // if (&player != MyPlayer) {
             //     return false;
             // }
 
-            if (WeaponDecay(player, (int)inv_body_loc.INVLOC_HAND_LEFT))
+            if (WeaponDecay((int)inv_body_loc.INVLOC_HAND_LEFT))
                 return true;
-            if (WeaponDecay(player, (int)inv_body_loc.INVLOC_HAND_RIGHT))
+            if (WeaponDecay((int)inv_body_loc.INVLOC_HAND_RIGHT))
                 return true;
 
             if (!d2Utils.FlipCoin(damageFrequency)) {
                 return false;
             }
 
-            if (!player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iClass == item_class.ICLASS_WEAPON) {
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+            if (!InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iClass == item_class.ICLASS_WEAPON) {
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
                     return false;
                 }
 
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability <= 0) {
-                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_LEFT, true);
-                    CalcPlrInv(player, true);
+                InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability <= 0) {
+                    RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
+                    CalcPlrInv(true);
                     return true;
                 }
             }
 
-            if (!player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iClass == item_class.ICLASS_WEAPON) {
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+            if (!InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iClass == item_class.ICLASS_WEAPON) {
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
                     return false;
                 }
 
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
-                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_RIGHT, true);
-                    CalcPlrInv(player, true);
+                InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
+                    RemoveEquipment(inv_body_loc.INVLOC_HAND_RIGHT, true);
+                    CalcPlrInv(true);
                     return true;
                 }
             }
 
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Shield) {
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+            if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Shield) {
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
                     return false;
                 }
 
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
-                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_RIGHT, true);
-                    CalcPlrInv(player, true);
+                InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
+                    RemoveEquipment(inv_body_loc.INVLOC_HAND_RIGHT, true);
+                    CalcPlrInv(true);
                     return true;
                 }
             }
 
-            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Shield) {
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+            if (InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Shield) {
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
                     return false;
                 }
 
-                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
-                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == 0) {
-                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_LEFT, true);
-                    CalcPlrInv(player, true);
+                InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
+                if (InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == 0) {
+                    RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
+                    CalcPlrInv(true);
                     return true;
                 }
             }

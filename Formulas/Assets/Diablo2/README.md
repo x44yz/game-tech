@@ -9,7 +9,8 @@ TODO:
 [x]player hit player
 [x]DamageArmor
 [x]DamageWeapon
-[+]info 面板
+[x]level up test button
+[+]equip item test button
 
 https://diablo2.diablowiki.net/
 http://wiki.d.163.com/index.php?title=%E8%AF%8D%E7%BC%80_(Diablo_I)
