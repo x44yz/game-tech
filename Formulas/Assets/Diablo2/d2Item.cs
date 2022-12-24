@@ -507,7 +507,7 @@ namespace d2
         }
 
         // Item indestructible durability
-        public const int DUR_INDESTRUCTIBLE = 255;
+        public const int DUR_INDESTRUCTIBLE = 255; // 不可破坏
         void ItemRndDur(d2Item item)
         {
             if (item._iDurability > 0 && item._iDurability != DUR_INDESTRUCTIBLE)

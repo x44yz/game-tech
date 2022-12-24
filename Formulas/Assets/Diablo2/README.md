@@ -7,7 +7,7 @@ TODO:
 [+]去除 difficult 区别  
 [x]monster hit player
 [x]player hit player
-[+]DamageArmor
+[x]DamageArmor
 [+]DamageWeapon
 
 https://diablo2.diablowiki.net/

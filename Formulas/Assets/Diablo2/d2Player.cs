@@ -242,6 +242,7 @@ namespace d2
         }
 
         public int animationFrame = 0;
+        public int animationFrameTick = 0;
         protected override void OnUpdate(float dt)
         {
             base.OnUpdate(dt);
@@ -249,7 +250,7 @@ namespace d2
             // update animation
             if (animationFrame > 0)
             {
-                animationFrame -= 1;
+                animationFrameTick += 1;
                 // Debug.Log("xx-- update ani frame > " + animationFrame);
             }
 
@@ -1652,6 +1653,8 @@ namespace d2
         {
             m_Animator.SetTrigger("Attack");
             weapon.StartAttack();
+            _pmode = PLR_MODE.PM_ATTACK;
+            NewPlrAnim(this, player_graphic.Attack);
         }
 
         void StartPlayerKill(d2Player player, int earflag)
@@ -1909,25 +1912,50 @@ namespace d2
             //     }
             // }
 
-            // if (player.AnimInfo.isLastFrame()) {
-            //     StartStand(player, player._pdir);
-            //     ClearStateVariables(player);
-            //     return true;
-            // }
+            if (player.AnimInfoRemainFrame() == 1)
+            {
+                if (player.DamageWeapon(player, 30)) 
+                {
+                    player.StartStand(player, player._pdir);
+                    // ClearStateVariables(player);
+                    return true;
+                }
+            }
+
+            if (player.AnimInfoIsLastFrame()) 
+            {
+                player.StartStand(player, player._pdir);
+                // ClearStateVariables(player);
+                return true;
+            }
 
             return false;
         }
 
         void NewPlrAnim(d2Player player, player_graphic graphic)
         {
+            animationFrameTick = 0;
+
             animationFrame = 30;
             if (graphic == player_graphic.Hit)
-                animationFrame = 30;
+                animationFrame = 15;
+            else if (graphic == player_graphic.Attack)
+                animationFrame = 20;
+        }
+
+        int AnimInfoRemainFrame()
+        {
+            return Mathf.Max(0, animationFrame - animationFrameTick);
+        }
+
+        int AnimInfoCurrentFrame()
+        {
+            return animationFrameTick;
         }
 
         bool AnimInfoIsLastFrame()
         {
-            return animationFrame <= 0;
+            return animationFrameTick >= animationFrame;
         }
 
         public Direction _pdir;
@@ -2013,6 +2041,92 @@ namespace d2
             // }
             Debug.Log("RemoveEquipment > " + bodyLocation);
             player.InvBody[(int)bodyLocation].clear();
+        }
+
+        // 每次攻击物品损坏，与耐久无关
+        bool WeaponDecay(d2Player player, int ii)
+        {
+            if (!player.InvBody[ii].isEmpty() && player.InvBody[ii]._iClass == item_class.ICLASS_WEAPON && d2Utils.HasAnyOf(player.InvBody[ii]._iDamAcFlags, ItemSpecialEffectHf.Decay)) {
+                player.InvBody[ii]._iPLDam -= 5;
+                if (player.InvBody[ii]._iPLDam <= -100) {
+                    RemoveEquipment(player, (inv_body_loc)(ii), true);
+                    CalcPlrInv(player, true);
+                    return true;
+                }
+                CalcPlrInv(player, true);
+            }
+            return false;
+        }
+
+        bool DamageWeapon(d2Player player, int damageFrequency)
+        {
+            // Debug.Log("xx-- DamageWeapon");
+            // if (&player != MyPlayer) {
+            //     return false;
+            // }
+
+            if (WeaponDecay(player, (int)inv_body_loc.INVLOC_HAND_LEFT))
+                return true;
+            if (WeaponDecay(player, (int)inv_body_loc.INVLOC_HAND_RIGHT))
+                return true;
+
+            if (!d2Utils.FlipCoin(damageFrequency)) {
+                return false;
+            }
+
+            if (!player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iClass == item_class.ICLASS_WEAPON) {
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+                    return false;
+                }
+
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability <= 0) {
+                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_LEFT, true);
+                    CalcPlrInv(player, true);
+                    return true;
+                }
+            }
+
+            if (!player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iClass == item_class.ICLASS_WEAPON) {
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+                    return false;
+                }
+
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
+                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_RIGHT, true);
+                    CalcPlrInv(player, true);
+                    return true;
+                }
+            }
+
+            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._itype == ItemType.Shield) {
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+                    return false;
+                }
+
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability--;
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT]._iDurability == 0) {
+                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_RIGHT, true);
+                    CalcPlrInv(player, true);
+                    return true;
+                }
+            }
+
+            if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_RIGHT].isEmpty() && player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._itype == ItemType.Shield) {
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == d2Item.DUR_INDESTRUCTIBLE) {
+                    return false;
+                }
+
+                player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability--;
+                if (player.InvBody[(int)inv_body_loc.INVLOC_HAND_LEFT]._iDurability == 0) {
+                    RemoveEquipment(player, inv_body_loc.INVLOC_HAND_LEFT, true);
+                    CalcPlrInv(player, true);
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
