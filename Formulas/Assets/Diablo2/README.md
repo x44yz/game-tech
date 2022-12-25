@@ -10,7 +10,10 @@ TODO:
 [x]DamageArmor
 [x]DamageWeapon
 [x]level up test button
-[+]equip item test button
+[x]equip item test button
+[+]equip item unique
+[+]equip item misc
+[+]hp 去掉 << 6
 
 https://diablo2.diablowiki.net/
 http://wiki.d.163.com/index.php?title=%E8%AF%8D%E7%BC%80_(Diablo_I)

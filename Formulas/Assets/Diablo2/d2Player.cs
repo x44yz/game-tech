@@ -114,13 +114,6 @@ namespace d2
         [Header("---- PLAYER ----")]
         public HeroClass _pClass;
         public int _pLevel; // 角色等级 
-        public _item_indexes headItemId = _item_indexes.IDI_NONE;
-        public _item_indexes lringItemId = _item_indexes.IDI_NONE;
-        public _item_indexes rringItemId = _item_indexes.IDI_NONE;
-        public _item_indexes amuletItemId = _item_indexes.IDI_NONE;
-        public _item_indexes lhandItemId = _item_indexes.IDI_NONE;
-        public _item_indexes rhandItemId = _item_indexes.IDI_NONE;
-        public _item_indexes chestItemId = _item_indexes.IDI_NONE;
 
         [Header("---- RUNTIME ----")]
         public int _pStrength;
@@ -206,12 +199,6 @@ namespace d2
         public PLR_MODE _pmode;
         public ActorPosition position = new ActorPosition();
 
-        [Button("LevelUp", EButtonEnableMode.Playmode)]
-        private void TestLevelUp()
-        {
-            NextPlrLevel();
-        }
-
         protected override void OnStart()
         {
             base.OnStart();
@@ -225,27 +212,7 @@ namespace d2
                 NextPlrLevel();
             }
 
-        // public _item_indexes headItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes lringItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes rringItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes amuletItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes lhandItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes rhandItemId = _item_indexes.IDI_NONE;
-        // public _item_indexes chestItemId = _item_indexes.IDI_NONE;
-            if (headItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_HEAD, headItemId);
-            if (lringItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_RING_LEFT, lringItemId);
-            if (rringItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_RING_RIGHT, rringItemId);
-            if (amuletItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_AMULET, amuletItemId);
-            if (lhandItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_HAND_LEFT, lhandItemId);
-            if (rhandItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_HAND_RIGHT, rhandItemId);
-            if (chestItemId != _item_indexes.IDI_NONE)
-                ChangePlayerItems(inv_body_loc.INVLOC_CHEST, chestItemId);
+            TestRefreshEquip();
         }
 
         public int animationFrame = 0;
@@ -1551,7 +1518,7 @@ namespace d2
         {
             var item = InvBody[(int)bodyLocation];
             int curlvl = 1;
-            item.RecreateItem(this, item, idx, ((int)icreateinfo_flag.CF_TOWN) | curlvl, 0, 1);
+            item.RecreateItem(this, idx, curlvl, 0, 1);
             CheckInvSwap(bodyLocation);
 
             // ReadySpellFromEquipment(bodyLocation);
@@ -2132,6 +2099,126 @@ namespace d2
 
             return false;
         }
+
+        // ---------------------------------------------------------------------
+#region EditorTest
+        [Button("LevelUp", EButtonEnableMode.Playmode)]
+        private void TestLevelUp()
+        {
+            NextPlrLevel();
+        }
+
+        [Button("RefreshEquip", EButtonEnableMode.Playmode)]
+        private void TestRefreshEquip()
+        {
+            RemoveEquipment(inv_body_loc.INVLOC_HEAD, true);
+            RemoveEquipment(inv_body_loc.INVLOC_RING_LEFT, true);
+            RemoveEquipment(inv_body_loc.INVLOC_RING_RIGHT, true);
+            RemoveEquipment(inv_body_loc.INVLOC_AMULET, true);
+            RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
+            RemoveEquipment(inv_body_loc.INVLOC_HAND_RIGHT, true);
+            RemoveEquipment(inv_body_loc.INVLOC_CHEST, true);
+
+            if (testHeadItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_HEAD, (_item_indexes)testHeadItemId);
+            if (testLeftRingItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_RING_LEFT, (_item_indexes)testLeftRingItemId);
+            if (testRightRingItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_RING_RIGHT, (_item_indexes)testRightRingItemId);
+            if (testAmuletItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_AMULET, (_item_indexes)testAmuletItemId);
+            if (testLeftHandItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_HAND_LEFT, (_item_indexes)testLeftHandItemId);
+            if (testRightHandItemId != (int)_item_indexes.IDI_NONE)
+            {
+                var dat = d2Data.AllItemsList[testRightHandItemId];
+                if (dat.iLoc == item_equip_type.ILOC_TWOHAND)
+                {
+                    Debug.LogWarning("right hand is two-hand weapon, remove left hand equip");
+                    testLeftHandItemId = (int)_item_indexes.IDI_NONE;
+                    RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
+                }
+                ChangePlayerItems(inv_body_loc.INVLOC_HAND_RIGHT, (_item_indexes)testRightHandItemId);
+            }
+            if (testChestItemId != (int)_item_indexes.IDI_NONE)
+                ChangePlayerItems(inv_body_loc.INVLOC_CHEST, (_item_indexes)testChestItemId);
+        }
+
+        [Dropdown("TestGetHeadItemIds")]
+        public int testHeadItemId;
+        public static DropdownList<int> testHeadItemIds = null;
+        private DropdownList<int> TestGetHeadItemIds()
+        {
+            if (testHeadItemIds == null)
+                testHeadItemIds = TestGetItemIds(item_equip_type.ILOC_HELM);
+            return testHeadItemIds;
+        }
+
+        [Dropdown("TestGetRingItemIds")]
+        public int testLeftRingItemId;
+        [Dropdown("TestGetRingItemIds")]
+        public int testRightRingItemId;
+        public static DropdownList<int> testRingItemIds = null;
+        private DropdownList<int> TestGetRingItemIds()
+        {
+            if (testRingItemIds == null)
+                testRingItemIds = TestGetItemIds(item_equip_type.ILOC_RING);
+            return testRingItemIds;
+        }
+
+        [Dropdown("TestGetHandItemIds")]
+        public int testLeftHandItemId;
+        [Dropdown("TestGetHandItemIds")]
+        public int testRightHandItemId;
+        public static DropdownList<int> testHandItemIds = null;
+        private DropdownList<int> TestGetHandItemIds()
+        {
+            if (testHandItemIds == null)
+                testHandItemIds = TestGetItemIds(item_equip_type.ILOC_ONEHAND, item_equip_type.ILOC_TWOHAND);
+            return testHandItemIds;
+        }
+
+        [Dropdown("TestGetAmuletItemIds")]
+        public int testAmuletItemId;
+        public static DropdownList<int> testAmuletItemIds = null;
+        private DropdownList<int> TestGetAmuletItemIds()
+        {
+            if (testAmuletItemIds == null)
+                testAmuletItemIds = TestGetItemIds(item_equip_type.ILOC_AMULET);
+            return testAmuletItemIds;
+        }
+
+        [Dropdown("TestGetChestItemIds")]
+        public int testChestItemId;
+        public static DropdownList<int> testChestItemIds = null;
+        private DropdownList<int> TestGetChestItemIds()
+        {
+            if (testChestItemIds == null)
+                testChestItemIds = TestGetItemIds(item_equip_type.ILOC_ARMOR);
+            return testChestItemIds;
+        }
+
+        private DropdownList<int> TestGetItemIds(params item_equip_type[] locs)
+        {
+            var rt = new DropdownList<int>();
+            rt.Add("None", (int)_item_indexes.IDI_NONE);
+
+            for (int i = 0; i < d2Data.AllItemsList.Length; ++i)
+            {
+                var d = d2Data.AllItemsList[i];
+                foreach (var loc in locs)
+                {
+                    if (d.iLoc == loc)
+                    {
+                        rt.Add(d.iName, i);
+                        break;
+                    }
+                }
+            }
+            return rt;
+        }
+
+#endregion // EditorTest
     }
 }
 

@@ -162,7 +162,7 @@ namespace d2
         }
 
         public int _iCreateInfo;
-        public void RecreateItem(d2Player player, d2Item item, _item_indexes idx, int icreateinfo, int iseed, int ivalue)
+        public void RecreateItem(d2Player player, _item_indexes idx, int icreateinfo, int iseed, int ivalue)
         {
             if (idx == _item_indexes.IDI_GOLD) {
                 InitializeItem(_item_indexes.IDI_GOLD);

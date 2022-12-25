@@ -989,13 +989,6 @@ MonoBehaviour:
   weapon: {fileID: 0}
   _pClass: 0
   _pLevel: 1
-  headItemId: 7
-  lringItemId: -1
-  rringItemId: -1
-  amuletItemId: -1
-  lhandItemId: -1
-  rhandItemId: 1
-  chestItemId: -1
   _pStrength: 0
   _pBaseStr: 0
   _pMagic: 0
@@ -4596,6 +4589,13 @@ MonoBehaviour:
     _iVMult2: 0
   MaxGold: 5000
   _pdir: 0
+  testHeadItemId: -1
+  testLeftRingItemId: 0
+  testRightRingItemId: 0
+  testLeftHandItemId: 0
+  testRightHandItemId: 0
+  testAmuletItemId: 0
+  testChestItemId: 0
 --- !u!70 &495155706
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -10230,13 +10230,6 @@ MonoBehaviour:
   weapon: {fileID: 0}
   _pClass: 0
   _pLevel: 1
-  headItemId: -1
-  lringItemId: -1
-  rringItemId: -1
-  amuletItemId: -1
-  lhandItemId: -1
-  rhandItemId: 1
-  chestItemId: -1
   _pStrength: 0
   _pBaseStr: 0
   _pMagic: 0
@@ -13837,6 +13830,13 @@ MonoBehaviour:
     _iVMult2: 0
   MaxGold: 5000
   _pdir: 0
+  testHeadItemId: -1
+  testLeftRingItemId: -1
+  testRightRingItemId: -1
+  testLeftHandItemId: -1
+  testRightHandItemId: 1
+  testAmuletItemId: -1
+  testChestItemId: -1
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0
