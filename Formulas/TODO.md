@@ -1,6 +1,7 @@
-## diablo
-## daggerfall
-## 辐射
+[+] diablo
+[+] daggerfall
+[+] 辐射 fallout 2
+[+] fallout shelter
 
 [x]player stats
 [x]enemy stats
