@@ -926,17 +926,17 @@ namespace d2
                 _iPLGetHit -= r;
                 break;
             case item_effect_type.IPL_LIFE:
-                _iPLHP += r << 6;
+                _iPLHP += r << d2DEF.HPMANAOFFSET;
                 break;
             case item_effect_type.IPL_LIFE_CURSE:
-                _iPLHP -= r << 6;
+                _iPLHP -= r << d2DEF.HPMANAOFFSET;
                 break;
             case item_effect_type.IPL_MANA:
-                _iPLMana += r << 6;
+                _iPLMana += r << d2DEF.HPMANAOFFSET;
                 // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_MANA_CURSE:
-                _iPLMana -= r << 6;
+                _iPLMana -= r << d2DEF.HPMANAOFFSET;
                 // RedrawComponent(PanelDrawComponent::Mana);
                 break;
             case item_effect_type.IPL_DUR: {
@@ -1120,12 +1120,12 @@ namespace d2
                 _iDamAcFlags |= ItemSpecialEffectHf.ACAgainstUndead;
                 break;
             case item_effect_type.IPL_MANATOLIFE: {
-                int portion = ((player._pMaxManaBase >> 6) * 50 / 100) << 6;
+                int portion = ((player._pMaxManaBase >> d2DEF.HPMANAOFFSET) * 50 / 100) << d2DEF.HPMANAOFFSET;
                 _iPLMana -= portion;
                 _iPLHP += portion;
             } break;
             case item_effect_type.IPL_LIFETOMANA: {
-                int portion = ((player._pMaxHPBase >> 6) * 40 / 100) << 6;
+                int portion = ((player._pMaxHPBase >> d2DEF.HPMANAOFFSET) * 40 / 100) << d2DEF.HPMANAOFFSET;
                 _iPLHP -= portion;
                 _iPLMana += portion;
             } break;

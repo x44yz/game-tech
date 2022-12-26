@@ -296,7 +296,7 @@ namespace d2
 
             _pBaseToBlk = BlockBonuses[ic];
 
-            _pHitPoints = (_pVitality + 10) << 6;
+            _pHitPoints = (_pVitality + 10) << d2DEF.HPMANAOFFSET;
             if (_pClass == HeroClass.Warrior || _pClass == HeroClass.Barbarian) {
                 _pHitPoints *= 2;
             } else if (_pClass == HeroClass.Rogue || _pClass == HeroClass.Monk || _pClass == HeroClass.Bard) {
@@ -307,7 +307,7 @@ namespace d2
             _pHPBase = _pHitPoints;
             _pMaxHPBase = _pHitPoints;
 
-            _pMana = _pMagic << 6;
+            _pMana = _pMagic << d2DEF.HPMANAOFFSET;
             if (_pClass == HeroClass.Sorcerer) {
                 _pMana *= 2;
             } else if (_pClass == HeroClass.Bard) {
@@ -723,7 +723,7 @@ namespace d2
             int dam = d2Utils.GenerateRnd(maxd - mind + 1) + mind;
             dam += dam * _pIBonusDam / 100;
             dam += _pIBonusDamMod;
-            int dam2 = dam << 6;
+            int dam2 = dam << d2DEF.HPMANAOFFSET;
             dam += _pDamageMod;
             
             // 暴击
@@ -778,7 +778,7 @@ namespace d2
             //     AddDoppelganger(monster);
             // }
 
-            dam <<= 6;
+            dam <<= d2DEF.HPMANAOFFSET;
             if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Jesters)) 
             {
                 int r = d2Utils.GenerateRnd(201);
@@ -795,7 +795,7 @@ namespace d2
             {
                 if (d2Utils.HasAnyOf(pDamAcFlags, ItemSpecialEffectHf.Peril)) 
                 {
-                    dam2 += _pIGetHit << 6;
+                    dam2 += _pIGetHit << d2DEF.HPMANAOFFSET;
                     if (dam2 >= 0)
                     {
                         ApplyPlrDamage(0, 1, dam2);
@@ -870,7 +870,7 @@ namespace d2
             }
 
             // 播放特效
-            if ((monster.hitPoints >> 6) <= 0)
+            if ((monster.hitPoints >> d2DEF.HPMANAOFFSET) <= 0)
             {
                 monster.M_StartKill(this, dam);
             } 
@@ -892,7 +892,7 @@ namespace d2
 
         public void ApplyPlrDamage(int dam, int minHP = 0, int frac = 0, int earflag = 0)
         {
-            int totalDamage = (dam << 6) + frac;
+            int totalDamage = (dam << d2DEF.HPMANAOFFSET) + frac;
             if (totalDamage > 0 && pManaShield) 
             {
                 int manaShieldLevel = _pSplLvl[(int)spell_id.SPL_MANASHIELD];
@@ -931,11 +931,11 @@ namespace d2
                 _pHitPoints = _pMaxHP;
                 _pHPBase = _pMaxHPBase;
             }
-            int minHitPoints = minHP << 6;
+            int minHitPoints = minHP << d2DEF.HPMANAOFFSET;
             if (_pHitPoints < minHitPoints) {
                 SetPlayerHitPoints(minHitPoints);
             }
-            if (_pHitPoints >> 6 <= 0) {
+            if (_pHitPoints >> d2DEF.HPMANAOFFSET <= 0) {
                 SyncPlrKill(earflag);
             }
         }
@@ -1180,7 +1180,7 @@ namespace d2
             } else if (d2Utils.IsAnyOf(_pClass, HeroClass.Rogue, HeroClass.Monk, HeroClass.Bard)) {
                 vadd += vadd / 2;
             }
-            ihp += (vadd << 6); // BUGFIX: blood boil can cause negative shifts here (see line 757)
+            ihp += (vadd << d2DEF.HPMANAOFFSET); // BUGFIX: blood boil can cause negative shifts here (see line 757)
 
             if (_pClass == HeroClass.Sorcerer) {
                 madd *= 2;
@@ -1190,12 +1190,12 @@ namespace d2
             } else if (_pClass == HeroClass.Bard) {
                 madd += (madd / 4) + (madd / 2);
             }
-            imana += (madd << 6);
+            imana += (madd << d2DEF.HPMANAOFFSET);
 
             _pMaxHP = ihp + _pMaxHPBase;
             _pHitPoints = Math.Min(ihp + _pHPBase, _pMaxHP);
 
-            if (/*&player == MyPlayer &&*/ (_pHitPoints >> 6) <= 0) {
+            if (/*&player == MyPlayer &&*/ (_pHitPoints >> d2DEF.HPMANAOFFSET) <= 0) {
                 SetPlayerHitPoints(0);
             }
 
@@ -1586,10 +1586,10 @@ namespace d2
 
             // RedrawComponent(PanelDrawComponent::Health);
             if (_pClass == HeroClass.Barbarian) {
-                if (dam >> 6 < _pLevel + _pLevel / 4 && !forcehit) {
+                if (dam >> d2DEF.HPMANAOFFSET < _pLevel + _pLevel / 4 && !forcehit) {
                     return;
                 }
-            } else if (dam >> 6 < _pLevel && !forcehit) {
+            } else if (dam >> d2DEF.HPMANAOFFSET < _pLevel && !forcehit) {
                 return;
             }
 
@@ -1783,7 +1783,7 @@ namespace d2
                     dam *= 2;
                 }
             }
-            int skdam = dam << 6;
+            int skdam = dam << d2DEF.HPMANAOFFSET;
             if (d2Utils.HasAnyOf(attacker._pIFlags, ItemSpecialEffect.RandomStealLife)) {
                 int tac = d2Utils.GenerateRnd(skdam / 8);
                 attacker._pHitPoints += tac;

@@ -136,7 +136,7 @@ namespace d2
             if (type == _monster_id.MT_DIABLO && !d2DEF.gbIsHellfire) {
                 maxhp /= 2;
             }
-            maxHitPoints = maxhp << 6;
+            maxHitPoints = maxhp << d2DEF.HPMANAOFFSET;
 
             if (!d2DEF.gbIsMultiplayer)
                 maxHitPoints = Math.Max(maxHitPoints / 2, 64);
@@ -180,7 +180,7 @@ namespace d2
             {
                 maxHitPoints = 3 * maxHitPoints;
                 if (d2DEF.gbIsHellfire)
-                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 100 : 50) << 6;
+                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 100 : 50) << d2DEF.HPMANAOFFSET;
                 else
                     maxHitPoints += 64;
                 hitPoints = maxHitPoints;
@@ -195,7 +195,7 @@ namespace d2
             {
                 maxHitPoints = 4 * maxHitPoints;
                 if (d2DEF.gbIsHellfire)
-                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 200 : 100) << 6;
+                    maxHitPoints += (d2DEF.gbIsMultiplayer ? 200 : 100) << d2DEF.HPMANAOFFSET;
                 else
                     maxHitPoints += 192;
                 hitPoints = maxHitPoints;
@@ -262,7 +262,7 @@ namespace d2
 
         void MonsterAttackPlayer(d2Player player, int hit, int minDam, int maxDam)
         {
-            if (player._pHitPoints >> 6 <= 0 || player._pInvincible || d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.Etherealize))
+            if (player._pHitPoints >> d2DEF.HPMANAOFFSET <= 0 || player._pInvincible || d2Utils.HasAnyOf(player._pSpellFlags, SpellFlag.Etherealize))
                 return;
             // 判断距离
             // if (position.tile.WalkingDistance(player.position.tile) >= 2)
@@ -305,8 +305,8 @@ namespace d2
                 player.StartPlrBlock(dir);
                 if (/*player == MyPlayer &&*/ player.wReflections > 0) 
                 {
-                    int kdam = d2Utils.GenerateRnd(((maxDam - minDam) << 6) + 1) + (minDam << 6);
-                    kdam = Math.Max(kdam + (player._pIGetHit << 6), 64);
+                    int kdam = d2Utils.GenerateRnd(((maxDam - minDam) << d2DEF.HPMANAOFFSET) + 1) + (minDam << d2DEF.HPMANAOFFSET);
+                    kdam = Math.Max(kdam + (player._pIGetHit << d2DEF.HPMANAOFFSET), /*64*/1 << d2DEF.HPMANAOFFSET);
                     CheckReflect(player, ref kdam);
                 }
                 return;
@@ -327,10 +327,10 @@ namespace d2
                     }
                 }
             }
-            int dam = (minDam << 6) + d2Utils.GenerateRnd(((maxDam - minDam) << 6) + 1);
+            int dam = (minDam << d2DEF.HPMANAOFFSET) + d2Utils.GenerateRnd(((maxDam - minDam) << d2DEF.HPMANAOFFSET) + 1);
             // 最小 64 点伤害？
             // _pIGetHit 减伤
-            dam = Math.Max(dam + (player._pIGetHit << 6), 64);
+            dam = Math.Max(dam + (player._pIGetHit << d2DEF.HPMANAOFFSET), 1 << d2DEF.HPMANAOFFSET);
             // if (&player == MyPlayer) 
             {
                 if (player.wReflections > 0)
@@ -341,9 +341,9 @@ namespace d2
             // Reflect can also kill a monster, so make sure the monster is still alive
             if (d2Utils.HasAnyOf(player._pIFlags, ItemSpecialEffect.Thorns) && mode != MonsterMode.Death) 
             {
-                int mdam = (d2Utils.GenerateRnd(3) + 1) << 6;
+                int mdam = (d2Utils.GenerateRnd(3) + 1) << d2DEF.HPMANAOFFSET;
                 ApplyMonsterDamage(mdam);
-                if (hitPoints >> 6 <= 0)
+                if (hitPoints >> d2DEF.HPMANAOFFSET <= 0)
                     M_StartKill(player, mdam);
                 else
                     M_StartHit(player, mdam);
@@ -351,7 +351,7 @@ namespace d2
 
             if ((flags & monster_flag.MFLAG_NOLIFESTEAL) == 0 && type == _monster_id.MT_SKING && d2DEF.gbIsMultiplayer)
                 hitPoints += dam;
-            if (player._pHitPoints >> 6 <= 0) 
+            if (player._pHitPoints >> d2DEF.HPMANAOFFSET <= 0) 
             {
                 if (d2DEF.gbIsHellfire)
                     M_StartStand(direction);
@@ -383,7 +383,7 @@ namespace d2
             int mdam = dam * (d2Utils.GenerateRnd(10) + 20) / 100;
             ApplyMonsterDamage(mdam);
             dam = Math.Max(dam - mdam, 0);
-            if (hitPoints >> 6 <= 0)
+            if (hitPoints >> d2DEF.HPMANAOFFSET <= 0)
                 M_StartKill(player, mdam);
             else
                 M_StartHit(player, mdam);
@@ -393,7 +393,7 @@ namespace d2
         {
             hitPoints -= damage;
 
-            // if (hitPoints >> 6 <= 0) {
+            // if (hitPoints >> d2DEF.HPMANAOFFSET <= 0) {
             //     delta_kill_monster(monster, position.tile, *MyPlayer);
             //     NetSendCmdLocParam1(false, CMD_MONSTDEATH, position.tile, getId());
             //     return;

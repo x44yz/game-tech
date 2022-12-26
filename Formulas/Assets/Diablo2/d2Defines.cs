@@ -1476,6 +1476,8 @@ namespace d2
 
     public class d2DEF
     {
+        public const int HPMANAOFFSET = 0;
+
         public const int BaseHitChance = 50;
         /** Indicate if we have loaded the Hellfire expansion data */
         public static bool gbIsHellfire = false;
