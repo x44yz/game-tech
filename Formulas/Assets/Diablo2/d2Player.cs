@@ -1748,7 +1748,16 @@ namespace d2
             int hit = d2Utils.GenerateRnd(100);
 
             int hper = attacker.GetMeleeToHit() - target.GetArmor();
+            // NOTE：限定到 5-95，是为了保障在差别很大的情况下，有小概率能够击中或闪避
+            // 如果 hper > 100, 限定到 100 那么可能永远击不中
+            // 如果 hper < 0, 限定到 0，那么必然击中
             hper = Mathf.Clamp(hper, 5, 95);
+
+            if (hit >= hper) 
+            {
+                d2Test.Inst.ShowMiss(target);
+                return false;
+            }
 
             int blk = 100;
             if ((target._pmode == PLR_MODE.PM_STAND || target._pmode == PLR_MODE.PM_ATTACK) && target._pBlockFlag) 
@@ -1759,13 +1768,7 @@ namespace d2
             int blkper = target.GetBlockChance() - (attacker._pLevel * 2);
             blkper = Mathf.Clamp(blkper, 0, 100);
 
-            if (hit >= hper) 
-            {
-                d2Test.Inst.ShowMiss(target);
-                return false;
-            }
-
-            if (blk < blkper) 
+            if (blk < blkper)
             {
                 Direction dir = d2Utils.GetDirection(target.position.tile, attacker.position.tile);
                 target.StartPlrBlock(dir);

@@ -13,7 +13,9 @@ TODO:
 [x]equip item test button
 [+]equip item unique
 [+]equip item misc
-[+]hp 去掉 << 6
+[x]hp 去掉 << 6
+[+]missile hit monster
+[+]missile hit player
 
 https://diablo2.diablowiki.net/
 http://wiki.d.163.com/index.php?title=%E8%AF%8D%E7%BC%80_(Diablo_I)
@@ -21,10 +23,15 @@ https://d2.lc/AB/wiki/index9c3b.html?title=Damage
 https://www.diablo-2.net/skillcalculator  
 https://planetdiablo.eu/diablo2/calcs/dmgcalc/dmgcalc.php?patch=110&lang=eng
 http://www.baronsbazaar.ca/forum/ppr/damage_calc.html  
+http://news.17173.com/z/ah2/content/10262021/160454018.shtml  
+http://news.17173.com/z/ah2/content/10262021/160149955.shtml  
 
 > 升级所需的经验值  
 ![excel](./../../Raw/diablo_%E7%BB%8F%E9%AA%8C%E5%80%BC.xlsx)  
 从 excel 中可以看出，是个类似前平后高的曲线，而 2 级之间的差值近似是条直线  
+
+> 护甲  
+护甲只是提高你闪避的概率，而不是减免伤害，这与许多游戏不同
 
 > 玩家 A 攻击玩家 B 流程  
 A 广播 destAction=ACTION_ATTACKPLR，每个客户端更新攻击（为了表现一致，A 的攻击动画和 B 的受伤动画），实际触发攻击的关键帧在 A 计算，然后发送 B 受伤的消息到 B，，B 收到消息扣除数值，然后同步数据到其他玩家。
@@ -71,4 +78,19 @@ A 广播 destAction=ACTION_ATTACKPLR，每个客户端更新攻击（为了表�
 |_iPLDam|额外伤害比|叠加到玩家 _pIBonusDam |
 
 
-
+> 近战伤害公式  
+```
+// 击中概率
+hper = attacker.GetMeleeToHit() - target.GetArmor() 
+hper = clamp(hper, 5, 95) // 限定范围是为了保证双方在差距明显的情况下也能击中或闪避
+if (rnd(100) > hper) return; // 不在击中概率内
+// 对方（不包括 monster）格挡 block
+blkper = target.GetBlockChance() - (attacker._pLevel * 2) // 格挡概率
+blkper = clamp(blkper, 0, 100)
+blk = 100 if (target is stand || attack) blk = rnd(100) // 目标只有在stand或attack状态下才有概率格挡，其他状态100%无法格挡
+if (blk < blkper) target.startblock; return;
+// 伤害计算
+dam = rnd(maxdam - mindam + 1) + mindam
+dam += (dam * attacker._pIBonusDam) / 100 + attacker._pIBonusDamMod // item 提供额外伤害
+dam += attacker._pDamageMod // strength 体力提供的伤害
+```
