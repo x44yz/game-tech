@@ -2,15 +2,40 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NaughtyAttributes;
 
 namespace gta3
 {
-    [Serializable]
     public class g3Weapon : MonoBehaviour
     {
+        [Dropdown("GetWeaponName")]
+        public string weaponName;
+        public static List<string> weaponNames = null;
+        private List<string> GetWeaponName()
+        {
+            if (weaponNames == null)
+            {
+                weaponNames = new List<string>();
+                foreach (var wp in CWeaponInfo.weaponInfos)
+                {
+                    weaponNames.Add(wp.m_Name);
+                }
+            }
+            return weaponNames;
+        }
+
+        [Header("RUNTIME")]
         public eWeaponType m_eWeaponType;
         public eWeaponFire m_eWeaponFire;
         public int m_nDamage;
+
+        private void Start() 
+        {
+            var wpInfo = CWeaponInfo.GetWeaponInfo(weaponName);
+            // m_eWeaponType = wpInfo.m_eWeaponFire
+            m_eWeaponFire = wpInfo.m_eWeaponFire;
+            m_nDamage = wpInfo.m_nDamage;
+        }
 
         public bool Fire(g3Player shooter, Vector3 fireSource)
         {

@@ -1006,6 +1006,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponName: Unarmed
   m_eWeaponType: 5
   m_eWeaponFire: 1
   m_nDamage: 0
@@ -6266,6 +6267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponName: BrassKnuckle
   m_eWeaponType: 0
   m_eWeaponFire: 0
   m_nDamage: 0

@@ -81,6 +81,8 @@ namespace gta3
             // else
             //     healthImpact = damage * m_pedStats->m_defendWeakness;
 
+            g3Test.Inst.ShowDamageText(this, (int)healthImpact);
+
             // 护甲
             if (m_fArmour != 0f)
             {
@@ -97,8 +99,6 @@ namespace gta3
             }
 
             m_fHealth -= healthImpact;
-
-            g3Test.Inst.ShowDamageText(this, (int)healthImpact);
 
             if (m_fHealth >= 1f)
                 return false;

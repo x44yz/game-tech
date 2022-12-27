@@ -2,8 +2,7 @@ TODO:
 [+]weapon 
 [x]Strike 击打 
 [+]KillPedWithCar
-[+]FireMelee
-
+[x]FireMelee
 
 https://github.com/td512/re3  
 https://gtamods.com/wiki/Weapon.dat_(VC)  
