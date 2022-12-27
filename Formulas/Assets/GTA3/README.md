@@ -1,9 +1,12 @@
 TODO:  
 [+]weapon 
-[+]Strike 击打 
+[x]Strike 击打 
+[+]KillPedWithCar
+[+]FireMelee
+
 
 https://github.com/td512/re3  
-
+https://gtamods.com/wiki/Weapon.dat_(VC)  
 
 
 > player 属性

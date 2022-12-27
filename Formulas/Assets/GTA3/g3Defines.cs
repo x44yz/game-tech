@@ -5,6 +5,14 @@ using UnityEngine;
 
 namespace gta3
 {
+    public enum eWeaponFire {
+        WEAPON_FIRE_MELEE, // 近战武器
+        WEAPON_FIRE_INSTANT_HIT, // 枪
+        WEAPON_FIRE_PROJECTILE, // 手雷，火箭彈
+        WEAPON_FIRE_AREA_EFFECT, // 比如火焰器
+        WEAPON_FIRE_USE // 比如引爆雷
+    };
+
     public enum ePedPieceTypes
     {
         PEDPIECE_TORSO, // 躯干

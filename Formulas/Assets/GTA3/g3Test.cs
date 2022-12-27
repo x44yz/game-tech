@@ -23,17 +23,23 @@ namespace gta3
             dmgTextTmp.gameObject.SetActive(false);
         }
 
+        private void Start() 
+        {
+            leftPlayer.m_nearPeds.Add(rightPlayer);
+            rightPlayer.m_nearPeds.Add(leftPlayer);
+        }
+
         private void Update() 
         {
-            // if (Input.GetKeyDown(KeyCode.J))
-            // {
-            //     leftPlayer.AttackPlayer(rightPlayer);
-            // }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                leftPlayer.FightStrike();
+            }
 
-            // if (Input.GetKeyDown(KeyCode.K))
-            // {
-            //     rightPlayer.AttackPlayer(leftPlayer);
-            // }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                leftPlayer.GetWeapon().Fire(leftPlayer, Vector3.forward);
+            }
         }
 
         private Text GetFreeDmgText()

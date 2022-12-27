@@ -12,12 +12,20 @@ namespace gta3
         public float m_fHealth = 100f;
         [Range(0f, 100f)]
         public float m_fArmour = 0f;
+        public g3Weapon handWeapon;
+
+        [Header("RUNTIME")]
+        public bool m_bAdrenalineActive = false; // 是否注射肾上腺素
+        public float m_attackStrength; // 攻击加成
+        public int m_numNearPeds { get { return m_nearPeds.Count; } }
+        // 筛选 30米（平面） 范围内的角色
+        public List<g3Player> m_nearPeds = new List<g3Player>();
 
         protected override void OnStart()
         {
             base.OnStart();
 
-            TestRefreshEquip();
+            handWeapon = GetComponent<g3Weapon>();
         }
 
         protected override void OnUpdate(float dt)
@@ -25,24 +33,45 @@ namespace gta3
             base.OnUpdate(dt);
         }
 
-        g3Weapon GetWeapon()
+        public g3Weapon GetWeapon()
         {
-
+            return handWeapon;
         }
 
-        void FightStrike()
+        // 格斗伤害
+        public void FightStrike()
         {
-            // find near
+            // 找寻最近的对象
+            var nearPed = m_nearPeds[0];
+            var closestPedPiece = ePedPieceTypes.PEDPIECE_TORSO;
 
-            nearPed->InflictDamage(this, eWeaponType.WEAPONTYPE_UNARMED, damageMult * 3.0f, closestPedPiece, direction);
+            int fightMoveDamage = 1; // TODO:根据动作确定伤害
+            int damageMult = fightMoveDamage * (UnityEngine.Random.Range(0, 1) + 2) + 1; // 动作伤害缩放2-3倍，最小值1
+
+            // 如果是攻击者是玩家并且注射肾上腺素，默认伤害20
+            if (IsPlayer())
+            {
+                if (m_bAdrenalineActive)
+                    damageMult = 20;
+            }
+            else
+            {
+                damageMult = (int)(damageMult * m_attackStrength);
+            }
+
+	        // 0-forward, 1-left, 2-backward, 3-right.
+	        int direction = 0;
+
+            nearPed.InflictDamage(this, eWeaponType.WEAPONTYPE_UNARMED, damageMult * 3.0f, closestPedPiece, direction);
         }
 
-        bool IsPlayer()
+        public bool IsPlayer()
         {
             return true;
         }
 
-        bool InflictDamage(g3Player damagedBy, eWeaponType method, float damage, ePedPieceTypes pedPiece, int direction)
+        // direction: 0-forward, 1-left, 2-backward, 3-right.
+        public bool InflictDamage(g3Player damagedBy, eWeaponType method, float damage, ePedPieceTypes pedPiece, int direction)
         {
             float healthImpact = 0f;
 
@@ -68,6 +97,9 @@ namespace gta3
             }
 
             m_fHealth -= healthImpact;
+
+            g3Test.Inst.ShowDamageText(this, (int)healthImpact);
+
             if (m_fHealth >= 1f)
                 return false;
 
@@ -83,52 +115,6 @@ namespace gta3
         {
             // NextPlrLevel();
         }
-
-        [Button("RefreshEquip", EButtonEnableMode.Playmode)]
-        private void TestRefreshEquip()
-        {
-            // RemoveEquipment(inv_body_loc.INVLOC_HEAD, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_RING_LEFT, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_RING_RIGHT, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_AMULET, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_HAND_RIGHT, true);
-            // RemoveEquipment(inv_body_loc.INVLOC_CHEST, true);
-
-            // if (testHeadItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_HEAD, (_item_indexes)testHeadItemId);
-            // if (testLeftRingItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_RING_LEFT, (_item_indexes)testLeftRingItemId);
-            // if (testRightRingItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_RING_RIGHT, (_item_indexes)testRightRingItemId);
-            // if (testAmuletItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_AMULET, (_item_indexes)testAmuletItemId);
-            // if (testLeftHandItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_HAND_LEFT, (_item_indexes)testLeftHandItemId);
-            // if (testRightHandItemId != (int)_item_indexes.IDI_NONE)
-            // {
-            //     var dat = dfData.AllItemsList[testRightHandItemId];
-            //     if (dat.iLoc == item_equip_type.ILOC_TWOHAND)
-            //     {
-            //         Debug.LogWarning("right hand is two-hand weapon, remove left hand equip");
-            //         testLeftHandItemId = (int)_item_indexes.IDI_NONE;
-            //         RemoveEquipment(inv_body_loc.INVLOC_HAND_LEFT, true);
-            //     }
-            //     ChangePlayerItems(inv_body_loc.INVLOC_HAND_RIGHT, (_item_indexes)testRightHandItemId);
-            // }
-            // if (testChestItemId != (int)_item_indexes.IDI_NONE)
-            //     ChangePlayerItems(inv_body_loc.INVLOC_CHEST, (_item_indexes)testChestItemId);
-        }
-
-        // [Dropdown("TestGetHeadItemIds")]
-        // public int testHeadItemId;
-        // public static DropdownList<int> testHeadItemIds = null;
-        // private DropdownList<int> TestGetHeadItemIds()
-        // {
-        //     if (testHeadItemIds == null)
-        //         testHeadItemIds = TestGetItemIds(item_equip_type.ILOC_HELM);
-        //     return testHeadItemIds;
-        // }
 
 #endregion // EditorTest
     }

@@ -958,6 +958,7 @@ GameObject:
   - component: {fileID: 495155707}
   - component: {fileID: 495155706}
   - component: {fileID: 495155704}
+  - component: {fileID: 495155705}
   m_Layer: 0
   m_Name: RIGHT_BURLY-MAN_1_swordsman (1)
   m_TagString: Untagged
@@ -987,8 +988,27 @@ MonoBehaviour:
   m_Animator: {fileID: 0}
   attackTick: 0
   weapon: {fileID: 0}
-  m_fHealth: 0
-  m_fArmour: 0
+  m_fHealth: 100
+  m_fArmour: 100
+  handWeapon: {fileID: 0}
+  m_bAdrenalineActive: 0
+  m_attackStrength: 0
+  m_nearPeds: []
+--- !u!114 &495155705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495155703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_eWeaponType: 5
+  m_eWeaponFire: 1
+  m_nDamage: 0
 --- !u!70 &495155706
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -3779,7 +3799,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Press J - Left Attack, K - Right Attack
+  m_Text: Press J - FightStrike, K - Right Attack
 --- !u!222 &1828135453
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6198,6 +6218,7 @@ GameObject:
   - component: {fileID: 50891965659343741}
   - component: {fileID: 70242907956040023}
   - component: {fileID: 1892421001020668}
+  - component: {fileID: 1892421001020669}
   m_Layer: 0
   m_Name: LEFT_BURLY-MAN_1_swordsman
   m_TagString: Untagged
@@ -6229,6 +6250,25 @@ MonoBehaviour:
   weapon: {fileID: 0}
   m_fHealth: 100
   m_fArmour: 100
+  handWeapon: {fileID: 0}
+  m_bAdrenalineActive: 0
+  m_attackStrength: 0
+  m_nearPeds: []
+--- !u!114 &1892421001020669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1892421001020667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_eWeaponType: 0
+  m_eWeaponFire: 0
+  m_nDamage: 0
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0
