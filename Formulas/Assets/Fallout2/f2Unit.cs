@@ -7,11 +7,12 @@ namespace f2
 {
     public class f2Unit : Unit
     {
-        public const int TRAITS_MAX_SELECTED_COUNT = 2;
+        public static int FID_TYPE(int value) => f2Utils.FID_TYPE(value);
+        public static int PID_TYPE(int value) => f2Utils.PID_TYPE(value);
+        public static int SID_TYPE(int value) => f2Utils.SID_TYPE(value);
+        public static int proto_ptr(int pid, ref Proto protoPtr) => f2Utils.proto_ptr(pid, ref protoPtr);
 
-        public static int FID_TYPE(int value) => ((value) & 0xF000000) >> 24;
-        public static int PID_TYPE(int value) => (value) >> 24;
-        public static int SID_TYPE(int value) => (value) >> 24;
+        public const int TRAITS_MAX_SELECTED_COUNT = 2;
 
         public static f2Unit obj_dude; // 当前选中的 unit
         public static f2Unit inven_dude = null; // 当前查看背包的 unit
@@ -26,44 +27,6 @@ namespace f2
         public int fid;
         public ObjectData data;
         public int flags;
-
-        int proto_ptr(int pid, ref Proto protoPtr)
-        {
-            // TODO
-            protoPtr = null;
-            return 0;
-            // *protoPtr = NULL;
-
-            // if (pid == -1) {
-            //     return -1;
-            // }
-
-            // if (pid == 0x1000000) {
-            //     *protoPtr = (Proto*)&gDudeProto;
-            //     return 0;
-            // }
-
-            // ProtoList* protoList = &(_protoLists[PID_TYPE(pid)]);
-            // ProtoListExtent* protoListExtent = protoList->head;
-            // while (protoListExtent != NULL) {
-            //     for (int index = 0; index < protoListExtent->length; index++) {
-            //         Proto* proto = (Proto*)protoListExtent->proto[index];
-            //         if (pid == proto->pid) {
-            //             *protoPtr = proto;
-            //             return 0;
-            //         }
-            //     }
-            //     protoListExtent = protoListExtent->next;
-            // }
-
-            // if (protoList->head != NULL && protoList->tail != NULL) {
-            //     if (PROTO_LIST_EXTENT_SIZE * protoList->length - (PROTO_LIST_EXTENT_SIZE - protoList->tail->length) > PROTO_LIST_MAX_ENTRIES) {
-            //         _proto_remove_some_list(PID_TYPE(pid));
-            //     }
-            // }
-
-            // return _proto_load_pid(pid, protoPtr);
-        }
 
         int critter_get_hits(f2Unit critter)
         {
@@ -312,7 +275,7 @@ namespace f2
             {
                 InventoryItem inventoryItem = (inventory.items[index]);
                 f2Item item = inventoryItem.item;
-                weight += item.item_weight() * inventoryItem.quantity;
+                weight += f2Item.item_weight(item) * inventoryItem.quantity;
             }
 
             // TODO:
@@ -323,14 +286,14 @@ namespace f2
                 {
                     // 不在右手
                     if ((item2.flags & (uint)ObjectFlags.OBJECT_IN_RIGHT_HAND) == 0) {
-                        weight += item2.item_weight();
+                        weight += f2Item.item_weight(item2);
                     }
                 }
 
                 f2Item item1 = inven_left_hand(obj);
                 if (item1 != null) {
                     if ((item1.flags & (uint)ObjectFlags.OBJECT_IN_LEFT_HAND) == 0) {
-                        weight += item1.item_weight();
+                        weight += f2Item.item_weight(item1);
                     }
                 }
 
@@ -339,7 +302,7 @@ namespace f2
                 {
                     if ((armor.flags & (uint)ObjectFlags.OBJECT_WORN) == 0) 
                     {
-                        weight += armor.item_weight();
+                        weight += f2Item.item_weight(armor);
                     }
                 }
             }
@@ -442,9 +405,9 @@ namespace f2
 
                                     f2Item item2 = inven_right_hand(critter);
                                     if (item2 != null) {
-                                        if (item2.item_get_type() == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                        if (f2Item.item_get_type(item2) == (int)ItemType.ITEM_TYPE_WEAPON) {
                                             // TODO: 有什么武器是没动画的？
-                                            if (item2.item_w_anim_code() != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
+                                            if (f2Item.item_w_anim_code(item2) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                 hasWeapon = true;
                                             }
                                         }
@@ -453,8 +416,8 @@ namespace f2
                                     if (!hasWeapon) {
                                         f2Item item1 = inven_left_hand(critter);
                                         if (item1 != null) {
-                                            if (item1.item_get_type() == (int)ItemType.ITEM_TYPE_WEAPON) {
-                                                if (item1.item_w_anim_code() != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
+                                            if (f2Item.item_get_type(item1) == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                                if (f2Item.item_w_anim_code(item1) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                     hasWeapon = true;
                                                 }
                                             }
@@ -857,7 +820,7 @@ namespace f2
             } 
             else {
                 // SFALL
-                if (attack.weapon.item_w_perk() == (int)Perk.PERK_WEAPON_PENETRATE
+                if (f2Item.item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_PENETRATE
                     || attack.hitMode == (int)HitMode.HIT_MODE_PALM_STRIKE
                     || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_STRIKE
                     || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK
@@ -871,7 +834,7 @@ namespace f2
             }
 
             int damageBonus;
-            if (attack.attacker == obj_dude && attack.weapon.item_w_subtype(attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
+            if (attack.attacker == obj_dude && f2Item.item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
                 damageBonus = 2 * perk_level(obj_dude, (int)Perk.PERK_BONUS_RANGED_DAMAGE);
             } else {
                 damageBonus = 0;
@@ -889,15 +852,15 @@ namespace f2
                 }
             }
 
-            damageResistance += attack.weapon.item_w_dr_adjust();
+            damageResistance += f2Item.item_w_dr_adjust(attack.weapon);
             if (damageResistance > 100) {
                 damageResistance = 100;
             } else if (damageResistance < 0) {
                 damageResistance = 0;
             }
 
-            int damageMultiplier = bonusDamageMultiplier * attack.weapon.item_w_dam_mult();
-            int damageDivisor = attack.weapon.item_w_dam_div();
+            int damageMultiplier = bonusDamageMultiplier * f2Item.item_w_dam_mult(attack.weapon);
+            int damageDivisor = f2Item.item_w_dam_div(attack.weapon);
 
             for (int index = 0; index < ammoQuantity; index++) 
             {
@@ -946,7 +909,7 @@ namespace f2
 
             if (hasKnockbackDistancePtr
                 && (critter.flags & (int)ObjectFlags.OBJECT_MULTIHEX) == 0
-                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || attack.weapon.item_w_subtype(attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
+                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || f2Item.item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
                 && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER
                 && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_KNOCKBACK) == false) 
             {
@@ -964,7 +927,7 @@ namespace f2
 
                 if (shouldKnockback) 
                 {
-                    int knockbackDistanceDivisor = attack.weapon.item_w_perk() == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
+                    int knockbackDistanceDivisor = f2Item.item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
 
                     knockbackDistancePtr = damagePtr / knockbackDistanceDivisor;
 

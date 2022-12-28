@@ -530,6 +530,20 @@ namespace f2
         GENDER_COUNT,
     };
 
+    public enum ItemProtoExtendedFlags {
+        ItemProtoExtendedFlags_BigGun = 0x0100,
+        ItemProtoExtendedFlags_IsTwoHanded = 0x0200,
+        ItemProtoExtendedFlags_0x0800 = 0x0800,
+        ItemProtoExtendedFlags_0x1000 = 0x1000,
+        ItemProtoExtendedFlags_0x2000 = 0x2000,
+        ItemProtoExtendedFlags_0x8000 = 0x8000,
+
+        // This flag is used on weapons to indicate that's an natural (integral)
+        // part of it's owner, for example Claw, or Robot's Rocket Launcher. Items
+        // with this flag on do count toward total weight and cannot be dropped.
+        ItemProtoExtendedFlags_NaturalWeapon = 0x08000000,
+    };
+
     public static class f2DEF
     {
         public const CombatDifficulty gCombatDifficulty = CombatDifficulty.COMBAT_DIFFICULTY_NORMAL;

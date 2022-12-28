@@ -145,7 +145,7 @@ namespace f2
     {
         // struct 
         // {
-        //     int pid; // pid
+        public int pid; // pid
         //     int messageId; // message_num
         //     int fid; // fid
 
