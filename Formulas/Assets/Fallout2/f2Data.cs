@@ -128,4 +128,73 @@ namespace f2
         public int[] extrasFlags = new int[f2DEF.EXPLOSION_TARGET_COUNT];
         public int[] extrasKnockback = new int[f2DEF.EXPLOSION_TARGET_COUNT];
     }
+
+    // Provides metadata about stats.
+    public class StatDescription {
+        public string name;
+        public string description;
+        public int frmId;
+        public int minimumValue;
+        public int maximumValue;
+        public int defaultValue;
+
+        public StatDescription(string name,
+                            string description,
+                            int frmId,
+                            int minimumValue,
+                            int maximumValue,
+                            int defaultValue)
+        {
+            this.name = name;
+            this.description = description;
+            this.frmId = frmId;
+            this.minimumValue = minimumValue;
+            this.maximumValue = maximumValue;
+            this.defaultValue = defaultValue;
+        }
+    };
+
+    public static class f2Data
+    {
+        public static readonly StatDescription[] stat_data = new StatDescription[]{
+            new StatDescription( "", "", 0, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 1, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 2, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 3, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 4, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 5, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 6, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 10, 0, 999, 0 ),
+            new StatDescription( "", "", 75, 1, 99, 0 ),
+            new StatDescription( "", "", 18, 0, 999, 0 ),
+            new StatDescription( "", "", 31, 0, int.MaxValue, 0 ),
+            new StatDescription( "", "", 32, 0, 500, 0 ),
+            new StatDescription( "", "", 20, 0, 999, 0 ),
+            new StatDescription( "", "", 24, 0, 60, 0 ),
+            new StatDescription( "", "", 25, 0, 30, 0 ),
+            new StatDescription( "", "", 26, 0, 100, 0 ),
+            new StatDescription( "", "", 94, -60, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 22, 0, 90, 0 ),
+            new StatDescription( "", "", 0, 0, 90, 0 ),
+            new StatDescription( "", "", 0, 0, 90, 0 ),
+            new StatDescription( "", "", 0, 0, 90, 0 ),
+            new StatDescription( "", "", 0, 0, 90, 0 ),
+            new StatDescription( "", "", 0, 0, 100, 0 ),
+            new StatDescription( "", "", 0, 0, 90, 0 ),
+            new StatDescription( "", "", 83, 0, 95, 0 ),
+            new StatDescription( "", "", 23, 0, 95, 0 ),
+            new StatDescription( "", "", 0, 16, 101, 25 ),
+            new StatDescription( "", "", 0, 0, 1, 0 ),
+            new StatDescription( "", "", 10, 0, 2000, 0 ),
+            new StatDescription( "", "", 11, 0, 2000, 0 ),
+            new StatDescription( "", "", 12, 0, 2000, 0 ),
+        };
+    }
 }

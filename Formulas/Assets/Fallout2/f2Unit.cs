@@ -378,9 +378,9 @@ namespace f2
 
         // has_perk
         // perk 技能点
-        bool perk_level(f2Unit critter, Perk perk)
+        bool perkHasRank(f2Unit critter, Perk perk)
         {
-            return perk_level(critter, (int)perk) > 0;
+            return perk_level(critter, (int)perk) != 0;
         }
 
         int perk_level(f2Unit critter, int perk)
@@ -391,6 +391,16 @@ namespace f2
 
             PerkRankData ranksData = perkGetLevelData(critter);
             return ranksData.ranks[perk];
+        }
+
+        public static f2Unit combat_turn_obj;
+        public f2Unit combat_whose_turn()
+        {
+            if (isInCombat()) {
+                return combat_turn_obj;
+            } else {
+                return null;
+            }
         }
 
         int critterGetStat(f2Unit critter, int stat)
@@ -420,42 +430,45 @@ namespace f2
                     break;
                 case Stat.STAT_ARMOR_CLASS:
                     if (isInCombat()) {
-                        if (_combat_whose_turn() != critter) {
+                        // 不在战斗的 unit
+                        if (combat_whose_turn() != critter) {
                             int actionPointsMultiplier = 1;
                             int hthEvadeBonus = 0;
 
-                            if (critter == gDude) {
-                                if (perkHasRank(gDude, PERK_HTH_EVADE)) {
+                            if (critter == obj_dude) {
+                                if (perkHasRank(critter, Perk.PERK_HTH_EVADE)) {
                                     bool hasWeapon = false;
 
-                                    Object* item2 = critterGetItem2(gDude);
-                                    if (item2 != NULL) {
-                                        if (itemGetType(item2) == ITEM_TYPE_WEAPON) {
-                                            if (weaponGetAnimationCode(item2) != WEAPON_ANIMATION_NONE) {
+                                    f2Item item2 = inven_right_hand(critter);
+                                    if (item2 != null) {
+                                        if (item2.item_get_type() == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                            // TODO: 有什么武器是没动画的？
+                                            if (item2.item_w_anim_code() != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                 hasWeapon = true;
                                             }
                                         }
                                     }
 
                                     if (!hasWeapon) {
-                                        Object* item1 = critterGetItem1(gDude);
-                                        if (item1 != NULL) {
-                                            if (itemGetType(item1) == ITEM_TYPE_WEAPON) {
-                                                if (weaponGetAnimationCode(item1) != WEAPON_ANIMATION_NONE) {
+                                        f2Item item1 = inven_left_hand(critter);
+                                        if (item1 != null) {
+                                            if (item1.item_get_type() == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                                if (item1.item_w_anim_code() != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                     hasWeapon = true;
                                                 }
                                             }
                                         }
                                     }
 
+                                    // 如果没有武器
                                     if (!hasWeapon) {
                                         actionPointsMultiplier = 2;
-                                        hthEvadeBonus = skillGetValue(gDude, SKILL_UNARMED) / 12;
+                                        hthEvadeBonus = skill_level(critter, (int)Skill.SKILL_UNARMED) / 12;
                                     }
                                 }
                             }
                             value += hthEvadeBonus;
-                            value += critter->data.critter.combat.ap * actionPointsMultiplier;
+                            value += critter.data.critter.combat.ap * actionPointsMultiplier;
                         }
                     }
                     break;
@@ -469,136 +482,136 @@ namespace f2
                 {
                     switch ((Stat)stat) {
                     case Stat.STAT_STRENGTH:
-                        if (perk_level(critter, Perk.PERK_GAIN_STRENGTH)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_STRENGTH)) {
                             value++;
                         }
 
-                        if (perk_level(critter, Perk.PERK_ADRENALINE_RUSH)) {
-                            if (critterGetStat(critter, STAT_CURRENT_HIT_POINTS) < (critterGetStat(critter, STAT_MAXIMUM_HIT_POINTS) / 2)) {
+                        if (perkHasRank(critter, Perk.PERK_ADRENALINE_RUSH)) {
+                            if (critterGetStat(critter, (int)Stat.STAT_CURRENT_HIT_POINTS) < (critterGetStat(critter, (int)Stat.STAT_MAXIMUM_HIT_POINTS) / 2)) {
                                 value++;
                             }
                         }
                         break;
                     case Stat.STAT_PERCEPTION:
-                        if (perk_level(critter, Perk.PERK_GAIN_PERCEPTION)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_PERCEPTION)) {
                             value++;
                         }
                         break;
                     case Stat.STAT_ENDURANCE:
-                        if (perk_level(critter, Perk.PERK_GAIN_ENDURANCE)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_ENDURANCE)) {
                             value++;
                         }
                         break;
                     case Stat.STAT_CHARISMA:
-                        if (1) {
-                            if (perk_level(critter, Perk.PERK_GAIN_CHARISMA)) {
+                        // if (1) {
+                            if (perkHasRank(critter, Perk.PERK_GAIN_CHARISMA)) {
                                 value++;
                             }
 
                             bool hasMirrorShades = false;
 
-                            Object* item2 = inven_right_hand(critter);
-                            if (item2 != NULL && item2->pid == PROTO_ID_MIRRORED_SHADES) {
+                            f2Item item2 = inven_right_hand(critter);
+                            if (item2 != null && item2.pid == (int)ProtoID.PROTO_ID_MIRRORED_SHADES) {
                                 hasMirrorShades = true;
                             }
 
-                            Object* item1 = inven_left_hand(critter);
-                            if (item1 != NULL && item1->pid == PROTO_ID_MIRRORED_SHADES) {
+                            f2Item item1 = inven_left_hand(critter);
+                            if (item1 != null && item1.pid == (int)ProtoID.PROTO_ID_MIRRORED_SHADES) {
                                 hasMirrorShades = true;
                             }
 
                             if (hasMirrorShades) {
                                 value++;
                             }
-                        }
+                        // }
                         break;
                     case Stat.STAT_INTELLIGENCE:
-                        if (perk_level(critter, Perk.PERK_GAIN_INTELLIGENCE)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_INTELLIGENCE)) {
                             value++;
                         }
                         break;
                     case Stat.STAT_AGILITY:
-                        if (perk_level(critter, Perk.PERK_GAIN_AGILITY)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_AGILITY)) {
                             value++;
                         }
                         break;
                     case Stat.STAT_LUCK:
-                        if (perk_level(critter, Perk.PERK_GAIN_LUCK)) {
+                        if (perkHasRank(critter, Perk.PERK_GAIN_LUCK)) {
                             value++;
                         }
                         break;
                     case Stat.STAT_MAXIMUM_HIT_POINTS:
-                        if (perk_level(critter, Perk.PERK_ALCOHOL_RAISED_HIT_POINTS)) {
+                        if (perkHasRank(critter, Perk.PERK_ALCOHOL_RAISED_HIT_POINTS)) {
                             value += 2;
                         }
 
-                        if (perk_level(critter, Perk.PERK_ALCOHOL_RAISED_HIT_POINTS_II)) {
+                        if (perkHasRank(critter, Perk.PERK_ALCOHOL_RAISED_HIT_POINTS_II)) {
                             value += 4;
                         }
 
-                        if (perk_level(critter, Perk.PERK_ALCOHOL_LOWERED_HIT_POINTS)) {
+                        if (perkHasRank(critter, Perk.PERK_ALCOHOL_LOWERED_HIT_POINTS)) {
                             value -= 2;
                         }
 
-                        if (perk_level(critter, Perk.PERK_ALCOHOL_LOWERED_HIT_POINTS_II)) {
+                        if (perkHasRank(critter, Perk.PERK_ALCOHOL_LOWERED_HIT_POINTS_II)) {
                             value -= 4;
                         }
 
-                        if (perk_level(critter, Perk.PERK_AUTODOC_RAISED_HIT_POINTS)) {
+                        if (perkHasRank(critter, Perk.PERK_AUTODOC_RAISED_HIT_POINTS)) {
                             value += 2;
                         }
 
-                        if (perk_level(critter, Perk.PERK_AUTODOC_RAISED_HIT_POINTS_II)) {
+                        if (perkHasRank(critter, Perk.PERK_AUTODOC_RAISED_HIT_POINTS_II)) {
                             value += 4;
                         }
 
-                        if (perk_level(critter, Perk.PERK_AUTODOC_LOWERED_HIT_POINTS)) {
+                        if (perkHasRank(critter, Perk.PERK_AUTODOC_LOWERED_HIT_POINTS)) {
                             value -= 2;
                         }
 
-                        if (perk_level(critter, Perk.PERK_AUTODOC_LOWERED_HIT_POINTS_II)) {
+                        if (perkHasRank(critter, Perk.PERK_AUTODOC_LOWERED_HIT_POINTS_II)) {
                             value -= 4;
                         }
                         break;
                     case Stat.STAT_DAMAGE_RESISTANCE:
                     case Stat.STAT_DAMAGE_RESISTANCE_EXPLOSION:
-                        if (perk_level(critter, Perk.PERK_DERMAL_IMPACT_ARMOR)) {
+                        if (perkHasRank(critter, Perk.PERK_DERMAL_IMPACT_ARMOR)) {
                             value += 5;
-                        } else if (perk_level(critter, Perk.PERK_DERMAL_IMPACT_ASSAULT_ENHANCEMENT)) {
+                        } else if (perkHasRank(critter, Perk.PERK_DERMAL_IMPACT_ASSAULT_ENHANCEMENT)) {
                             value += 10;
                         }
                         break;
                     case Stat.STAT_DAMAGE_RESISTANCE_LASER:
                     case Stat.STAT_DAMAGE_RESISTANCE_FIRE:
                     case Stat.STAT_DAMAGE_RESISTANCE_PLASMA:
-                        if (perk_level(critter, Perk.PERK_PHOENIX_ARMOR_IMPLANTS)) {
+                        if (perkHasRank(critter, Perk.PERK_PHOENIX_ARMOR_IMPLANTS)) {
                             value += 5;
-                        } else if (perk_level(critter, Perk.PERK_PHOENIX_ASSAULT_ENHANCEMENT)) {
+                        } else if (perkHasRank(critter, Perk.PERK_PHOENIX_ASSAULT_ENHANCEMENT)) {
                             value += 10;
                         }
                         break;
                     case Stat.STAT_RADIATION_RESISTANCE:
                     case Stat.STAT_POISON_RESISTANCE:
-                        if (perk_level(critter, Perk.PERK_VAULT_CITY_INOCULATIONS)) {
+                        if (perkHasRank(critter, Perk.PERK_VAULT_CITY_INOCULATIONS)) {
                             value += 10;
                         }
                         break;
                     }
                 }
 
-                value = std::clamp(value, gStatDescriptions[stat].minimumValue, gStatDescriptions[stat].maximumValue);
+                value = Mathf.Clamp(value, f2Data.stat_data[stat].minimumValue, f2Data.stat_data[stat].maximumValue);
             } 
             else 
             {
                 switch ((Stat)stat) {
                 case Stat.STAT_CURRENT_HIT_POINTS:
-                    value = critterGetHitPoints(critter);
+                    value = critter_get_hits(critter);
                     break;
                 case Stat.STAT_CURRENT_POISON_LEVEL:
-                    value = critterGetPoison(critter);
+                    value = critter_get_poison(critter);
                     break;
                 case Stat.STAT_CURRENT_RADIATION_LEVEL:
-                    value = critterGetRadiation(critter);
+                    value = critter_get_rads(critter);
                     break;
                 default:
                     value = 0;
@@ -607,6 +620,50 @@ namespace f2
             }
 
             return value;
+        }
+
+        int skill_level(f2Unit critter, int skill)
+        {
+            // TODO
+            return 0;
+
+            // if (!skillIsValid(skill)) {
+            //     return -5;
+            // }
+
+            // int baseValue = skill_points(critter, skill);
+            // if (baseValue < 0) {
+            //     return baseValue;
+            // }
+
+            // SkillDescription* skillDescription = &(skill_data[skill]);
+
+            // int v7 = critterGetStat(critter, skillDescription->stat1);
+            // if (skillDescription->stat2 != -1) {
+            //     v7 += critterGetStat(critter, skillDescription->stat2);
+            // }
+
+            // int value = skillDescription->defaultValue + skillDescription->statModifier * v7 + baseValue * skillDescription->field_20;
+
+            // if (critter == obj_dude) {
+            //     if (skill_is_tagged(skill)) {
+            //         value += baseValue * skillDescription->field_20;
+
+            //         if (!perk_level(critter, PERK_TAG) || skill != tag_skill[3]) {
+            //             value += 20;
+            //         }
+            //     }
+
+            //     value += trait_adjust_skill(skill);
+            //     value += perk_adjust_skill(critter, skill);
+            //     value += skill_game_difficulty(skill);
+            // }
+
+            // if (value > 300) {
+            //     value = 300;
+            // }
+
+            // return value;
         }
 
         int weaponGetDamageType(f2Unit critter, f2Item weapon)

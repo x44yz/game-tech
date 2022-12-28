@@ -5,6 +5,63 @@ using UnityEngine;
 
 namespace f2
 {
+    public enum ProtoID
+    {
+        PROTO_ID_POWER_ARMOR = 3,
+        PROTO_ID_SMALL_ENERGY_CELL = 38,
+        PROTO_ID_MICRO_FUSION_CELL = 39,
+        PROTO_ID_STIMPACK = 40,
+        PROTO_ID_MONEY = 41,
+        PROTO_ID_FIRST_AID_KIT = 47,
+        PROTO_ID_RADAWAY = 48,
+        PROTO_ID_DYNAMITE_I = 51,
+        PROTO_ID_GEIGER_COUNTER_I = 52,
+        PROTO_ID_MENTATS = 53,
+        PROTO_ID_STEALTH_BOY_I = 54,
+        PROTO_ID_MOTION_SENSOR = 59,
+        PROTO_ID_BIG_BOOK_OF_SCIENCE = 73,
+        PROTO_ID_DEANS_ELECTRONICS = 76,
+        PROTO_ID_FLARE = 79,
+        PROTO_ID_FIRST_AID_BOOK = 80,
+        PROTO_ID_PLASTIC_EXPLOSIVES_I = 85,
+        PROTO_ID_SCOUT_HANDBOOK = 86,
+        PROTO_ID_BUFF_OUT = 87,
+        PROTO_ID_DOCTORS_BAG = 91,
+        PROTO_ID_GUNS_AND_BULLETS = 102,
+        PROTO_ID_NUKA_COLA = 106,
+        PROTO_ID_PSYCHO = 110,
+        PROTO_ID_BEER = 124,
+        PROTO_ID_BOOZE = 125,
+        PROTO_ID_SUPER_STIMPACK = 144,
+        PROTO_ID_MOLOTOV_COCKTAIL = 159,
+        PROTO_ID_LIT_FLARE = 205,
+        PROTO_ID_DYNAMITE_II = 206, // armed
+        PROTO_ID_GEIGER_COUNTER_II = 207,
+        PROTO_ID_PLASTIC_EXPLOSIVES_II = 209, // armed
+        PROTO_ID_STEALTH_BOY_II = 210,
+        PROTO_ID_HARDENED_POWER_ARMOR = 232,
+        PROTO_ID_JET = 259,
+        PROTO_ID_JET_ANTIDOTE = 260,
+        PROTO_ID_HEALING_POWDER = 273,
+        PROTO_ID_DECK_OF_TRAGIC_CARDS = 304,
+        PROTO_ID_CATS_PAW_ISSUE_5 = 331,
+        PROTO_ID_ADVANCED_POWER_ARMOR = 348,
+        PROTO_ID_ADVANCED_POWER_ARMOR_MK_II = 349,
+        PROTO_ID_SHIV = 383,
+        PROTO_ID_SOLAR_SCORCHER = 390,
+        PROTO_ID_SUPER_CATTLE_PROD = 399,
+        PROTO_ID_MEGA_POWER_FIST = 407,
+        PROTO_ID_FIELD_MEDIC_FIRST_AID_KIT = 408,
+        PROTO_ID_PARAMEDICS_BAG = 409,
+        PROTO_ID_RAMIREZ_BOX_CLOSED = 431,
+        PROTO_ID_MIRRORED_SHADES = 433,
+        PROTO_ID_RAIDERS_MAP = 444,
+        PROTO_ID_CAR_TRUNK = 455,
+        PROTO_ID_PIP_BOY_LINGUAL_ENHANCER = 499,
+        PROTO_ID_PIP_BOY_MEDICAL_ENHANCER = 516,
+        PROTO_ID_SURVEY_MAP = 523,
+    };
+
     public enum Perk 
     {
         PERK_AWARENESS,
@@ -299,8 +356,63 @@ namespace f2
         DAM_CRIP = DAM_CRIP_LEG_ANY | DAM_CRIP_ARM_ANY | DAM_BLIND,
     };
 
+    public enum ItemType {
+        ITEM_TYPE_ARMOR,
+        ITEM_TYPE_CONTAINER,
+        ITEM_TYPE_DRUG,
+        ITEM_TYPE_WEAPON,
+        ITEM_TYPE_AMMO,
+        ITEM_TYPE_MISC,
+        ITEM_TYPE_KEY,
+        ITEM_TYPE_COUNT,
+    };
+
+    public enum WeaponAnimation {
+        WEAPON_ANIMATION_NONE,
+        WEAPON_ANIMATION_KNIFE, // d
+        WEAPON_ANIMATION_CLUB, // e
+        WEAPON_ANIMATION_HAMMER, // f
+        WEAPON_ANIMATION_SPEAR, // g
+        WEAPON_ANIMATION_PISTOL, // h
+        WEAPON_ANIMATION_SMG, // i
+        WEAPON_ANIMATION_SHOTGUN, // j
+        WEAPON_ANIMATION_LASER_RIFLE, // k
+        WEAPON_ANIMATION_MINIGUN, // l
+        WEAPON_ANIMATION_LAUNCHER, // m
+        WEAPON_ANIMATION_COUNT,
+    };
+
+    // Available skills.
+    public enum Skill 
+    {
+        SKILL_SMALL_GUNS,
+        SKILL_BIG_GUNS,
+        SKILL_ENERGY_WEAPONS,
+        SKILL_UNARMED,
+        SKILL_MELEE_WEAPONS,
+        SKILL_THROWING,
+        SKILL_FIRST_AID,
+        SKILL_DOCTOR,
+        SKILL_SNEAK,
+        SKILL_LOCKPICK,
+        SKILL_STEAL,
+        SKILL_TRAPS,
+        SKILL_SCIENCE,
+        SKILL_REPAIR,
+        SKILL_SPEECH,
+        SKILL_BARTER,
+        SKILL_GAMBLING,
+        SKILL_OUTDOORSMAN,
+        SKILL_COUNT,
+    };
+
     public static class f2DEF
     {
+        // The minimum value of SPECIAL stat.
+        public const int PRIMARY_STAT_MIN = 1;
+        // The maximum value of SPECIAL stat.
+        public const int PRIMARY_STAT_MAX = 10;
+
         public const int EXPLOSION_TARGET_COUNT = 6;
         // 60 * 60 * 10
         public const int GAME_TIME_TICKS_PER_HOUR = 36000;
