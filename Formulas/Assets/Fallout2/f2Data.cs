@@ -81,6 +81,66 @@ namespace f2
         public int team; // team_num
     };
 
+    public struct ProtoItemWeaponData{
+        public int animationCode; // d.animation_code
+        public int minDamage; // d.min_damage
+        public int maxDamage; // d.max_damage
+        public int damageType; // d.dt
+        public int maxRange1; // d.max_range1
+        public int maxRange2; // d.max_range2
+        public int projectilePid; // d.proj_pid
+        public int minStrength; // d.min_st
+        public int actionPointCost1; // d.mp_cost1
+        public int actionPointCost2; // d.mp_cost2
+        public int criticalFailureType; // d.crit_fail_table
+        public int perk; // d.perk
+        public int rounds; // d.rounds
+        public int caliber; // d.caliber
+        public int ammoTypePid; // d.ammo_type_pid
+        public int ammoCapacity; // d.max_ammo
+        public byte soundCode; // d.sound_id
+    };
+
+    public struct ItemProtoData {
+        // union {
+        //     struct {
+        //         int field_0;
+        //         int field_4;
+        //         int field_8; // max charges
+        //         int field_C;
+        //         int field_10;
+        //         int field_14;
+        //         int field_18;
+        //     } unknown;
+            // ProtoItemArmorData armor;
+            // ProtoItemContainerData container;
+            // ProtoItemDrugData drug;
+        public ProtoItemWeaponData weapon;
+            // ProtoItemAmmoData ammo;
+            // ProtoItemMiscData misc;
+            // ProtoItemKeyData key;
+        // };
+    };
+
+    public struct ItemProto {
+        public int pid; // pid
+        public int messageId; // message_num
+        public int fid; // fid
+        public int lightDistance; // light_distance
+        public int lightIntensity; // light_intensity
+        public int flags; // flags
+        public int extendedFlags; // flags_ext
+        public int sid; // sid
+        public int type; // type
+        public ItemProtoData data; // d
+        public int material; // material
+        public int size; // size
+        public int weight; // weight
+        public int cost; // cost
+        public int inventoryFid; // inv_fid
+        public byte field_80;
+    };
+
     public class Proto 
     {
         // struct 
@@ -96,7 +156,7 @@ namespace f2
         //     int extendedFlags;
         //     int sid;
         // };
-        // ItemProto item;
+        public ItemProto item;
         public CritterProto critter;
         // SceneryProto scenery;
         // WallProto wall;

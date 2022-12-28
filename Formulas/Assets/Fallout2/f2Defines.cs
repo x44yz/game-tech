@@ -406,8 +406,134 @@ namespace f2
         SKILL_COUNT,
     };
 
+    public enum DamageType {
+        DAMAGE_TYPE_NORMAL,
+        DAMAGE_TYPE_LASER,
+        DAMAGE_TYPE_FIRE,
+        DAMAGE_TYPE_PLASMA,
+        DAMAGE_TYPE_ELECTRICAL,
+        DAMAGE_TYPE_EMP,
+        DAMAGE_TYPE_EXPLOSION,
+        DAMAGE_TYPE_COUNT,
+    };
+
+    public enum HitMode 
+    {
+        HIT_MODE_LEFT_WEAPON_PRIMARY = 0,
+        HIT_MODE_LEFT_WEAPON_SECONDARY = 1,
+        HIT_MODE_RIGHT_WEAPON_PRIMARY = 2,
+        HIT_MODE_RIGHT_WEAPON_SECONDARY = 3,
+        HIT_MODE_PUNCH = 4,
+        HIT_MODE_KICK = 5,
+        HIT_MODE_LEFT_WEAPON_RELOAD = 6,
+        HIT_MODE_RIGHT_WEAPON_RELOAD = 7,
+
+        // Punch Level 2
+        HIT_MODE_STRONG_PUNCH = 8,
+
+        // Punch Level 3
+        HIT_MODE_HAMMER_PUNCH = 9,
+
+        // Punch Level 4 aka 'Lightning Punch'
+        HIT_MODE_HAYMAKER = 10,
+
+        // Punch Level 5 aka 'Chop Punch'
+        HIT_MODE_JAB = 11,
+
+        // Punch Level 6 aka 'Dragon Punch'
+        HIT_MODE_PALM_STRIKE = 12,
+
+        // Punch Level 7 aka 'Force Punch'
+        HIT_MODE_PIERCING_STRIKE = 13,
+
+        // Kick Level 2
+        HIT_MODE_STRONG_KICK = 14,
+
+        // Kick Level 3
+        HIT_MODE_SNAP_KICK = 15,
+
+        // Kick Level 4 aka 'Roundhouse Kick'
+        HIT_MODE_POWER_KICK = 16,
+
+        // Kick Level 5
+        HIT_MODE_HIP_KICK = 17,
+
+        // Kick Level 6 aka 'Jump Kick'
+        HIT_MODE_HOOK_KICK = 18,
+
+        // Kick Level 7 aka 'Death Blossom Kick'
+        HIT_MODE_PIERCING_KICK = 19,
+        HIT_MODE_COUNT,
+        FIRST_ADVANCED_PUNCH_HIT_MODE = HIT_MODE_STRONG_PUNCH,
+        LAST_ADVANCED_PUNCH_HIT_MODE = HIT_MODE_PIERCING_STRIKE,
+        FIRST_ADVANCED_KICK_HIT_MODE = HIT_MODE_STRONG_KICK,
+        LAST_ADVANCED_KICK_HIT_MODE = HIT_MODE_PIERCING_KICK,
+        FIRST_ADVANCED_UNARMED_HIT_MODE = FIRST_ADVANCED_PUNCH_HIT_MODE,
+        LAST_ADVANCED_UNARMED_HIT_MODE = LAST_ADVANCED_KICK_HIT_MODE,
+    };
+
+    public enum AttackType {
+        ATTACK_TYPE_NONE,
+        ATTACK_TYPE_UNARMED,
+        ATTACK_TYPE_MELEE,
+        ATTACK_TYPE_THROW,
+        ATTACK_TYPE_RANGED,
+        ATTACK_TYPE_COUNT,
+    };
+
+    public enum CombatDifficulty {
+        COMBAT_DIFFICULTY_EASY,
+        COMBAT_DIFFICULTY_NORMAL,
+        COMBAT_DIFFICULTY_HARD,
+    };
+
+    public enum KillType {
+        KILL_TYPE_MAN,
+        KILL_TYPE_WOMAN,
+        KILL_TYPE_CHILD,
+        KILL_TYPE_SUPER_MUTANT,
+        KILL_TYPE_GHOUL,
+        KILL_TYPE_BRAHMIN,
+        KILL_TYPE_RADSCORPION,
+        KILL_TYPE_RAT,
+        KILL_TYPE_FLOATER,
+        KILL_TYPE_CENTAUR,
+        KILL_TYPE_ROBOT,
+        KILL_TYPE_DOG,
+        KILL_TYPE_MANTIS,
+        KILL_TYPE_DEATH_CLAW,
+        KILL_TYPE_PLANT,
+        KILL_TYPE_GECKO,
+        KILL_TYPE_ALIEN,
+        KILL_TYPE_GIANT_ANT,
+        KILL_TYPE_BIG_BAD_BOSS,
+        KILL_TYPE_COUNT,
+    };
+
+    public enum CritterFlags {
+        CRITTER_BARTER = 0x02,
+        CRITTER_NO_STEAL = 0x20,
+        CRITTER_NO_DROP = 0x40,
+        CRITTER_NO_LIMBS = 0x80,
+        CRITTER_NO_AGE = 0x100,
+        CRITTER_NO_HEAL = 0x200,
+        CRITTER_INVULNERABLE = 0x400,
+        CRITTER_FLAT = 0x800,
+        CRITTER_SPECIAL_DEATH = 0x1000,
+        CRITTER_LONG_LIMBS = 0x2000,
+        CRITTER_NO_KNOCKBACK = 0x4000,
+    };
+
+    public enum Gender {
+        GENDER_MALE,
+        GENDER_FEMALE,
+        GENDER_COUNT,
+    };
+
     public static class f2DEF
     {
+        public const CombatDifficulty gCombatDifficulty = CombatDifficulty.COMBAT_DIFFICULTY_NORMAL;
+
         // The minimum value of SPECIAL stat.
         public const int PRIMARY_STAT_MIN = 1;
         // The maximum value of SPECIAL stat.

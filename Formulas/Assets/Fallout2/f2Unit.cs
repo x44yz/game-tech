@@ -25,8 +25,9 @@ namespace f2
         public int pid; // proto 配置 id
         public int fid;
         public ObjectData data;
+        public int flags;
 
-        int protoGetProto(int pid, ref Proto protoPtr)
+        int proto_ptr(int pid, ref Proto protoPtr)
         {
             // TODO
             protoPtr = null;
@@ -84,7 +85,7 @@ namespace f2
             if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) 
             {
                 Proto proto = null;
-                protoGetProto(critter.pid, ref proto);
+                proto_ptr(critter.pid, ref proto);
                 return proto.critter.data.baseStats[stat];
             } 
             else 
@@ -106,7 +107,7 @@ namespace f2
         {
             if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) {
                 Proto proto = null;
-                protoGetProto(critter.pid, ref proto);
+                proto_ptr(critter.pid, ref proto);
                 return proto.critter.data.bonusStats[stat];
             }
 
@@ -684,12 +685,143 @@ namespace f2
             return 0;
         }
 
-        public void attackComputeDamage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
+        public int item_w_damage(f2Unit critter, int hitMode)
+        {
+            // TODO
+            return 0;
+            // if (critter == NULL) {
+            //     return 0;
+            // }
+
+            // int minDamage = 0;
+            // int maxDamage = 0;
+            // int meleeDamage = 0;
+            // int unarmedDamage = 0;
+
+            // // NOTE: Uninline.
+            // Object* weapon = item_hit_with(critter, hitMode);
+
+            // if (weapon != NULL) {
+            //     Proto* proto;
+            //     proto_ptr(weapon->pid, &proto);
+
+            //     minDamage = proto->item.data.weapon.minDamage;
+            //     maxDamage = proto->item.data.weapon.maxDamage;
+
+            //     int attackType = item_w_subtype(weapon, hitMode);
+            //     if (attackType == ATTACK_TYPE_MELEE || attackType == ATTACK_TYPE_UNARMED) {
+            //         meleeDamage = critterGetStat(critter, STAT_MELEE_DAMAGE);
+            //     }
+            // } else {
+            //     minDamage = 1;
+            //     maxDamage = critterGetStat(critter, STAT_MELEE_DAMAGE) + 2;
+
+            //     switch (hitMode) {
+            //     case HIT_MODE_STRONG_PUNCH:
+            //     case HIT_MODE_JAB:
+            //         unarmedDamage = 3;
+            //         break;
+            //     case HIT_MODE_HAMMER_PUNCH:
+            //     case HIT_MODE_STRONG_KICK:
+            //         unarmedDamage = 4;
+            //         break;
+            //     case HIT_MODE_HAYMAKER:
+            //     case HIT_MODE_PALM_STRIKE:
+            //     case HIT_MODE_SNAP_KICK:
+            //     case HIT_MODE_HIP_KICK:
+            //         unarmedDamage = 7;
+            //         break;
+            //     case HIT_MODE_POWER_KICK:
+            //     case HIT_MODE_HOOK_KICK:
+            //         unarmedDamage = 9;
+            //         break;
+            //     case HIT_MODE_PIERCING_STRIKE:
+            //         unarmedDamage = 10;
+            //         break;
+            //     case HIT_MODE_PIERCING_KICK:
+            //         unarmedDamage = 12;
+            //         break;
+            //     }
+            // }
+
+            // return roll_random(unarmedDamage + minDamage, unarmedDamage + meleeDamage + maxDamage);
+        }
+
+        int critterGetKillType(f2Unit obj)
+        {
+            if (obj == obj_dude) {
+                int gender = critterGetStat(obj, (int)Stat.STAT_GENDER);
+                if (gender == (int)Gender.GENDER_FEMALE) {
+                    return (int)KillType.KILL_TYPE_WOMAN;
+                }
+                return (int)KillType.KILL_TYPE_MAN;
+            }
+
+            if (PID_TYPE(obj.pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return -1;
+            }
+
+            Proto proto = null;
+            proto_ptr(obj.pid, ref proto);
+
+            return proto.critter.data.killType;
+        }
+
+        int critter_get_base_damage_type(f2Unit obj)
+        {
+            if (PID_TYPE(obj.pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return 0;
+            }
+
+            Proto proto = null;
+            if (proto_ptr(obj.pid, ref proto) == -1) {
+                return 0;
+            }
+
+            return proto.critter.data.damageType;
+        }
+
+        int item_w_damage_type(f2Unit critter, f2Item weapon)
+        {
+            Proto proto = null;
+
+            if (weapon != null) {
+                proto_ptr(weapon.pid, ref proto);
+
+                return proto.item.data.weapon.damageType;
+            }
+
+            if (critter != null) 
+            {
+                return critter_get_base_damage_type(critter);
+            }
+
+            return 0;
+        }
+
+        // Checks proto critter flag.
+        bool critter_flag_check(int pid, int flag)
+        {
+            if (pid == -1) {
+                return false;
+            }
+
+            if (PID_TYPE(pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return false;
+            }
+
+            Proto proto = null;
+            proto_ptr(pid, ref proto);
+            return (proto.critter.data.flags & flag) != 0;
+        }
+
+        public void compute_damage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
         {
             int damagePtr;
             f2Unit critter;
             int flagsPtr;
             int knockbackDistancePtr;
+            bool hasKnockbackDistancePtr;
 
             if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
             {
@@ -697,6 +829,7 @@ namespace f2
                 critter = attack.defender;
                 flagsPtr = attack.defenderFlags;
                 knockbackDistancePtr = attack.defenderKnockback;
+                hasKnockbackDistancePtr = true;
             } 
             else 
             {
@@ -704,133 +837,124 @@ namespace f2
                 critter = attack.attacker;
                 flagsPtr = attack.attackerFlags;
                 knockbackDistancePtr = 0;
+                hasKnockbackDistancePtr = false;
             }
 
             // TODO: why = 0
             damagePtr = 0;
-            if (FID_TYPE(critter->fid) != OBJ_TYPE_CRITTER) {
+            if (FID_TYPE(critter.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
                 return;
             }
 
             // 获得攻击者武器类型
             int damageType = weaponGetDamageType(attack.attacker, attack.weapon);
-            int damageThreshold = critterGetStat(critter, STAT_DAMAGE_THRESHOLD + damageType);
-            int damageResistance = critterGetStat(critter, STAT_DAMAGE_RESISTANCE + damageType);
+            int damageThreshold = critterGetStat(critter, (int)Stat.STAT_DAMAGE_THRESHOLD + damageType);
+            int damageResistance = critterGetStat(critter, (int)Stat.STAT_DAMAGE_RESISTANCE + damageType);
 
-            if ((*flagsPtr & DAM_BYPASS) != 0 && damageType != DAMAGE_TYPE_EMP) {
+            if ((flagsPtr & (int)Dam.DAM_BYPASS) != 0 && damageType != (int)DamageType.DAMAGE_TYPE_EMP) {
                 damageThreshold = 20 * damageThreshold / 100;
                 damageResistance = 20 * damageResistance / 100;
-            } else {
+            } 
+            else {
                 // SFALL
-                if (weaponGetPerk(attack->weapon) == PERK_WEAPON_PENETRATE
-                    || unarmedIsPenetrating(attack->hitMode)) {
+                if (attack.weapon.item_w_perk() == (int)Perk.PERK_WEAPON_PENETRATE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PALM_STRIKE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_STRIKE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_KICK) {
                     damageThreshold = 20 * damageThreshold / 100;
                 }
 
-                if (attack->attacker == gDude && traitIsSelected(TRAIT_FINESSE)) {
+                if (attack.attacker == obj_dude && trait_level((int)Trait.TRAIT_FINESSE)) {
                     damageResistance += 30;
                 }
             }
 
             int damageBonus;
-            if (attack->attacker == gDude && weaponGetAttackTypeForHitMode(attack->weapon, attack->hitMode) == ATTACK_TYPE_RANGED) {
-                damageBonus = 2 * perkGetRank(gDude, PERK_BONUS_RANGED_DAMAGE);
+            if (attack.attacker == obj_dude && attack.weapon.item_w_subtype(attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
+                damageBonus = 2 * perk_level(obj_dude, (int)Perk.PERK_BONUS_RANGED_DAMAGE);
             } else {
                 damageBonus = 0;
             }
 
             int combatDifficultyDamageModifier = 100;
-            if (attack->attacker->data.critter.combat.team != gDude->data.critter.combat.team) {
-                switch (settings.preferences.combat_difficulty) {
-                case COMBAT_DIFFICULTY_EASY:
+            if (attack.attacker.data.critter.combat.team != obj_dude.data.critter.combat.team) {
+                switch (f2DEF.gCombatDifficulty) {
+                case CombatDifficulty.COMBAT_DIFFICULTY_EASY:
                     combatDifficultyDamageModifier = 75;
                     break;
-                case COMBAT_DIFFICULTY_HARD:
+                case CombatDifficulty.COMBAT_DIFFICULTY_HARD:
                     combatDifficultyDamageModifier = 125;
                     break;
                 }
             }
 
-            // SFALL: Damage mod.
-            DamageCalculationContext context;
-            context.attack = attack;
-            context.damagePtr = damagePtr;
-            context.damageResistance = damageResistance;
-            context.damageThreshold = damageThreshold;
-            context.damageBonus = damageBonus;
-            context.bonusDamageMultiplier = bonusDamageMultiplier;
-            context.combatDifficultyDamageModifier = combatDifficultyDamageModifier;
+            damageResistance += attack.weapon.item_w_dr_adjust();
+            if (damageResistance > 100) {
+                damageResistance = 100;
+            } else if (damageResistance < 0) {
+                damageResistance = 0;
+            }
 
-            if (gDamageCalculationType == DAMAGE_CALCULATION_TYPE_GLOVZ || gDamageCalculationType == DAMAGE_CALCULATION_TYPE_GLOVZ_WITH_DAMAGE_MULTIPLIER_TWEAK) {
-                damageModCalculateGlovz(&context);
-            } else if (gDamageCalculationType == DAMAGE_CALCULATION_TYPE_YAAM) {
-                damageModCalculateYaam(&context);
-            } else {
-                damageResistance += weaponGetAmmoDamageResistanceModifier(attack->weapon);
-                if (damageResistance > 100) {
-                    damageResistance = 100;
-                } else if (damageResistance < 0) {
-                    damageResistance = 0;
+            int damageMultiplier = bonusDamageMultiplier * attack.weapon.item_w_dam_mult();
+            int damageDivisor = attack.weapon.item_w_dam_div();
+
+            for (int index = 0; index < ammoQuantity; index++) 
+            {
+                int damage = item_w_damage(attack.attacker, attack.hitMode);
+
+                damage += damageBonus;
+
+                damage *= damageMultiplier;
+
+                if (damageDivisor != 0) {
+                    damage /= damageDivisor;
                 }
 
-                int damageMultiplier = bonusDamageMultiplier * weaponGetAmmoDamageMultiplier(attack->weapon);
-                int damageDivisor = weaponGetAmmoDamageDivisor(attack->weapon);
+                // TODO: Why we're halving it?
+                damage /= 2;
 
-                for (int index = 0; index < ammoQuantity; index++) {
-                    int damage = weaponGetDamage(attack->attacker, attack->hitMode);
+                damage *= combatDifficultyDamageModifier;
+                damage /= 100;
 
-                    damage += damageBonus;
+                damage -= damageThreshold;
 
-                    damage *= damageMultiplier;
+                if (damage > 0) {
+                    damage -= damage * damageResistance / 100;
+                }
 
-                    if (damageDivisor != 0) {
-                        damage /= damageDivisor;
+                if (damage > 0) {
+                    damagePtr += damage;
+                }
+            }
+
+            if (attack.attacker == obj_dude) 
+            {
+                if (perk_level(attack.attacker, (int)Perk.PERK_LIVING_ANATOMY) != 0) {
+                    int kt = critterGetKillType(attack.defender);
+                    if (kt != (int)KillType.KILL_TYPE_ROBOT && kt != (int)KillType.KILL_TYPE_ALIEN) {
+                        damagePtr += 5;
                     }
+                }
 
-                    // TODO: Why we're halving it?
-                    // NOTE：因为默认 bonusDamageMultiplier = 2
-                    damage /= 2;
-
-                    damage *= combatDifficultyDamageModifier;
-                    damage /= 100;
-
-                    damage -= damageThreshold;
-
-                    if (damage > 0) {
-                        damage -= damage * damageResistance / 100;
-                    }
-
-                    if (damage > 0) {
-                        *damagePtr += damage;
+                if (perk_level(attack.attacker, (int)Perk.PERK_PYROMANIAC) != 0) {
+                    if (item_w_damage_type(attack.attacker, attack.weapon) == (int)DamageType.DAMAGE_TYPE_FIRE) {
+                        damagePtr += 5;
                     }
                 }
             }
 
-            if (attack->attacker == gDude) {
-                if (perkGetRank(attack->attacker, PERK_LIVING_ANATOMY) != 0) {
-                    int kt = critterGetKillType(attack->defender);
-                    if (kt != KILL_TYPE_ROBOT && kt != KILL_TYPE_ALIEN) {
-                        *damagePtr += 5;
-                    }
-                }
-
-                if (perkGetRank(attack->attacker, PERK_PYROMANIAC) != 0) {
-                    if (weaponGetDamageType(attack->attacker, attack->weapon) == DAMAGE_TYPE_FIRE) {
-                        *damagePtr += 5;
-                    }
-                }
-            }
-
-            if (knockbackDistancePtr != NULL
-                && (critter->flags & OBJECT_MULTIHEX) == 0
-                && (damageType == DAMAGE_TYPE_EXPLOSION || attack->weapon == NULL || weaponGetAttackTypeForHitMode(attack->weapon, attack->hitMode) == ATTACK_TYPE_MELEE)
-                && PID_TYPE(critter->pid) == OBJ_TYPE_CRITTER
-                && !_critter_flag_check(critter->pid, CRITTER_NO_KNOCKBACK)) {
+            if (hasKnockbackDistancePtr
+                && (critter.flags & (int)ObjectFlags.OBJECT_MULTIHEX) == 0
+                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || attack.weapon.item_w_subtype(attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
+                && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER
+                && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_KNOCKBACK) == false) 
+            {
                 bool shouldKnockback = true;
                 bool hasStonewall = false;
-                if (critter == gDude) {
-                    if (perkGetRank(critter, PERK_STONEWALL) != 0) {
-                        int chance = randomBetween(0, 100);
+                if (critter == obj_dude) {
+                    if (perk_level(critter, (int)Perk.PERK_STONEWALL) != 0) {
+                        int chance = f2Utils.roll_random(0, 100);
                         hasStonewall = true;
                         if (chance < 50) {
                             shouldKnockback = false;
@@ -838,14 +962,19 @@ namespace f2
                     }
                 }
 
-                if (shouldKnockback) {
-                    int knockbackDistanceDivisor = weaponGetPerk(attack->weapon) == PERK_WEAPON_KNOCKBACK ? 5 : 10;
+                if (shouldKnockback) 
+                {
+                    int knockbackDistanceDivisor = attack.weapon.item_w_perk() == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
 
-                    *knockbackDistancePtr = *damagePtr / knockbackDistanceDivisor;
+                    knockbackDistancePtr = damagePtr / knockbackDistanceDivisor;
 
-                    if (hasStonewall) {
-                        *knockbackDistancePtr /= 2;
+                    if (hasStonewall) 
+                    {
+                        knockbackDistancePtr /= 2;
                     }
+
+                    // set back
+                    attack.defenderKnockback = knockbackDistancePtr;
                 }
             }
         }
