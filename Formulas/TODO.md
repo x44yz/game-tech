@@ -1,7 +1,10 @@
-[+] diablo
-[+] daggerfall
-[+] 辐射 fallout 2
-[+] fallout shelter
+[+] diablo  
+[+] daggerfall  
+[+] 辐射 fallout 2  
+[+] fallout shelter  
+[x] gta3  
+[+] Minecraft   
+[+] 饥荒  
 
 [x]player stats
 [x]enemy stats

@@ -10,7 +10,6 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         owner = this.transform.root.transform.GetComponent<Unit>();
-        owner.weapon = this;
     }
 
     public void StartAttack()
@@ -20,22 +19,22 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (owner.isAttacking == false)
-            return;
+        // if (owner.isAttacking == false)
+        //     return;
 
-        var target = other.GetComponent<Unit>();
-        if (target == null) 
-            return;
+        // var target = other.GetComponent<Unit>();
+        // if (target == null) 
+        //     return;
 
-        // 防止对象多个 collider 引起多次 enter
-        if (attackTargets.Contains(target))
-            return;
-        attackTargets.Add(target);
+        // // 防止对象多个 collider 引起多次 enter
+        // if (attackTargets.Contains(target))
+        //     return;
+        // attackTargets.Add(target);
 
-        if (owner.CanAttack(target) == false)
-            return;
+        // if (owner.CanAttack(target) == false)
+        //     return;
 
-        owner.HitTarget(target);
-        Debug.Log("hit::" + other.name + " - " + other.GetInstanceID());
+        // owner.HitTarget(target);
+        // Debug.Log("hit::" + other.name + " - " + other.GetInstanceID());
     }
 }

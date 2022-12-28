@@ -18,54 +18,45 @@ namespace f2
 
         public TestMode testMode;
         public Text dmgTextTmp;
-        public f2Player leftPlayer;
-        public f2Player rightPlayer;
-        public f2Monster rightMonster;
         
         public Queue<Text> dmgTextPool = new Queue<Text>();
+
+        public static int game_time()
+        {
+            // TODO
+            return 0;
+        }
+
+        public static bool isInCombat()
+        {
+            // return (gCombatState & COMBAT_STATE_0x01) != 0;
+            return true;
+        }
 
         private void Awake() 
         {
             Inst = this;
 
             dmgTextTmp.gameObject.SetActive(false);
-
-            leftPlayer.gameObject.SetActive(false);
-            rightPlayer.gameObject.SetActive(false);
-            rightMonster.gameObject.SetActive(false);
-            if (testMode == TestMode.PLAYER_2_MONSTER)
-            {
-                leftPlayer.gameObject.SetActive(true);
-                rightMonster.gameObject.SetActive(true);
-            }
-            else if (testMode == TestMode.PLAYER_2_PLAYER)
-            {
-                leftPlayer.gameObject.SetActive(true);
-                rightPlayer.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogError("not implement test mode > " + testMode);
-            }
         }
 
         private void Update() 
         {
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                if (testMode == TestMode.PLAYER_2_MONSTER)
-                    leftPlayer.AttackMonster(rightMonster);
-                else if (testMode == TestMode.PLAYER_2_PLAYER)
-                    leftPlayer.AttackPlayer(rightPlayer);
-            }
+            // if (Input.GetKeyDown(KeyCode.J))
+            // {
+            //     if (testMode == TestMode.PLAYER_2_MONSTER)
+            //         leftPlayer.AttackMonster(rightMonster);
+            //     else if (testMode == TestMode.PLAYER_2_PLAYER)
+            //         leftPlayer.AttackPlayer(rightPlayer);
+            // }
 
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                if (testMode == TestMode.PLAYER_2_MONSTER)
-                    rightMonster.AttackPlayer(leftPlayer);
-                else if (testMode == TestMode.PLAYER_2_PLAYER)
-                    rightPlayer.AttackPlayer(leftPlayer);
-            }
+            // if (Input.GetKeyDown(KeyCode.K))
+            // {
+            //     if (testMode == TestMode.PLAYER_2_MONSTER)
+            //         rightMonster.AttackPlayer(leftPlayer);
+            //     else if (testMode == TestMode.PLAYER_2_PLAYER)
+            //         rightPlayer.AttackPlayer(leftPlayer);
+            // }
         }
 
         private Text GetFreeDmgText()

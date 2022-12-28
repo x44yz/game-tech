@@ -3,6 +3,8 @@ TODO:
 
 https://fallout.fandom.com/wiki/Fallout_2  
 https://fallout.fandom.com/wiki/Damage  
+https://f3mic.github.io/index.html  
+https://www.bilibili.com/read/cv12206741  
 
 _combat_attack 计算伤害
 attackComputeDamage

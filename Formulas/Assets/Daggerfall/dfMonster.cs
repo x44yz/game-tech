@@ -78,11 +78,11 @@ namespace df
             // test
         }
 
-        protected override void OnHit(Unit attacker)
-        {
-            base.OnHit(attacker);
-            Debug.Log("xx-- d2Monster.OnHit");
-        }
+        // protected override void OnHit(Unit attacker)
+        // {
+        //     base.OnHit(attacker);
+        //     Debug.Log("xx-- d2Monster.OnHit");
+        // }
 
         public bool isPossibleToHit
         {

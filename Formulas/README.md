@@ -1,5 +1,4 @@
-[+] Minecraft   
-[+] 饥荒  
+
 
 damage 
 level

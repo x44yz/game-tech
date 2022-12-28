@@ -603,15 +603,15 @@ namespace df
             return 1ul << (spellId - 1);
         }
 
-        public override void HitTarget(Unit target)
-        {
-            base.HitTarget(target);
-            Debug.Log("xx-- d2HitTarget");
+        // public override void HitTarget(Unit target)
+        // {
+        //     base.HitTarget(target);
+        //     Debug.Log("xx-- d2HitTarget");
 
-            var mon = target as dfMonster;
-            if (mon != null)
-                PlrHitMonster(mon);
-        }
+        //     var mon = target as dfMonster;
+        //     if (mon != null)
+        //         PlrHitMonster(mon);
+        // }
 
         public int GetArmor()
         {
@@ -1621,7 +1621,7 @@ namespace df
         void StartPlayerAttack()
         {
             m_Animator.SetTrigger("Attack");
-            weapon.StartAttack();
+            // weapon.StartAttack();
             _pmode = PLR_MODE.PM_ATTACK;
             NewPlrAnim(player_graphic.Attack);
         }
