@@ -780,5 +780,26 @@ namespace f2
             proto_ptr(obj_dude.pid, ref proto);
             return (proto.critter.data.flags & (1 << state)) != 0;
         }
+
+        static bool critter_is_dead(f2Object critter)
+        {
+            if (critter == null) {
+                return false;
+            }
+
+            if (PID_TYPE(critter.pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return false;
+            }
+
+            if (critterGetStat(critter, (int)Stat.STAT_CURRENT_HIT_POINTS) <= 0) {
+                return true;
+            }
+
+            if ((critter.data.critter.combat.results & (int)Dam.DAM_DEAD) != 0) {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

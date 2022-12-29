@@ -10,5 +10,6 @@ namespace f2
         public int fid;
         public ObjectData data;
         public int flags;
+        public int tile;
     }
 }
