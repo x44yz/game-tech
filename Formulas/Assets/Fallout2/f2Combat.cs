@@ -1841,8 +1841,9 @@ namespace f2
                 break;
             }
 
-            if (attackType == ATTACK_TYPE_RANGED || attackType == ATTACK_TYPE_THROW) {
-                if ((attack->attackerFlags & (DAM_HIT | (int)Dam.DAM_CRITICAL)) == 0) {
+            if (attackType == (int)AttackType.ATTACK_TYPE_RANGED || attackType == (int)AttackType.ATTACK_TYPE_THROW)
+            {
+                if ((attack.attackerFlags & ((int)Dam.DAM_HIT | (int)Dam.DAM_CRITICAL)) == 0) {
                     int tile;
                     if (isGrenade) {
                         int throwDistance = roll_random(1, distance / 2);
@@ -1851,33 +1852,40 @@ namespace f2
                         }
 
                         int rotation = roll_random(0, 5);
-                        tile = tile_num_in_direction(attack->defender->tile, rotation, throwDistance);
+                        tile = tile_num_in_direction(attack.defender.tile, rotation, throwDistance);
                     } else {
-                        tile = tile_num_beyond(attack->attacker->tile, attack->defender->tile, range);
+                        tile = tile_num_beyond(attack.attacker.tile, attack.defender.tile, range);
                     }
 
-                    attack->tile = tile;
+                    attack.tile = tile;
 
-                    Object* v25 = attack->defender;
-                    make_straight_path_func(v25, attack->defender->tile, attack->tile, NULL, &v25, 32, obj_shoot_blocking_at);
-                    if (v25 != NULL && v25 != attack->defender) {
-                        attack->tile = v25->tile;
-                    } else {
-                        v25 = obj_blocking_at(NULL, attack->tile, attack->defender->elevation);
-                    }
+                    f2Object v25 = attack.defender;
+                    // make_straight_path_func(v25, attack.defender.tile, attack.tile, null, v25, 32, obj_shoot_blocking_at);
+                    // if (v25 != null && v25 != attack->defender) 
+                    // {
+                    //     attack.tile = v25.tile;
+                    // } 
+                    // else 
+                    // {
+                    //     v25 = obj_blocking_at(NULL, attack->tile, attack->defender->elevation);
+                    // }
 
-                    if (v25 != NULL && (v25->flags & OBJECT_SHOOT_THRU) == 0) {
-                        attack->attackerFlags |= (int)Dam.DAM_HIT;
-                        attack->defender = v25;
+                    if (v25 != null && (v25.flags & (uint)ObjectFlags.OBJECT_SHOOT_THRU) == 0) 
+                    {
+                        attack.attackerFlags |= (int)Dam.DAM_HIT;
+                        attack.defender = v25;
                         compute_damage(attack, 1, 2);
                     }
                 }
             }
 
-            if ((damageType == DAMAGE_TYPE_EXPLOSION || isGrenade) && ((attack->attackerFlags & (int)Dam.DAM_HIT) != 0 || (attack->attackerFlags & (int)Dam.DAM_CRITICAL) == 0)) {
+            if ((damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || isGrenade) && ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0 || (attack.attackerFlags & (int)Dam.DAM_CRITICAL) == 0)) 
+            {
                 compute_explosion_on_extras(attack, 0, isGrenade, 0);
-            } else {
-                if ((attack->attackerFlags & (int)Dam.DAM_EXPLODE) != 0) {
+            } 
+            else 
+            {
+                if ((attack.attackerFlags & (int)Dam.DAM_EXPLODE) != 0) {
                     compute_explosion_on_extras(attack, 1, isGrenade, 0);
                 }
             }
@@ -1885,6 +1893,29 @@ namespace f2
             death_checks(attack);
 
             return 0;
+        }
+
+        static int attack_crit_failure(Attack attack)
+        {
+            // TODO
+            return 0;
+        }
+
+        // compute_explosion_on_extras
+        static void compute_explosion_on_extras(Attack attack, int a2, bool isGrenade, int a4)
+        {
+            // TODO
+        }
+
+        static void death_checks(Attack attack)
+        {
+            // TODO
+            // check_for_death(attack->attacker, attack->attackerDamage, &(attack->attackerFlags));
+            // check_for_death(attack->defender, attack->defenderDamage, &(attack->defenderFlags));
+
+            // for (int index = 0; index < attack->extrasLength; index++) {
+            //     check_for_death(attack->extras[index], attack->extrasDamage[index], &(attack->extrasFlags[index]));
+            // }
         }
 
         public static int attack_crit_success(Attack attack)
@@ -1923,40 +1954,64 @@ namespace f2
                 criticalHitDescription = pc_crit_succ_eff[attack.defenderHitLocation, effect];
             } else {
                 int killType = critterGetKillType(defender);
-                criticalHitDescription = &(crit_succ_eff[killType][attack->defenderHitLocation][effect]);
+                criticalHitDescription = crit_succ_eff[killType, attack.defenderHitLocation, effect];
             }
 
-            attack->defenderFlags |= criticalHitDescription->flags;
+            attack.defenderFlags |= criticalHitDescription.flags;
 
             // NOTE: Original code is slightly different, it does not set message in
             // advance, instead using "else" statement.
-            attack->criticalMessageId = criticalHitDescription->messageId;
+            attack.criticalMessageId = criticalHitDescription.messageId;
 
-            if (criticalHitDescription->massiveCriticalStat != -1) {
-                if (stat_result(defender, criticalHitDescription->massiveCriticalStat, criticalHitDescription->massiveCriticalStatModifier, NULL) <= ROLL_FAILURE) {
-                    attack->defenderFlags |= criticalHitDescription->massiveCriticalFlags;
-                    attack->criticalMessageId = criticalHitDescription->massiveCriticalMessageId;
+            if (criticalHitDescription.massiveCriticalStat != -1) 
+            {
+                int howMuch = 0;
+                if (stat_result(defender, criticalHitDescription.massiveCriticalStat, 
+                    criticalHitDescription.massiveCriticalStatModifier, ref howMuch) <= (int)Roll.ROLL_FAILURE) 
+                {
+                    attack.defenderFlags |= criticalHitDescription.massiveCriticalFlags;
+                    attack.criticalMessageId = criticalHitDescription.massiveCriticalMessageId;
                 }
             }
 
-            if ((attack->defenderFlags & (int)Dam.DAM_CRIP_RANDOM) != 0) {
+            if ((attack.defenderFlags & (int)Dam.DAM_CRIP_RANDOM) != 0) {
                 // NOTE: Uninline.
-                do_random_cripple(&(attack->defenderFlags));
+                do_random_cripple(ref attack.defenderFlags);
             }
 
-            if (item_w_perk(attack->weapon) == PERK_WEAPON_ENHANCED_KNOCKOUT) {
-                attack->defenderFlags |= (int)Dam.DAM_KNOCKED_OUT;
+            if (item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_ENHANCED_KNOCKOUT) {
+                attack.defenderFlags |= (int)Dam.DAM_KNOCKED_OUT;
             }
 
-            Object* weapon = NULL;
+            f2Object weapon = null;
             if (defender != obj_dude) {
-                weapon = item_hit_with(defender, HIT_MODE_RIGHT_WEAPON_PRIMARY);
+                weapon = item_hit_with(defender, (int)HitMode.HIT_MODE_RIGHT_WEAPON_PRIMARY);
             }
 
             int flags = attackFindInvalidFlags(defender, weapon);
-            attack->defenderFlags &= ~flags;
+            attack.defenderFlags &= ~flags;
 
-            return criticalHitDescription->damageMultiplier;
+            return criticalHitDescription.damageMultiplier;
+        }
+
+        static void do_random_cripple(ref int flagsPtr)
+        {
+            flagsPtr &= ~(int)Dam.DAM_CRIP_RANDOM;
+
+            switch (roll_random(0, 3)) {
+            case 0:
+                flagsPtr |= (int)Dam.DAM_CRIP_LEG_LEFT;
+                break;
+            case 1:
+                flagsPtr |= (int)Dam.DAM_CRIP_LEG_RIGHT;
+                break;
+            case 2:
+                flagsPtr |= (int)Dam.DAM_CRIP_ARM_LEFT;
+                break;
+            case 3:
+                flagsPtr |= (int)Dam.DAM_CRIP_ARM_RIGHT;
+                break;
+            }
         }
 
         public static int correctAttackForPerks(Attack attack)
@@ -1973,7 +2028,7 @@ namespace f2
                         weapon = item_hit_with(attack.defender, (int)HitMode.HIT_MODE_RIGHT_WEAPON_PRIMARY);
                     }
 
-                    if (!(attackFindInvalidFlags(attack.defender, weapon) & 1)) {
+                    if ((attackFindInvalidFlags(attack.defender, weapon) & 1) == 0) {
                         attack.defenderFlags |= (int)Dam.DAM_KNOCKED_OUT;
                     }
                 }
@@ -1986,12 +2041,12 @@ namespace f2
         {
             int flags = 0;
 
-            if (critter != null && PID_TYPE(critter.pid) == OBJ_TYPE_CRITTER && critter_flag_check(critter->pid, CRITTER_NO_DROP)) {
-                flags |= DAM_DROP;
+            if (critter != null && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_DROP)) {
+                flags |= (int)Dam.DAM_DROP;
             }
 
-            if (item != NULL && item_is_hidden(item)) {
-                flags |= DAM_DROP;
+            if (item != null && item_is_hidden(item) != 0) {
+                flags |= (int)Dam.DAM_DROP;
             }
 
             return flags;
@@ -2063,6 +2118,148 @@ namespace f2
             attack.defenderHitLocation = (int)HitLocation.HIT_LOCATION_TORSO;
             compute_damage(attack, 1, 2);
             return true;
+        }
+
+        static void combat_ctd_init(Attack attack, f2Object attacker, f2Object defender, int hitMode, int hitLocation)
+        {
+            attack.attacker = attacker;
+            attack.hitMode = hitMode;
+            attack.weapon = item_hit_with(attacker, hitMode);
+            attack.attackHitLocation = (int)HitLocation.HIT_LOCATION_TORSO;
+            attack.attackerDamage = 0;
+            attack.attackerFlags = 0;
+            attack.ammoQuantity = 0;
+            attack.criticalMessageId = -1;
+            attack.defender = defender;
+            attack.tile = defender != null ? defender.tile : -1;
+            attack.defenderHitLocation = hitLocation;
+            attack.defenderDamage = 0;
+            attack.defenderFlags = 0;
+            attack.defenderKnockback = 0;
+            attack.extrasLength = 0;
+            attack.oops = defender;
+        }
+
+        public class STRUCT_664980 {
+            public f2Object attacker;
+            public f2Object defender;
+            public int actionPointsBonus;
+            public int accuracyBonus;
+            public int damageBonus;
+            public int minDamage;
+            public int maxDamage;
+            public int field_1C; // probably bool, indicating field_20 and field_24 used
+            public int field_20; // flags on attacker
+            public int field_24; // flags on defender
+        };
+
+        static STRUCT_664980 gcsd = null;
+
+        static Attack main_ctd = new Attack();
+        // bonus action points from BONUS_MOVE perk.
+        static int combat_free_move;
+        static bool combat_call_display = false;
+        static bool combat_cleanup_enabled = false;
+
+        static int combat_attack(f2Object a1, f2Object a2, int hitMode, int hitLocation)
+        {
+            // if (a1 != obj_dude && hitMode == (int)HitMode.HIT_MODE_PUNCH && roll_random(1, 4) == 1) {
+            //     int fid = art_id(OBJ_TYPE_CRITTER, a1->fid & 0xFFF, ANIM_KICK_LEG, (a1->fid & 0xF000) >> 12, (a1->fid & 0x70000000) >> 28);
+            //     if (art_exists(fid)) {
+            //         hitMode = HIT_MODE_KICK;
+            //     }
+            // }
+
+            combat_ctd_init(main_ctd, a1, a2, hitMode, hitLocation);
+            // debug_printf("computing attack...\n");
+
+            if (compute_attack(main_ctd) == -1) {
+                return -1;
+            }
+
+            if (gcsd != null)
+            {
+                main_ctd.defenderDamage += gcsd.damageBonus;
+
+                if (main_ctd.defenderDamage < gcsd.minDamage) {
+                    main_ctd.defenderDamage = gcsd.minDamage;
+                }
+
+                if (main_ctd.defenderDamage > gcsd.maxDamage) {
+                    main_ctd.defenderDamage = gcsd.maxDamage;
+                }
+
+                if (gcsd.field_1C != 0) 
+                {
+                    // FIXME: looks like a bug, two different fields are used to set
+                    // one field.
+                    main_ctd.defenderFlags = gcsd.field_20;
+                    main_ctd.defenderFlags = gcsd.field_24;
+                }
+            }
+
+            bool aiming = false;
+            if (main_ctd.defenderHitLocation == (int)HitLocation.HIT_LOCATION_TORSO || main_ctd.defenderHitLocation == (int)HitLocation.HIT_LOCATION_UNCALLED) {
+                if (a1 == obj_dude) {
+                    intface_get_attack(ref hitMode, ref aiming);
+                } else {
+                    aiming = false;
+                }
+            } else {
+                aiming = true;
+            }
+
+            int actionPoints = item_w_mp_cost(a1, main_ctd.hitMode, aiming);
+            // debug_printf("sequencing attack...\n");
+
+            if (action_attack(main_ctd) == -1) {
+                return -1;
+            }
+
+            if (actionPoints > a1.data.critter.combat.ap) {
+                a1.data.critter.combat.ap = 0;
+            } else {
+                a1.data.critter.combat.ap -= actionPoints;
+            }
+
+            if (a1 == obj_dude) {
+                intface_update_move_points(a1.data.critter.combat.ap, combat_free_move);
+                critter_set_who_hit_me(a1, a2);
+            }
+
+            combat_call_display = true;
+            combat_cleanup_enabled = true;
+            combatAIInfoSetLastTarget(a1, a2);
+            // debug_printf("running attack...\n");
+
+            return 0;
+        }
+
+        static int combatAIInfoSetLastTarget(f2Object a1, f2Object a2)
+        {
+            // if (!isInCombat()) {
+            //     return 0;
+            // }
+
+            // if (a1 == NULL) {
+            //     return -1;
+            // }
+
+            // if (a1->cid == -1) {
+            //     return -1;
+            // }
+
+            // if (a1 == a2) {
+            //     return -1;
+            // }
+
+            // if (critter_is_dead(a2)) {
+            //     a2 = NULL;
+            // }
+
+            // aiInfoList[a1->cid].lastTarget = a2;
+
+            return 0;
         }
     }
 }

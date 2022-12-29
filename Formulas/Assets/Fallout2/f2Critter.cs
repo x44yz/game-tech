@@ -801,5 +801,29 @@ namespace f2
 
             return false;
         }
+
+        static int critter_set_who_hit_me(f2Object a1, f2Object a2)
+        {
+            if (a1 == null) {
+                return -1;
+            }
+
+            if (a2 != null && FID_TYPE(a2.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return -1;
+            }
+
+            if (PID_TYPE(a1.pid) == (int)ObjType.OBJ_TYPE_CRITTER) 
+            {
+                int howMuch = 0;
+                if (a2 == null || a1.data.critter.combat.team != a2.data.critter.combat.team || (stat_result(a1, (int)Stat.STAT_INTELLIGENCE, -1, ref howMuch) < 2 && (!isPartyMember(a1) || !isPartyMember(a2)))) {
+                    a1.data.critter.combat.whoHitMe = a2;
+                    if (a2 == obj_dude) {
+                        reaction_set(a1, -3);
+                    }
+                }
+            }
+
+            return 0;
+        }
     }
 }

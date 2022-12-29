@@ -213,7 +213,7 @@ namespace f2
         public int defenderDamage;
         public int defenderFlags;
         public int defenderKnockback;
-        // public Object* oops;
+        public f2Object oops;
         public int extrasLength;
         // public Object* extras[EXPLOSION_TARGET_COUNT];
         public int[] extrasHitLocation = new int[f2DEF.EXPLOSION_TARGET_COUNT];

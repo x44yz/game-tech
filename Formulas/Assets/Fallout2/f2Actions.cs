@@ -16,6 +16,31 @@ namespace f2
             // return diff != 0 && diff != 1 && diff != 5;
             return true;
         }
+
+        static int action_attack(Attack attack)
+        {
+            // if (register_clear(attack->attacker) == -2) {
+            //     return -1;
+            // }
+
+            // if (register_clear(attack->defender) == -2) {
+            //     return -1;
+            // }
+
+            // for (int index = 0; index < attack->extrasLength; index++) {
+            //     if (register_clear(attack->extras[index]) == -2) {
+            //         return -1;
+            //     }
+            // }
+
+            // int anim = item_w_anim(attack->attacker, attack->hitMode);
+            // if (anim < ANIM_FIRE_SINGLE && anim != ANIM_THROW_ANIM) {
+            //     return action_melee(attack, anim);
+            // } else {
+            //     return action_ranged(attack, anim);
+            // }
+            return -1;
+        }
     }
 }
 

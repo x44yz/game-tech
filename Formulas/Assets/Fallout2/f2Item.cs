@@ -466,5 +466,98 @@ namespace f2
 
             return 0;
         }
+
+        // Returns action points required for hit mode.
+        static int item_w_mp_cost(f2Object critter, int hitMode, bool aiming)
+        {
+            int actionPoints = 0;
+
+            // // NOTE: Uninline.
+            // Object* weapon = item_hit_with(critter, hitMode);
+
+            // if (hitMode == HIT_MODE_LEFT_WEAPON_RELOAD || hitMode == HIT_MODE_RIGHT_WEAPON_RELOAD) {
+            //     if (weapon != NULL) {
+            //         Proto* proto;
+            //         proto_ptr(weapon->pid, &proto);
+            //         if (proto->item.data.weapon.perk == PERK_WEAPON_FAST_RELOAD) {
+            //             return 1;
+            //         }
+
+            //         if (weapon->pid == PROTO_ID_SOLAR_SCORCHER) {
+            //             return 0;
+            //         }
+            //     }
+            //     return 2;
+            // }
+
+            // switch (hitMode) {
+            // case HIT_MODE_PALM_STRIKE:
+            //     actionPoints = 6;
+            //     break;
+            // case HIT_MODE_PIERCING_STRIKE:
+            //     actionPoints = 8;
+            //     break;
+            // case HIT_MODE_STRONG_KICK:
+            // case HIT_MODE_SNAP_KICK:
+            // case HIT_MODE_POWER_KICK:
+            //     actionPoints = 4;
+            //     break;
+            // case HIT_MODE_HIP_KICK:
+            // case HIT_MODE_HOOK_KICK:
+            //     actionPoints = 7;
+            //     break;
+            // case HIT_MODE_PIERCING_KICK:
+            //     actionPoints = 9;
+            //     break;
+            // default:
+            //     // TODO: Inverse conditions.
+            //     if (weapon != NULL && hitMode != HIT_MODE_PUNCH && hitMode != HIT_MODE_KICK && hitMode != HIT_MODE_STRONG_PUNCH && hitMode != HIT_MODE_HAMMER_PUNCH && hitMode != HIT_MODE_HAYMAKER) {
+            //         if (hitMode == HIT_MODE_LEFT_WEAPON_PRIMARY || hitMode == HIT_MODE_RIGHT_WEAPON_PRIMARY) {
+            //             // NOTE: Uninline.
+            //             actionPoints = item_w_primary_mp_cost(weapon);
+            //         } else {
+            //             // NOTE: Uninline.
+            //             actionPoints = item_w_secondary_mp_cost(weapon);
+            //         }
+
+            //         if (critter == obj_dude) {
+            //             if (trait_level(TRAIT_FAST_SHOT)) {
+            //                 if (item_w_range(critter, hitMode) > 2) {
+            //                     actionPoints--;
+            //                 }
+            //             }
+            //         }
+            //     } else {
+            //         actionPoints = 3;
+            //     }
+            //     break;
+            // }
+
+            // if (critter == obj_dude) {
+            //     int attackType = item_w_subtype(weapon, hitMode);
+
+            //     if (perkHasRank(obj_dude, PERK_BONUS_HTH_ATTACKS)) {
+            //         if (attackType == ATTACK_TYPE_MELEE || attackType == ATTACK_TYPE_UNARMED) {
+            //             actionPoints -= 1;
+            //         }
+            //     }
+
+            //     if (perkHasRank(obj_dude, PERK_BONUS_RATE_OF_FIRE)) {
+            //         if (attackType == ATTACK_TYPE_RANGED) {
+            //             actionPoints -= 1;
+            //         }
+            //     }
+            // }
+
+            // if (aiming) {
+            //     actionPoints += 1;
+            // }
+
+            // if (actionPoints < 1) {
+            //     actionPoints = 1;
+            // }
+
+            return actionPoints;
+        }
     }
 }
