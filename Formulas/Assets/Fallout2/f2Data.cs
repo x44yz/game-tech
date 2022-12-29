@@ -11,7 +11,7 @@ namespace f2
     };
 
     public class InventoryItem {
-        public f2Item item;
+        public f2Object item;
         public int quantity; // 数量
     };
 
@@ -22,11 +22,35 @@ namespace f2
         public List<InventoryItem> items;
     };
 
+    public struct WeaponObjectData {
+        public int ammoQuantity; // obj_pudg.pudweapon.cur_ammo_quantity
+        public int ammoTypePid; // obj_pudg.pudweapon.cur_ammo_type_pid
+    };
+
+    public struct AmmoItemData {
+        public int quantity; // obj_pudg.pudammo.cur_ammo_quantity
+    };
+
+    public struct MiscItemData {
+        public int charges; // obj_pudg.pudmisc_item.curr_charges
+    };
+
+    public struct KeyItemData {
+        public int keyCode; // obj_pudg.pudkey_item.cur_key_code
+    };
+
+    public class ItemObjectData {
+        public WeaponObjectData weapon;
+        public AmmoItemData ammo;
+        public MiscItemData misc;
+        public KeyItemData key;
+    };
+
     public class ObjectData {
         public Inventory inventory;
         public CritterObjectData critter;
         public int flags;
-        // ItemObjectData item;
+        public ItemObjectData item;
         // SceneryObjectData scenery;
         // MiscObjectData misc;
     };
@@ -39,7 +63,7 @@ namespace f2
         public int damageLastTurn; // obj_pud.combat_data.damage_last_turn
         public int aiPacket; // obj_pud.combat_data.ai_packet
         public int team; // obj_pud.combat_data.team_num
-        public f2Unit whoHitMe; // obj_pud.combat_data.who_hit_me
+        public f2Object whoHitMe; // obj_pud.combat_data.who_hit_me
         public int whoHitMeCid;
     };
 
@@ -101,6 +125,15 @@ namespace f2
         public byte soundCode; // d.sound_id
     };
 
+    public struct ProtoItemAmmoData {
+        public int caliber; // d.caliber
+        public int quantity; // d.quantity
+        public int armorClassModifier; // d.ac_adjust
+        public int damageResistanceModifier; // d.dr_adjust
+        public int damageMultiplier; // d.dam_mult
+        public int damageDivisor; // d.dam_div
+    };
+
     public struct ItemProtoData {
         // union {
         //     struct {
@@ -116,7 +149,7 @@ namespace f2
             // ProtoItemContainerData container;
             // ProtoItemDrugData drug;
         public ProtoItemWeaponData weapon;
-            // ProtoItemAmmoData ammo;
+        public ProtoItemAmmoData ammo;
             // ProtoItemMiscData misc;
             // ProtoItemKeyData key;
         // };
@@ -166,15 +199,15 @@ namespace f2
 
     public class Attack 
     {
-        public f2Unit attacker;
+        public f2Object attacker;
         public int hitMode;
-        public f2Item weapon;
+        public f2Object weapon;
         public int attackHitLocation;
         public int attackerDamage;
         public int attackerFlags;
         public int ammoQuantity;
         public int criticalMessageId;
-        public f2Unit defender;
+        public f2Object defender;
         public int tile;
         public int defenderHitLocation;
         public int defenderDamage;
@@ -214,8 +247,70 @@ namespace f2
         }
     };
 
+    public struct SkillDescription 
+    {
+        public string name;
+        public string description;
+        public string attributes;
+        public int frmId;
+        public int defaultValue;
+        public int statModifier;
+        public int stat1;
+        public int stat2;
+        public int field_20;
+        public int experience;
+        public int field_28;
+
+        public SkillDescription(string name,
+                            string description,
+                            string attributes,
+                            int frmId,
+                            int defaultValue,
+                            int statModifier,
+                            int stat1,
+                            int stat2,
+                            int field_20,
+                            int experience,
+                            int field_28)
+        {
+            this.name = name;
+            this.description = description;
+            this.attributes = attributes;
+            this.frmId = frmId;
+            this.defaultValue = defaultValue;
+            this.statModifier = statModifier;
+            this.stat1 = stat1;
+            this.stat2 = stat2;
+            this.field_20 = field_20;
+            this.experience = experience;
+            this.field_28 = field_28;
+        }
+    };
+ 
+
     public static class f2Data
     {
+        public static SkillDescription[] skill_data = new SkillDescription[(int)Skill.SKILL_COUNT] {
+                new SkillDescription( "", "", "", 28, 5, 4, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 29, 0, 2, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 30, 0, 2, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 31, 30, 2, (int)Stat.STAT_AGILITY, (int)Stat.STAT_STRENGTH, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 32, 20, 2, (int)Stat.STAT_AGILITY, (int)Stat.STAT_STRENGTH, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 33, 0, 4, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 34, 0, 2, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_INTELLIGENCE, 1, 25, 0 ),
+                new SkillDescription( "", "", "", 35, 5, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_INTELLIGENCE, 1, 50, 0 ),
+                new SkillDescription( "", "", "", 36, 5, 3, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 37, 10, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_AGILITY, 1, 25, 1 ),
+                new SkillDescription( "", "", "", 38, 0, 3, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 25, 1 ),
+                new SkillDescription( "", "", "", 39, 10, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_AGILITY, 1, 25, 1 ),
+                new SkillDescription( "", "", "", 40, 0, 4, (int)Stat.STAT_INTELLIGENCE, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 41, 0, 3, (int)Stat.STAT_INTELLIGENCE, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 42, 0, 5, (int)Stat.STAT_CHARISMA, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 43, 0, 4, (int)Stat.STAT_CHARISMA, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 44, 0, 5, (int)Stat.STAT_LUCK, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 45, 0, 2, (int)Stat.STAT_ENDURANCE, (int)Stat.STAT_INTELLIGENCE, 1, 100, 0 ),
+            };
+
         public static readonly StatDescription[] stat_data = new StatDescription[]{
             new StatDescription( "", "", 0, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
             new StatDescription( "", "", 1, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),

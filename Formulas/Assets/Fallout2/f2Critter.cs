@@ -5,45 +5,24 @@ using UnityEngine;
 
 namespace f2
 {
-    public class f2Unit : Unit
+    public partial class f2Game
     {
-        public static int FID_TYPE(int value) => f2Utils.FID_TYPE(value);
-        public static int PID_TYPE(int value) => f2Utils.PID_TYPE(value);
-        public static int SID_TYPE(int value) => f2Utils.SID_TYPE(value);
-        public static int proto_ptr(int pid, ref Proto protoPtr) => f2Utils.proto_ptr(pid, ref protoPtr);
-
-        public const int TRAITS_MAX_SELECTED_COUNT = 2;
-
-        public static f2Unit obj_dude; // 当前选中的 unit
-        public static f2Unit inven_dude = null; // 当前查看背包的 unit
-
-        // List of selected traits.
-        // 特征/天赋
-        public static int[] pc_trait = new int[TRAITS_MAX_SELECTED_COUNT];
-        // An array of perk ranks for each party member.
-        public static PerkRankData perkLevelDataList = null;
-
-        public int pid; // proto 配置 id
-        public int fid;
-        public ObjectData data;
-        public int flags;
-
-        int critter_get_hits(f2Unit critter)
+        static int critter_get_hits(f2Object critter)
         {
             return PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER ? critter.data.critter.hp : 0;
         }
 
-        int critter_get_poison(f2Unit critter)
+        static int critter_get_poison(f2Object critter)
         {
             return PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER ? critter.data.critter.poison : 0;
         }
 
-        int critter_get_rads(f2Unit obj)
+        static int critter_get_rads(f2Object obj)
         {
             return PID_TYPE(obj.pid) == (int)ObjType.OBJ_TYPE_CRITTER ? obj.data.critter.radiation : 0;
         }
 
-        int stat_get_base_direct(f2Unit critter, int stat)
+        static int stat_get_base_direct(f2Object critter, int stat)
         {
             if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) 
             {
@@ -66,7 +45,7 @@ namespace f2
             return 0;
         }
 
-        int stat_get_bonus(f2Unit critter, int stat)
+        static int stat_get_bonus(f2Object critter, int stat)
         {
             if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) {
                 Proto proto = null;
@@ -77,14 +56,8 @@ namespace f2
             return 0;
         }
 
-        // Returns `true` if the specified trait is selected.
-        bool trait_level(int trait)
-        {
-            return pc_trait[0] == trait || pc_trait[1] == trait;
-        }
-
         // Returns stat modifier depending on selected traits.
-        int trait_adjust_stat(int stat)
+        static int trait_adjust_stat(int stat)
         {
             int modifier = 0;
 
@@ -185,7 +158,7 @@ namespace f2
             return modifier;
         }
 
-        int stat_get_base(f2Unit critter, int stat)
+        static int stat_get_base(f2Object critter, int stat)
         {
             int value = stat_get_base_direct(critter, stat);
 
@@ -197,11 +170,11 @@ namespace f2
         }
 
         // 获得右手物品
-        f2Item inven_right_hand(f2Unit critter)
+        public static f2Object inven_right_hand(f2Object critter)
         {
             int i;
             Inventory inventory;
-            f2Item item;
+            f2Object item;
 
             // if (i_rhand != NULL && critter == inven_dude) {
             //     return i_rhand;
@@ -220,11 +193,11 @@ namespace f2
         }
 
         // 获得左手物品
-        f2Item inven_left_hand(f2Unit critter)
+        public static f2Object inven_left_hand(f2Object critter)
         {
             int i;
             Inventory inventory;
-            f2Item item;
+            f2Object item;
 
             // if (i_lhand != NULL && critter == inven_dude) {
             //     return i_lhand;
@@ -240,11 +213,11 @@ namespace f2
             return null;
         }
 
-        f2Item inven_worn(f2Unit critter)
+        static f2Object inven_worn(f2Object critter)
         {
             int i;
             Inventory inventory;
-            f2Item item;
+            f2Object item;
 
             // if (i_worn != NULL && critter == inven_dude) {
             //     return i_worn;
@@ -261,104 +234,13 @@ namespace f2
             return null;
         }
 
-        // Calculates total weight of the items in inventory.
-        int item_total_weight(f2Unit obj)
-        {
-            if (obj == null) {
-                return 0;
-            }
-
-            int weight = 0;
-
-            Inventory inventory = (obj.data.inventory);
-            for (int index = 0; index < inventory.length; index++) 
-            {
-                InventoryItem inventoryItem = (inventory.items[index]);
-                f2Item item = inventoryItem.item;
-                weight += f2Item.item_weight(item) * inventoryItem.quantity;
-            }
-
-            // TODO:
-            // 上面不是已经加过 weight，下面又统计没有装备的，是否重复？
-            if (FID_TYPE(obj.fid) == (int)ObjType.OBJ_TYPE_CRITTER) {
-                f2Item item2 = inven_right_hand(obj);
-                if (item2 != null) 
-                {
-                    // 不在右手
-                    if ((item2.flags & (uint)ObjectFlags.OBJECT_IN_RIGHT_HAND) == 0) {
-                        weight += f2Item.item_weight(item2);
-                    }
-                }
-
-                f2Item item1 = inven_left_hand(obj);
-                if (item1 != null) {
-                    if ((item1.flags & (uint)ObjectFlags.OBJECT_IN_LEFT_HAND) == 0) {
-                        weight += f2Item.item_weight(item1);
-                    }
-                }
-
-                f2Item armor = inven_worn(obj);
-                if (armor != null) 
-                {
-                    if ((armor.flags & (uint)ObjectFlags.OBJECT_WORN) == 0) 
-                    {
-                        weight += f2Item.item_weight(armor);
-                    }
-                }
-            }
-            return weight;
-        }
-
-        bool isInCombat()
+        static bool isInCombat()
         {
             return f2Test.isInCombat();
         }
 
-        // Returns true if perk is valid.
-        static bool perkIsValid(int perk)
-        {
-            return perk >= 0 && perk < (int)Perk.PERK_COUNT;
-        }
-
-        public static int partyMemberMaxCount = 0;
-        // List of party members, it's length is [partyMemberMaxCount] + 20.
-        // static PartyMember partyMemberList = NULL;
-
-        PerkRankData perkGetLevelData(f2Unit critter)
-        {
-            if (critter == obj_dude) {
-                return perkLevelDataList;
-            }
-
-            // for (int index = 1; index < partyMemberMaxCount; index++) {
-            //     if (critter.pid == partyMemberPidList[index]) {
-            //         return perkLevelDataList + index;
-            //     }
-            // }
-
-            Debug.LogError("Error: perkGetLevelData: Can't find party member match!");
-            return perkLevelDataList;
-        }
-
-        // has_perk
-        // perk 技能点
-        bool perkHasRank(f2Unit critter, Perk perk)
-        {
-            return perk_level(critter, (int)perk) != 0;
-        }
-
-        int perk_level(f2Unit critter, int perk)
-        {
-            if (!perkIsValid(perk)) {
-                return 0;
-            }
-
-            PerkRankData ranksData = perkGetLevelData(critter);
-            return ranksData.ranks[perk];
-        }
-
-        public static f2Unit combat_turn_obj;
-        public f2Unit combat_whose_turn()
+        public static f2Object combat_turn_obj;
+        public static f2Object combat_whose_turn()
         {
             if (isInCombat()) {
                 return combat_turn_obj;
@@ -367,7 +249,12 @@ namespace f2
             }
         }
 
-        int critterGetStat(f2Unit critter, int stat)
+        public static int critterGetStat(f2Object critter, Stat stat)
+        {
+            return critterGetStat(critter, (int)stat);
+        }
+
+        public static int critterGetStat(f2Object critter, int stat)
         {
             int value;
             if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) 
@@ -403,21 +290,21 @@ namespace f2
                                 if (perkHasRank(critter, Perk.PERK_HTH_EVADE)) {
                                     bool hasWeapon = false;
 
-                                    f2Item item2 = inven_right_hand(critter);
+                                    f2Object item2 = inven_right_hand(critter);
                                     if (item2 != null) {
-                                        if (f2Item.item_get_type(item2) == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                        if (item_get_type(item2) == (int)ItemType.ITEM_TYPE_WEAPON) {
                                             // TODO: 有什么武器是没动画的？
-                                            if (f2Item.item_w_anim_code(item2) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
+                                            if (item_w_anim_code(item2) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                 hasWeapon = true;
                                             }
                                         }
                                     }
 
                                     if (!hasWeapon) {
-                                        f2Item item1 = inven_left_hand(critter);
+                                        f2Object item1 = inven_left_hand(critter);
                                         if (item1 != null) {
-                                            if (f2Item.item_get_type(item1) == (int)ItemType.ITEM_TYPE_WEAPON) {
-                                                if (f2Item.item_w_anim_code(item1) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
+                                            if (item_get_type(item1) == (int)ItemType.ITEM_TYPE_WEAPON) {
+                                                if (item_w_anim_code(item1) != (int)WeaponAnimation.WEAPON_ANIMATION_NONE) {
                                                     hasWeapon = true;
                                                 }
                                             }
@@ -474,12 +361,12 @@ namespace f2
 
                             bool hasMirrorShades = false;
 
-                            f2Item item2 = inven_right_hand(critter);
+                            f2Object item2 = inven_right_hand(critter);
                             if (item2 != null && item2.pid == (int)ProtoID.PROTO_ID_MIRRORED_SHADES) {
                                 hasMirrorShades = true;
                             }
 
-                            f2Item item1 = inven_left_hand(critter);
+                            f2Object item1 = inven_left_hand(critter);
                             if (item1 != null && item1.pid == (int)ProtoID.PROTO_ID_MIRRORED_SHADES) {
                                 hasMirrorShades = true;
                             }
@@ -586,131 +473,70 @@ namespace f2
             return value;
         }
 
-        int skill_level(f2Unit critter, int skill)
+        static int skill_points(f2Object obj, int skill)
         {
-            // TODO
-            return 0;
+            if (!skillIsValid(skill)) {
+                return 0;
+            }
 
-            // if (!skillIsValid(skill)) {
-            //     return -5;
-            // }
+            Proto proto = null;
+            proto_ptr(obj.pid, ref proto);
 
-            // int baseValue = skill_points(critter, skill);
-            // if (baseValue < 0) {
-            //     return baseValue;
-            // }
-
-            // SkillDescription* skillDescription = &(skill_data[skill]);
-
-            // int v7 = critterGetStat(critter, skillDescription->stat1);
-            // if (skillDescription->stat2 != -1) {
-            //     v7 += critterGetStat(critter, skillDescription->stat2);
-            // }
-
-            // int value = skillDescription->defaultValue + skillDescription->statModifier * v7 + baseValue * skillDescription->field_20;
-
-            // if (critter == obj_dude) {
-            //     if (skill_is_tagged(skill)) {
-            //         value += baseValue * skillDescription->field_20;
-
-            //         if (!perk_level(critter, PERK_TAG) || skill != tag_skill[3]) {
-            //             value += 20;
-            //         }
-            //     }
-
-            //     value += trait_adjust_skill(skill);
-            //     value += perk_adjust_skill(critter, skill);
-            //     value += skill_game_difficulty(skill);
-            // }
-
-            // if (value > 300) {
-            //     value = 300;
-            // }
-
-            // return value;
+            return proto.critter.data.skills[skill];
         }
 
-        int weaponGetDamageType(f2Unit critter, f2Item weapon)
+        static int[] tag_skill = new int[f2DEF.NUM_TAGGED_SKILLS];
+        static bool skill_is_tagged(int skill)
         {
-            // TODO
-            // Proto* proto;
-
-            // if (weapon != NULL) {
-            //     protoGetProto(weapon->pid, &proto);
-
-            //     return proto->item.data.weapon.damageType;
-            // }
-
-            // if (critter != NULL) {
-            //     return critterGetDamageType(critter);
-            // }
-
-            return 0;
+            return skill == tag_skill[0]
+                || skill == tag_skill[1]
+                || skill == tag_skill[2]
+                || skill == tag_skill[3];
         }
 
-        public int item_w_damage(f2Unit critter, int hitMode)
+        static int skill_level(f2Object critter, int skill)
         {
-            // TODO
-            return 0;
-            // if (critter == NULL) {
-            //     return 0;
-            // }
+            if (!skillIsValid(skill)) {
+                return -5;
+            }
 
-            // int minDamage = 0;
-            // int maxDamage = 0;
-            // int meleeDamage = 0;
-            // int unarmedDamage = 0;
+            int baseValue = skill_points(critter, skill);
+            if (baseValue < 0) {
+                return baseValue;
+            }
 
-            // // NOTE: Uninline.
-            // Object* weapon = item_hit_with(critter, hitMode);
+            SkillDescription skillDescription = (f2Data.skill_data[skill]);
 
-            // if (weapon != NULL) {
-            //     Proto* proto;
-            //     proto_ptr(weapon->pid, &proto);
+            int v7 = critterGetStat(critter, skillDescription.stat1);
+            if (skillDescription.stat2 != -1) {
+                v7 += critterGetStat(critter, skillDescription.stat2);
+            }
 
-            //     minDamage = proto->item.data.weapon.minDamage;
-            //     maxDamage = proto->item.data.weapon.maxDamage;
+            int value = skillDescription.defaultValue + skillDescription.statModifier * v7 + baseValue * skillDescription.field_20;
 
-            //     int attackType = item_w_subtype(weapon, hitMode);
-            //     if (attackType == ATTACK_TYPE_MELEE || attackType == ATTACK_TYPE_UNARMED) {
-            //         meleeDamage = critterGetStat(critter, STAT_MELEE_DAMAGE);
-            //     }
-            // } else {
-            //     minDamage = 1;
-            //     maxDamage = critterGetStat(critter, STAT_MELEE_DAMAGE) + 2;
+            if (critter == obj_dude) {
+                if (skill_is_tagged(skill)) 
+                {
+                    value += baseValue * skillDescription.field_20;
 
-            //     switch (hitMode) {
-            //     case HIT_MODE_STRONG_PUNCH:
-            //     case HIT_MODE_JAB:
-            //         unarmedDamage = 3;
-            //         break;
-            //     case HIT_MODE_HAMMER_PUNCH:
-            //     case HIT_MODE_STRONG_KICK:
-            //         unarmedDamage = 4;
-            //         break;
-            //     case HIT_MODE_HAYMAKER:
-            //     case HIT_MODE_PALM_STRIKE:
-            //     case HIT_MODE_SNAP_KICK:
-            //     case HIT_MODE_HIP_KICK:
-            //         unarmedDamage = 7;
-            //         break;
-            //     case HIT_MODE_POWER_KICK:
-            //     case HIT_MODE_HOOK_KICK:
-            //         unarmedDamage = 9;
-            //         break;
-            //     case HIT_MODE_PIERCING_STRIKE:
-            //         unarmedDamage = 10;
-            //         break;
-            //     case HIT_MODE_PIERCING_KICK:
-            //         unarmedDamage = 12;
-            //         break;
-            //     }
-            // }
+                    if (perk_level(critter, (int)Perk.PERK_TAG) != 0 || skill != tag_skill[3]) {
+                        value += 20;
+                    }
+                }
 
-            // return roll_random(unarmedDamage + minDamage, unarmedDamage + meleeDamage + maxDamage);
+                value += trait_adjust_skill(skill);
+                value += perk_adjust_skill(critter, skill);
+                value += skill_game_difficulty(skill);
+            }
+
+            if (value > 300) {
+                value = 300;
+            }
+
+            return value;
         }
 
-        int critterGetKillType(f2Unit obj)
+        public static int critterGetKillType(f2Object obj)
         {
             if (obj == obj_dude) {
                 int gender = critterGetStat(obj, (int)Stat.STAT_GENDER);
@@ -730,7 +556,7 @@ namespace f2
             return proto.critter.data.killType;
         }
 
-        int critter_get_base_damage_type(f2Unit obj)
+        public static int critter_get_base_damage_type(f2Object obj)
         {
             if (PID_TYPE(obj.pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
                 return 0;
@@ -744,26 +570,8 @@ namespace f2
             return proto.critter.data.damageType;
         }
 
-        int item_w_damage_type(f2Unit critter, f2Item weapon)
-        {
-            Proto proto = null;
-
-            if (weapon != null) {
-                proto_ptr(weapon.pid, ref proto);
-
-                return proto.item.data.weapon.damageType;
-            }
-
-            if (critter != null) 
-            {
-                return critter_get_base_damage_type(critter);
-            }
-
-            return 0;
-        }
-
         // Checks proto critter flag.
-        bool critter_flag_check(int pid, int flag)
+        public static bool critter_flag_check(int pid, int flag)
         {
             if (pid == -1) {
                 return false;
@@ -778,10 +586,10 @@ namespace f2
             return (proto.critter.data.flags & flag) != 0;
         }
 
-        public void compute_damage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
+        public static void compute_damage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
         {
             int damagePtr;
-            f2Unit critter;
+            f2Object critter;
             int flagsPtr;
             int knockbackDistancePtr;
             bool hasKnockbackDistancePtr;
@@ -810,7 +618,7 @@ namespace f2
             }
 
             // 获得攻击者武器类型
-            int damageType = weaponGetDamageType(attack.attacker, attack.weapon);
+            int damageType = item_w_damage_type(attack.attacker, attack.weapon);
             int damageThreshold = critterGetStat(critter, (int)Stat.STAT_DAMAGE_THRESHOLD + damageType);
             int damageResistance = critterGetStat(critter, (int)Stat.STAT_DAMAGE_RESISTANCE + damageType);
 
@@ -820,7 +628,7 @@ namespace f2
             } 
             else {
                 // SFALL
-                if (f2Item.item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_PENETRATE
+                if (item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_PENETRATE
                     || attack.hitMode == (int)HitMode.HIT_MODE_PALM_STRIKE
                     || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_STRIKE
                     || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK
@@ -834,7 +642,7 @@ namespace f2
             }
 
             int damageBonus;
-            if (attack.attacker == obj_dude && f2Item.item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
+            if (attack.attacker == obj_dude && item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
                 damageBonus = 2 * perk_level(obj_dude, (int)Perk.PERK_BONUS_RANGED_DAMAGE);
             } else {
                 damageBonus = 0;
@@ -852,15 +660,15 @@ namespace f2
                 }
             }
 
-            damageResistance += f2Item.item_w_dr_adjust(attack.weapon);
+            damageResistance += item_w_dr_adjust(attack.weapon);
             if (damageResistance > 100) {
                 damageResistance = 100;
             } else if (damageResistance < 0) {
                 damageResistance = 0;
             }
 
-            int damageMultiplier = bonusDamageMultiplier * f2Item.item_w_dam_mult(attack.weapon);
-            int damageDivisor = f2Item.item_w_dam_div(attack.weapon);
+            int damageMultiplier = bonusDamageMultiplier * item_w_dam_mult(attack.weapon);
+            int damageDivisor = item_w_dam_div(attack.weapon);
 
             for (int index = 0; index < ammoQuantity; index++) 
             {
@@ -909,7 +717,7 @@ namespace f2
 
             if (hasKnockbackDistancePtr
                 && (critter.flags & (int)ObjectFlags.OBJECT_MULTIHEX) == 0
-                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || f2Item.item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
+                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
                 && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER
                 && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_KNOCKBACK) == false) 
             {
@@ -917,7 +725,7 @@ namespace f2
                 bool hasStonewall = false;
                 if (critter == obj_dude) {
                     if (perk_level(critter, (int)Perk.PERK_STONEWALL) != 0) {
-                        int chance = f2Utils.roll_random(0, 100);
+                        int chance = roll_random(0, 100);
                         hasStonewall = true;
                         if (chance < 50) {
                             shouldKnockback = false;
@@ -927,7 +735,7 @@ namespace f2
 
                 if (shouldKnockback) 
                 {
-                    int knockbackDistanceDivisor = f2Item.item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
+                    int knockbackDistanceDivisor = item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
 
                     knockbackDistancePtr = damagePtr / knockbackDistanceDivisor;
 
@@ -940,6 +748,37 @@ namespace f2
                     attack.defenderKnockback = knockbackDistancePtr;
                 }
             }
+        }
+    
+        public static int obj_dist(f2Object object1, f2Object object2)
+        {
+            return 0;
+            // if (object1 == NULL || object2 == NULL) {
+            //     return 0;
+            // }
+
+            // int distance = tile_dist(object1->tile, object2->tile);
+
+            // if ((object1->flags & OBJECT_MULTIHEX) != 0) {
+            //     distance -= 1;
+            // }
+
+            // if ((object2->flags & OBJECT_MULTIHEX) != 0) {
+            //     distance -= 1;
+            // }
+
+            // if (distance < 0) {
+            //     distance = 0;
+            // }
+
+            // return distance;
+        }
+
+        public static bool is_pc_flag(int state)
+        {
+            Proto proto = null;
+            proto_ptr(obj_dude.pid, ref proto);
+            return (proto.critter.data.flags & (1 << state)) != 0;
         }
     }
 }

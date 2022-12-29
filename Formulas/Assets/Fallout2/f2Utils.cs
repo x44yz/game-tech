@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace f2
 {
-    public static class f2Utils
+    public partial class f2Game
     {
         public static int FID_TYPE(int value) => ((value) & 0xF000000) >> 24;
         public static int PID_TYPE(int value) => (value) >> 24;
