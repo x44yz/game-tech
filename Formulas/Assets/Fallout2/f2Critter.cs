@@ -253,7 +253,7 @@ namespace f2
         {
             return critterGetStat(critter, (int)stat);
         }
-
+        
         public static int critterGetStat(f2Object critter, int stat)
         {
             int value;
@@ -500,6 +500,7 @@ namespace f2
                 return -5;
             }
 
+            // 升级技能点
             int baseValue = skill_points(critter, skill);
             if (baseValue < 0) {
                 return baseValue;
@@ -524,8 +525,11 @@ namespace f2
                     }
                 }
 
+                // 天赋
                 value += trait_adjust_skill(skill);
+                // perk
                 value += perk_adjust_skill(critter, skill);
+                // 难度（Easy+20，Normal+0，Hard-10）
                 value += skill_game_difficulty(skill);
             }
 

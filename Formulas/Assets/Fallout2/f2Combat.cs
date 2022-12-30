@@ -1726,17 +1726,222 @@ namespace f2
             },
         };
 
+        // determine_to_hit
+        public static int determine_to_hit_func(f2Object attacker, int tile, f2Object defender, int hitLocation, int hitMode, int a6)
+        {
+            f2Object weapon = item_hit_with(attacker, hitMode);
+
+            bool targetIsCritter = defender != null
+                ? FID_TYPE(defender.fid) == (int)ObjType.OBJ_TYPE_CRITTER
+                : false;
+
+            bool isRangedWeapon = false;
+
+            int accuracy;
+            // 空手攻击
+            if (weapon == null || hitMode == (int)HitMode.HIT_MODE_PUNCH || hitMode == (int)HitMode.HIT_MODE_KICK || (hitMode >= (int)HitMode.FIRST_ADVANCED_UNARMED_HIT_MODE && hitMode <= (int)HitMode.LAST_ADVANCED_UNARMED_HIT_MODE)) 
+            {
+                // 与 ST + AG 有关
+                accuracy = skill_level(attacker, (int)Skill.SKILL_UNARMED);
+            } 
+            else 
+            {
+                accuracy = item_w_skill_level(attacker, hitMode);
+
+                int modifier = 0;
+
+                int attackType = item_w_subtype(weapon, hitMode);
+                // 如果是范围攻击或投掷攻击
+                if (attackType == (int)AttackType.ATTACK_TYPE_RANGED || attackType == (int)AttackType.ATTACK_TYPE_THROW) 
+                {
+                    isRangedWeapon = true;
+
+                    int v29 = 0;
+                    int v25 = 0;
+
+                    int weaponPerk = item_w_perk(weapon);
+                    switch (weaponPerk) {
+                    case PERK_WEAPON_LONG_RANGE:
+                        v29 = 4;
+                        break;
+                    case PERK_WEAPON_SCOPE_RANGE:
+                        v29 = 5;
+                        v25 = 8;
+                        break;
+                    default:
+                        v29 = 2;
+                        break;
+                    }
+
+                    int perception = critterGetStat(attacker, STAT_PERCEPTION);
+
+                    if (defender != NULL) {
+                        modifier = obj_dist_with_tile(attacker, tile, defender, defender->tile);
+                    } else {
+                        modifier = 0;
+                    }
+
+                    if (modifier >= v25) {
+                        int penalty = attacker == obj_dude
+                            ? v29 * (perception - 2)
+                            : v29 * perception;
+
+                        modifier -= penalty;
+                    } else {
+                        modifier += v25;
+                    }
+
+                    if (-2 * perception > modifier) {
+                        modifier = -2 * perception;
+                    }
+
+                    if (attacker == obj_dude) {
+                        modifier -= 2 * perk_level(obj_dude, PERK_SHARPSHOOTER);
+                    }
+
+                    if (modifier >= 0) {
+                        if ((attacker->data.critter.combat.results & DAM_BLIND) != 0) {
+                            modifier *= -12;
+                        } else {
+                            modifier *= -4;
+                        }
+                    } else {
+                        modifier *= -4;
+                    }
+
+                    if (a6 || modifier > 0) {
+                        accuracy += modifier;
+                    }
+
+                    modifier = 0;
+
+                    if (defender != NULL && a6) {
+                        combat_is_shot_blocked(attacker, tile, defender->tile, defender, &modifier);
+                    }
+
+                    accuracy -= 10 * modifier;
+                }
+
+                if (attacker == obj_dude && trait_level(Trait.TRAIT_ONE_HANDER)) 
+                {
+                    if (item_w_is_2handed(weapon)) {
+                        accuracy -= 40;
+                    } else {
+                        accuracy += 20;
+                    }
+                }
+
+                // 武器要求的最小 strenth
+                int minStrength = item_w_min_st(weapon);
+                modifier = minStrength - critterGetStat(attacker, (int)Stat.STAT_STRENGTH);
+                if (attacker == obj_dude && perk_level(obj_dude, Perk.PERK_WEAPON_HANDLING) != 0) 
+                {
+                    // HARDCODE
+                    modifier -= 3;
+                }
+
+                // 力量不足的时候，会降低精确度
+                if (modifier > 0) {
+                    // HARDCODE
+                    accuracy -= 20 * modifier;
+                }
+
+                if (item_w_perk(weapon) == (int)Perk.PERK_WEAPON_ACCURATE) {
+                    // HARDCODE
+                    accuracy += 20;
+                }
+            }
+
+            // 减去目标护甲
+            if (targetIsCritter && defender != null) 
+            {
+                int armorClass = critterGetStat(defender, Stat.STAT_ARMOR_CLASS);
+                armorClass += item_w_ac_adjust(weapon);
+                if (armorClass < 0) {
+                    armorClass = 0;
+                }
+
+                // 护甲越高命中越低
+                accuracy -= armorClass;
+            }
+
+            if (isRangedWeapon) {
+                accuracy += hit_location_penalty[hitLocation];
+            } else {
+                accuracy += hit_location_penalty[hitLocation] / 2;
+            }
+
+            if (defender != NULL && (defender->flags & OBJECT_MULTIHEX) != 0) {
+                accuracy += 15;
+            }
+
+            if (attacker == obj_dude) {
+                int lightIntensity;
+                if (defender != NULL) {
+                    lightIntensity = obj_get_visible_light(defender);
+                    if (item_w_perk(weapon) == PERK_WEAPON_NIGHT_SIGHT) {
+                        lightIntensity = 65536;
+                    }
+                } else {
+                    lightIntensity = 0;
+                }
+
+                if (lightIntensity <= 26214)
+                    accuracy -= 40;
+                else if (lightIntensity <= 39321)
+                    accuracy -= 25;
+                else if (lightIntensity <= 52428)
+                    accuracy -= 10;
+            }
+
+            if (gcsd != NULL) {
+                accuracy += gcsd->accuracyBonus;
+            }
+
+            if ((attacker->data.critter.combat.results & DAM_BLIND) != 0) {
+                accuracy -= 25;
+            }
+
+            if (targetIsCritter && defender != NULL && (defender->data.critter.combat.results & (DAM_KNOCKED_OUT | DAM_KNOCKED_DOWN)) != 0) {
+                accuracy += 40;
+            }
+
+            if (attacker->data.critter.combat.team != obj_dude->data.critter.combat.team) {
+                int combatDifficuly = 1;
+                config_get_value(&game_config, GAME_CONFIG_PREFERENCES_KEY, GAME_CONFIG_COMBAT_DIFFICULTY_KEY, &combatDifficuly);
+                switch (combatDifficuly) {
+                case 0:
+                    accuracy -= 20;
+                    break;
+                case 2:
+                    accuracy += 20;
+                    break;
+                }
+            }
+
+            if (accuracy > 95) {
+                accuracy = 95;
+            }
+
+            if (accuracy < -100) {
+                debug_printf("Whoa! Bad skill value in determine_to_hit!\n");
+            }
+
+            return accuracy;
+        }
+
         public static int compute_attack(Attack attack)
         {
             int range = item_w_range(attack.attacker, attack.hitMode);
             int distance = obj_dist(attack.attacker, attack.defender);
 
+            // 判断是否在攻击距离内
             if (range < distance) {
                 return -1;
             }
 
             int anim = item_w_anim(attack.attacker, attack.hitMode);
-            // int accuracy = determine_to_hit_func(attack->attacker, attack->attacker->tile, attack->defender, attack->defenderHitLocation, attack->hitMode, 1);
+            int accuracy = determine_to_hit_func(attack.attacker, attack.attacker.tile, attack.defender, attack.defenderHitLocation, attack.hitMode, 1);
 
             bool isGrenade = false;
             int damageType = item_w_damage_type(attack.attacker, attack.weapon);
@@ -2170,6 +2375,7 @@ namespace f2
             //     }
             // }
 
+            // a1 攻击者，a2 被攻击
             combat_ctd_init(main_ctd, a1, a2, hitMode, hitLocation);
             // debug_printf("computing attack...\n");
 

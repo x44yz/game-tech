@@ -1,13 +1,54 @@
-TODO:  
-[+]attributes   
+基于 https://github.com/alexbatalov/fallout2-re 项目代码分析  
 
+>TODO:  
+[x]combat_attack   
+
+>REF:  
 https://fallout.fandom.com/wiki/Fallout_2  
 https://fallout.fandom.com/wiki/Damage  
 https://f3mic.github.io/index.html  
 https://www.bilibili.com/read/cv12206741  
+https://fallout.fandom.com/wiki/Fallout_2_skills  
 
-_combat_attack 计算伤害
-attackComputeDamage
+> fallout2 设定  
+tile 是 hex grid 布局  
+武器作为主武器和副武器的最大距离来自不同设定 maxRange1 & maxRange2  
+Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加成)  
+空手状态下攻击距离是 1 格，但是长手脚（CRITTER_LONG_LIMBS）攻击距离是 2 格  
+标记技能（taged skill）能够增加 
+
+> Perk
+
+| 属性 | 定义 | 等级要求 | 其他要求 |好处Benefit |
+|------|-----|----------|---------|----|
+|Heave Ho! | PERK_HEAVE_HO |6|ST<9 | 当使用投掷武器时，每级增加 2 点 Strength
+|Weapon Handling|PERK_WEAPON_HANDLING|12|ST<7, AG 5 | 武器使用需要的 Strength 检查时 +3 Strength
+
+> Weapon Perk
+
+| 属性 | 定义 | 作用Effect |
+|------|-----|----------|
+|Weapon Accurate|PERK_WEAPON_ACCURATE | 增加20%命中
+
+> Skill
+所有技能最大上限 300%  
+武器根据类型有默认的 skill 定义（attack_skill），另外武器的伤害类型或扩展定义（extendedFlags）也会影响 skill 类型。（武器的 skill 是根据表现反推的？）
+
+| 属性 | 定义 | 公式
+|----|----|----|
+|Small Guns|SKILL_SMALL_GUNS| 5%+(4xAG) 
+|Unarmed|SKILL_UNARMED| 30%+2x(ST+AG)
+|Melee Weapons|SKILL_MELEE_WEAPONS| 20%+2x(ST+AG)
+|Throwing|SKILL_THROWING| 4%xAG
+|Energy Weapons|SKILL_ENERGY_WEAPONS|2%xAG
+|Big Guns|SKILL_BIG_GUNS|2%xAG
+
+> Trait  
+天赋，创建角色时候可以选择 2 个天赋
+
+| 属性 | 定义 | 好处Benefit | 坏处Penalty
+|----|----|----|----|
+|One Hander|TRAIT_ONE_HANDER| 单手武器增加20%命中概率 | 双手武器减少40%命中概率
 
 > player 属性
 

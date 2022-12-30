@@ -42,6 +42,11 @@ namespace f2
             return perk_level(critter, (int)perk) != 0;
         }
 
+        public static int perk_level(f2Object critter, Perk perk)
+        {
+            return perk_level(critter, (int)perk);
+        }
+
         public static int perk_level(f2Object critter, int perk)
         {
             if (!perkIsValid(perk)) {

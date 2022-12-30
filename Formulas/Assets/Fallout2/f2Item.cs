@@ -20,6 +20,20 @@ namespace f2
             (int)AttackType.ATTACK_TYPE_RANGED, // 8 // Continous // Only: Flamer, Improved Flamer, Flame Breath
         };
 
+        // Maps weapon extended flags to skill.
+        // 对应 attack_subtype
+        static int[] attack_skill = new int[9]{
+            -1,
+            (int)Skill.SKILL_UNARMED,
+            (int)Skill.SKILL_UNARMED,
+            (int)Skill.SKILL_MELEE_WEAPONS,
+            (int)Skill.SKILL_MELEE_WEAPONS,
+            (int)Skill.SKILL_THROWING,
+            (int)Skill.SKILL_SMALL_GUNS,
+            (int)Skill.SKILL_SMALL_GUNS,
+            (int)Skill.SKILL_SMALL_GUNS,
+        };
+
         // Returns true if [item] is an natural weapon of it's owner.
         //
         // See [ItemProtoExtendedFlags_NaturalWeapon] for more details on natural weapons.
@@ -238,9 +252,9 @@ namespace f2
 
             int index;
             if (hitMode == (int)HitMode.HIT_MODE_LEFT_WEAPON_PRIMARY || hitMode == (int)HitMode.HIT_MODE_RIGHT_WEAPON_PRIMARY) {
-                index = proto.item.extendedFlags & 0xF;
+                index = proto.item.extendedFlags & 0xF; // 低4位
             } else {
-                index = (proto.item.extendedFlags & 0xF0) >> 4;
+                index = (proto.item.extendedFlags & 0xF0) >> 4; // 高4位
             }
 
             return attack_subtype[index];
@@ -396,10 +410,13 @@ namespace f2
             // NOTE: Uninline.
             f2Object weapon = item_hit_with(critter, hitMode);
 
-            if (weapon != null && hitMode != 4 && hitMode != 5 && (hitMode < 8 || hitMode > 19)) 
+            // 使用武器
+            if (weapon != null && hitMode != (int)HitMode.HIT_MODE_PUNCH && hitMode != (int)HitMode.HIT_MODE_KICK 
+                && (hitMode < 8 || hitMode > 19)) 
             {
                 Proto proto = null;
                 proto_ptr(weapon.pid, ref proto);
+                // 作为主武器和副武器的距离不一样
                 if (hitMode == (int)HitMode.HIT_MODE_LEFT_WEAPON_PRIMARY || hitMode == (int)HitMode.HIT_MODE_RIGHT_WEAPON_PRIMARY) {
                     range = proto.item.data.weapon.maxRange1;
                 } else {
@@ -423,6 +440,7 @@ namespace f2
                 return range;
             }
 
+            // 长手脚的时候可以 2 格
             if (critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_LONG_LIMBS)) {
                 return 2;
             }
@@ -558,6 +576,107 @@ namespace f2
             // }
 
             return actionPoints;
+        }
+
+        // 返回 skill id
+        static int item_w_skill(f2Object weapon, int hitMode)
+        {
+            if (weapon == null) {
+                return (int)Skill.SKILL_UNARMED;
+            }
+
+            Proto proto = null;
+            proto_ptr(weapon.pid, ref proto);
+
+            int index;
+            if (hitMode == (int)HitMode.HIT_MODE_LEFT_WEAPON_PRIMARY || hitMode == (int)HitMode.HIT_MODE_RIGHT_WEAPON_PRIMARY) {
+                index = proto.item.extendedFlags & 0xF;
+            } else {
+                index = (proto.item.extendedFlags & 0xF0) >> 4;
+            }
+
+            int skill = attack_skill[index];
+
+            // 枪械默认技能，特殊枪械单独处理
+            if (skill == (int)Skill.SKILL_SMALL_GUNS) 
+            {
+                int damageType = item_w_damage_type(null, weapon);
+                if (damageType == (int)DamageType.DAMAGE_TYPE_LASER || damageType == (int)DamageType.DAMAGE_TYPE_PLASMA 
+                    || damageType == (int)DamageType.DAMAGE_TYPE_ELECTRICAL) 
+                {
+                    skill = (int)Skill.SKILL_ENERGY_WEAPONS;
+                } 
+                else 
+                {
+                    if ((proto.item.extendedFlags & (int)ItemProtoExtendedFlags.ItemProtoExtendedFlags_BigGun) != 0) 
+                    {
+                        skill = (int)Skill.SKILL_BIG_GUNS;
+                    }
+                }
+            }
+
+            return skill;
+        }
+
+        // Returns skill value when critter is about to perform hitMode.
+        static int item_w_skill_level(f2Object critter, int hitMode)
+        {
+            if (critter == null) {
+                return 0;
+            }
+
+            int skill;
+
+            // NOTE: Uninline.
+            f2Object weapon = item_hit_with(critter, hitMode);
+            if (weapon != null) {
+                skill = item_w_skill(weapon, hitMode);
+            } else {
+                skill = (int)Skill.SKILL_UNARMED;
+            }
+
+            return skill_level(critter, skill);
+        }
+
+        static bool item_w_is_2handed(f2Object weapon)
+        {
+            Proto proto = null;
+
+            if (weapon == null) {
+                return false;
+            }
+
+            proto_ptr(weapon.pid, ref proto);
+
+            return (proto.item.extendedFlags & (int)ItemProtoExtendedFlags.ItemProtoExtendedFlags_TwoHanded) != 0;
+        }
+
+        static int item_w_min_st(f2Object weapon)
+        {
+            if (weapon == null) {
+                return -1;
+            }
+
+            Proto proto = null;
+            proto_ptr(weapon.pid, ref proto);
+            return proto.item.data.weapon.minStrength;
+        }
+
+        // 弹药对护甲的影响（比如穿甲弹）
+        static int item_w_ac_adjust(f2Object weapon)
+        {
+            // NOTE: Uninline.
+            int ammoTypePid = item_w_ammo_pid(weapon);
+            if (ammoTypePid == -1) {
+                return 0;
+            }
+
+            Proto proto = null;
+            if (proto_ptr(ammoTypePid, ref proto) == -1) {
+                return 0;
+            }
+
+            return proto.item.data.ammo.armorClassModifier;
         }
     }
 }

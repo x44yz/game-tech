@@ -257,7 +257,7 @@ namespace f2
         public int statModifier;
         public int stat1;
         public int stat2;
-        public int field_20;
+        public int field_20; // 每点技能点增加值
         public int experience;
         public int field_28;
 
@@ -290,6 +290,24 @@ namespace f2
 
     public static class f2Data
     {
+        // SKILL_SMALL_GUNS
+        // SKILL_BIG_GUNS
+        // SKILL_ENERGY_WEAPONS
+        // SKILL_UNARMED
+        // SKILL_MELEE_WEAPONS
+        // SKILL_THROWING
+        // SKILL_FIRST_AID
+        // SKILL_DOCTOR
+        // SKILL_SNEAK
+        // SKILL_LOCKPICK
+        // SKILL_STEAL
+        // SKILL_TRAPS
+        // SKILL_SCIENCE
+        // SKILL_REPAIR
+        // SKILL_SPEECH
+        // SKILL_BARTER
+        // SKILL_GAMBLING
+        // SKILL_OUTDOORSMAN
         public static SkillDescription[] skill_data = new SkillDescription[(int)Skill.SKILL_COUNT] {
                 new SkillDescription( "", "", "", 28, 5, 4, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 29, 0, 2, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),

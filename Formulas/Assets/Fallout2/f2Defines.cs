@@ -408,10 +408,10 @@ namespace f2
 
     public enum DamageType {
         DAMAGE_TYPE_NORMAL,
-        DAMAGE_TYPE_LASER,
+        DAMAGE_TYPE_LASER, // 激光
         DAMAGE_TYPE_FIRE,
-        DAMAGE_TYPE_PLASMA,
-        DAMAGE_TYPE_ELECTRICAL,
+        DAMAGE_TYPE_PLASMA, // 粒子枪伤害
+        DAMAGE_TYPE_ELECTRICAL, // 电
         DAMAGE_TYPE_EMP,
         DAMAGE_TYPE_EXPLOSION,
         DAMAGE_TYPE_COUNT,
@@ -538,7 +538,7 @@ namespace f2
 
     public enum ItemProtoExtendedFlags {
         ItemProtoExtendedFlags_BigGun = 0x0100,
-        ItemProtoExtendedFlags_IsTwoHanded = 0x0200,
+        ItemProtoExtendedFlags_TwoHanded = 0x0200,
         ItemProtoExtendedFlags_0x0800 = 0x0800,
         ItemProtoExtendedFlags_0x1000 = 0x1000,
         ItemProtoExtendedFlags_0x2000 = 0x2000,
@@ -554,11 +554,11 @@ namespace f2
         HIT_LOCATION_HEAD,
         HIT_LOCATION_LEFT_ARM,
         HIT_LOCATION_RIGHT_ARM,
-        HIT_LOCATION_TORSO,
-        HIT_LOCATION_RIGHT_LEG,
+        HIT_LOCATION_TORSO, // 躯干
+        HIT_LOCATION_RIGHT_LEG, // 4
         HIT_LOCATION_LEFT_LEG,
         HIT_LOCATION_EYES,
-        HIT_LOCATION_GROIN,
+        HIT_LOCATION_GROIN, // 腹部
         HIT_LOCATION_UNCALLED,
         HIT_LOCATION_COUNT,
         HIT_LOCATION_SPECIFIC_COUNT = HIT_LOCATION_COUNT - 1,

@@ -12,6 +12,11 @@ namespace f2
         // 特征/天赋
         public static int[] pc_trait = new int[TRAITS_MAX_SELECTED_COUNT];
 
+        public static bool trait_level(Trait trait)
+        {
+            return trait_level((int)trait);
+        }
+
         // Returns `true` if the specified trait is selected.
         public static bool trait_level(int trait)
         {
