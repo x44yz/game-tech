@@ -1775,7 +1775,6 @@ namespace f2
 
                     int weaponPerk = item_w_perk(weapon);
                     switch ((Perk)weaponPerk) {
-                        HERE
                     case Perk.PERK_WEAPON_LONG_RANGE:
                         v29 = 4;
                         break;
@@ -1788,21 +1787,28 @@ namespace f2
                         break;
                     }
 
-                    int perception = critterGetStat(attacker, STAT_PERCEPTION);
-
-                    if (defender != NULL) {
-                        modifier = obj_dist_with_tile(attacker, tile, defender, defender->tile);
-                    } else {
+                    if (defender != null) {
+                        modifier = obj_dist_with_tile(attacker, tile, defender, defender.tile);
+                    } 
+                    else {
                         modifier = 0;
                     }
 
-                    if (modifier >= v25) {
+                    // 感知
+                    int perception = critterGetStat(attacker, Stat.STAT_PERCEPTION);
+
+                    // TODO:?
+                    // 下面是什么意思
+                    if (modifier >= v25) 
+                    {
                         int penalty = attacker == obj_dude
                             ? v29 * (perception - 2)
                             : v29 * perception;
 
                         modifier -= penalty;
-                    } else {
+                    }
+                    else 
+                    {
                         modifier += v25;
                     }
 
@@ -1811,11 +1817,12 @@ namespace f2
                     }
 
                     if (attacker == obj_dude) {
-                        modifier -= 2 * perk_level(obj_dude, PERK_SHARPSHOOTER);
+                        modifier -= 2 * perk_level(obj_dude, Perk.PERK_SHARPSHOOTER);
                     }
 
-                    if (modifier >= 0) {
-                        if ((attacker->data.critter.combat.results & DAM_BLIND) != 0) {
+                    if (modifier >= 0) 
+                    {
+                        if ((attacker.data.critter.combat.results & (int)Dam.DAM_BLIND) != 0) {
                             modifier *= -12;
                         } else {
                             modifier *= -4;
@@ -1824,14 +1831,14 @@ namespace f2
                         modifier *= -4;
                     }
 
-                    if (a6 || modifier > 0) {
+                    if (a6 != 0 || modifier > 0) {
                         accuracy += modifier;
                     }
 
                     modifier = 0;
 
-                    if (defender != NULL && a6) {
-                        combat_is_shot_blocked(attacker, tile, defender->tile, defender, &modifier);
+                    if (defender != null && a6 != 0) {
+                        combat_is_shot_blocked(attacker, tile, defender.tile, defender, ref modifier);
                     }
 
                     accuracy -= 10 * modifier;
@@ -1961,6 +1968,48 @@ namespace f2
             return accuracy;
         }
 
+        // Probably calculates line of sight or determines if object can see other object.
+        static bool combat_is_shot_blocked(f2Object a1, int from, int to, f2Object a4, ref int a5)
+        {
+            // // if (a5 != NULL) {
+            //     a5 = 0;
+            // // }
+
+            // f2Object obstacle = a1;
+            // int current = from;
+            // while (obstacle != NULL && current != to) {
+            //     make_straight_path_func(a1, current, to, 0, &obstacle, 32, obj_shoot_blocking_at);
+            //     if (obstacle != NULL) {
+            //         if (FID_TYPE(obstacle->fid) != OBJ_TYPE_CRITTER && obstacle != a4) {
+            //             return true;
+            //         }
+
+            //         if (a5 != NULL) {
+            //             if (obstacle != a4) {
+            //                 if (a4 != NULL) {
+            //                     if ((a4->data.critter.combat.results & DAM_DEAD) == 0) {
+            //                         *a5 += 1;
+
+            //                         if ((a4->flags & OBJECT_MULTIHEX) != 0) {
+            //                             *a5 += 1;
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+
+            //         if ((obstacle->flags & OBJECT_MULTIHEX) != 0) {
+            //             int rotation = tile_dir(current, to);
+            //             current = tile_num_in_direction(current, rotation, 1);
+            //         } else {
+            //             current = obstacle->tile;
+            //         }
+            //     }
+            // }
+
+            return false;
+        }
+
         public static int compute_attack(Attack attack)
         {
             int range = item_w_range(attack.attacker, attack.hitMode);
@@ -1972,6 +2021,7 @@ namespace f2
             }
 
             int anim = item_w_anim(attack.attacker, attack.hitMode);
+            // 命中率
             int accuracy = determine_to_hit_func(attack.attacker, attack.attacker.tile, attack.defender, attack.defenderHitLocation, attack.hitMode, 1);
 
             bool isGrenade = false;
@@ -1992,15 +2042,19 @@ namespace f2
             // TODO
             int roll = (int)Roll.ROLL_SUCCESS;
 
-            // if (anim == (int)AnimationType.ANIM_FIRE_BURST || anim == (int)AnimationType.ANIM_FIRE_CONTINUOUS) {
-            //     roll = compute_spray(attack, accuracy, &roundsHitMainTarget, &roundsSpent, anim);
-            // } else {
-            //     int chance = critterGetStat(attack->attacker, (int)Stat.STAT_CRITICAL_CHANCE);
-            //     roll = roll_check(accuracy, chance - hit_location_penalty[attack->defenderHitLocation], NULL);
-            // }
+            // 连击或持续攻击（比如火焰枪）
+            if (anim == (int)AnimationType.ANIM_FIRE_BURST || anim == (int)AnimationType.ANIM_FIRE_CONTINUOUS) {
+                roll = compute_spray(attack, accuracy, ref roundsHitMainTarget, ref roundsSpent, anim);
+            } else {
+                // 暴击概率
+                int chance = critterGetStat(attack.attacker, (int)Stat.STAT_CRITICAL_CHANCE);
+                roll = roll_check(accuracy, chance - hit_location_penalty[attack.defenderHitLocation]);
+            }
 
+            // 命中失败
             if (roll == (int)Roll.ROLL_FAILURE) {
                 if (trait_level((int)Trait.TRAIT_JINXED) || perkHasRank(obj_dude, Perk.PERK_JINXED)) {
+                    // 50% 的概率变为暴击失败
                     if (roll_random(0, 1) == 1) {
                         roll = (int)Roll.ROLL_CRITICAL_FAILURE;
                     }
@@ -2008,18 +2062,22 @@ namespace f2
             }
 
             if (roll == (int)Roll.ROLL_SUCCESS) {
+                // 如果使用近战武器或者空手
                 if ((attackType == (int)AttackType.ATTACK_TYPE_MELEE || attackType == (int)AttackType.ATTACK_TYPE_UNARMED) && attack.attacker == obj_dude) {
                     if (perkHasRank(attack.attacker, Perk.PERK_SLAYER)) {
                         roll = (int)Roll.ROLL_CRITICAL_SUCCESS;
                     }
 
+                    // 潜行从后面造成双倍伤害
                     if (perkHasRank(obj_dude, Perk.PERK_SILENT_DEATH)
                         && !is_hit_from_front(obj_dude, attack.defender)
                         && is_pc_flag((int)DudeState.DUDE_STATE_SNEAKING)
                         && obj_dude != attack.defender.data.critter.combat.whoHitMe) {
-                        damageMultiplier = 4;
+                        // damageMultiplier = 4;
+                        damageMultiplier *= 2;
                     }
 
+                    // HARDCODE
                     if (((attack.hitMode == (int)HitMode.HIT_MODE_HAMMER_PUNCH || attack.hitMode == (int)HitMode.HIT_MODE_POWER_KICK) && roll_random(1, 100) <= 5)
                         || ((attack.hitMode == (int)HitMode.HIT_MODE_JAB || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK) && roll_random(1, 100) <= 10)
                         || (attack.hitMode == (int)HitMode.HIT_MODE_HAYMAKER && roll_random(1, 100) <= 15)
@@ -2035,6 +2093,7 @@ namespace f2
                 attack.ammoQuantity = roundsSpent;
 
                 if (roll == (int)Roll.ROLL_SUCCESS && attack.attacker == obj_dude) {
+                    // 使用范围攻击武器的时候有增加暴击的概率
                     if (perk_level(obj_dude, (int)Perk.PERK_SNIPER) != 0) {
                         int d10 = roll_random(1, 10);
                         int luck = critterGetStat(obj_dude, (int)Stat.STAT_LUCK);
@@ -2044,6 +2103,8 @@ namespace f2
                     }
                 }
             } else {
+                // TODO:
+                // 为什么要重置 = 1
                 if (item_w_max_ammo(attack.weapon) > 0) {
                     attack.ammoQuantity = 1;
                 }
@@ -2131,6 +2192,97 @@ namespace f2
             return 0;
         }
 
+        static int compute_spray(Attack attack, int accuracy, ref int roundsHitMainTargetPtr, ref int roundsSpentPtr, int anim)
+        {
+            return (int)Roll.ROLL_SUCCESS;
+
+            // *roundsHitMainTargetPtr = 0;
+
+            // int ammoQuantity = item_w_curr_ammo(attack->weapon);
+            // int burstRounds = item_w_rounds(attack->weapon);
+            // if (burstRounds < ammoQuantity) {
+            //     ammoQuantity = burstRounds;
+            // }
+
+            // *roundsSpentPtr = ammoQuantity;
+
+            // int criticalChance = critterGetStat(attack->attacker, STAT_CRITICAL_CHANCE);
+            // int roll = roll_check(accuracy, criticalChance, NULL);
+
+            // if (roll == ROLL_CRITICAL_FAILURE) {
+            //     return roll;
+            // }
+
+            // if (roll == ROLL_CRITICAL_SUCCESS) {
+            //     accuracy += 20;
+            // }
+
+            // int leftRounds;
+            // int mainTargetRounds;
+            // int centerRounds;
+            // int rightRounds;
+            // if (anim == ANIM_FIRE_BURST) {
+            //     centerRounds = ammoQuantity / 3;
+            //     if (centerRounds == 0) {
+            //         centerRounds = 1;
+            //     }
+
+            //     leftRounds = ammoQuantity / 3;
+            //     rightRounds = ammoQuantity - centerRounds - leftRounds;
+            //     mainTargetRounds = centerRounds / 2;
+            //     if (mainTargetRounds == 0) {
+            //         mainTargetRounds = 1;
+            //         centerRounds -= 1;
+            //     }
+            // } else {
+            //     leftRounds = 1;
+            //     mainTargetRounds = 1;
+            //     centerRounds = 1;
+            //     rightRounds = 1;
+            // }
+
+            // for (int index = 0; index < mainTargetRounds; index += 1) {
+            //     if (roll_check(accuracy, 0, NULL) >= ROLL_SUCCESS) {
+            //         *roundsHitMainTargetPtr += 1;
+            //     }
+            // }
+
+            // if (*roundsHitMainTargetPtr == 0 && check_ranged_miss(attack)) {
+            //     *roundsHitMainTargetPtr = 1;
+            // }
+
+            // int range = item_w_range(attack->attacker, attack->hitMode);
+            // int mainTargetEndTile = tile_num_beyond(attack->attacker->tile, attack->defender->tile, range);
+            // *roundsHitMainTargetPtr += shoot_along_path(attack, mainTargetEndTile, centerRounds - *roundsHitMainTargetPtr, anim);
+
+            // int centerTile;
+            // if (obj_dist(attack->attacker, attack->defender) <= 3) {
+            //     centerTile = tile_num_beyond(attack->attacker->tile, attack->defender->tile, 3);
+            // } else {
+            //     centerTile = attack->defender->tile;
+            // }
+
+            // int rotation = tile_dir(centerTile, attack->attacker->tile);
+
+            // int leftTile = tile_num_in_direction(centerTile, (rotation + 1) % ROTATION_COUNT, 1);
+            // int leftEndTile = tile_num_beyond(attack->attacker->tile, leftTile, range);
+            // *roundsHitMainTargetPtr += shoot_along_path(attack, leftEndTile, leftRounds, anim);
+
+            // int rightTile = tile_num_in_direction(centerTile, (rotation + 5) % ROTATION_COUNT, 1);
+            // int rightEndTile = tile_num_beyond(attack->attacker->tile, rightTile, range);
+            // *roundsHitMainTargetPtr += shoot_along_path(attack, rightEndTile, rightRounds, anim);
+
+            // if (roll != ROLL_FAILURE || (*roundsHitMainTargetPtr <= 0 && attack->extrasLength <= 0)) {
+            //     if (roll >= ROLL_SUCCESS && *roundsHitMainTargetPtr == 0 && attack->extrasLength == 0) {
+            //         roll = ROLL_FAILURE;
+            //     }
+            // } else {
+            //     roll = ROLL_SUCCESS;
+            // }
+
+            // return roll;
+        }
+
         static int attack_crit_failure(Attack attack)
         {
             // TODO
@@ -2146,12 +2298,28 @@ namespace f2
         static void death_checks(Attack attack)
         {
             // TODO
-            // check_for_death(attack->attacker, attack->attackerDamage, &(attack->attackerFlags));
-            // check_for_death(attack->defender, attack->defenderDamage, &(attack->defenderFlags));
+            check_for_death(attack.attacker, attack.attackerDamage, ref attack.attackerFlags);
+            check_for_death(attack.defender, attack.defenderDamage, ref attack.defenderFlags);
 
-            // for (int index = 0; index < attack->extrasLength; index++) {
-            //     check_for_death(attack->extras[index], attack->extrasDamage[index], &(attack->extrasFlags[index]));
-            // }
+            for (int index = 0; index < attack.extrasLength; index++) {
+                check_for_death(attack.extras[index], attack.extrasDamage[index], ref attack.extrasFlags[index]);
+            }
+        }
+
+        static void check_for_death(f2Object obj, int damage, ref int flags)
+        {
+            if (obj == null || !critter_flag_check(obj.pid, (int)CritterFlags.CRITTER_INVULNERABLE))
+            {
+                if (obj == null || PID_TYPE(obj.pid) == (int)ObjType.OBJ_TYPE_CRITTER) 
+                {
+                    if (damage > 0) 
+                    {
+                        if (critter_get_hits(obj) - damage <= 0) {
+                            flags |= (int)Dam.DAM_DEAD;
+                        }
+                    }
+                }
+            }
         }
 
         public static int attack_crit_success(Attack attack)
@@ -2252,6 +2420,7 @@ namespace f2
 
         public static int correctAttackForPerks(Attack attack)
         {
+            // TODO
             if (item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_ENHANCED_KNOCKOUT) 
             {
                 int difficulty = critterGetStat(attack.attacker, (int)Stat.STAT_STRENGTH) - 8;
@@ -2403,6 +2572,7 @@ namespace f2
             combat_ctd_init(main_ctd, a1, a2, hitMode, hitLocation);
             // debug_printf("computing attack...\n");
 
+            // -1 没有攻击成功
             if (compute_attack(main_ctd) == -1) {
                 return -1;
             }
@@ -2446,6 +2616,7 @@ namespace f2
                 return -1;
             }
 
+            // 消耗 ap
             if (actionPoints > a1.data.critter.combat.ap) {
                 a1.data.critter.combat.ap = 0;
             } else {

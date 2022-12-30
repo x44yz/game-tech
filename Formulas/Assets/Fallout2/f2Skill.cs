@@ -27,7 +27,7 @@ namespace f2
             case Skill.SKILL_BARTER:
             case Skill.SKILL_GAMBLING:
             case Skill.SKILL_OUTDOORSMAN:
-                var gameDifficulty = f2DEF.gGameDifficulty;
+                var gameDifficulty = gGameDifficulty;
                 // config_get_value(&game_config, GAME_CONFIG_PREFERENCES_KEY, GAME_CONFIG_GAME_DIFFICULTY_KEY, &gameDifficulty);
 
                 if (gameDifficulty == GameDifficulty.GAME_DIFFICULTY_HARD) {

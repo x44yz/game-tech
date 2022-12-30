@@ -199,6 +199,8 @@ namespace f2
 
     public class Attack 
     {
+        public const int EXPLOSION_TARGET_COUNT = f2Game.EXPLOSION_TARGET_COUNT;
+
         public f2Object attacker;
         public int hitMode;
         public f2Object weapon;
@@ -215,11 +217,11 @@ namespace f2
         public int defenderKnockback;
         public f2Object oops;
         public int extrasLength;
-        // public Object* extras[EXPLOSION_TARGET_COUNT];
-        public int[] extrasHitLocation = new int[f2DEF.EXPLOSION_TARGET_COUNT];
-        public int[] extrasDamage = new int[f2DEF.EXPLOSION_TARGET_COUNT];
-        public int[] extrasFlags = new int[f2DEF.EXPLOSION_TARGET_COUNT];
-        public int[] extrasKnockback = new int[f2DEF.EXPLOSION_TARGET_COUNT];
+        public f2Object[] extras = new f2Object[EXPLOSION_TARGET_COUNT];
+        public int[] extrasHitLocation = new int[EXPLOSION_TARGET_COUNT];
+        public int[] extrasDamage = new int[EXPLOSION_TARGET_COUNT];
+        public int[] extrasFlags = new int[EXPLOSION_TARGET_COUNT];
+        public int[] extrasKnockback = new int[EXPLOSION_TARGET_COUNT];
     }
 
     // Provides metadata about stats.
@@ -288,7 +290,7 @@ namespace f2
     };
  
 
-    public static class f2Data
+    public partial class f2Game
     {
         // SKILL_SMALL_GUNS
         // SKILL_BIG_GUNS
@@ -309,34 +311,34 @@ namespace f2
         // SKILL_GAMBLING
         // SKILL_OUTDOORSMAN
         public static SkillDescription[] skill_data = new SkillDescription[(int)Skill.SKILL_COUNT] {
-                new SkillDescription( "", "", "", 28, 5, 4, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 29, 0, 2, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 30, 0, 2, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 28, 5, 4, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 29, 0, 2, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 30, 0, 2, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 31, 30, 2, (int)Stat.STAT_AGILITY, (int)Stat.STAT_STRENGTH, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 32, 20, 2, (int)Stat.STAT_AGILITY, (int)Stat.STAT_STRENGTH, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 33, 0, 4, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 33, 0, 4, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 34, 0, 2, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_INTELLIGENCE, 1, 25, 0 ),
                 new SkillDescription( "", "", "", 35, 5, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_INTELLIGENCE, 1, 50, 0 ),
-                new SkillDescription( "", "", "", 36, 5, 3, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 36, 5, 3, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 37, 10, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_AGILITY, 1, 25, 1 ),
-                new SkillDescription( "", "", "", 38, 0, 3, (int)Stat.STAT_AGILITY, f2DEF.STAT_INVALID, 1, 25, 1 ),
+                new SkillDescription( "", "", "", 38, 0, 3, (int)Stat.STAT_AGILITY, STAT_INVALID, 1, 25, 1 ),
                 new SkillDescription( "", "", "", 39, 10, 1, (int)Stat.STAT_PERCEPTION, (int)Stat.STAT_AGILITY, 1, 25, 1 ),
-                new SkillDescription( "", "", "", 40, 0, 4, (int)Stat.STAT_INTELLIGENCE, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 41, 0, 3, (int)Stat.STAT_INTELLIGENCE, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 42, 0, 5, (int)Stat.STAT_CHARISMA, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 43, 0, 4, (int)Stat.STAT_CHARISMA, f2DEF.STAT_INVALID, 1, 0, 0 ),
-                new SkillDescription( "", "", "", 44, 0, 5, (int)Stat.STAT_LUCK, f2DEF.STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 40, 0, 4, (int)Stat.STAT_INTELLIGENCE, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 41, 0, 3, (int)Stat.STAT_INTELLIGENCE, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 42, 0, 5, (int)Stat.STAT_CHARISMA, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 43, 0, 4, (int)Stat.STAT_CHARISMA, STAT_INVALID, 1, 0, 0 ),
+                new SkillDescription( "", "", "", 44, 0, 5, (int)Stat.STAT_LUCK, STAT_INVALID, 1, 0, 0 ),
                 new SkillDescription( "", "", "", 45, 0, 2, (int)Stat.STAT_ENDURANCE, (int)Stat.STAT_INTELLIGENCE, 1, 100, 0 ),
             };
 
         public static readonly StatDescription[] stat_data = new StatDescription[]{
-            new StatDescription( "", "", 0, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 1, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 2, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 3, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 4, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 5, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
-            new StatDescription( "", "", 6, f2DEF.PRIMARY_STAT_MIN, f2DEF.PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 0, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 1, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 2, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 3, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 4, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 5, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
+            new StatDescription( "", "", 6, PRIMARY_STAT_MIN, PRIMARY_STAT_MAX, 5 ),
             new StatDescription( "", "", 10, 0, 999, 0 ),
             new StatDescription( "", "", 75, 1, 99, 0 ),
             new StatDescription( "", "", 18, 0, 999, 0 ),

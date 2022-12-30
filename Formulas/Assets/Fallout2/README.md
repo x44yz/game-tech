@@ -2,6 +2,7 @@
 
 >TODO:  
 [x]combat_attack   
+[+]apply_damage
 
 >REF:  
 https://fallout.fandom.com/wiki/Fallout_2  
@@ -24,6 +25,8 @@ Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加�
 |------|-----|----------|---------|----|
 |Heave Ho! | PERK_HEAVE_HO |6|ST<9 | 当使用投掷武器时，每级增加 2 点 Strength
 |Weapon Handling|PERK_WEAPON_HANDLING|12|ST<7, AG 5 | 武器使用需要的 Strength 检查时 +3 Strength
+|Slayer |PERK_SLAYER|24|ST 8，AG8，Unarmed skill 80% |所有近战攻击变为暴击
+|Silent Death |PERK_SILENT_DEATH|18|AG 6,Sneak 80%, Unarmed 80% | 潜行的时候从后面造成双倍伤害
 
 > Weapon Perk
 
@@ -31,7 +34,8 @@ Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加�
 |------|-----|----------|
 |Weapon Accurate|PERK_WEAPON_ACCURATE | 增加20%命中
 |Weapon Night Sight|PERK_WEAPON_NIGHT_SIGHT | 排除环境亮度对命中率的干扰
-|Weapon Long Range |PERK_WEAPON_LONG_RANGE |
+|Weapon Long Range |PERK_WEAPON_LONG_RANGE | 攻击距离增加100%
+|Weapon Scope Range |PERK_WEAPON_SCOPE_RANGE | 攻击距离增加150%
 
 > Skill
 所有技能最大上限 300%  
@@ -52,6 +56,7 @@ Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加�
 | 属性 | 定义 | 好处Benefit | 坏处Penalty
 |----|----|----|----|
 |One Hander|TRAIT_ONE_HANDER| 单手武器增加20%命中概率 | 双手武器减少40%命中概率
+|Jinxed |TRAIT_JINXED | 环绕你的暴击失败更高 |自己暴击失败也更高
 
 > player 属性
 

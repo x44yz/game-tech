@@ -6,10 +6,25 @@ namespace f2
 {
     public partial class f2Game
     {
+        public const CombatDifficulty gCombatDifficulty = CombatDifficulty.COMBAT_DIFFICULTY_NORMAL;
+        public const GameDifficulty gGameDifficulty = GameDifficulty.GAME_DIFFICULTY_NORMAL;
+
         // The minimum value of SPECIAL stat.
         public const int PRIMARY_STAT_MIN = 1;
         // The maximum value of SPECIAL stat.
         public const int PRIMARY_STAT_MAX = 10;
+
+        public const int EXPLOSION_TARGET_COUNT = 6;
+        // 60 * 60 * 10
+        public const int GAME_TIME_TICKS_PER_HOUR = 36000;
+        // 24 * 60 * 60 * 10
+        public const int GAME_TIME_TICKS_PER_DAY = 864000;
+        // 365 * 24 * 60 * 60 * 10
+        public const int GAME_TIME_TICKS_PER_YEAR = 315360000;
+
+        public const int STAT_INVALID = -1;
+        // max number of tagged skills
+        public const int NUM_TAGGED_SKILLS = 4;
 
         public static f2Object obj_dude; // 当前选中的 unit
         public static f2Object inven_dude = null; // 当前查看背包的 unit
@@ -131,6 +146,30 @@ namespace f2
         {
             // scr_set_local_var(critter->sid, 0, value);
             return 0;
+        }
+
+        static int obj_dist_with_tile(f2Object object1, int tile1, f2Object object2, int tile2)
+        {
+            return 0;
+            // if (object1 == NULL || object2 == NULL) {
+            //     return 0;
+            // }
+
+            // int distance = tile_dist(tile1, tile2);
+
+            // if ((object1->flags & OBJECT_MULTIHEX) != 0) {
+            //     distance -= 1;
+            // }
+
+            // if ((object2->flags & OBJECT_MULTIHEX) != 0) {
+            //     distance -= 1;
+            // }
+
+            // if (distance < 0) {
+            //     distance = 0;
+            // }
+
+            // return distance;
         }
     }
 }

@@ -66,6 +66,63 @@ namespace f2
 
             return result;
         }
+
+        // Rolls d% against [difficulty].
+        static int roll_check(int difficulty, int criticalSuccessModifier)
+        {
+            int howMuch = 0;
+            return roll_check(difficulty, criticalSuccessModifier, ref howMuch);
+        }
+
+        static int roll_check(int difficulty, int criticalSuccessModifier, ref int howMuchPtr)
+        {
+            // difficulty = 20，那么就有 20% 的概率为 success，再加上 10% 的概率暴击
+            int delta = difficulty - roll_random(1, 100);
+            int result = roll_check_critical(delta, criticalSuccessModifier);
+
+            // if (howMuchPtr != NULL) {
+                howMuchPtr = delta;
+            // }
+
+            return result;
+        }
+
+        // Translates raw d% result into [Roll] constants, possibly upgrading to
+        // criticals (starting from day 2).
+        static int roll_check_critical(int delta, int criticalSuccessModifier)
+        {
+            int gameTime = game_time();
+
+            int roll;
+            if (delta < 0) {
+                roll = (int)Roll.ROLL_FAILURE;
+
+                if ((gameTime / GAME_TIME_TICKS_PER_DAY) >= 1) {
+                    // 10% to become critical failure.
+                    if (roll_random(1, 100) <= -delta / 10) {
+                        roll = (int)Roll.ROLL_CRITICAL_FAILURE;
+                    }
+                }
+            } else {
+                roll = (int)Roll.ROLL_SUCCESS;
+
+                if ((gameTime / GAME_TIME_TICKS_PER_DAY) >= 1) {
+                    // 10% + modifier to become critical success.
+                    if (roll_random(1, 100) <= delta / 10 + criticalSuccessModifier) {
+                        roll = (int)Roll.ROLL_CRITICAL_SUCCESS;
+                    }
+                }
+            }
+
+            return roll;
+        }
+
+        // Returns game time in ticks (1/10 second).
+        static int game_time()
+        {
+            // return fallout_game_time;
+            return 0;
+        }
     }
 }
 

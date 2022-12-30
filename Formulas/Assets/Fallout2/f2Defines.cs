@@ -523,7 +523,7 @@ namespace f2
         CRITTER_NO_LIMBS = 0x80,
         CRITTER_NO_AGE = 0x100,
         CRITTER_NO_HEAL = 0x200,
-        CRITTER_INVULNERABLE = 0x400,
+        CRITTER_INVULNERABLE = 0x400, // 无敌的
         CRITTER_FLAT = 0x800,
         CRITTER_SPECIAL_DEATH = 0x1000,
         CRITTER_LONG_LIMBS = 0x2000,
@@ -657,24 +657,6 @@ namespace f2
 
     public static class f2DEF
     {
-        public const CombatDifficulty gCombatDifficulty = CombatDifficulty.COMBAT_DIFFICULTY_NORMAL;
-        public const GameDifficulty gGameDifficulty = GameDifficulty.GAME_DIFFICULTY_NORMAL;
 
-        // The minimum value of SPECIAL stat.
-        public const int PRIMARY_STAT_MIN = 1;
-        // The maximum value of SPECIAL stat.
-        public const int PRIMARY_STAT_MAX = 10;
-
-        public const int EXPLOSION_TARGET_COUNT = 6;
-        // 60 * 60 * 10
-        public const int GAME_TIME_TICKS_PER_HOUR = 36000;
-        // 24 * 60 * 60 * 10
-        public const int GAME_TIME_TICKS_PER_DAY = 864000;
-        // 365 * 24 * 60 * 60 * 10
-        public const int GAME_TIME_TICKS_PER_YEAR = 315360000;
-
-        public const int STAT_INVALID = -1;
-        // max number of tagged skills
-        public const int NUM_TAGGED_SKILLS = 4;
     }
 }

@@ -324,7 +324,7 @@ namespace f2
                     }
                     break;
                 case Stat.STAT_AGE:
-                    value += f2Test.game_time() / f2DEF.GAME_TIME_TICKS_PER_YEAR;
+                    value += f2Test.game_time() / GAME_TIME_TICKS_PER_YEAR;
                     break;
                 }
 
@@ -450,7 +450,7 @@ namespace f2
                     }
                 }
 
-                value = Mathf.Clamp(value, f2Data.stat_data[stat].minimumValue, f2Data.stat_data[stat].maximumValue);
+                value = Mathf.Clamp(value, stat_data[stat].minimumValue, stat_data[stat].maximumValue);
             } 
             else 
             {
@@ -485,7 +485,7 @@ namespace f2
             return proto.critter.data.skills[skill];
         }
 
-        static int[] tag_skill = new int[f2DEF.NUM_TAGGED_SKILLS];
+        static int[] tag_skill = new int[NUM_TAGGED_SKILLS];
         static bool skill_is_tagged(int skill)
         {
             return skill == tag_skill[0]
@@ -506,7 +506,7 @@ namespace f2
                 return baseValue;
             }
 
-            SkillDescription skillDescription = (f2Data.skill_data[skill]);
+            SkillDescription skillDescription = (skill_data[skill]);
 
             int v7 = critterGetStat(critter, skillDescription.stat1);
             if (skillDescription.stat2 != -1) {
@@ -600,7 +600,7 @@ namespace f2
 
             if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
             {
-                damagePtr = attack.defenderDamage;
+                // damagePtr = attack.defenderDamage;
                 critter = attack.defender;
                 flagsPtr = attack.defenderFlags;
                 knockbackDistancePtr = attack.defenderKnockback;
@@ -608,14 +608,13 @@ namespace f2
             } 
             else 
             {
-                damagePtr = attack.attackerDamage;
+                // damagePtr = attack.attackerDamage;
                 critter = attack.attacker;
                 flagsPtr = attack.attackerFlags;
                 knockbackDistancePtr = 0;
                 hasKnockbackDistancePtr = false;
             }
 
-            // TODO: why = 0
             damagePtr = 0;
             if (FID_TYPE(critter.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
                 return;
@@ -654,7 +653,7 @@ namespace f2
 
             int combatDifficultyDamageModifier = 100;
             if (attack.attacker.data.critter.combat.team != obj_dude.data.critter.combat.team) {
-                switch (f2DEF.gCombatDifficulty) {
+                switch (gCombatDifficulty) {
                 case CombatDifficulty.COMBAT_DIFFICULTY_EASY:
                     combatDifficultyDamageModifier = 75;
                     break;
@@ -747,11 +746,19 @@ namespace f2
                     {
                         knockbackDistancePtr /= 2;
                     }
-
-                    // set back
-                    attack.defenderKnockback = knockbackDistancePtr;
                 }
             }
+
+            // set back
+            if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
+            {
+                attack.defenderDamage = damagePtr;
+            } 
+            else 
+            {
+                attack.attackerDamage = damagePtr;
+            }
+            attack.defenderKnockback = knockbackDistancePtr;
         }
     
         public static int obj_dist(f2Object object1, f2Object object2)
