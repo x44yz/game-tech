@@ -1774,11 +1774,12 @@ namespace f2
                     int v25 = 0;
 
                     int weaponPerk = item_w_perk(weapon);
-                    switch (weaponPerk) {
-                    case PERK_WEAPON_LONG_RANGE:
+                    switch ((Perk)weaponPerk) {
+                        HERE
+                    case Perk.PERK_WEAPON_LONG_RANGE:
                         v29 = 4;
                         break;
-                    case PERK_WEAPON_SCOPE_RANGE:
+                    case Perk.PERK_WEAPON_SCOPE_RANGE:
                         v29 = 5;
                         v25 = 8;
                         break;
@@ -1895,22 +1896,23 @@ namespace f2
             // 光线对命中度的影响
             if (attacker == obj_dude) 
             {
-                int lightIntensity;
-                if (defender != null) {
-                    lightIntensity = obj_get_visible_light(defender);
-                    if (item_w_perk(weapon) == PERK_WEAPON_NIGHT_SIGHT) {
-                        lightIntensity = 65536;
-                    }
-                } else {
-                    lightIntensity = 0;
-                }
+                // int lightIntensity;
+                // if (defender != null) {
+                //     lightIntensity = obj_get_visible_light(defender);
+                //     if (item_w_perk(weapon) == PERK_WEAPON_NIGHT_SIGHT) {
+                //         lightIntensity = 65536;
+                //     }
+                // } else {
+                //     lightIntensity = 0;
+                // }
 
-                if (lightIntensity <= 26214)
-                    accuracy -= 40;
-                else if (lightIntensity <= 39321)
-                    accuracy -= 25;
-                else if (lightIntensity <= 52428)
-                    accuracy -= 10;
+                // 光线越亮，命中度损失越低
+                // if (lightIntensity <= 26214)
+                //     accuracy -= 40;
+                // else if (lightIntensity <= 39321)
+                //     accuracy -= 25;
+                // else if (lightIntensity <= 52428)
+                //     accuracy -= 10;
             }
 
             // TODO
@@ -2284,13 +2286,6 @@ namespace f2
             }
 
             return flags;
-        }
-
-        // determine_to_hit
-        static int determine_to_hit_func(f2Object attacker, int tile, f2Object defender, int hitLocation, int hitMode, int a6)
-        {
-            // TODO
-            return 0;
         }
 
         static bool check_ranged_miss(Attack attack)

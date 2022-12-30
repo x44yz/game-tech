@@ -30,6 +30,8 @@ Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加�
 | 属性 | 定义 | 作用Effect |
 |------|-----|----------|
 |Weapon Accurate|PERK_WEAPON_ACCURATE | 增加20%命中
+|Weapon Night Sight|PERK_WEAPON_NIGHT_SIGHT | 排除环境亮度对命中率的干扰
+|Weapon Long Range |PERK_WEAPON_LONG_RANGE |
 
 > Skill
 所有技能最大上限 300%  
