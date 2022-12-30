@@ -1726,6 +1726,20 @@ namespace f2
             },
         };
 
+        // 不同部位命中概率的修改值
+        // Accuracy modifiers for hit locations.
+        static int[] hit_location_penalty = new int[(int)HitLocation.HIT_LOCATION_COUNT]{
+            -40, // HIT_LOCATION_HEAD
+            -30, // HIT_LOCATION_LEFT_ARM
+            -30, // HIT_LOCATION_RIGHT_ARM
+            0, // HIT_LOCATION_TORSO
+            -20, // HIT_LOCATION_RIGHT_LEG
+            -20, // HIT_LOCATION_LEFT_LEG
+            -60, // HIT_LOCATION_EYES
+            -30, // HIT_LOCATION_GROIN
+            0, // HIT_LOCATION_UNCALLED
+        };
+        
         // determine_to_hit
         public static int determine_to_hit_func(f2Object attacker, int tile, f2Object defender, int hitLocation, int hitMode, int a6)
         {
@@ -1865,19 +1879,24 @@ namespace f2
                 accuracy -= armorClass;
             }
 
+            // 多目标和单目标武器
             if (isRangedWeapon) {
                 accuracy += hit_location_penalty[hitLocation];
             } else {
                 accuracy += hit_location_penalty[hitLocation] / 2;
             }
 
-            if (defender != NULL && (defender->flags & OBJECT_MULTIHEX) != 0) {
+            // 如果目标跨多格
+            if (defender != null && (defender.flags & (uint)ObjectFlags.OBJECT_MULTIHEX) != 0) {
+                // HARDCODE
                 accuracy += 15;
             }
 
-            if (attacker == obj_dude) {
+            // 光线对命中度的影响
+            if (attacker == obj_dude) 
+            {
                 int lightIntensity;
-                if (defender != NULL) {
+                if (defender != null) {
                     lightIntensity = obj_get_visible_light(defender);
                     if (item_w_perk(weapon) == PERK_WEAPON_NIGHT_SIGHT) {
                         lightIntensity = 65536;
@@ -1894,37 +1913,47 @@ namespace f2
                     accuracy -= 10;
             }
 
-            if (gcsd != NULL) {
-                accuracy += gcsd->accuracyBonus;
-            }
+            // TODO
+            // gcsd 是什么
+            // if (gcsd != null) 
+            // {
+            //     accuracy += gcsd->accuracyBonus;
+            // }
 
-            if ((attacker->data.critter.combat.results & DAM_BLIND) != 0) {
+            // HARDCODE：致盲效果减少命中度
+            if ((attacker.data.critter.combat.results & (int)Dam.DAM_BLIND) != 0) {
                 accuracy -= 25;
             }
 
-            if (targetIsCritter && defender != NULL && (defender->data.critter.combat.results & (DAM_KNOCKED_OUT | DAM_KNOCKED_DOWN)) != 0) {
+            // HARDCODE：击倒效果增加命中度
+            if (targetIsCritter && defender != null && (defender.data.critter.combat.results & ((int)Dam.DAM_KNOCKED_OUT | (int)Dam.DAM_KNOCKED_DOWN)) != 0) {
                 accuracy += 40;
             }
 
-            if (attacker->data.critter.combat.team != obj_dude->data.critter.combat.team) {
-                int combatDifficuly = 1;
-                config_get_value(&game_config, GAME_CONFIG_PREFERENCES_KEY, GAME_CONFIG_COMBAT_DIFFICULTY_KEY, &combatDifficuly);
-                switch (combatDifficuly) {
-                case 0:
-                    accuracy -= 20;
-                    break;
-                case 2:
-                    accuracy += 20;
-                    break;
-                }
-            }
+            // TODO:
+            // 战斗难度对命中的影响，但是判断 team 的原因？
+            // if (attacker.data.critter.combat.team != obj_dude.data.critter.combat.team)
+            // {
+            //     int combatDifficuly = 1;
+            //     config_get_value(&game_config, GAME_CONFIG_PREFERENCES_KEY, GAME_CONFIG_COMBAT_DIFFICULTY_KEY, &combatDifficuly);
+            //     switch (combatDifficuly) {
+            //     case 0:
+            //         accuracy -= 20;
+            //         break;
+            //     case 2:
+            //         accuracy += 20;
+            //         break;
+            //     }
+            // }
 
+            // 限定命中的最大值
+            // HARDCODE
             if (accuracy > 95) {
                 accuracy = 95;
             }
 
             if (accuracy < -100) {
-                debug_printf("Whoa! Bad skill value in determine_to_hit!\n");
+                Debug.Log("Whoa! Bad skill value in determine_to_hit!\n");
             }
 
             return accuracy;

@@ -15,7 +15,8 @@ tile 是 hex grid 布局
 武器作为主武器和副武器的最大距离来自不同设定 maxRange1 & maxRange2  
 Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加成)  
 空手状态下攻击距离是 1 格，但是长手脚（CRITTER_LONG_LIMBS）攻击距离是 2 格  
-标记技能（taged skill）能够增加 
+标记技能（taged skill）能够增加  
+命中率（accuracy）的上限是 95  
 
 > Perk
 
