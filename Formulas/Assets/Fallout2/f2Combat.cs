@@ -1765,7 +1765,7 @@ namespace f2
                 int modifier = 0;
 
                 int attackType = item_w_subtype(weapon, hitMode);
-                // 如果是范围攻击或投掷攻击
+                // 如果是非近战攻击或投掷攻击
                 if (attackType == (int)AttackType.ATTACK_TYPE_RANGED || attackType == (int)AttackType.ATTACK_TYPE_THROW) 
                 {
                     isRangedWeapon = true;
@@ -1844,8 +1844,10 @@ namespace f2
                     accuracy -= 10 * modifier;
                 }
 
+                // 天赋调整
                 if (attacker == obj_dude && trait_level(Trait.TRAIT_ONE_HANDER)) 
                 {
+                    // HARDCODE
                     if (item_w_is_2handed(weapon)) {
                         accuracy -= 40;
                     } else {
@@ -1887,7 +1889,7 @@ namespace f2
                 accuracy -= armorClass;
             }
 
-            // 多目标和单目标武器
+            // 远程武器
             if (isRangedWeapon) {
                 accuracy += hit_location_penalty[hitLocation];
             } else {
@@ -2518,6 +2520,190 @@ namespace f2
             return true;
         }
 
+        public static void compute_damage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
+        {
+            int damagePtr;
+            f2Object critter;
+            int flagsPtr;
+            int knockbackDistancePtr;
+            bool hasKnockbackDistancePtr;
+
+            if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
+            {
+                // damagePtr = attack.defenderDamage;
+                critter = attack.defender;
+                flagsPtr = attack.defenderFlags;
+                knockbackDistancePtr = attack.defenderKnockback;
+                hasKnockbackDistancePtr = true;
+            } 
+            else 
+            {
+                // damagePtr = attack.attackerDamage;
+                critter = attack.attacker;
+                flagsPtr = attack.attackerFlags;
+                knockbackDistancePtr = 0;
+                hasKnockbackDistancePtr = false;
+            }
+
+            damagePtr = 0;
+            if (FID_TYPE(critter.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return;
+            }
+
+            // 获得攻击者武器类型
+            int damageType = item_w_damage_type(attack.attacker, attack.weapon);
+            // 伤害极限
+            int damageThreshold = critterGetStat(critter, (int)Stat.STAT_DAMAGE_THRESHOLD + damageType);
+            // 减伤
+            int damageResistance = critterGetStat(critter, (int)Stat.STAT_DAMAGE_RESISTANCE + damageType);
+
+            // 特殊处理
+            // bypass 暴击效果，伤害减免减少
+            if ((flagsPtr & (int)Dam.DAM_BYPASS) != 0 && damageType != (int)DamageType.DAMAGE_TYPE_EMP) {
+                damageThreshold = 20 * damageThreshold / 100;
+                damageResistance = 20 * damageResistance / 100;
+            } 
+            else {
+                // SFALL
+                if (item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_PENETRATE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PALM_STRIKE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_STRIKE
+                    || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK
+                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_KICK) {
+                    damageThreshold = 20 * damageThreshold / 100;
+                }
+
+                if (attack.attacker == obj_dude && trait_level((int)Trait.TRAIT_FINESSE)) {
+                    damageResistance += 30;
+                }
+            }
+
+            int damageBonus;
+            // 非近战武器根据 Perk 等级格外添加伤害
+            if (attack.attacker == obj_dude && item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
+                damageBonus = 2 * perk_level(obj_dude, (int)Perk.PERK_BONUS_RANGED_DAMAGE);
+            } else {
+                damageBonus = 0;
+            }
+
+            int combatDifficultyDamageModifier = 100;
+            if (attack.attacker.data.critter.combat.team != obj_dude.data.critter.combat.team) {
+                switch (gCombatDifficulty) {
+                case CombatDifficulty.COMBAT_DIFFICULTY_EASY:
+                    combatDifficultyDamageModifier = 75;
+                    break;
+                case CombatDifficulty.COMBAT_DIFFICULTY_HARD:
+                    combatDifficultyDamageModifier = 125;
+                    break;
+                }
+            }
+
+            damageResistance += item_w_dr_adjust(attack.weapon);
+            if (damageResistance > 100) {
+                damageResistance = 100;
+            } else if (damageResistance < 0) {
+                damageResistance = 0;
+            }
+
+            // 伤害加成
+            int damageMultiplier = bonusDamageMultiplier * item_w_dam_mult(attack.weapon);
+            int damageDivisor = item_w_dam_div(attack.weapon);
+
+            for (int index = 0; index < ammoQuantity; index++) 
+            {
+                // 获得武器伤害
+                int damage = item_w_damage(attack.attacker, attack.hitMode);
+
+                // perk 添加
+                damage += damageBonus;
+
+                // 倍乘
+                damage *= damageMultiplier;
+
+                if (damageDivisor != 0) {
+                    damage /= damageDivisor;
+                }
+
+                // TODO: Why we're halving it?
+                // 可能默认传进来的 bonusDamageMultiplier = 2
+                damage /= 2;
+
+                // 战斗难度
+                damage *= combatDifficultyDamageModifier;
+                damage /= 100;
+
+                // 扣除
+                damage -= damageThreshold;
+
+                // 扣除减伤百分比，最后计算
+                if (damage > 0) {
+                    damage -= damage * damageResistance / 100;
+                }
+
+                if (damage > 0) {
+                    damagePtr += damage;
+                }
+            }
+
+            if (attack.attacker == obj_dude) 
+            {
+                if (perk_level(attack.attacker, (int)Perk.PERK_LIVING_ANATOMY) != 0) {
+                    int kt = critterGetKillType(attack.defender);
+                    if (kt != (int)KillType.KILL_TYPE_ROBOT && kt != (int)KillType.KILL_TYPE_ALIEN) {
+                        damagePtr += 5;
+                    }
+                }
+
+                if (perk_level(attack.attacker, (int)Perk.PERK_PYROMANIAC) != 0) {
+                    if (item_w_damage_type(attack.attacker, attack.weapon) == (int)DamageType.DAMAGE_TYPE_FIRE) {
+                        damagePtr += 5;
+                    }
+                }
+            }
+
+            if (hasKnockbackDistancePtr
+                && (critter.flags & (int)ObjectFlags.OBJECT_MULTIHEX) == 0
+                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
+                && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER
+                && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_KNOCKBACK) == false) 
+            {
+                bool shouldKnockback = true;
+                bool hasStonewall = false;
+                if (critter == obj_dude) {
+                    if (perk_level(critter, (int)Perk.PERK_STONEWALL) != 0) {
+                        int chance = roll_random(0, 100);
+                        hasStonewall = true;
+                        if (chance < 50) {
+                            shouldKnockback = false;
+                        }
+                    }
+                }
+
+                if (shouldKnockback) 
+                {
+                    int knockbackDistanceDivisor = item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
+
+                    knockbackDistancePtr = damagePtr / knockbackDistanceDivisor;
+
+                    if (hasStonewall) 
+                    {
+                        knockbackDistancePtr /= 2;
+                    }
+                }
+            }
+
+            // set back
+            if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
+            {
+                attack.defenderDamage = damagePtr;
+            } 
+            else 
+            {
+                attack.attackerDamage = damagePtr;
+            }
+            attack.defenderKnockback = knockbackDistancePtr;
+        }
+
         static void combat_ctd_init(Attack attack, f2Object attacker, f2Object defender, int hitMode, int hitLocation)
         {
             attack.attacker = attacker;
@@ -2612,6 +2798,7 @@ namespace f2
             int actionPoints = item_w_mp_cost(a1, main_ctd.hitMode, aiming);
             // debug_printf("sequencing attack...\n");
 
+            // 攻击动作，动作结束结算伤害
             if (action_attack(main_ctd) == -1) {
                 return -1;
             }
@@ -2659,6 +2846,244 @@ namespace f2
             // }
 
             // aiInfoList[a1->cid].lastTarget = a2;
+
+            return 0;
+        }
+
+        static void combat_anim_finished()
+        {
+            // combat_turn_running -= 1;
+            // if (combat_turn_running != 0) {
+            //     return;
+            // }
+
+            // if (obj_dude == main_ctd.attacker) {
+            //     game_ui_enable();
+            // }
+
+            if (combat_cleanup_enabled) {
+                combat_cleanup_enabled = false;
+
+                f2Object weapon = item_hit_with(main_ctd.attacker, main_ctd.hitMode);
+                if (weapon != null) {
+                    // 更新武器状态
+                    // if (item_w_max_ammo(weapon) > 0) {
+                    //     int ammoQuantity = item_w_curr_ammo(weapon);
+                    //     item_w_set_curr_ammo(weapon, ammoQuantity - main_ctd.ammoQuantity);
+
+                    //     if (main_ctd.attacker == obj_dude) {
+                    //         intface_update_ammo_lights();
+                    //     }
+                    // }
+                }
+
+                // if (combat_call_display) {
+                //     combat_display(&main_ctd);
+                //     combat_call_display = false;
+                // }
+
+                apply_damage(main_ctd, true);
+
+                // Object* attacker = main_ctd.attacker;
+                // if (attacker == obj_dude && combat_highlight == 2) {
+                //     combat_outline_on();
+                // }
+
+                // if (scr_end_combat()) {
+                //     if ((obj_dude->data.critter.combat.results & DAM_KNOCKED_OUT) != 0) {
+                //         if (attacker->data.critter.combat.team == obj_dude->data.critter.combat.team) {
+                //             combat_ending_guy = obj_dude->data.critter.combat.whoHitMe;
+                //         } else {
+                //             combat_ending_guy = attacker;
+                //         }
+                //     }
+                // }
+
+                // combat_ctd_init(&main_ctd, main_ctd.attacker, NULL, HIT_MODE_PUNCH, HIT_LOCATION_TORSO);
+
+                // if ((attacker->data.critter.combat.results & (DAM_KNOCKED_OUT | DAM_KNOCKED_DOWN)) != 0) {
+                //     if ((attacker->data.critter.combat.results & (DAM_KNOCKED_OUT | DAM_DEAD | DAM_LOSE_TURN)) == 0) {
+                //         combat_standup(attacker);
+                //     }
+                // }
+            }
+
+
+        }
+
+        static void apply_damage(Attack attack, bool animated)
+        {
+            f2Object attacker = attack.attacker;
+            bool attackerIsCritter = attacker != null && FID_TYPE(attacker.fid) == (int)ObjType.OBJ_TYPE_CRITTER;
+            bool v5 = attack.defender != attack.oops;
+
+            if (attackerIsCritter && (attacker.data.critter.combat.results & (int)Dam.DAM_DEAD) != 0) {
+                // set_new_results(attacker, attack.attackerFlags);
+                // TODO: Not sure about "attack->defender == attack->oops".
+                damage_object(attacker, attack.attackerDamage, animated, attack.defender == attack.oops, attacker);
+            }
+
+            // f2Object v7 = attack.oops;
+            // if (v7 != null && v7 != attack.defender) {
+            //     combatai_notify_onlookers(v7);
+            // }
+
+            // Object* defender = attack->defender;
+            // bool defenderIsCritter = defender != NULL && FID_TYPE(defender->fid) == OBJ_TYPE_CRITTER;
+
+            // if (!defenderIsCritter && !v5) {
+            //     bool v9 = isPartyMember(attack->defender) && isPartyMember(attack->attacker) ? false : true;
+            //     if (v9) {
+            //         if (defender != NULL) {
+            //             if (defender->sid != -1) {
+            //                 scr_set_ext_param(defender->sid, attack->attackerDamage);
+            //                 scr_set_objs(defender->sid, attack->attacker, attack->weapon);
+            //                 exec_script_proc(defender->sid, SCRIPT_PROC_DAMAGE);
+            //             }
+            //         }
+            //     }
+            // }
+
+            // if (defenderIsCritter && (defender->data.critter.combat.results & DAM_DEAD) == 0) {
+            //     set_new_results(defender, attack->defenderFlags);
+
+            //     if (defenderIsCritter) {
+            //         if (defenderIsCritter) {
+            //             if ((defender->data.critter.combat.results & (DAM_DEAD | DAM_KNOCKED_OUT)) != 0) {
+            //                 if (!v5 || defender != obj_dude) {
+            //                     critter_set_who_hit_me(defender, attack->attacker);
+            //                 }
+            //             } else if (defender == attack->oops || defender->data.critter.combat.team != attack->attacker->data.critter.combat.team) {
+            //                 combatai_check_retaliation(defender, attack->attacker);
+            //             }
+            //         }
+            //     }
+
+            //     scr_set_objs(defender->sid, attack->attacker, attack->weapon);
+            //     damage_object(defender, attack->defenderDamage, animated, attack->defender != attack->oops, attacker);
+
+            //     if (defenderIsCritter) {
+            //         combatai_notify_onlookers(defender);
+            //     }
+
+            //     if (attack->defenderDamage >= 0 && (attack->attackerFlags & DAM_HIT) != 0) {
+            //         scr_set_objs(attack->attacker->sid, NULL, attack->defender);
+            //         scr_set_ext_param(attack->attacker->sid, 2);
+            //         exec_script_proc(attack->attacker->sid, SCRIPT_PROC_COMBAT);
+            //     }
+            // }
+
+            // for (int index = 0; index < attack->extrasLength; index++) {
+            //     Object* obj = attack->extras[index];
+            //     if (FID_TYPE(obj->fid) == OBJ_TYPE_CRITTER && (obj->data.critter.combat.results & DAM_DEAD) == 0) {
+            //         set_new_results(obj, attack->extrasFlags[index]);
+
+            //         if (defenderIsCritter) {
+            //             if ((obj->data.critter.combat.results & (DAM_DEAD | DAM_KNOCKED_OUT)) != 0) {
+            //                 critter_set_who_hit_me(obj, attack->attacker);
+            //             } else if (obj->data.critter.combat.team != attack->attacker->data.critter.combat.team) {
+            //                 combatai_check_retaliation(obj, attack->attacker);
+            //             }
+            //         }
+
+            //         scr_set_objs(obj->sid, attack->attacker, attack->weapon);
+            //         // TODO: Not sure about defender == oops.
+            //         damage_object(obj, attack->extrasDamage[index], animated, attack->defender == attack->oops, attack->attacker);
+            //         combatai_notify_onlookers(obj);
+
+            //         if (attack->extrasDamage[index] >= 0) {
+            //             if ((attack->attackerFlags & DAM_HIT) != 0) {
+            //                 scr_set_objs(attack->attacker->sid, NULL, obj);
+            //                 scr_set_ext_param(attack->attacker->sid, 2);
+            //                 exec_script_proc(attack->attacker->sid, SCRIPT_PROC_COMBAT);
+            //             }
+            //         }
+            //     }
+            // }
+        }
+
+        static void damage_object(f2Object a1, int damage, bool animated, bool a4, f2Object a5)
+        {
+            if (a1 == null) {
+                return;
+            }
+
+            if (FID_TYPE(a1.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return;
+            }
+
+            if (critter_flag_check(a1.pid, (int)CritterFlags.CRITTER_INVULNERABLE)) {
+                return;
+            }
+
+            if (damage <= 0) {
+                return;
+            }
+
+            // set hp
+            critter_adjust_hits(a1, -damage);
+
+            // if (a1 == obj_dude) {
+            //     intface_update_hit_points(animated);
+            // }
+
+            a1.data.critter.combat.damageLastTurn += damage;
+
+            // if (!a4) {
+            //     // TODO: Not sure about this one.
+            //     if (!isPartyMember(a1) || !isPartyMember(a5)) {
+            //         scr_set_ext_param(a1->sid, damage);
+            //         exec_script_proc(a1->sid, SCRIPT_PROC_DAMAGE);
+            //     }
+            // }
+
+            // if ((a1->data.critter.combat.results & DAM_DEAD) != 0) {
+            //     scr_set_objs(a1->sid, a1->data.critter.combat.whoHitMe, NULL);
+            //     exec_script_proc(a1->sid, SCRIPT_PROC_DESTROY);
+            //     item_destroy_all_hidden(a1);
+
+            //     if (a1 != obj_dude) {
+            //         Object* whoHitMe = a1->data.critter.combat.whoHitMe;
+            //         if (whoHitMe == obj_dude || (whoHitMe != NULL && whoHitMe->data.critter.combat.team == obj_dude->data.critter.combat.team)) {
+            //             bool scriptOverrides = false;
+            //             Script* scr;
+            //             if (scr_ptr(a1->sid, &scr) != -1) {
+            //                 scriptOverrides = scr->scriptOverrides;
+            //             }
+
+            //             if (!scriptOverrides) {
+            //                 combat_exps += critter_kill_exps(a1);
+            //                 critter_kill_count_inc(critterGetKillType(a1));
+            //             }
+            //         }
+            //     }
+
+            //     if (a1->sid != -1) {
+            //         scr_remove(a1->sid);
+            //         a1->sid = -1;
+            //     }
+
+            //     partyMemberRemove(a1);
+            // }
+        }
+
+        static int critter_adjust_hits(f2Object critter, int hp)
+        {
+            if (PID_TYPE(critter.pid) != (int)ObjType.OBJ_TYPE_CRITTER) {
+                return 0;
+            }
+
+            int maximumHp = critterGetStat(critter, Stat.STAT_MAXIMUM_HIT_POINTS);
+            int newHp = critter.data.critter.hp + hp;
+
+            critter.data.critter.hp = newHp;
+            if (maximumHp >= newHp) {
+                if (newHp <= 0 && (critter.data.critter.combat.results & (int)Dam.DAM_DEAD) == 0) {
+                    // critter_kill(critter, -1, true);
+                }
+            } else {
+                critter.data.critter.hp = maximumHp;
+            }
 
             return 0;
         }

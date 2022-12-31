@@ -131,6 +131,8 @@ namespace f2
         public int armorClassModifier; // d.ac_adjust
         public int damageResistanceModifier; // d.dr_adjust
         public int damageMultiplier; // d.dam_mult
+        // divisor 的意义没有看出，应该是这里数据是 int，为了做出
+        // float 的效果，所以添加的，实际 damageScale = damageMultiplier / damageDivisor
         public int damageDivisor; // d.dam_div
     };
 

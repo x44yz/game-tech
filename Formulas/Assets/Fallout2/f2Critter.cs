@@ -589,177 +589,6 @@ namespace f2
             proto_ptr(pid, ref proto);
             return (proto.critter.data.flags & flag) != 0;
         }
-
-        public static void compute_damage(Attack attack, int ammoQuantity, int bonusDamageMultiplier)
-        {
-            int damagePtr;
-            f2Object critter;
-            int flagsPtr;
-            int knockbackDistancePtr;
-            bool hasKnockbackDistancePtr;
-
-            if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
-            {
-                // damagePtr = attack.defenderDamage;
-                critter = attack.defender;
-                flagsPtr = attack.defenderFlags;
-                knockbackDistancePtr = attack.defenderKnockback;
-                hasKnockbackDistancePtr = true;
-            } 
-            else 
-            {
-                // damagePtr = attack.attackerDamage;
-                critter = attack.attacker;
-                flagsPtr = attack.attackerFlags;
-                knockbackDistancePtr = 0;
-                hasKnockbackDistancePtr = false;
-            }
-
-            damagePtr = 0;
-            if (FID_TYPE(critter.fid) != (int)ObjType.OBJ_TYPE_CRITTER) {
-                return;
-            }
-
-            // 获得攻击者武器类型
-            int damageType = item_w_damage_type(attack.attacker, attack.weapon);
-            int damageThreshold = critterGetStat(critter, (int)Stat.STAT_DAMAGE_THRESHOLD + damageType);
-            int damageResistance = critterGetStat(critter, (int)Stat.STAT_DAMAGE_RESISTANCE + damageType);
-
-            if ((flagsPtr & (int)Dam.DAM_BYPASS) != 0 && damageType != (int)DamageType.DAMAGE_TYPE_EMP) {
-                damageThreshold = 20 * damageThreshold / 100;
-                damageResistance = 20 * damageResistance / 100;
-            } 
-            else {
-                // SFALL
-                if (item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_PENETRATE
-                    || attack.hitMode == (int)HitMode.HIT_MODE_PALM_STRIKE
-                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_STRIKE
-                    || attack.hitMode == (int)HitMode.HIT_MODE_HOOK_KICK
-                    || attack.hitMode == (int)HitMode.HIT_MODE_PIERCING_KICK) {
-                    damageThreshold = 20 * damageThreshold / 100;
-                }
-
-                if (attack.attacker == obj_dude && trait_level((int)Trait.TRAIT_FINESSE)) {
-                    damageResistance += 30;
-                }
-            }
-
-            int damageBonus;
-            if (attack.attacker == obj_dude && item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_RANGED) {
-                damageBonus = 2 * perk_level(obj_dude, (int)Perk.PERK_BONUS_RANGED_DAMAGE);
-            } else {
-                damageBonus = 0;
-            }
-
-            int combatDifficultyDamageModifier = 100;
-            if (attack.attacker.data.critter.combat.team != obj_dude.data.critter.combat.team) {
-                switch (gCombatDifficulty) {
-                case CombatDifficulty.COMBAT_DIFFICULTY_EASY:
-                    combatDifficultyDamageModifier = 75;
-                    break;
-                case CombatDifficulty.COMBAT_DIFFICULTY_HARD:
-                    combatDifficultyDamageModifier = 125;
-                    break;
-                }
-            }
-
-            damageResistance += item_w_dr_adjust(attack.weapon);
-            if (damageResistance > 100) {
-                damageResistance = 100;
-            } else if (damageResistance < 0) {
-                damageResistance = 0;
-            }
-
-            int damageMultiplier = bonusDamageMultiplier * item_w_dam_mult(attack.weapon);
-            int damageDivisor = item_w_dam_div(attack.weapon);
-
-            for (int index = 0; index < ammoQuantity; index++) 
-            {
-                int damage = item_w_damage(attack.attacker, attack.hitMode);
-
-                damage += damageBonus;
-
-                damage *= damageMultiplier;
-
-                if (damageDivisor != 0) {
-                    damage /= damageDivisor;
-                }
-
-                // TODO: Why we're halving it?
-                damage /= 2;
-
-                damage *= combatDifficultyDamageModifier;
-                damage /= 100;
-
-                damage -= damageThreshold;
-
-                if (damage > 0) {
-                    damage -= damage * damageResistance / 100;
-                }
-
-                if (damage > 0) {
-                    damagePtr += damage;
-                }
-            }
-
-            if (attack.attacker == obj_dude) 
-            {
-                if (perk_level(attack.attacker, (int)Perk.PERK_LIVING_ANATOMY) != 0) {
-                    int kt = critterGetKillType(attack.defender);
-                    if (kt != (int)KillType.KILL_TYPE_ROBOT && kt != (int)KillType.KILL_TYPE_ALIEN) {
-                        damagePtr += 5;
-                    }
-                }
-
-                if (perk_level(attack.attacker, (int)Perk.PERK_PYROMANIAC) != 0) {
-                    if (item_w_damage_type(attack.attacker, attack.weapon) == (int)DamageType.DAMAGE_TYPE_FIRE) {
-                        damagePtr += 5;
-                    }
-                }
-            }
-
-            if (hasKnockbackDistancePtr
-                && (critter.flags & (int)ObjectFlags.OBJECT_MULTIHEX) == 0
-                && (damageType == (int)DamageType.DAMAGE_TYPE_EXPLOSION || attack.weapon == null || item_w_subtype(attack.weapon, attack.hitMode) == (int)AttackType.ATTACK_TYPE_MELEE)
-                && PID_TYPE(critter.pid) == (int)ObjType.OBJ_TYPE_CRITTER
-                && critter_flag_check(critter.pid, (int)CritterFlags.CRITTER_NO_KNOCKBACK) == false) 
-            {
-                bool shouldKnockback = true;
-                bool hasStonewall = false;
-                if (critter == obj_dude) {
-                    if (perk_level(critter, (int)Perk.PERK_STONEWALL) != 0) {
-                        int chance = roll_random(0, 100);
-                        hasStonewall = true;
-                        if (chance < 50) {
-                            shouldKnockback = false;
-                        }
-                    }
-                }
-
-                if (shouldKnockback) 
-                {
-                    int knockbackDistanceDivisor = item_w_perk(attack.weapon) == (int)Perk.PERK_WEAPON_KNOCKBACK ? 5 : 10;
-
-                    knockbackDistancePtr = damagePtr / knockbackDistanceDivisor;
-
-                    if (hasStonewall) 
-                    {
-                        knockbackDistancePtr /= 2;
-                    }
-                }
-            }
-
-            // set back
-            if ((attack.attackerFlags & (int)Dam.DAM_HIT) != 0) 
-            {
-                attack.defenderDamage = damagePtr;
-            } 
-            else 
-            {
-                attack.attackerDamage = damagePtr;
-            }
-            attack.defenderKnockback = knockbackDistancePtr;
-        }
     
         public static int obj_dist(f2Object object1, f2Object object2)
         {
@@ -835,6 +664,32 @@ namespace f2
             }
 
             return 0;
+        }
+
+        void stat_recalc_derived(Object* critter)
+        {
+            int strength = critterGetStat(critter, STAT_STRENGTH);
+            int perception = critterGetStat(critter, STAT_PERCEPTION);
+            int endurance = critterGetStat(critter, STAT_ENDURANCE);
+            int intelligence = critterGetStat(critter, STAT_INTELLIGENCE);
+            int agility = critterGetStat(critter, STAT_AGILITY);
+            int luck = critterGetStat(critter, STAT_LUCK);
+
+            Proto* proto;
+            proto_ptr(critter->pid, &proto);
+            CritterProtoData* data = &(proto->critter.data);
+
+            data->baseStats[STAT_MAXIMUM_HIT_POINTS] = stat_get_base(critter, STAT_STRENGTH) + stat_get_base(critter, STAT_ENDURANCE) * 2 + 15;
+            data->baseStats[STAT_MAXIMUM_ACTION_POINTS] = agility / 2 + 5;
+            data->baseStats[STAT_ARMOR_CLASS] = agility;
+            data->baseStats[STAT_MELEE_DAMAGE] = max(strength - 5, 1);
+            data->baseStats[STAT_CARRY_WEIGHT] = 25 * strength + 25;
+            data->baseStats[STAT_SEQUENCE] = 2 * perception;
+            data->baseStats[STAT_HEALING_RATE] = max(endurance / 3, 1);
+            data->baseStats[STAT_CRITICAL_CHANCE] = luck;
+            data->baseStats[STAT_BETTER_CRITICALS] = 0;
+            data->baseStats[STAT_RADIATION_RESISTANCE] = 2 * endurance;
+            data->baseStats[STAT_POISON_RESISTANCE] = 5 * endurance;
         }
     }
 }

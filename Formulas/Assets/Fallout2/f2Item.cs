@@ -369,6 +369,7 @@ namespace f2
                 }
             } else {
                 minDamage = 1;
+                // HARDCOEDE：+2
                 maxDamage = critterGetStat(critter, (int)Stat.STAT_MELEE_DAMAGE) + 2;
 
                 switch ((HitMode)hitMode) {
