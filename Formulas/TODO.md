@@ -5,6 +5,7 @@
 [x] gta3  
 [+] Minecraft   
 [+] 饥荒  
+[x] 魔塔 Magic Tower
 
 [x]player stats
 [x]enemy stats
@@ -19,6 +20,3 @@ Kingdom Rush
 ## 经营游戏
 Soda Dungeon
 
-
-## 魔塔
-Magic Tower
