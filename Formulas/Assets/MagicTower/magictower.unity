@@ -957,8 +957,6 @@ GameObject:
   - component: {fileID: 495155708}
   - component: {fileID: 495155707}
   - component: {fileID: 495155706}
-  - component: {fileID: 495155704}
-  - component: {fileID: 495155705}
   m_Layer: 0
   m_Name: RIGHT_BURLY-MAN_1_swordsman (1)
   m_TagString: Untagged
@@ -966,50 +964,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &495155704
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495155703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be581ef680f89b04ab7e48451d5dc302, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 527603623}
-  moveSpeed: 0
-  isAttacking: 0
-  atk: 0
-  sortingOrder: 0
-  spriteOrderUpdateTick: 0
-  m_SpriteGroup: []
-  m_Animator: {fileID: 0}
-  attackTick: 0
-  weapon: {fileID: 0}
-  m_fHealth: 100
-  m_fArmour: 100
-  handWeapon: {fileID: 0}
-  m_bAdrenalineActive: 0
-  m_attackStrength: 0
-  m_nearPeds: []
---- !u!114 &495155705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495155703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponName: Unarmed
-  m_eWeaponType: 5
-  m_eWeaponFire: 1
-  m_nDamage: 0
 --- !u!70 &495155706
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -2387,29 +2341,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1107471636}
-  - component: {fileID: 1107471635}
   m_Layer: 0
-  m_Name: g3Test
+  m_Name: mtTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1107471635
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1107471634}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12a27401479c0c448929a2b78c1fb1db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dmgTextTmp: {fileID: 1556391803}
-  leftPlayer: {fileID: 1892421001020668}
-  rightPlayer: {fileID: 495155704}
 --- !u!4 &1107471636
 Transform:
   m_ObjectHideFlags: 0
@@ -6218,8 +6156,6 @@ GameObject:
   - component: {fileID: 4985777558087185}
   - component: {fileID: 50891965659343741}
   - component: {fileID: 70242907956040023}
-  - component: {fileID: 1892421001020668}
-  - component: {fileID: 1892421001020669}
   m_Layer: 0
   m_Name: LEFT_BURLY-MAN_1_swordsman
   m_TagString: Untagged
@@ -6227,50 +6163,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1892421001020668
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892421001020667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: be581ef680f89b04ab7e48451d5dc302, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  model: {fileID: 1797582712233961}
-  moveSpeed: 0
-  isAttacking: 0
-  atk: 0
-  sortingOrder: 0
-  spriteOrderUpdateTick: 0
-  m_SpriteGroup: []
-  m_Animator: {fileID: 0}
-  attackTick: 0
-  weapon: {fileID: 0}
-  m_fHealth: 100
-  m_fArmour: 100
-  handWeapon: {fileID: 0}
-  m_bAdrenalineActive: 0
-  m_attackStrength: 0
-  m_nearPeds: []
---- !u!114 &1892421001020669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1892421001020667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 282ebe05b4aeb7a4eb80fc8ef32b5c38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponName: BrassKnuckle
-  m_eWeaponType: 0
-  m_eWeaponFire: 0
-  m_nDamage: 0
 --- !u!1 &1900213106409926
 GameObject:
   m_ObjectHideFlags: 0
