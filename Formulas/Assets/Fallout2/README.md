@@ -39,9 +39,9 @@ if (rand(accuracy) == ROLL_SUCCESS || ROLL_CRITICAL_SUCCESS) // 随机命中率
 [x]register_clear  
 [x]STAT_DAMAGE_THRESHOLD
 [x]STAT_DAMAGE_RESISTANCE
-[+]与伤害有关 STAT_MELEE_DAMAGE  
-[+]stat_recalc_derived  
-[+]stat_set_base  
+[x]与伤害有关 STAT_MELEE_DAMAGE  
+[x]stat_recalc_derived  
+[x]stat_set_base  
 
 >REF:  
 https://fallout.fandom.com/wiki/Fallout_2  
@@ -59,12 +59,24 @@ Strength 与投掷物最远距离公式 maxRange = 3 * strength(包含 perk 加�
 命中率（accuracy）的上限是 95  
 减少伤害三种方式 AC（Armor Class），DR（Damage Resistance），DT（Damage Threshold）  
 
-
 > Stat  
-| 属性 | 定义 | 好处Benefit |
-|------|-----|----------|
-|Damage Threshold |STAT_DAMAGE_THRESHOLD |防护硬值，来自 Armor 加成，直接从伤害中扣除
-|Damage Resistance |STAT_DAMAGE_RESISTANCE |伤害减免，来自 Armor 加成，扣除最后伤害的百分比
+
+| 属性 | 定义 | Base | 说明 | 改变 |
+|------|-----|----- |------|------|
+|Strength |STAT_STRENGTH |0| 力量，1 点可携带 25 磅重量，当不满足武器的最低力量要求时每少一点损失 20 的命中率 | HP，近战伤害，携带重量，武器力量要求 
+|Max HP|STAT_MAXIMUM_HIT_POINTS | base.ST + base.EN * 2 + 15 |
+|Max AP|STAT_MAXIMUM_ACTION_POINTS | AG / 2 + 5 |
+|Armor Class|STAT_ARMOR_CLASS | AG |
+|Melee Damage |STAT_MELEE_DAMAGE | max(ST - 5, 1)
+|Carry Weight |STAT_CARRY_WEIGHT | 25 * ST + 25 |
+|Sequence |STAT_SEQUENCE | 2 * PE
+|Healing Rate |STAT_HEALING_RATE | max(EN / 3, 1)
+|Critical Chance|STAT_CRITICAL_CHANCE | luck
+|Better Criticals|STAT_BETTER_CRITICALS | 0 |
+|Radiation Resistance|STAT_RADIATION_RESISTANCE | 2 * EN |
+|Poison Resistance|STAT_POISON_RESISTANCE | 2 * EN | 
+|Damage Threshold |STAT_DAMAGE_THRESHOLD |0|防护硬值，来自 Armor 加成，直接从伤害中扣除
+|Damage Resistance |STAT_DAMAGE_RESISTANCE |0|伤害减免，来自 Armor 加成，扣除最后伤害的百分比
 
 > Perk
 

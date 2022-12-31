@@ -1,6 +1,6 @@
 [+] diablo  
 [+] daggerfall  
-[+] 辐射 fallout 2  
+[x] 辐射 fallout 2  
 [+] fallout shelter  
 [x] gta3  
 [+] Minecraft   

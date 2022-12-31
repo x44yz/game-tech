@@ -666,30 +666,85 @@ namespace f2
             return 0;
         }
 
-        void stat_recalc_derived(Object* critter)
+        static void stat_recalc_derived(f2Object critter)
         {
-            int strength = critterGetStat(critter, STAT_STRENGTH);
-            int perception = critterGetStat(critter, STAT_PERCEPTION);
-            int endurance = critterGetStat(critter, STAT_ENDURANCE);
-            int intelligence = critterGetStat(critter, STAT_INTELLIGENCE);
-            int agility = critterGetStat(critter, STAT_AGILITY);
-            int luck = critterGetStat(critter, STAT_LUCK);
+            int strength = critterGetStat(critter, Stat.STAT_STRENGTH); // 力量
+            int perception = critterGetStat(critter, Stat.STAT_PERCEPTION); // 感知
+            int endurance = critterGetStat(critter, Stat.STAT_ENDURANCE); // 耐力
+            int intelligence = critterGetStat(critter, Stat.STAT_INTELLIGENCE); // 智商
+            int agility = critterGetStat(critter, Stat.STAT_AGILITY); // 敏捷
+            int luck = critterGetStat(critter, Stat.STAT_LUCK); // 幸运
 
-            Proto* proto;
-            proto_ptr(critter->pid, &proto);
-            CritterProtoData* data = &(proto->critter.data);
+            Proto proto = null;
+            proto_ptr(critter.pid, ref proto);
+            CritterProtoData data = proto.critter.data;
 
-            data->baseStats[STAT_MAXIMUM_HIT_POINTS] = stat_get_base(critter, STAT_STRENGTH) + stat_get_base(critter, STAT_ENDURANCE) * 2 + 15;
-            data->baseStats[STAT_MAXIMUM_ACTION_POINTS] = agility / 2 + 5;
-            data->baseStats[STAT_ARMOR_CLASS] = agility;
-            data->baseStats[STAT_MELEE_DAMAGE] = max(strength - 5, 1);
-            data->baseStats[STAT_CARRY_WEIGHT] = 25 * strength + 25;
-            data->baseStats[STAT_SEQUENCE] = 2 * perception;
-            data->baseStats[STAT_HEALING_RATE] = max(endurance / 3, 1);
-            data->baseStats[STAT_CRITICAL_CHANCE] = luck;
-            data->baseStats[STAT_BETTER_CRITICALS] = 0;
-            data->baseStats[STAT_RADIATION_RESISTANCE] = 2 * endurance;
-            data->baseStats[STAT_POISON_RESISTANCE] = 5 * endurance;
+            // 基础属性，没有 item/perk/trait/skill 加成
+            data.baseStats[(int)Stat.STAT_MAXIMUM_HIT_POINTS] = stat_get_base(critter, (int)Stat.STAT_STRENGTH) + stat_get_base(critter, (int)Stat.STAT_ENDURANCE) * 2 + 15;
+            data.baseStats[(int)Stat.STAT_MAXIMUM_ACTION_POINTS] = agility / 2 + 5;
+            data.baseStats[(int)Stat.STAT_ARMOR_CLASS] = agility; 
+            data.baseStats[(int)Stat.STAT_MELEE_DAMAGE] = Mathf.Max(strength - 5, 1);
+            data.baseStats[(int)Stat.STAT_CARRY_WEIGHT] = 25 * strength + 25;
+            data.baseStats[(int)Stat.STAT_SEQUENCE] = 2 * perception;
+            data.baseStats[(int)Stat.STAT_HEALING_RATE] = Mathf.Max(endurance / 3, 1);
+            data.baseStats[(int)Stat.STAT_CRITICAL_CHANCE] = luck;
+            data.baseStats[(int)Stat.STAT_BETTER_CRITICALS] = 0;
+            data.baseStats[(int)Stat.STAT_RADIATION_RESISTANCE] = 2 * endurance;
+            data.baseStats[(int)Stat.STAT_POISON_RESISTANCE] = 5 * endurance;
+        }
+
+        static bool statIsValid(int stat)
+        {
+            return stat >= 0 && stat < (int)Stat.STAT_COUNT;
+        }
+
+        // 设置基础值 SPECIAL，其他基础值都是通过这个计算出来的
+        static int stat_set_base(f2Object critter, int stat, int value)
+        {
+            if (!statIsValid(stat)) {
+                return -5;
+            }
+
+            if (stat >= 0 && stat < (int)Stat.SAVEABLE_STAT_COUNT) {
+                if (stat > (int)Stat.STAT_LUCK && stat <= (int)Stat.STAT_POISON_RESISTANCE) {
+                    // Cannot change base value of derived stats.
+                    return -1;
+                }
+
+                if (critter == obj_dude) {
+                    value -= trait_adjust_stat(stat);
+                }
+
+                if (value < stat_data[stat].minimumValue) {
+                    return -2;
+                }
+
+                if (value > stat_data[stat].maximumValue) {
+                    return -3;
+                }
+
+                Proto proto = null;
+                proto_ptr(critter.pid, ref proto);
+                proto.critter.data.baseStats[stat] = value;
+
+                if (stat >= (int)Stat.STAT_STRENGTH && stat <= (int)Stat.STAT_LUCK) {
+                    stat_recalc_derived(critter);
+                }
+
+                return 0;
+            }
+
+            switch ((Stat)stat) {
+            case Stat.STAT_CURRENT_HIT_POINTS:
+                return critter_adjust_hits(critter, value - critter_get_hits(critter));
+            // case Stat.STAT_CURRENT_POISON_LEVEL:
+            //     return critter_adjust_poison(critter, value - critter_get_poison(critter));
+            // case Stat.STAT_CURRENT_RADIATION_LEVEL:
+            //     return critter_adjust_rads(critter, value - critter_get_rads(critter));
+            }
+
+            // Should be unreachable
+            return 0;
         }
     }
 }
