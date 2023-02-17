@@ -239,6 +239,10 @@ namespace Tutorial
             {
                 ((Tutorial)target).PlayFromEditor();
             }
+            if (GUILayout.Button("Refresh Current"))
+            {
+                
+            }
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Separator();
         }

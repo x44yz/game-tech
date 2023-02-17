@@ -389,13 +389,14 @@ namespace Tutorial
             if (ctrls == null || ctrls.Length == 0)
                 return null;
 
-            for (int i = 0; i < ctrls.Length; ++i)
-            {
-                var tt = TutorialUtils.GetTargetByPath(ctrls[i].name);
-                if (tt != null)
-                    return tt;
-            }
-            return null;
+            return ctrls[0].gameObject;
+            // for (int i = 0; i < ctrls.Length; ++i)
+            // {
+            //     var tt = TutorialUtils.GetTargetByPath(ctrls[i].name);
+            //     if (tt != null)
+            //         return tt;
+            // }
+            // return null;
         }
     }
 }

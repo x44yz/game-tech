@@ -16,10 +16,48 @@ MonoBehaviour:
   visible: 1
   targetName: 
   arrowType: 0
-  position: {x: 100, y: 100}
+  position: {x: -350, y: -200}
   anchorMin: {x: 0.5, y: 0.5}
   anchorMax: {x: 0.5, y: 0.5}
   scale: {x: 1, y: 1}
+--- !u!114 &-6070433064598228822
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a195739be09808f4aa8e3fbf857cf166, type: 3}
+  m_Name: Tutorial.TutActionAcceptClick
+  m_EditorClassIdentifier: 
+  desc: 
+  clickType: 0
+--- !u!114 &-4464104376443146044
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad496cc053a7678479d3d14e33a45a0b, type: 3}
+  m_Name: Tutorial.TutActionAreaHighlight
+  m_EditorClassIdentifier: 
+  desc: 
+  visible: 1
+  targetName: 
+  rect:
+    serializedVersion: 2
+    x: 233
+    y: -112
+    width: 530.7396
+    height: 187.262
+  anchorMin: {x: 0.5, y: 0.5}
+  anchorMax: {x: 0.5, y: 0.5}
+  acceptInput: 1
 --- !u!114 &-2274969176794616083
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -36,6 +74,60 @@ MonoBehaviour:
   visible: 0
   title: 
   text: 
+--- !u!114 &-2086993048381822767
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad496cc053a7678479d3d14e33a45a0b, type: 3}
+  m_Name: Tutorial.TutActionAreaHighlight
+  m_EditorClassIdentifier: 
+  desc: 
+  visible: 1
+  targetName: 
+  rect:
+    serializedVersion: 2
+    x: 233
+    y: 96
+    width: 530.7396
+    height: 187.262
+  anchorMin: {x: 0.5, y: 0.5}
+  anchorMax: {x: 0.5, y: 0.5}
+  acceptInput: 1
+--- !u!114 &-1069450385460446022
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a195739be09808f4aa8e3fbf857cf166, type: 3}
+  m_Name: Tutorial.TutActionAcceptClick
+  m_EditorClassIdentifier: 
+  desc: 
+  clickType: 0
+--- !u!114 &-574493186842232415
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f446cabe210a3a84d9f5dc762f5fb19d, type: 3}
+  m_Name: Tutorial.TutActionShowTextArea
+  m_EditorClassIdentifier: 
+  desc: 
+  visible: 1
+  title: KKK
+  text: tutorial end
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,6 +150,16 @@ MonoBehaviour:
   - {fileID: -2274969176794616083}
   - {fileID: 5919486834016894737}
   - {fileID: -6453095626852468813}
+  - {fileID: -6070433064598228822}
+  - {fileID: 2789503183875776461}
+  - {fileID: -2086993048381822767}
+  - {fileID: 9115524497378506553}
+  - {fileID: -4464104376443146044}
+  - {fileID: 5893653918797578140}
+  - {fileID: 8459946076534612205}
+  - {fileID: -574493186842232415}
+  - {fileID: -1069450385460446022}
+  - {fileID: 1753766775331191828}
 --- !u!114 &1104844968310938281
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -72,6 +174,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuName: MenuShop
   parameters: []
+--- !u!114 &1753766775331191828
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff2c97317fc8984b9e2a71a82d12b18, type: 3}
+  m_Name: Tutorial.TutActionShowMenu
+  m_EditorClassIdentifier: 
+  desc: 
+  menuType: 0
+  visible: 0
+--- !u!114 &2789503183875776461
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b4cedbb621083344bd0946e58a3104b, type: 3}
+  m_Name: Tutorial.TutActionShowClickArrow
+  m_EditorClassIdentifier: 
+  desc: 
+  visible: 0
+  targetName: 
+  arrowType: 0
+  position: {x: 0, y: 0}
+  anchorMin: {x: 0.5, y: 0.5}
+  anchorMax: {x: 0.5, y: 0.5}
+  scale: {x: 1, y: 1}
 --- !u!114 &5723435413847702989
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -88,6 +225,20 @@ MonoBehaviour:
   visible: 1
   title: KKK
   text: this is text-area text
+--- !u!114 &5893653918797578140
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a195739be09808f4aa8e3fbf857cf166, type: 3}
+  m_Name: Tutorial.TutActionAcceptClick
+  m_EditorClassIdentifier: 
+  desc: 
+  clickType: 1
 --- !u!114 &5919486834016894737
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -127,6 +278,30 @@ MonoBehaviour:
   desc: 
   menuType: 0
   visible: 1
+--- !u!114 &8459946076534612205
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad496cc053a7678479d3d14e33a45a0b, type: 3}
+  m_Name: Tutorial.TutActionAreaHighlight
+  m_EditorClassIdentifier: 
+  desc: 
+  visible: 0
+  targetName: 
+  rect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 0
+    height: 0
+  anchorMin: {x: 0.5, y: 0.5}
+  anchorMax: {x: 0.5, y: 0.5}
+  acceptInput: 1
 --- !u!114 &8564757006794515031
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -141,3 +316,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desc: 
   clickType: 0
+--- !u!114 &9115524497378506553
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a195739be09808f4aa8e3fbf857cf166, type: 3}
+  m_Name: Tutorial.TutActionAcceptClick
+  m_EditorClassIdentifier: 
+  desc: 
+  clickType: 1
