@@ -1,8 +1,24 @@
 # game-tech
 game tech
 
-[Ability]
+| project | status<br>+:todo<br>* :deving<br>x :done | desc |
+|-----|----|----|
+|Ability|+| |
+|AStar|x| |
+|CollisionAvoidance|x| |
+|Dialogue|+| |
+|Formulas|*| |
+|FSM|x| |
+|Graph|*| |
+|MinMax|x| |
+|Multiplayer|+| |
+|MVVM|+| |
+|SteeringBehavior|x| |
+|Task|+| |
+|Tutorial|x| |
 
-// TODO:
-[DataManager]
-可参考 redux 的模式设计
+TODO:  
+[+]DevAssist  
+[+]ConfigHotSync  
+[+]AI Planner  
+[+]AI Perception System  
