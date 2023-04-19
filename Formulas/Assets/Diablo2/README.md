@@ -97,13 +97,28 @@ dam += attacker._pDamageMod // strength 体力提供的伤害
 
 > 攻速  
 不同职业有不同的攻击动画（攻击动画的长短表示攻击速度），然后武器会有几种攻击标签，会影响攻击动画跳过的帧数  
+1.不同职业有基础攻击动画  
+```
+_pAFNum = PlrGFXAnimLens[static_cast<std::size_t>(pc)][9]
+```
+2.不同职业装备不同武器有不同攻击速度（暂时按照武器分类）  
+```
+if (gn == PlayerWeaponGraphic::Axe) {
+	player._pAFrames = 20;
+	player._pAFNum = 10;
+} else if (gn == PlayerWeaponGraphic::Staff) {
+	player._pAFrames = 16;
+	player._pAFNum = 11;
+}
+```
+3.计算物品的加成效果 (FastAttack, FasterAttack, FastestAttack)，跳过帧数  
 ```
 int8_t skippedAnimationFrames = 0;
-	if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FasterAttack)) {
-		skippedAnimationFrames = 2;
-	} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastAttack)) {
-		skippedAnimationFrames = 1;
-	} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastestAttack)) {
-		skippedAnimationFrames = 2;
-	}
+if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FasterAttack)) {
+	skippedAnimationFrames = 2;
+} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastAttack)) {
+	skippedAnimationFrames = 1;
+} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastestAttack)) {
+	skippedAnimationFrames = 2;
+}
 ```
