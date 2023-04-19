@@ -94,3 +94,16 @@ dam = rnd(maxdam - mindam + 1) + mindam
 dam += (dam * attacker._pIBonusDam) / 100 + attacker._pIBonusDamMod // item 提供额外伤害
 dam += attacker._pDamageMod // strength 体力提供的伤害
 ```
+
+> 攻速  
+不同职业有不同的攻击动画（攻击动画的长短表示攻击速度），然后武器会有几种攻击标签，会影响攻击动画跳过的帧数  
+```
+int8_t skippedAnimationFrames = 0;
+	if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FasterAttack)) {
+		skippedAnimationFrames = 2;
+	} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastAttack)) {
+		skippedAnimationFrames = 1;
+	} else if (HasAnyOf(player._pIFlags, ItemSpecialEffect::FastestAttack)) {
+		skippedAnimationFrames = 2;
+	}
+```
