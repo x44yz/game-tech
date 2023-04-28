@@ -32,10 +32,8 @@ public class Monster : Actor
         return null;
     }
 
-    protected override void Awake()
+    protected override void OnInit()
     {
-        base.Awake();
-
         MSIdle idle = new MSIdle(this);
 
         fsm = new StateMachine<Monster>(this);
@@ -47,10 +45,8 @@ public class Monster : Actor
         fsm.Translate(typeof(MSIdle));
     }
 
-    protected override void Update(float dt)
+    protected override void OnUpdate(float dt)
     {
-        base.Update(dt);
-
         fsm.Update(dt);
     }
 }

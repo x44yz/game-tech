@@ -10,54 +10,66 @@ using UnityEditor;
 public class Actor : MonoBehaviour, IStateMachineOwner
 {
     [Header("RUNTIME")]
-    public ActorCfg cfg;
-    public ActorData data;
-    public StateMachine<Actor> fsm;
+    // public ActorCfg cfg;
+    // public ActorData data;
+    // public StateMachine<Actor> fsm;
     public bool debugFSM;
 
     public bool IsFSMDebug => debugFSM;
     public string FSMDebugLogPrefix => name;
 
-    public virtual float moveSpeed { get { return cfg.walkSpeed; } }
+    public virtual float moveSpeed => 2f; // { get { return cfg.walkSpeed; } }
 
-    public static Actor Create(int actorId)
+    // public static Actor Create(int actorId)
+    // {
+    //     var data = GameData.Inst.NewActor(actorId);
+    //     return Actor.Create(data);
+    // }
+
+    // public static Actor Create(ActorData actorData)
+    // {
+    //     var cfg = GameConfig.Inst.GetActor(actorData.id);
+    //     var obj = AssetMgr.InstGameObject(cfg.asset);
+    //     if (obj != null)
+    //     {
+    //         Actor at = obj.GetOrAddComponent<Actor>();
+    //         at.cfg = cfg;
+    //         at.data = actorData;
+    //         at.name = "Actor_" + actorData.uid;
+    //         return at;
+    //     };
+    //     Debug.LogError("[ACTOR]failed create actor > " + cfg.id + "-" + cfg.asset);
+    //     return null;
+    // }
+
+    private void Awake()
     {
-        var data = GameData.Inst.NewActor(actorId);
-        return Actor.Create(data);
+        // ASIdle idle = new ASIdle(this);
+
+        // fsm = new StateMachine<Actor>(this);
+
+        // fsm.Register(idle);
+
+        // // fsm.AddTransition(new Transition(idle, run, idle.IsTranslateToRun));
+        // fsm.Translate(typeof(ASIdle));
+
+        OnInit();
     }
 
-    public static Actor Create(ActorData actorData)
+    private void Update()
     {
-        var cfg = GameConfig.Inst.GetActor(actorData.id);
-        var obj = AssetMgr.InstGameObject(cfg.asset);
-        if (obj != null)
-        {
-            Actor at = obj.GetOrAddComponent<Actor>();
-            at.cfg = cfg;
-            at.data = actorData;
-            at.name = "Actor_" + actorData.uid;
-            return at;
-        };
-        Debug.LogError("[ACTOR]failed create actor > " + cfg.id + "-" + cfg.asset);
-        return null;
+        float dt = Time.deltaTime;
+        // fsm.Update(dt);
+
+        OnUpdate(dt);
     }
 
-    protected virtual void Awake()
+    protected virtual void OnInit()
     {
-        ASIdle idle = new ASIdle(this);
-
-        fsm = new StateMachine<Actor>(this);
-
-        fsm.Register(idle);
-
-        // fsm.AddTransition(new Transition(idle, run, idle.IsTranslateToRun));
-
-        fsm.Translate(typeof(ASIdle));
     }
 
-    protected virtual void Update(float dt)
+    protected virtual void OnUpdate(float dt)
     {
-        fsm.Update(dt);
     }
 }
 
@@ -88,25 +100,25 @@ public class ASIdle : ActorState
     }
 }
 
-#if UNITY_EDITOR
-[CustomEditor(typeof(Actor))]
-public class ActorEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
+// #if UNITY_EDITOR
+// [CustomEditor(typeof(Actor))]
+// public class ActorEditor : Editor
+// {
+//     public override void OnInspectorGUI()
+//     {
+//         base.OnInspectorGUI();
 
-        GUILayout.Label("----------------");
+//         GUILayout.Label("----------------");
         
-        Actor at = target as Actor;
-        if (at != null && at.fsm != null && at.fsm.curState != null)
-        {
-            EditorGUILayout.LabelField("State", at.fsm.curState.GetType().ToString());
-        }
-        else
-        {
-            EditorGUILayout.LabelField("State", "None");
-        }
-    }
-}
-#endif
+//         // Actor at = target as Actor;
+//         // if (at != null && at.fsm != null && at.fsm.curState != null)
+//         // {
+//         //     EditorGUILayout.LabelField("State", at.fsm.curState.GetType().ToString());
+//         // }
+//         // else
+//         // {
+//         //     EditorGUILayout.LabelField("State", "None");
+//         // }
+//     }
+// }
+// #endif

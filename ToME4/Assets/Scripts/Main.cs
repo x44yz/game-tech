@@ -7,9 +7,9 @@ public class Main : MonoBehaviour
 {
     public static Main Inst;
 
-    [Header("RUNTIME")]
-    public List<Actor> actors = new List<Actor>();
-    public List<Monster> monsters = new List<Monster>();
+    // [Header("RUNTIME")]
+    // public List<Actor> actors = new List<Actor>();
+    // public List<Monster> monsters = new List<Monster>();
 
     public GameConfig gCfgs { get { return GameConfig.Inst; } }
     public GameData gDatas { get { return GameData.Inst; } }
