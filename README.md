@@ -17,6 +17,7 @@ game tech
 |Task|+|unity|
 |Tutorial|x|unity|
 |ToME4|*|unity|
+|Fallout2|*|unity|
 
 TODO:  
 [+]DevAssist  
