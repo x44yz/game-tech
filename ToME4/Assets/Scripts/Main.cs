@@ -17,6 +17,9 @@ public class Main : MonoBehaviour
     void Awake()
     {
         Inst = this;
+
+        Races.Init();
+        Talents.Init();
     }
 
     void Start()
