@@ -24,13 +24,7 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-        // // load actors
-        // for (int i = 0; i < GameData.Inst.humanDatas.Count; ++i)
-        // {
-        //     var actorData = GameData.Inst.humanDatas[i];
-        //     var actor = Human.Create(actorData);
-        //     humans.Add(actor);
-        // }
+        
     }
 
     void Update()

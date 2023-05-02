@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9216953825675578980}
-  - component: {fileID: 9216953825675578983}
+  - component: {fileID: 2092400482864997084}
   m_Layer: 0
-  m_Name: Worker
+  m_Name: Hero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9216953825675578983
+--- !u!114 &2092400482864997084
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,27 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 9216953825675578981}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66adc907294149e4bb7e36749081aced, type: 3}
+  m_Script: {fileID: 11500000, guid: a5e1df8a68e9b694c8b253248c410ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 9216953826632459867}
-  lhandContainerTF: {fileID: 9216953826632629139}
-  rhandContainerTF: {fileID: 9216953826632628789}
-  debugFSM: 0
-  bodyRadius: 0
-  isSelected: 0
-  animator: {fileID: 0}
-  hasMoveTarget: 0
-  moveTargetPos: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  cfg:
-    id: 0
-    name: 
-    asset: 
-    walkSpeed: 0
-  data:
-    uid: 0
-    id: 0
 --- !u!1001 &9216953826632491293
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -127,23 +109,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
---- !u!1 &9216953826632459867 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100166, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
-  m_PrefabInstance: {fileID: 9216953826632491293}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9216953826632628795 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 400166, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
-  m_PrefabInstance: {fileID: 9216953826632491293}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9216953826632629139 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400014, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
-  m_PrefabInstance: {fileID: 9216953826632491293}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &9216953826632628789 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400168, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
+  m_CorrespondingSourceObject: {fileID: 400166, guid: eb062aa776e44954d94c4c2f76ebc148,
+    type: 3}
   m_PrefabInstance: {fileID: 9216953826632491293}
   m_PrefabAsset: {fileID: 0}

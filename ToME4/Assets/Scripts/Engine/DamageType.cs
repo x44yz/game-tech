@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DamageType : MonoBehaviour
+namespace Engine
 {
-    // Start is called before the first frame update
-    void Start()
+    public class DamageType
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public string type;
+        public System.Func<Actor, Actor, int, int> projector;
     }
 }

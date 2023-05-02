@@ -11,7 +11,7 @@ namespace Engine
 {
     public class Actor
     {
-        public void TakeHit(int value, Actor src)
+        public bool TakeHit(int value, Actor src)
         {
             throw new System.NotImplementedException();
         }

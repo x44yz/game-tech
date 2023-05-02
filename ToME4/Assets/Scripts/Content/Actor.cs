@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Actor : Engine.Actor, ICombat
+public class GameActor : Engine.Actor, ICombat
 {
 	// -- Define some basic combat stats
 	public int combat_armor = 0;
@@ -13,4 +13,6 @@ public class Actor : Engine.Actor, ICombat
 
 	// -- Default melee barehanded damage
 	public int? combat_dam = 1;
+
+	public bool isHero = false;
 }
