@@ -16,7 +16,7 @@ namespace Engine
             throw new System.NotImplementedException();
         }
 
-        public int getStr()
+        public int GetStr()
         {
             throw new System.NotImplementedException();
         }
