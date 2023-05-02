@@ -30,7 +30,7 @@ public class Hero : Actor
         throw new System.NotImplementedException();
     }
 
-    public void AttackImpl(Actor target)
+    public bool AttackImpl(Actor target)
     {
         /* The weapon used */
         Entity obj = equipped_item_by_slot_name("weapon");
@@ -48,11 +48,11 @@ public class Hero : Actor
         }
 
         /* Handle player fear (only for invisible monsters) */
-        if (player_of_has(p, OF_AFRAID)) {
-            equip_learn_flag(p, OF_AFRAID);
-            msgt(MSG_AFRAID, "You are too afraid to attack %s!", m_name);
-            return false;
-        }
+        // if (player_of_has(p, OF_AFRAID)) {
+        //     equip_learn_flag(p, OF_AFRAID);
+        //     msgt(MSG_AFRAID, "You are too afraid to attack %s!", m_name);
+        //     return false;
+        // }
 
         /* Disturb the monster */
         monster_wake(mon, false, 100);
