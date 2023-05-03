@@ -5,6 +5,12 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
+public struct monster_race
+{
+    public int ac; /* Armour Class */
+}
+
 public class Monster : Actor
 {
+    public monster_race race;
 }
