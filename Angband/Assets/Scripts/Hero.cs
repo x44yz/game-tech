@@ -7,7 +7,7 @@ public class Hero : Actor
     public RaceCfg race;
     public ClassCfg cls;
 
-    public void Attack(Actor target)
+    public void Attack(Monster mon)
     {
         /* Reward BGs with 5% of max SPs, min 1/2 point */
         // if (player_has(p, PF_COMBAT_REGEN)) {
@@ -22,7 +22,7 @@ public class Hero : Actor
         //     if (attempt_shield_bash(p, mon, &fear)) return;
         // }
 
-        AttackImpl(target);
+        AttackImpl(mon);
     }
 
     public Entity equipped_item_by_slot_name(string slot)
@@ -30,7 +30,27 @@ public class Hero : Actor
         throw new System.NotImplementedException();
     }
 
-    public bool AttackImpl(Actor target)
+    public int chance_of_melee_hit(Entity weapon)
+    {
+        int bonus = p->state.to_h + (weapon ? weapon->to_h : 0);
+        return p->state.skills[SKILL_TO_HIT_MELEE] + bonus * BTH_PLUS_ADJ;
+    }
+
+    /**
+    * Determine if a hit roll is successful against the target AC.
+    * See also: hit_chance
+    *
+    * \param to_hit To total to-hit value to use
+    * \param ac The AC to roll against
+    */
+    bool test_hit(int to_hit, int ac)
+    {
+        random_chance c;
+        hit_chance(&c, to_hit, ac);
+        return random_chance_check(c);
+    }
+
+    public bool AttackImpl(Monster mon)
     {
         /* The weapon used */
         Entity obj = equipped_item_by_slot_name("weapon");
@@ -42,10 +62,10 @@ public class Hero : Actor
         bool success = false;
 
         /* Auto-Recall and track if possible and visible */
-        if (monster_is_visible(mon)) {
-            monster_race_track(p->upkeep, mon->race);
-            health_track(p->upkeep, mon);
-        }
+        // if (monster_is_visible(mon)) {
+        //     monster_race_track(p->upkeep, mon->race);
+        //     health_track(p->upkeep, mon);
+        // }
 
         /* Handle player fear (only for invisible monsters) */
         // if (player_of_has(p, OF_AFRAID)) {
@@ -55,18 +75,20 @@ public class Hero : Actor
         // }
 
         /* Disturb the monster */
-        monster_wake(mon, false, 100);
-        mon_clear_timed(mon, MON_TMD_HOLD, MON_TMD_FLG_NOTIFY);
+        // monster_wake(mon, false, 100);
+        // mon_clear_timed(mon, MON_TMD_HOLD, MON_TMD_FLG_NOTIFY);
 
         /* See if the player hit */
-        success = test_hit(chance_of_melee_hit(p, obj, mon), mon->race->ac);
+        success = test_hit(chance_of_melee_hit(obj), mon->race->ac);
 
         /* If a miss, skip this hit */
-        if (!success) {
-            msgt(MSG_MISS, "You miss %s.", m_name);
+        if (!success) 
+        {
+            // msgt(MSG_MISS, "You miss %s.", m_name);
 
             /* Small chance of bloodlust side-effects */
-            if (p->timed[TMD_BLOODLUST] && one_in_(50)) {
+            if (p->timed[TMD_BLOODLUST] && one_in_(50)) 
+            {
                 msg("You feel strange...");
                 player_over_exert(p, PY_EXERT_SCRAMBLE, 20, 20);
             }
