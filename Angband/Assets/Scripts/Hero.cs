@@ -8,7 +8,7 @@ using UnityEngine;
 public struct equip_slot {
 	int type;
 	string name;
-    Entity obj;
+    GObject obj;
 };
 
 public struct player_body {
@@ -80,10 +80,87 @@ public class player_options {
 	int name_suffix;		/**< Numeric suffix for player name */
 };
 
+/**
+* Indexes of the player stats (hard-coded by savefiles).
+*/
+public enum STAT
+{
+    STAT_STR,
+    STAT_INT,
+    STAT_WIS,
+    STAT_DEX,
+    STAT_CON,
+    STAT_MAX
+};
+
+/**
+* Skill indexes
+*/
+public enum SKILL {
+    SKILL_DISARM_PHYS,		/* Disarming - physical */
+    SKILL_DISARM_MAGIC,		/* Disarming - magical */
+    SKILL_DEVICE,			/* Magic Devices */
+    SKILL_SAVE,				/* Saving throw */
+    SKILL_SEARCH,			/* Searching ability */
+    SKILL_STEALTH,			/* Stealth factor */
+    SKILL_TO_HIT_MELEE,		/* To hit (normal) */
+    SKILL_TO_HIT_BOW,		/* To hit (shooting) */
+    SKILL_TO_HIT_THROW,		/* To hit (throwing) */
+    SKILL_DIGGING,			/* Digging */
+
+    SKILL_MAX
+};
+
+ /**
+* All the variable state that changes when you put on/take off equipment.
+* Player flags are not currently variable, but useful here so monsters can
+* learn them.
+*/
+public class player_state {
+    public int[] stat_add = new int[(int)STAT.STAT_MAX];	/**< Equipment stat bonuses */
+    public int[] stat_ind = new int[(int)STAT.STAT_MAX];	/**< Indexes into stat tables */
+    public int[] stat_use = new int[(int)STAT.STAT_MAX];	/**< Current modified stats */
+    public int[] stat_top = new int[(int)STAT.STAT_MAX];	/**< Maximal modified stats */
+
+    public int[] skills = new int[(int)SKILL.SKILL_MAX];		/**< Skills */
+
+    public int speed;			/**< Current speed */
+
+    public int num_blows;		/**< Number of blows x100 */
+    public int num_shots;		/**< Number of shots x10 */
+    public int num_moves;		/**< Number of extra movement actions */
+
+    public int ammo_mult;		/**< Ammo multiplier */
+    public int ammo_tval;		/**< Ammo variety */
+
+    public int ac;				/**< Base ac */
+    public int dam_red;		/**< Damage reduction */
+    public int perc_dam_red;	/**< Percentage damage reduction */
+    public int to_a;			/**< Bonus to ac */
+    public int to_h;			/**< Bonus to hit */
+    public int to_d;			/**< Bonus to dam */
+
+    public int see_infra;		/**< Infravision range */
+
+    public int cur_light;		/**< Radius of light (if any) */
+
+    public bool heavy_wield;	/**< Heavy weapon */
+    public bool heavy_shoot;	/**< Heavy shooter */
+    public bool bless_wield;	/**< Blessed (or blunt) weapon */
+
+    public bool cumber_armor;	/**< Mana draining armor */
+
+    // public bitflag[] flags = new bitflag[OF_SIZE];					/**< Status flags from race and items */
+    // public bitflag[] pflags = new bitflag[PF_SIZE];				/**< Player intrinsic flags */
+    // public element_info[] el_info = new element_info[(int)ELEM.ELEM_MAX];	/**< Resists from race and items */
+};
+
 public class Hero : Actor
 {
     public RaceCfg race;
     public ClassCfg cls;
+
+    public player_state state;			/* Calculatable state */
 
     public void Attack(Monster mon)
     {
@@ -103,12 +180,12 @@ public class Hero : Actor
         AttackImpl(mon);
     }
 
-    public Entity equipped_item_by_slot_name(string slot)
+    public GObject equipped_item_by_slot_name(string slot)
     {
         throw new System.NotImplementedException();
     }
 
-    public int chance_of_melee_hit(Entity weapon)
+    public int chance_of_melee_hit(GObject weapon)
     {
         // int bonus = p->state.to_h + (weapon ? weapon->to_h : 0);
         // return p->state.skills[SKILL_TO_HIT_MELEE] + bonus * BTH_PLUS_ADJ;
@@ -133,7 +210,7 @@ public class Hero : Actor
     /**
     * Get the object in a specific slot (if any).  Quit if slot index is invalid.
     */
-    Entity slot_object(int slot)
+    GObject slot_object(int slot)
     {
         /* Check bounds */
         // assert(slot >= 0 && slot < p->body.count);
@@ -158,7 +235,7 @@ public class Hero : Actor
     * \param verb is the verb used in the attack ("smite", etc)
     * \param range is whether or not this is a ranged attack
     */
-    void improve_attack_modifier(Hero p, Entity obj,
+    void improve_attack_modifier(Hero p, GObject obj,
         Monster mon, ref int brand_used, ref int slay_used, bool range)
     {
         throw new System.NotImplementedException();
@@ -245,7 +322,7 @@ public class Hero : Actor
     *
     * Factor in damage dice, to-dam and any brand or slay.
     */
-    int melee_damage(Monster mon, Entity obj, int b, int s)
+    int melee_damage(Monster mon, GObject obj, int b, int s)
     {
         throw new System.NotImplementedException();
         // int dmg = (obj != null) ? damroll(obj.dd, obj.ds) : 1;
@@ -297,9 +374,112 @@ public class Hero : Actor
         // return new_dam;
     }
 
+    /**
+    * Determine O-combat melee damage.
+    *
+    * Deadliness and any brand or slay add extra sides to the damage dice,
+    * criticals add extra dice.
+    */
+    static int o_melee_damage(Hero p, Monster mon,
+            GObject obj, int b, int s, ref int msg_type)
+    {
+        throw new System.NotImplementedException();
+        // int dice = (obj) ? obj->dd : 1;
+        // int sides, dmg, add = 0;
+        // bool extra;
+
+        // /* Get the average value of a single damage die. (x10) */
+        // int die_average = (10 * (((obj) ? obj->ds : 1) + 1)) / 2;
+
+        // /* Adjust the average for slays and brands. (10x inflation) */
+        // if (s) {
+        //     die_average *= slays[s].o_multiplier;
+        //     add = slays[s].o_multiplier - 10;
+        // } else if (b) {
+        //     int bmult = get_monster_brand_multiplier(mon, &brands[b], true);
+
+        //     die_average *= bmult;
+        //     add = bmult - 10;
+        // } else {
+        //     die_average *= 10;
+        // }
+
+        // /* Apply deadliness to average. (100x inflation) */
+        // apply_deadliness(&die_average,
+        //     MIN(((obj) ? obj->to_d : 0) + p->state.to_d, 150));
+
+        // /* Calculate the actual number of sides to each die. */
+        // sides = (2 * die_average) - 10000;
+        // extra = randint0(10000) < (sides % 10000);
+        // sides /= 10000;
+        // sides += (extra ? 1 : 0);
+
+        // /*
+        // * Get number of critical dice; for now, excluding criticals for
+        // * unarmed combat
+        // */
+        // if (obj) dice += o_critical_melee(p, mon, obj, msg_type);
+
+        // /* Roll out the damage. */
+        // dmg = damroll(dice, sides);
+
+        // /* Apply any special additions to damage. */
+        // dmg += add;
+
+        // return dmg;
+    }
+
+    /**
+    * Check if the player state has the given OF_ flag.
+    */
+    bool player_of_has(Hero p, int flag)
+    {
+        throw new System.NotImplementedException();
+        // Debug.Assert(p);
+        // return of_has(p.state.flags, flag);
+    }
+
+    void equip_learn_flag(Hero p, int flag)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void equip_learn_on_melee_attack(Hero p)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    void learn_brand_slay_from_melee(Hero p, GObject weapon,
+		Monster mon)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    bool player_is_shapechanged(Hero p)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    /**
+    * Apply the player damage bonuses
+    */
+    static int player_damage_bonus(player_state state)
+    {
+        return state.to_d;
+    }
+
+    bool mon_take_hit(Monster mon, Hero p, int dam, ref bool fear)
+    {
+        throw new System.NotImplementedException();
+        // char k = char.MinValue;
+        // string k = "";
+        // return mon_take_hit(mon, p, dam, ref fear, ref k);
+    }
 
     public bool AttackImpl(Monster mon)
     {
+        var p = this;
+
         /* The weapon used */
         var obj = equipped_item_by_slot_name("weapon");
 
@@ -310,6 +490,8 @@ public class Hero : Actor
         bool success = false;
         int dmg = 0;
         int weight = 0;
+
+        int msg_type = 0;
 
         /* Auto-Recall and track if possible and visible */
         // if (monster_is_visible(mon)) {
@@ -375,16 +557,16 @@ public class Hero : Actor
             dmg = melee_damage(mon, obj, b, s);
             /* For now, exclude criticals on unarmed combat */
             if (obj != null) dmg = critical_melee(this, mon, weight, obj.to_h,
-                dmg, &msg_type);
+                dmg, ref msg_type);
         } else {
-            dmg = o_melee_damage(p, mon, obj, b, s, &msg_type);
+            dmg = o_melee_damage(this, mon, obj, b, s, ref msg_type);
         }
 
         /* Splash damage and earthquakes */
         splash = (weight * dmg) / 100;
-        if (player_of_has(p, OF_IMPACT) && dmg > 50) {
+        if (player_of_has(this, (int)OF.OF_IMPACT) && dmg > 50) {
             do_quake = true;
-            equip_learn_flag(p, OF_IMPACT);
+            equip_learn_flag(p, (int)OF.OF_IMPACT);
         }
 
         /* Learn by use */
@@ -392,19 +574,19 @@ public class Hero : Actor
         learn_brand_slay_from_melee(p, obj, mon);
 
         /* Apply the player damage bonuses */
-        if (!OPT(p, birth_percent_damage)) {
-            dmg += player_damage_bonus(&p->state);
+        if (!_OPT(p, (int)OPT.OPT_birth_percent_damage)) {
+            dmg += player_damage_bonus(p.state);
         }
 
         /* Substitute shape-specific blows for shapechanged players */
-        if (player_is_shapechanged(p)) {
-            int choice = randint0(p->shape->num_blows);
-            struct player_blow *blow = p->shape->blows;
-            while (choice--) {
-                blow = blow->next;
-            }
-            my_strcpy(verb, blow->name, sizeof(verb));
-        }
+        // if (player_is_shapechanged(p)) {
+        //     int choice = randint0(p->shape->num_blows);
+        //     player_blow blow = p->shape->blows;
+        //     while (choice--) {
+        //         blow = blow->next;
+        //     }
+        //     // my_strcpy(verb, blow->name, sizeof(verb));
+        // }
 
         /* No negative damage; change verb if no damage done */
         if (dmg <= 0) {
@@ -414,48 +596,51 @@ public class Hero : Actor
             Debug.Log("xx-- fail to harm");
         }
 
-        for (i = 0; i < N_ELEMENTS(melee_hit_types); i++) {
-            const char *dmg_text = "";
+        // for (i = 0; i < N_ELEMENTS(melee_hit_types); i++) {
+        //     const char *dmg_text = "";
 
-            if (msg_type != melee_hit_types[i].msg_type)
-                continue;
+        //     if (msg_type != melee_hit_types[i].msg_type)
+        //         continue;
 
-            if (OPT(p, show_damage))
-                dmg_text = format(" (%d)", dmg);
+        //     if (OPT(p, show_damage))
+        //         dmg_text = format(" (%d)", dmg);
 
-            if (melee_hit_types[i].text)
-                msgt(msg_type, "You %s %s%s. %s", verb, m_name, dmg_text,
-                        melee_hit_types[i].text);
-            else
-                msgt(msg_type, "You %s %s%s.", verb, m_name, dmg_text);
-        }
+        //     if (melee_hit_types[i].text)
+        //         msgt(msg_type, "You %s %s%s. %s", verb, m_name, dmg_text,
+        //                 melee_hit_types[i].text);
+        //     else
+        //         msgt(msg_type, "You %s %s%s.", verb, m_name, dmg_text);
+        // }
 
         /* Pre-damage side effects */
-        blow_side_effects(p, mon);
+        // 攻击副作用
+        // blow_side_effects(p, mon);
 
         /* Damage, check for hp drain, fear and death */
-        drain = MIN(mon->hp, dmg);
-        stop = mon_take_hit(mon, p, dmg, fear, NULL);
+        drain = Mathf.Min(mon.hp, dmg);
+        bool fear = false;
+        bool stop = mon_take_hit(mon, p, dmg, ref fear);
 
         /* Small chance of bloodlust side-effects */
-        if (p->timed[TMD_BLOODLUST] && one_in_(50)) {
-            msg("You feel something give way!");
-            player_over_exert(p, PY_EXERT_CON, 20, 0);
-        }
+        // 副作用 - 嗜血
+        // if (p->timed[TMD_BLOODLUST] && one_in_(50)) {
+        //     msg("You feel something give way!");
+        //     player_over_exert(p, PY_EXERT_CON, 20, 0);
+        // }
 
         if (!stop) {
-            if (p->timed[TMD_ATT_VAMP] && monster_is_living(mon)) {
-                effect_simple(EF_HEAL_HP, source_player(), format("%d", drain),
-                            0, 0, 0, 0, 0, NULL);
-            }
+            // if (p->timed[TMD_ATT_VAMP] && monster_is_living(mon)) {
+            //     effect_simple(EF_HEAL_HP, source_player(), format("%d", drain),
+            //                 0, 0, 0, 0, 0, NULL);
+            // }
         }
 
-        if (stop)
-            (*fear) = false;
+        // if (stop)
+        //     (*fear) = false;
 
         /* Post-damage effects */
-        if (blow_after_effects(grid, dmg, splash, fear, do_quake))
-            stop = true;
+        // if (blow_after_effects(grid, dmg, splash, fear, do_quake))
+        //     stop = true;
 
         return stop;
     }

@@ -13,4 +13,5 @@ public struct monster_race
 public class Monster : Actor
 {
     public monster_race race;
+    public int hp;
 }
