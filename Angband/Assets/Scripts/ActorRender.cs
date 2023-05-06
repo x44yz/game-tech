@@ -8,6 +8,7 @@ public class ActorRender : MonoBehaviour
     public static readonly int HASH_WALK = Animator.StringToHash("Walk");
     public static readonly int HASH_DEATH = Animator.StringToHash("DEATH");
 
+    public Actor actor;
     public Animator animator;
 
     void Start()

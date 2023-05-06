@@ -1148,9 +1148,64 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroRace: Human
-  heroClass: 
+  heroClass: Ogre
   heroRender: {fileID: 9216953825303321130}
   monsterRender: {fileID: 2720502547808023524}
+  hero:
+    race:
+      name: 
+      str: 0
+      inte: 0
+      wis: 0
+      dex: 0
+      con: 0
+      skillDisarmPhys: 0
+      skillDisarmMagic: 0
+      skillDevice: 0
+      skillSave: 0
+      skillStealth: 0
+      skillSearch: 0
+      skillMelee: 0
+      skillShoot: 0
+      skillThrow: 0
+      skillDig: 0
+      hitdie: 0
+      exp: 0
+      infravision: 0
+      history: 0
+      age: 0
+      base_hgt: 0
+      mod_hgt: 0
+      base_wgt: 0
+      mod_wgt: 0
+    cls:
+      name: 
+      str: 0
+      inte: 0
+      wis: 0
+      dex: 0
+      con: 0
+      skillDisarmPhys: 0
+      skillDisarmMagic: 0
+      skillDevice: 0
+      skillSave: 0
+      skillStealth: 0
+      skillSearch: 0
+      skillMelee: 0
+      skillShoot: 0
+      skillThrow: 0
+      skillDig: 0
+      hitdie: 0
+      exp: 0
+      infravision: 0
+      history: 0
+      age: 0
+      base_hgt: 0
+      mod_hgt: 0
+      base_wgt: 0
+      mod_wgt: 0
+  monster:
+    hp: 0
 --- !u!1 &2113002796
 GameObject:
   m_ObjectHideFlags: 0

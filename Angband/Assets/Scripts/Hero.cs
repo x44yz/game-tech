@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -155,12 +156,19 @@ public class player_state {
     // public element_info[] el_info = new element_info[(int)ELEM.ELEM_MAX];	/**< Resists from race and items */
 };
 
+[Serializable]
 public class Hero : Actor
 {
     public RaceCfg race;
     public ClassCfg cls;
 
     public player_state state;			/* Calculatable state */
+
+    public void Init(string heroRace, string heroClass)
+    {
+        race = Races.raceCfgs.Find(x => x.name == heroRace);
+        cls = Classes.classCfgs.Find(x => x.name == heroClass);
+    }
 
     public void Attack(Monster mon)
     {
