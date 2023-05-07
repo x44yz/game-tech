@@ -9,6 +9,7 @@ public class Main : MonoBehaviour
 
     public string heroRace;
     public string heroClass;
+    public string heroWeapon;
 
     public ActorRender heroRender;
     public ActorRender monsterRender;
