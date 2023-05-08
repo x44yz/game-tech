@@ -694,6 +694,77 @@ public class Hero : Actor
     }
 
     /**
+    * Handle "player->upkeep->update"
+    */
+    void update_stuff(Hero p)
+    {
+        /* Update stuff */
+        if (!p->upkeep->update) return;
+
+
+        if (p->upkeep->update & (PU_INVEN)) {
+            p->upkeep->update &= ~(PU_INVEN);
+            calc_inventory(p);
+        }
+
+        if (p->upkeep->update & (PU_BONUS)) {
+            p->upkeep->update &= ~(PU_BONUS);
+            update_bonuses(p);
+        }
+
+        if (p->upkeep->update & (PU_TORCH)) {
+            p->upkeep->update &= ~(PU_TORCH);
+            calc_light(p, &p->state, true);
+        }
+
+        if (p->upkeep->update & (PU_HP)) {
+            p->upkeep->update &= ~(PU_HP);
+            calc_hitpoints(p);
+        }
+
+        if (p->upkeep->update & (PU_MANA)) {
+            p->upkeep->update &= ~(PU_MANA);
+            calc_mana(p, &p->state, true);
+        }
+
+        if (p->upkeep->update & (PU_SPELLS)) {
+            p->upkeep->update &= ~(PU_SPELLS);
+            if (p->class->magic.total_spells > 0) {
+                calc_spells(p);
+            }
+        }
+
+        /* Character is not ready yet, no map updates */
+        if (!character_generated) return;
+
+        /* Map is not shown, no map updates */
+        if (!map_is_visible()) return;
+
+        if (p->upkeep->update & (PU_UPDATE_VIEW)) {
+            p->upkeep->update &= ~(PU_UPDATE_VIEW);
+            update_view(cave, p);
+        }
+
+        if (p->upkeep->update & (PU_DISTANCE)) {
+            p->upkeep->update &= ~(PU_DISTANCE);
+            p->upkeep->update &= ~(PU_MONSTERS);
+            update_monsters(true);
+        }
+
+        if (p->upkeep->update & (PU_MONSTERS)) {
+            p->upkeep->update &= ~(PU_MONSTERS);
+            update_monsters(false);
+        }
+
+
+        if (p->upkeep->update & (PU_PANEL)) {
+            p->upkeep->update &= ~(PU_PANEL);
+            event_signal(EVENT_PLAYERMOVED);
+        }
+    }
+
+
+    /**
     * Calculate the effect of a shapechange on player state
     */
     static void calc_shapechange(struct player_state *state,
