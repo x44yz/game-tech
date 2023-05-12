@@ -189,6 +189,12 @@ public class Actor : MonoBehaviour
         get { return entityType; }
     }
 
+    int careerIndex = -1;
+    public int CareerIndex
+    {
+        get { return careerIndex; }
+    }
+
     public int DecreaseHealth(int amount)
     {
         throw new System.NotImplementedException();

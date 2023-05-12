@@ -30,7 +30,7 @@ public static class FormulaUtils
         int damage = 0;
         int chanceToHitMod = 0;
         int backstabChance = 0;
-        PlayerEntity player = GameManager.Instance.PlayerEntity;
+        var player = Main.Inst.hero;
         short skillID = 0;
 
         // Choose whether weapon-wielding enemies use their weapons or weaponless attacks.
@@ -187,23 +187,148 @@ public static class FormulaUtils
         DamageEquipment(attacker, target, damage, weapon, struckBodyPart);
 
         // Apply Ring of Namira effect
-        if (target == player)
+        // if (target == player)
+        // {
+        //     DaggerfallUnityItem[] equippedItems = target.ItemEquipTable.EquipTable;
+        //     DaggerfallUnityItem item = null;
+        //     if (equippedItems.Length != 0)
+        //     {
+        //         if (IsRingOfNamira(equippedItems[(int)EquipSlots.Ring0]) || IsRingOfNamira(equippedItems[(int)EquipSlots.Ring1]))
+        //         {
+        //             IEntityEffect effectTemplate = GameManager.Instance.EntityEffectBroker.GetEffectTemplate(RingOfNamiraEffect.EffectKey);
+        //             effectTemplate.EnchantmentPayloadCallback(EnchantmentPayloadFlags.None,
+        //                 targetEntity: AIAttacker.EntityBehaviour,
+        //                 sourceItem: item,
+        //                 sourceDamage: damage);
+        //         }
+        //     }
+        // }
+        //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
+
+        return damage;
+    }
+
+    /// <summary>
+    /// Allocate any equipment damage from a strike, and reduce item condition.
+    /// </summary>
+    public static void DamageEquipment(Actor attacker, Actor target, int damage, Item weapon, int struckBodyPart)
+    {
+        // If damage was done by a weapon, damage the weapon and armor of the hit body part.
+        // In classic, shields are never damaged, only armor specific to the hitbody part is.
+        // Here, if an equipped shield covers the hit body part, it takes damage instead.
+        if (weapon != null && damage > 0)
         {
-            DaggerfallUnityItem[] equippedItems = target.ItemEquipTable.EquipTable;
-            DaggerfallUnityItem item = null;
-            if (equippedItems.Length != 0)
+            // TODO: If attacker is AI, apply Ring of Namira effect
+            ApplyConditionDamageThroughPhysicalHit(weapon, attacker, damage);
+
+            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+            bool shieldTakesDamage = false;
+            if (shield != null)
             {
-                if (IsRingOfNamira(equippedItems[(int)EquipSlots.Ring0]) || IsRingOfNamira(equippedItems[(int)EquipSlots.Ring1]))
+                BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+
+                for (int i = 0; (i < protectedBodyParts.Length) && !shieldTakesDamage; i++)
                 {
-                    IEntityEffect effectTemplate = GameManager.Instance.EntityEffectBroker.GetEffectTemplate(RingOfNamiraEffect.EffectKey);
-                    effectTemplate.EnchantmentPayloadCallback(EnchantmentPayloadFlags.None,
-                        targetEntity: AIAttacker.EntityBehaviour,
-                        sourceItem: item,
-                        sourceDamage: damage);
+                    if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
+                        shieldTakesDamage = true;
                 }
             }
+
+            if (shieldTakesDamage)
+                ApplyConditionDamageThroughPhysicalHit(shield, target, damage);
+            else
+            {
+                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+                if (armor != null)
+                    ApplyConditionDamageThroughPhysicalHit(armor, target, damage);
+            }
         }
-        //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
+    }
+
+    /// <summary>
+    /// Inflict a classic poison onto entity.
+    /// </summary>
+    /// <param name="attacker">Source entity. Can be the same as target</param>
+    /// <param name="target">Target entity</param>
+    /// <param name="poisonType">Classic poison type</param>
+    /// <param name="bypassResistance">Whether it should bypass resistances</param>
+    public static void InflictPoison(Actor attacker, Actor target, Poisons poisonType, bool bypassResistance)
+    {
+        // Target must have an entity behaviour and effect manager
+        EntityEffectManager effectManager = null;
+        if (target.EntityBehaviour != null)
+        {
+            effectManager = target.EntityBehaviour.GetComponent<EntityEffectManager>();
+            if (effectManager == null)
+                return;
+        }
+        else
+        {
+            return;
+        }
+
+        // Note: In classic, AI characters' immunity to poison is ignored, although the level 1 check below still gives rats immunity
+        DFCareer.Tolerance toleranceFlags = target.Career.Poison;
+        if (toleranceFlags == DFCareer.Tolerance.Immune)
+            return;
+
+        // Handle player with racial resistance to poison
+        if (target is Hero)
+        {
+            RaceTemplate raceTemplate = (target as PlayerEntity).GetLiveRaceTemplate();
+            if ((raceTemplate.ImmunityFlags & DFCareer.EffectFlags.Poison) == DFCareer.EffectFlags.Poison)
+                return;
+        }
+
+        if (bypassResistance || SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Poison, target, 0) != 0)
+        {
+            if (target.Level != 1)
+            {
+                // Infect target
+                EntityEffectBundle bundle = effectManager.CreatePoison(poisonType);
+                effectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+            }
+        }
+        else
+        {
+            Debug.LogFormat("Poison resisted by {0}.", target.EntityBehaviour.name);
+        }
+    }
+
+    public static int CalculateWeaponAttackDamage(Actor attacker, Actor target, int damageModifier, int weaponAnimTime, Item weapon)
+    {
+        int damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
+
+        if (target != GameManager.Instance.PlayerEntity)
+        {
+            if ((target as EnemyEntity).CareerIndex == (int)MonsterCareers.SkeletalWarrior)
+            {
+                // Apply edged-weapon damage modifier for Skeletal Warrior
+                if ((weapon.flags & 0x10) == 0)
+                    damage /= 2;
+
+                // Apply silver weapon damage modifier for Skeletal Warrior
+                // Arena applies a silver weapon damage bonus for undead enemies, which is probably where this comes from.
+                if (weapon.NativeMaterialValue == (int)WeaponMaterialTypes.Silver)
+                    damage *= 2;
+            }
+        }
+        // TODO: Apply strength bonus from Mace of Molag Bal
+
+        // Apply strength modifier
+        damage += DamageModifier(attacker.Stats.LiveStrength);
+
+        // Apply material modifier.
+        // The in-game display in Daggerfall of weapon damages with material modifiers is incorrect. The material modifier is half of what the display suggests.
+        damage += weapon.GetWeaponMaterialModifier();
+        if (damage < 1)
+            damage = 0;
+
+        damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+
+        // Mod hook for adjusting final weapon damage. (no-op in DFU)
+        damage = AdjustWeaponAttackDamage(attacker, target, damage, weaponAnimTime, weapon);
 
         return damage;
     }
@@ -237,7 +362,7 @@ public static class FormulaUtils
         if (target is Monster)
         {
             var enemyTarget = target as Monster;
-            if (enemyTarget.MobileEnemy.Affinity == MobileAffinity.Human)
+            if (enemyTarget.Affinity == MobileAffinity.Human)
             {
                 if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
                     damage += attacker.Level;
@@ -605,6 +730,64 @@ public static class FormulaUtils
                 return 21;
             default:
                 return 0;
+        }
+    }
+
+    public static DFCareer.EnemyGroups GetEnemyEntityEnemyGroup(Monster e)
+    {
+        switch (e.CareerIndex)
+        {
+            case (int)MonsterCareers.Rat:
+            case (int)MonsterCareers.GiantBat:
+            case (int)MonsterCareers.GrizzlyBear:
+            case (int)MonsterCareers.SabertoothTiger:
+            case (int)MonsterCareers.Spider:
+            case (int)MonsterCareers.Slaughterfish:
+            case (int)MonsterCareers.GiantScorpion:
+            case (int)MonsterCareers.Dragonling:
+            case (int)MonsterCareers.Horse_Invalid:             // (grouped as undead in classic)
+            case (int)MonsterCareers.Dragonling_Alternate:      // (grouped as undead in classic)
+                return DFCareer.EnemyGroups.Animals;
+            case (int)MonsterCareers.Imp:
+            case (int)MonsterCareers.Spriggan:
+            case (int)MonsterCareers.Orc:
+            case (int)MonsterCareers.Centaur:
+            case (int)MonsterCareers.Werewolf:
+            case (int)MonsterCareers.Nymph:
+            case (int)MonsterCareers.OrcSergeant:
+            case (int)MonsterCareers.Harpy:
+            case (int)MonsterCareers.Wereboar:
+            case (int)MonsterCareers.Giant:
+            case (int)MonsterCareers.OrcShaman:
+            case (int)MonsterCareers.Gargoyle:
+            case (int)MonsterCareers.OrcWarlord:
+            case (int)MonsterCareers.Dreugh:                    // (grouped as undead in classic)
+            case (int)MonsterCareers.Lamia:                     // (grouped as undead in classic)
+                return DFCareer.EnemyGroups.Humanoid;
+            case (int)MonsterCareers.SkeletalWarrior:
+            case (int)MonsterCareers.Zombie:                    // (grouped as animal in classic)
+            case (int)MonsterCareers.Ghost:
+            case (int)MonsterCareers.Mummy:
+            case (int)MonsterCareers.Wraith:
+            case (int)MonsterCareers.Vampire:
+            case (int)MonsterCareers.VampireAncient:
+            case (int)MonsterCareers.Lich:
+            case (int)MonsterCareers.AncientLich:
+                return DFCareer.EnemyGroups.Undead;
+            case (int)MonsterCareers.FrostDaedra:
+            case (int)MonsterCareers.FireDaedra:
+            case (int)MonsterCareers.Daedroth:
+            case (int)MonsterCareers.DaedraSeducer:
+            case (int)MonsterCareers.DaedraLord:
+                return DFCareer.EnemyGroups.Daedra;
+            case (int)MonsterCareers.FireAtronach:
+            case (int)MonsterCareers.IronAtronach:
+            case (int)MonsterCareers.FleshAtronach:
+            case (int)MonsterCareers.IceAtronach:
+                return DFCareer.EnemyGroups.None;
+
+            default:
+                return DFCareer.EnemyGroups.None;
         }
     }
 }

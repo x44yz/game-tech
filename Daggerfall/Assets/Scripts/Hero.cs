@@ -3,9 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Player reflex settings for enemy speed.
+/// </summary>
+public enum PlayerReflexes
+{
+    VeryHigh = 0,
+    High = 1,
+    Average = 2,
+    Low = 3,
+    VeryLow = 4,
+}
+
 public class Hero : Actor
 {
     public RaceTemplate RaceTemplate { get { return GetLiveRaceTemplate(); } }
+
+    protected PlayerReflexes reflexes;
+    public PlayerReflexes Reflexes { get { return reflexes; } set { reflexes = value; } }
 
     protected int biographyAvoidHitMod = 0;
     public int BiographyAvoidHitMod { get { return biographyAvoidHitMod; } set { biographyAvoidHitMod = value; } }

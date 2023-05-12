@@ -46,11 +46,11 @@ public class RaceTemplate
         clone.PaperDollBodyFemaleClothed = PaperDollBodyFemaleClothed;
         clone.PaperDollHeadsMale = PaperDollHeadsMale;
         clone.PaperDollHeadsFemale = PaperDollHeadsFemale;
-        clone.ResistanceFlags = ResistanceFlags;
-        clone.ImmunityFlags = ImmunityFlags;
-        clone.LowToleranceFlags = LowToleranceFlags;
-        clone.CriticalWeaknessFlags = CriticalWeaknessFlags;
-        clone.SpecialAbilities = SpecialAbilities;
+        // clone.ResistanceFlags = ResistanceFlags;
+        // clone.ImmunityFlags = ImmunityFlags;
+        // clone.LowToleranceFlags = LowToleranceFlags;
+        // clone.CriticalWeaknessFlags = CriticalWeaknessFlags;
+        // clone.SpecialAbilities = SpecialAbilities;
 
         return clone;
     }
