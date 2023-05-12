@@ -186,7 +186,7 @@ public class Actor : MonoBehaviour
 
     protected WeaponMaterialTypes minMetalToHit;
     public WeaponMaterialTypes MinMetalToHit { get { return minMetalToHit; } set { minMetalToHit = value; } }
-    protected DSkills skills = new DSkills();
+    protected DSkills skills;
     public DSkills Skills { get { return skills; } set { skills.Copy(value); } }
     public int Level;
 
@@ -271,4 +271,9 @@ public class Actor : MonoBehaviour
     }
 
     // public EffectManager effectManager => GetComponent<EffectManager>();
+
+    void Awake()
+    {
+        skills = new DSkills();
+    }
 }

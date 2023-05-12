@@ -85,6 +85,8 @@ public class Item : MonoBehaviour
     public bool IsEnchanted;
     public Poisons poisonType = Poisons.None;
 
+    public ushort flags;
+
     public virtual int GetBaseDamageMin()
     {
         return FormulaUtils.CalculateWeaponMinDamage((Weapons)TemplateIndex);

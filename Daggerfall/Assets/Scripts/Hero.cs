@@ -25,6 +25,17 @@ public class Hero : Actor
     protected int biographyAvoidHitMod = 0;
     public int BiographyAvoidHitMod { get { return biographyAvoidHitMod; } set { biographyAvoidHitMod = value; } }
 
+    protected RaceTemplate raceTemplate;
+    public RaceTemplate GetLiveRaceTemplate()
+    {
+        // Look for racial override effect
+        // RacialOverrideEffect racialOverrideEffect = GameManager.Instance.PlayerEffectManager.GetRacialOverrideEffect();
+        // if (racialOverrideEffect != null)
+        //     return racialOverrideEffect.CustomRace;
+        // else
+        return raceTemplate;
+    }
+
     public bool WeaponDamage(Item strikingWeapon, bool arrowHit, bool arrowSummoned, Actor target, Vector3 impactPosition, Vector3 direction)
     {
         // Calculate damage

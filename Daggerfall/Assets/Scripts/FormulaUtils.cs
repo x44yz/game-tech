@@ -372,37 +372,38 @@ public static class FormulaUtils
     /// </summary>
     public static void DamageEquipment(Actor attacker, Actor target, int damage, Item weapon, int struckBodyPart)
     {
-        // If damage was done by a weapon, damage the weapon and armor of the hit body part.
-        // In classic, shields are never damaged, only armor specific to the hitbody part is.
-        // Here, if an equipped shield covers the hit body part, it takes damage instead.
-        if (weapon != null && damage > 0)
-        {
-            // TODO: If attacker is AI, apply Ring of Namira effect
-            ApplyConditionDamageThroughPhysicalHit(weapon, attacker, damage);
+        throw new System.NotImplementedException();
+        // // If damage was done by a weapon, damage the weapon and armor of the hit body part.
+        // // In classic, shields are never damaged, only armor specific to the hitbody part is.
+        // // Here, if an equipped shield covers the hit body part, it takes damage instead.
+        // if (weapon != null && damage > 0)
+        // {
+        //     // TODO: If attacker is AI, apply Ring of Namira effect
+        //     ApplyConditionDamageThroughPhysicalHit(weapon, attacker, damage);
 
-            Item shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
-            bool shieldTakesDamage = false;
-            if (shield != null)
-            {
-                BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
+        //     Item shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+        //     bool shieldTakesDamage = false;
+        //     if (shield != null)
+        //     {
+        //         BodyParts[] protectedBodyParts = shield.GetShieldProtectedBodyParts();
 
-                for (int i = 0; (i < protectedBodyParts.Length) && !shieldTakesDamage; i++)
-                {
-                    if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
-                        shieldTakesDamage = true;
-                }
-            }
+        //         for (int i = 0; (i < protectedBodyParts.Length) && !shieldTakesDamage; i++)
+        //         {
+        //             if (protectedBodyParts[i] == (BodyParts)struckBodyPart)
+        //                 shieldTakesDamage = true;
+        //         }
+        //     }
 
-            if (shieldTakesDamage)
-                ApplyConditionDamageThroughPhysicalHit(shield, target, damage);
-            else
-            {
-                EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
-                DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
-                if (armor != null)
-                    ApplyConditionDamageThroughPhysicalHit(armor, target, damage);
-            }
-        }
+        //     if (shieldTakesDamage)
+        //         ApplyConditionDamageThroughPhysicalHit(shield, target, damage);
+        //     else
+        //     {
+        //         EquipSlots hitSlot = DaggerfallUnityItem.GetEquipSlotForBodyPart((BodyParts)struckBodyPart);
+        //         DaggerfallUnityItem armor = target.ItemEquipTable.GetItem(hitSlot);
+        //         if (armor != null)
+        //             ApplyConditionDamageThroughPhysicalHit(armor, target, damage);
+        //     }
+        // }
     }
 
     /// <summary>
@@ -488,15 +489,15 @@ public static class FormulaUtils
         damage += GetBonusOrPenaltyByEnemyType(attacker, target);
 
         // Mod hook for adjusting final weapon damage. (no-op in DFU)
-        damage = AdjustWeaponAttackDamage(attacker, target, damage, weaponAnimTime, weapon);
+        // damage = AdjustWeaponAttackDamage(attacker, target, damage, weaponAnimTime, weapon);
 
         return damage;
     }
 
     public static int CalculateHandToHandAttackDamage(Actor attacker, Actor target, int damageModifier, bool player)
     {
-        int minBaseDamage = CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
-        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
+        int minBaseDamage = CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(Skills.HandToHand));
+        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(Skills.HandToHand));
         int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
 
         // Apply damage modifiers.
