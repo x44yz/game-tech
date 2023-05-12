@@ -7,6 +7,9 @@ public class Hero : Actor
 {
     public RaceTemplate RaceTemplate { get { return GetLiveRaceTemplate(); } }
 
+    protected int biographyAvoidHitMod = 0;
+    public int BiographyAvoidHitMod { get { return biographyAvoidHitMod; } set { biographyAvoidHitMod = value; } }
+
     public bool WeaponDamage(Item strikingWeapon, bool arrowHit, bool arrowSummoned, Actor target, Vector3 impactPosition, Vector3 direction)
     {
         // Calculate damage

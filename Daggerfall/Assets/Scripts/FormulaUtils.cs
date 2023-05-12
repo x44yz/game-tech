@@ -100,6 +100,7 @@ public static class FormulaUtils
         int struckBodyPart = CalculateStruckBodyPart();
 
         // Get damage for weaponless attacks
+        // 空手攻击  
         if (skillID == (short)Skills.HandToHand)
         {
             // 如果是玩家或种族敌人
@@ -122,18 +123,18 @@ public static class FormulaUtils
                 {
                     if (attackNumber == 0)
                     {
-                        minBaseDamage = AIAttacker.MobileEnemy.MinDamage;
-                        maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage;
+                        minBaseDamage = AIAttacker.MinDamage;
+                        maxBaseDamage = AIAttacker.MaxDamage;
                     }
                     else if (attackNumber == 1)
                     {
-                        minBaseDamage = AIAttacker.MobileEnemy.MinDamage2;
-                        maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage2;
+                        minBaseDamage = AIAttacker.MinDamage2;
+                        maxBaseDamage = AIAttacker.MaxDamage2;
                     }
                     else if (attackNumber == 2)
                     {
-                        minBaseDamage = AIAttacker.MobileEnemy.MinDamage3;
-                        maxBaseDamage = AIAttacker.MobileEnemy.MaxDamage3;
+                        minBaseDamage = AIAttacker.MinDamage3;
+                        maxBaseDamage = AIAttacker.MaxDamage3;
                     }
 
                     int reflexesChance = 50 - (10 * ((int)player.Reflexes - 2));
@@ -164,7 +165,7 @@ public static class FormulaUtils
             chanceToHitMod += CalculateWeaponToHit(weapon);
 
             // Mod hook for adjusting final hit chance mod and adding new elements to calculation. (no-op in DFU)
-            chanceToHitMod = AdjustWeaponHitChanceMod(attacker, target, chanceToHitMod, weaponAnimTime, weapon);
+            // chanceToHitMod = AdjustWeaponHitChanceMod(attacker, target, chanceToHitMod, weaponAnimTime, weapon);
 
             if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
             {
@@ -205,6 +206,234 @@ public static class FormulaUtils
         //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
 
         return damage;
+    }
+
+    public static int CalculateHandToHandAttackDamage(Actor attacker, Actor target, int damageModifier, bool player)
+    {
+        int minBaseDamage = CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
+        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(DFCareer.Skills.HandToHand));
+        int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
+
+        // Apply damage modifiers.
+        damage += damageModifier;
+
+        // Apply strength modifier for players. It is not applied in classic despite what the in-game description for the Strength attribute says.
+        if (player)
+            damage += DamageModifier(attacker.Stats.LiveStrength);
+
+        damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+
+        return damage;
+    }
+
+    public static int GetBonusOrPenaltyByEnemyType(Actor attacker, Actor target)
+    {
+        if (attacker == null || target == null)
+            return 0;
+
+        int damage = 0;
+        // Apply bonus or penalty by opponent type.
+        // In classic this is broken and only works if the attack is done with a weapon that has the maximum number of enchantments.
+        if (target is Monster)
+        {
+            var enemyTarget = target as Monster;
+            if (enemyTarget.MobileEnemy.Affinity == MobileAffinity.Human)
+            {
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+            else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Undead)
+            {
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+            else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Daedra)
+            {
+                if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.DaedraAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+            else if (enemyTarget.GetEnemyGroup() == DFCareer.EnemyGroups.Animals)
+            {
+                if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.AnimalsAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+        }
+        else if (target is Hero)
+        {
+            if (GameManager.Instance.PlayerEffectManager.HasVampirism()) // Vampires are undead, therefore use undead modifier
+            {
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+            else
+            {
+                // Player is assumed humanoid
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+        }
+
+        return damage;
+    }
+
+    public static int DamageModifier(int strength)
+    {
+        return (int)Mathf.Floor((float)(strength - 50) / 5f);
+    }
+
+    public static int CalculateHandToHandMinDamage(int handToHandSkill)
+    {
+        return (handToHandSkill / 10) + 1;
+    }
+
+    public static int CalculateHandToHandMaxDamage(int handToHandSkill)
+    {
+        // Daggerfall Chronicles table lists hand-to-hand skills of 80 and above (45 through 79 are omitted)
+        // as if they give max damage of (handToHandSkill / 5) + 2, but the hand-to-hand damage display in the character sheet
+        // in classic Daggerfall shows it as continuing to be (handToHandSkill / 5) + 1
+        return (handToHandSkill / 5) + 1;
+    }
+
+    /// <summary>
+    /// Calculates whether an attack on a target is successful or not.
+    /// </summary>
+    public static bool CalculateSuccessfulHit(Actor attacker, Actor target, int chanceToHitMod, int struckBodyPart)
+    {
+        if (attacker == null || target == null)
+            return false;
+
+        int chanceToHit = chanceToHitMod;
+
+        // 护甲对命中的影响
+        // Get armor value for struck body part
+        chanceToHit += CalculateArmorToHit(target, struckBodyPart);
+
+        // 肾上腺素
+        // Apply adrenaline rush modifiers.
+        chanceToHit += CalculateAdrenalineRushToHit(attacker, target);
+
+        // 魅力对命中的影响
+        // Apply enchantment modifier
+        chanceToHit += attacker.ChanceToHitModifier;
+
+        // Apply stat differential modifiers. (default: luck and agility)
+        chanceToHit += CalculateStatsToHit(attacker, target);
+
+        // Apply skill modifiers. (default: dodge and crit strike)
+        chanceToHit += CalculateSkillsToHit(attacker, target);
+
+        // Apply monster modifier and biography adjustments.
+        chanceToHit += CalculateAdjustmentsToHit(attacker, target);
+
+        chanceToHit = Mathf.Clamp(chanceToHit, 3, 97);
+
+        return Dice100.SuccessRoll(chanceToHit);
+    }
+
+    public static int CalculateAdjustmentsToHit(Actor attacker, Actor target)
+    {
+        var player = Main.Inst.hero;
+        var AITarget = target as Monster;
+
+        int chanceToHitMod = 0;
+
+        // Apply hit mod from character biography
+        if (target == player)
+        {
+            chanceToHitMod -= player.BiographyAvoidHitMod;
+        }
+
+        // Apply monster modifier.
+        if ((target != player) && (AITarget.EntityType == EntityTypes.EnemyMonster))
+        {
+            chanceToHitMod += 40;
+        }
+
+        // DF Chronicles says -60 is applied at the end, but it actually seems to be -50.
+        chanceToHitMod -= 50;
+
+        return chanceToHitMod;
+    }
+
+    public static int CalculateSkillsToHit(Actor attacker, Actor target)
+    {
+        int chanceToHitMod = 0;
+
+        // Apply dodging modifier.
+        // This modifier is bugged in classic and the attacker's dodging skill is used rather than the target's.
+        // DF Chronicles says the dodging calculation is (dodging / 10), but it actually seems to be (dodging / 4).
+        chanceToHitMod -= target.Skills.GetLiveSkillValue(Skills.Dodging) / 4;
+
+        // Apply critical strike modifier.
+        if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(Skills.CriticalStrike)))
+        {
+            chanceToHitMod += attacker.Skills.GetLiveSkillValue(Skills.CriticalStrike) / 10;
+        }
+
+        return chanceToHitMod;
+    }
+
+    public static int CalculateStatsToHit(Actor attacker, Actor target)
+    {
+        int chanceToHitMod = 0;
+
+        // Apply luck modifier.
+        chanceToHitMod += (attacker.Stats.LiveLuck - target.Stats.LiveLuck) / 10;
+
+        // Apply agility modifier.
+        chanceToHitMod += (attacker.Stats.LiveAgility - target.Stats.LiveAgility) / 10;
+
+        return chanceToHitMod;
+    }
+
+    public static int CalculateAdrenalineRushToHit(Actor attacker, Actor target)
+    {
+        const int adrenalineRushModifier = 5;
+        const int improvedAdrenalineRushModifier = 8;
+
+        int chanceToHitMod = 0;
+        if (attacker.Career.AdrenalineRush && attacker.CurrentHealth < (attacker.MaxHealth / 8))
+        {
+            chanceToHitMod += (attacker.ImprovedAdrenalineRush) ? improvedAdrenalineRushModifier : adrenalineRushModifier;
+        }
+
+        if (target.Career.AdrenalineRush && target.CurrentHealth < (target.MaxHealth / 8))
+        {
+            chanceToHitMod -= (target.ImprovedAdrenalineRush) ? improvedAdrenalineRushModifier : adrenalineRushModifier;
+        }
+        return chanceToHitMod;
+    }
+
+    public static int MaxStatValue()
+    {
+        return 100;
+    }
+
+    public static int CalculateArmorToHit(Actor target, int struckBodyPart)
+    {
+        int armorValue = 0;
+        if (struckBodyPart <= target.ArmorValues.Length)
+        {
+            armorValue = target.ArmorValues[struckBodyPart] + target.IncreasedArmorValueModifier + target.DecreasedArmorValueModifier;
+        }
+        return armorValue;
+    }
+
+    public static int CalculateWeaponToHit(Item weapon)
+    {
+        return weapon.GetWeaponMaterialModifier() * 10;
     }
 
     public static int CalculateStruckBodyPart()
@@ -377,5 +606,114 @@ public static class FormulaUtils
             default:
                 return 0;
         }
+    }
+}
+
+public class Dice100
+{
+    private Dice100()
+    {
+    }
+
+    public static int Roll()
+    {
+        return Random.Range(1, 101);
+    }
+
+    public static bool SuccessRoll(int chanceSuccess)
+    {
+        return Random.Range(0, 100) < chanceSuccess; // Same as Random.Range(1, 101) <= chanceSuccess
+    }
+
+    public static bool FailedRoll(int chanceSuccess)
+    {
+        return Random.Range(0, 100) >= chanceSuccess; // Same as Random.Range(1, 101) > chanceSuccess
+    }
+}
+
+/// <summary>
+/// Reimplementing key parts of Daggerfall's random library.
+/// This ensures critical random number sequences (e.g. building names)
+/// will match Daggerfall's output across all platforms.
+/// </summary>
+public static class DFRandom
+{
+    static ulong next = 1;
+    static ulong savedNext;
+
+    public static uint Seed
+    {
+        get { return (uint)next; }
+        set { next = value; }
+    }
+
+    /// <summary>
+    /// Seed random generator.
+    /// </summary>
+    /// <param name="seed">Seed int.</param>
+    public static void srand(int seed)
+    {
+        next = (uint)seed;
+    }
+
+    /// <summary>
+    /// Seed random generator.
+    /// </summary>
+    /// <param name="seed">Seed uint.</param>
+    public static void srand(uint seed)
+    {
+        next = seed;
+    }
+
+    /// <summary>
+    /// Generate a random number.
+    /// </summary>
+    /// <returns></returns>
+    public static uint rand()
+    {
+        next = next * 1103515245 + 12345;
+        return ((uint)((next >> 16) & 0x7FFF));
+    }
+
+    /// <summary>
+    /// Generates a random number between min and max (exclusive).
+    /// </summary>
+    /// <param name="min">Minimum number.</param>
+    /// <param name="max">Maximum number (exclusive).</param>
+    /// <returns>Random number between min and max - 1.</returns>
+    public static int random_range(int min, int max)
+    {
+        return (int)rand() % (max - min) + min;
+    }
+
+    /// <summary>
+    /// Generates a random number between min and max (inclusive).
+    /// </summary>
+    /// <param name="min">Minimum number.</param>
+    /// <param name="max">Maximum number (inclusive).</param>
+    /// <returns>Random number between min and max - 1.</returns>
+    public static int random_range_inclusive(int min, int max)
+    {
+        return (int)rand() % (max - min + 1) + min;
+    }
+
+    /// <summary>
+    /// Generates a random number between 0 and max (exclusive).
+    /// </summary>
+    /// <param name="max">Maximum number (exclusive).</param>
+    /// <returns>Random number between 0 and max - 1.</returns>
+    public static int random_range(int max)
+    {
+        return (int)rand() % max;
+    }
+
+    public static void SaveSeed()
+    {
+        savedNext = next;
+    }
+
+    public static void RestoreSeed()
+    {
+        next = savedNext;
     }
 }

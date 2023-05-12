@@ -141,4 +141,32 @@ public class Item : MonoBehaviour
     {
         return (Skills)GetWeaponSkillIDAsShort();
     }
+
+    public int GetWeaponMaterialModifier()
+    {
+        switch (nativeMaterialValue)
+        {
+            case (int)WeaponMaterialTypes.Iron:
+                return -1;
+            case (int)WeaponMaterialTypes.Steel:
+            case (int)WeaponMaterialTypes.Silver:
+                return 0;
+            case (int)WeaponMaterialTypes.Elven:
+                return 1;
+            case (int)WeaponMaterialTypes.Dwarven:
+                return 2;
+            case (int)WeaponMaterialTypes.Mithril:
+            case (int)WeaponMaterialTypes.Adamantium:
+                return 3;
+            case (int)WeaponMaterialTypes.Ebony:
+                return 4;
+            case (int)WeaponMaterialTypes.Orcish:
+                return 5;
+            case (int)WeaponMaterialTypes.Daedric:
+                return 6;
+
+            default:
+                return 0;
+        }
+    }
 }

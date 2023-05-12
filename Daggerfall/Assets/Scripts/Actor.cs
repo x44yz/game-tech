@@ -135,6 +135,19 @@ public enum ClassCareers
     Knight = 17,
 }
 
+/// <summary>
+/// Defines various types of living entities in the world.
+/// </summary>
+public enum EntityTypes
+{
+    None,
+    Player,
+    CivilianNPC,
+    StaticNPC,
+    EnemyMonster,
+    EnemyClass,
+}
+
 public class Actor : MonoBehaviour
 {
     public int Weight;
@@ -152,8 +165,59 @@ public class Actor : MonoBehaviour
     public DSkills Skills { get { return skills; } set { skills.Copy(value); } }
     public int Level;
 
+    public const int NumberBodyParts = 7;
+    protected sbyte[] armorValues = new sbyte[NumberBodyParts];
+    public sbyte[] ArmorValues { get { return armorValues; } set { armorValues = value; } }
+
+    public int IncreasedArmorValueModifier { get; private set; }
+    public int DecreasedArmorValueModifier { get; private set; }
+    public bool ImprovedAdrenalineRush { get; set; }
+    public int ChanceToHitModifier { get; private set; }
+
+    public int MaxHealth { get { return GetMaxHealth(); } set { maxHealth = value; } }
+    public int CurrentHealth { get { return GetCurrentHealth(); } set { SetHealth(value); } }
+
+    protected DStats stats = new DStats();
+    public DStats Stats { get { return stats; } set { stats.Copy(value); } }
+
+    protected DFCareer career = new DFCareer();
+    public DFCareer Career { get { return career; } set { career = value; } }
+
+    EntityTypes entityType = EntityTypes.None;
+    public EntityTypes EntityType
+    {
+        get { return entityType; }
+    }
+
     public int DecreaseHealth(int amount)
     {
         throw new System.NotImplementedException();
+    }
+
+    public int MaxHealthLimiter { get; private set; }
+    protected int maxHealth;
+    // Gets maximum health with effect limiter
+    int GetMaxHealth()
+    {
+        // Limiter must be 1 or greater
+        if (MaxHealthLimiter < 1)
+            return maxHealth;
+
+        return (MaxHealthLimiter < maxHealth) ? MaxHealthLimiter : maxHealth;
+    }
+
+    protected int currentHealth;
+    int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public virtual int SetHealth(int amount, bool restoreMode = false)
+    {
+        currentHealth = (restoreMode) ? amount : Mathf.Clamp(amount, 0, MaxHealth);
+        // if (currentHealth <= 0)
+        //     RaiseOnDeathEvent();
+
+        return currentHealth;
     }
 }
