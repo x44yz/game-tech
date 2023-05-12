@@ -4,6 +4,13 @@ using UnityEngine;
 
 public static class FormulaUtils
 {
+    /// <summary>Struct for return values of formula that affect damage and to-hit chance.</summary>
+    public struct ToHitAndDamageMods
+    {
+        public int damageMod;
+        public int toHitMod;
+    }
+
     /// <summary>
     /// Calculate the damage caused by an attack.
     /// </summary>
@@ -33,11 +40,11 @@ public static class FormulaUtils
         // and the weaponless values seems more appropriate, so here
         // enemies will choose to use their weaponless attack if it is more damaging.
         // 如果空手的伤害比持武器伤害大，默认空手
-        EnemyEntity AIAttacker = attacker as EnemyEntity;
+        var AIAttacker = attacker as Monster;
         if (AIAttacker != null && weapon != null)
         {
             int weaponAverage = (weapon.GetBaseDamageMin() + weapon.GetBaseDamageMax()) / 2;
-            int noWeaponAverage = (AIAttacker.MobileEnemy.MinDamage + AIAttacker.MobileEnemy.MaxDamage) / 2;
+            int noWeaponAverage = (AIAttacker.MinDamage + AIAttacker.MaxDamage) / 2;
 
             if (noWeaponAverage > weaponAverage)
             {
@@ -52,10 +59,6 @@ public static class FormulaUtils
             // If the attacker is using a weapon, check if the material is high enough to damage the target
             if (target.MinMetalToHit > (WeaponMaterialTypes)weapon.NativeMaterialValue)
             {
-                if (attacker == player)
-                {
-                    DaggerfallUI.Instance.PopupMessage(TextManager.Instance.GetLocalizedText("materialIneffective"));
-                }
                 return 0;
             }
             // Get weapon skill used
@@ -63,7 +66,7 @@ public static class FormulaUtils
         }
         else
         {
-            skillID = (short)DFCareer.Skills.HandToHand;
+            skillID = (short)Skills.HandToHand;
         }
 
         chanceToHitMod = attacker.Skills.GetLiveSkillValue(skillID);
@@ -72,9 +75,9 @@ public static class FormulaUtils
         if (attacker == player)
         {
             // Apply swing modifiers
-            ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
-            damageModifiers += swingMods.damageMod;
-            chanceToHitMod += swingMods.toHitMod;
+            // ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
+            // damageModifiers += swingMods.damageMod;
+            // chanceToHitMod += swingMods.toHitMod;
 
             // 熟练度
             // Apply proficiency modifiers
@@ -97,7 +100,7 @@ public static class FormulaUtils
         int struckBodyPart = CalculateStruckBodyPart();
 
         // Get damage for weaponless attacks
-        if (skillID == (short)DFCareer.Skills.HandToHand)
+        if (skillID == (short)Skills.HandToHand)
         {
             // 如果是玩家或种族敌人
             if (attacker == player || (AIAttacker != null && AIAttacker.EntityType == EntityTypes.EnemyClass))
@@ -202,5 +205,177 @@ public static class FormulaUtils
         //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
 
         return damage;
+    }
+
+    public static int CalculateStruckBodyPart()
+    {
+        int[] bodyParts = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6 };
+        return bodyParts[UnityEngine.Random.Range(0, bodyParts.Length)];
+    }
+
+    // public static ToHitAndDamageMods CalculateSwingModifiers(FPSWeapon onscreenWeapon)
+    // {
+    //     ToHitAndDamageMods mods = new ToHitAndDamageMods();
+    //     if (onscreenWeapon != null)
+    //     {
+    //         // The Daggerfall manual groups diagonal slashes to the left and right as if they are the same, but they are different.
+    //         // Classic does not apply swing modifiers to unarmed attacks.
+    //         if (onscreenWeapon.WeaponState == WeaponStates.StrikeUp)
+    //         {
+    //             mods.damageMod = -4;
+    //             mods.toHitMod = 10;
+    //         }
+    //         if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownRight)
+    //         {
+    //             mods.damageMod = -2;
+    //             mods.toHitMod = 5;
+    //         }
+    //         if (onscreenWeapon.WeaponState == WeaponStates.StrikeDownLeft)
+    //         {
+    //             mods.damageMod = 2;
+    //             mods.toHitMod = -5;
+    //         }
+    //         if (onscreenWeapon.WeaponState == WeaponStates.StrikeDown)
+    //         {
+    //             mods.damageMod = 4;
+    //             mods.toHitMod = -10;
+    //         }
+    //     }
+    //     return mods;
+    // }
+
+    public static ToHitAndDamageMods CalculateProficiencyModifiers(Actor attacker, Item weapon)
+    {
+        ToHitAndDamageMods mods = new ToHitAndDamageMods();
+        if (weapon != null)
+        {
+            // Apply weapon proficiency
+            if (((int)attacker.Career.ExpertProficiencies & weapon.GetWeaponSkillUsed()) != 0)
+            {
+                mods.damageMod = (attacker.Level / 3) + 1;
+                mods.toHitMod = attacker.Level;
+            }
+        }
+        // Apply hand-to-hand proficiency. Hand-to-hand proficiency is not applied in classic.
+        else if (((int)attacker.Career.ExpertProficiencies & (int)ProficiencyFlags.HandToHand) != 0)
+        {
+            mods.damageMod = (attacker.Level / 3) + 1;
+            mods.toHitMod = attacker.Level;
+        }
+        return mods;
+    }
+
+    public static ToHitAndDamageMods CalculateRacialModifiers(Actor attacker, Item weapon, Hero player)
+    {
+        ToHitAndDamageMods mods = new ToHitAndDamageMods();
+        if (weapon != null)
+        {
+            if (player.RaceTemplate.ID == (int)Races.DarkElf)
+            {
+                mods.damageMod = attacker.Level / 4;
+                mods.toHitMod = attacker.Level / 4;
+            }
+            else if (weapon.GetWeaponSkillIDAsShort() == (short)Skills.Archery)
+            {
+                if (player.RaceTemplate.ID == (int)Races.WoodElf)
+                {
+                    mods.damageMod = attacker.Level / 3;
+                    mods.toHitMod = attacker.Level / 3;
+                }
+            }
+            else if (player.RaceTemplate.ID == (int)Races.Redguard)
+            {
+                mods.damageMod = attacker.Level / 3;
+                mods.toHitMod = attacker.Level / 3;
+            }
+        }
+        return mods;
+    }
+
+    public static int CalculateBackstabChance(Hero player, Actor target, bool isEnemyFacingAwayFromPlayer)
+    {
+        if (isEnemyFacingAwayFromPlayer)
+        {
+            // player.TallySkill(DFCareer.Skills.Backstabbing, 1);
+            return player.Skills.GetLiveSkillValue(Skills.Backstabbing);
+        }
+        return 0;
+    }
+
+    public static int CalculateBackstabDamage(int damage, int backstabbingLevel)
+    {
+        if (backstabbingLevel > 1 && Dice100.SuccessRoll(backstabbingLevel))
+        {
+            damage *= 3;
+            // string backstabMessage = TextManager.Instance.GetLocalizedText("successfulBackstab");
+            // DaggerfallUI.Instance.PopupMessage(backstabMessage);
+        }
+        return damage;
+    }
+
+    public static int CalculateWeaponMinDamage(Weapons weapon)
+    {
+        switch (weapon)
+        {
+            case Weapons.Dagger:
+            case Weapons.Tanto:
+            case Weapons.Wakazashi:
+            case Weapons.Shortsword:
+            case Weapons.Broadsword:
+            case Weapons.Staff:
+            case Weapons.Mace:
+                return 1;
+            case Weapons.Longsword:
+            case Weapons.Claymore:
+            case Weapons.Battle_Axe:
+            case Weapons.War_Axe:
+            case Weapons.Flail:
+                return 2;
+            case Weapons.Saber:
+            case Weapons.Katana:
+            case Weapons.Dai_Katana:
+            case Weapons.Warhammer:
+                return 3;
+            case Weapons.Short_Bow:
+            case Weapons.Long_Bow:
+                return 4;
+            default:
+                return 0;
+        }
+    }
+
+    public static int CalculateWeaponMaxDamage(Weapons weapon)
+    {
+        switch (weapon)
+        {
+            case Weapons.Dagger:
+                return 6;
+            case Weapons.Tanto:
+            case Weapons.Shortsword:
+            case Weapons.Staff:
+                return 8;
+            case Weapons.Wakazashi:
+                return 10;
+            case Weapons.Broadsword:
+            case Weapons.Saber:
+            case Weapons.Battle_Axe:
+            case Weapons.Mace:
+                return 12;
+            case Weapons.Flail:
+                return 14;
+            case Weapons.Longsword:
+            case Weapons.Katana:
+            case Weapons.War_Axe:
+            case Weapons.Short_Bow:
+                return 16;
+            case Weapons.Claymore:
+            case Weapons.Warhammer:
+            case Weapons.Long_Bow:
+                return 18;
+            case Weapons.Dai_Katana:
+                return 21;
+            default:
+                return 0;
+        }
     }
 }
