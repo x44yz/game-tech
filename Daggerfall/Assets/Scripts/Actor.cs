@@ -9,6 +9,31 @@ using UnityEditor;
 #endif
 
 /// <summary>
+/// Diseases the player can catch. (msgs 100-116)
+/// </summary>
+public enum Diseases
+{
+    None = -1,
+    WitchesPox = 0,
+    Plague = 1,
+    YellowFever = 2,
+    StomachRot = 3,
+    Consumption = 4,
+    BrainFever = 5,
+    SwampRot = 6,
+    CalironsCurse = 7,
+    Cholera = 8,
+    Leprosy = 9,
+    WoundRot = 10,
+    RedDeath = 11,
+    BloodRot = 12,
+    TyphoidFever = 13,
+    Dementia = 14,
+    Chrondiasis = 15,
+    WizardFever = 16,
+}
+
+/// <summary>
 /// Skills
 /// </summary>
 public enum Skills
@@ -226,4 +251,24 @@ public class Actor : MonoBehaviour
 
         return currentHealth;
     }
+
+    public int CurrentFatigue { get { return GetCurrentFatigue(); } set { SetFatigue(value); } }
+    public const int FatigueMultiplier = 64;
+    public int MaxFatigue { get { return (stats.LiveStrength + stats.LiveEndurance) * FatigueMultiplier; } }
+    protected int currentFatigue;
+    public virtual int SetFatigue(int amount, bool restoreMode = false)
+    {
+        currentFatigue = (restoreMode) ? amount : Mathf.Clamp(amount, 0, MaxFatigue);
+        // if (currentFatigue <= 0 && currentHealth > 0)
+        //     RaiseOnExhaustedEvent();
+
+        return currentFatigue;
+    }
+
+    int GetCurrentFatigue()
+    {
+        return currentFatigue;
+    }
+
+    // public EffectManager effectManager => GetComponent<EffectManager>();
 }

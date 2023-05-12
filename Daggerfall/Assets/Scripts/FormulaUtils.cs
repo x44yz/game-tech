@@ -208,6 +208,165 @@ public static class FormulaUtils
         return damage;
     }
 
+    public static float specialInfectionChance = 0.6f;
+
+    /// <summary>
+    /// Execute special monster attack effects.
+    /// </summary>
+    /// <param name="attacker">Attacking entity</param>
+    /// <param name="target">Target entity</param>
+    /// <param name="damage">Damage done by the hit</param>
+    public static void OnMonsterHit(Monster attacker, Actor target, int damage)
+    {
+        Diseases[] diseaseListA = { Diseases.Plague };
+        Diseases[] diseaseListB = { Diseases.Plague, Diseases.StomachRot, Diseases.BrainFever };
+        Diseases[] diseaseListC = {
+            Diseases.Plague, Diseases.YellowFever, Diseases.StomachRot, Diseases.Consumption,
+            Diseases.BrainFever, Diseases.SwampRot, Diseases.Cholera, Diseases.Leprosy, Diseases.RedDeath,
+            Diseases.TyphoidFever, Diseases.Dementia
+        };
+        float random;
+        switch (attacker.CareerIndex)
+        {
+            case (int)MonsterCareers.Rat:
+                // In classic rat can only give plague (diseaseListA), but DF Chronicles says plague, stomach rot and brain fever (diseaseListB).
+                // Don't know which was intended. Using B since it has more variety.
+                if (Dice100.SuccessRoll(5))
+                    InflictDisease(attacker, target, diseaseListB);
+                break;
+            case (int)MonsterCareers.GiantBat:
+                // Classic uses 2% chance, but DF Chronicles says 5% chance. Not sure which was intended.
+                if (Dice100.SuccessRoll(2))
+                    InflictDisease(attacker, target, diseaseListB);
+                break;
+            case (int)MonsterCareers.Spider:
+            case (int)MonsterCareers.GiantScorpion:
+                throw new System.NotSupportedException();
+                // EntityEffectManager targetEffectManager = target.GetComponent<EntityEffectManager>();
+                // if (targetEffectManager.FindIncumbentEffect<Paralyze>() == null)
+                // {
+                //     SpellRecord.SpellRecordData spellData;
+                //     GameManager.Instance.EntityEffectBroker.GetClassicSpellRecord(66, out spellData);
+                //     EffectBundleSettings bundle;
+                //     GameManager.Instance.EntityEffectBroker.ClassicSpellRecordDataToEffectBundleSettings(spellData, BundleTypes.Spell, out bundle);
+                //     EntityEffectBundle spell = new EntityEffectBundle(bundle, attacker.EntityBehaviour);
+                //     EntityEffectManager attackerEffectManager = attacker.EntityBehaviour.GetComponent<EntityEffectManager>();
+                //     attackerEffectManager.SetReadySpell(spell, true);
+                // }
+                break;
+            case (int)MonsterCareers.Werewolf:
+                throw new System.NotSupportedException();
+                // random = UnityEngine.Random.Range(0f, 100f);
+                // if (random <= specialInfectionChance && target.EntityType == EntityTypes.Player)
+                // {
+                //     // Werewolf
+                //     EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateLycanthropyDisease(LycanthropyTypes.Werewolf);
+                //     GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.SpecialInfection);
+                //     Debug.Log("Player infected by werewolf.");
+                // }
+                break;
+            case (int)MonsterCareers.Nymph:
+                FatigueDamage(attacker, target, damage);
+                break;
+            case (int)MonsterCareers.Wereboar:
+                throw new System.NotSupportedException();
+                // random = UnityEngine.Random.Range(0f, 100f);
+                // if (random <= specialInfectionChance && target.EntityType == EntityTypes.Player)
+                // {
+                //     // Wereboar
+                //     EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateLycanthropyDisease(LycanthropyTypes.Wereboar);
+                //     GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.SpecialInfection);
+                //     Debug.Log("Player infected by wereboar.");
+                // }
+                break;
+            case (int)MonsterCareers.Zombie:
+                // Nothing in classic. DF Chronicles says 2% chance of disease, which seems like it was probably intended.
+                // Diseases listed in DF Chronicles match those of mummy (except missing cholera, probably a mistake)
+                if (Dice100.SuccessRoll(2))
+                    InflictDisease(attacker, target, diseaseListC);
+                break;
+            case (int)MonsterCareers.Mummy:
+                if (Dice100.SuccessRoll(5))
+                    InflictDisease(attacker, target, diseaseListC);
+                break;
+            case (int)MonsterCareers.Vampire:
+            case (int)MonsterCareers.VampireAncient:
+                throw new System.NotSupportedException();
+                // random = UnityEngine.Random.Range(0f, 100f);
+                // if (random <= specialInfectionChance && target.EntityType == EntityTypes.Player)
+                // {
+                //     // Inflict stage one vampirism disease
+                //     EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateVampirismDisease();
+                //     GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.SpecialInfection);
+                //     Debug.Log("Player infected by vampire.");
+                // }
+                // else if (random <= 2.0f)
+                // {
+                //     InflictDisease(attacker, target, diseaseListA);
+                // }
+                break;
+            case (int)MonsterCareers.Lamia:
+                // Nothing in classic, but DF Chronicles says 2 pts of fatigue damage per health damage
+                FatigueDamage(attacker, target, damage);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public static void FatigueDamage(Monster attacker, Actor target, int damage)
+    {
+        // In classic, nymphs do 10-30 fatigue damage per hit, and lamias don't do any.
+        // DF Chronicles says nymphs have "Energy Leech", which is a spell in
+        // the game and not what they use, and for lamias "Every 1 pt of health damage = 2 pts of fatigue damage".
+        // Lamia health damage is 5-15. Multiplying this by 2 may be where 10-30 came from. Nymph health damage is 1-5.
+        // Not sure what was intended here, but using the "Every 1 pt of health damage = 2 pts of fatigue damage"
+        // seems sensible, since the fatigue damage will scale to the health damage and lamias are a higher level opponent
+        // than nymphs and will do more fatigue damage.
+        target.SetFatigue(target.CurrentFatigue - ((damage * 2) * 64));
+
+        // TODO: When nymphs drain the player's fatigue level to 0, the player is supposed to fall asleep for 14 days
+        // and then wake up, according to DF Chronicles. This doesn't work correctly in classic. Classic does advance
+        // time 14 days but the player dies like normal because of the "collapse from exhaustion near monsters = die" code.
+    }
+
+    /// <summary>
+    /// Inflict a classic disease onto player.
+    /// </summary>
+    /// <param name="attacker">Source entity. Can be the same as target</param>
+    /// <param name="target">Target entity - must be player.</param>
+    /// <param name="diseaseList">Array of disease indices matching Diseases enum.</param>
+    public static void InflictDisease(Actor attacker, Actor target, Diseases[] diseaseList)
+    {
+        // Must have a valid disease list
+        if (diseaseList == null || diseaseList.Length == 0 || target.EntityType != EntityTypes.Player)
+            return;
+
+        // Only allow player to catch a disease this way
+        var playerEntity = Main.Inst.hero;
+        if (target != playerEntity)
+            return;
+
+        // Player cannot catch diseases at level 1 in classic. Maybe to keep new players from dying at the start of the game.
+        if (playerEntity.Level != 1)
+        {
+            throw new System.NotSupportedException();
+            // // Return if disease resisted
+            // if (SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Disease, target, 0) == 0)
+            //     return;
+
+            // // Select a random disease from disease array and validate range
+            // int diseaseIndex = UnityEngine.Random.Range(0, diseaseList.Length);
+
+            // // Infect player
+            // Diseases diseaseType = diseaseList[diseaseIndex];
+            // EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateDisease(diseaseType);
+            // GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+
+            // Debug.LogFormat("Infected player with disease {0}", diseaseType.ToString());
+        }
+    }
+
     /// <summary>
     /// Allocate any equipment damage from a strike, and reduce item condition.
     /// </summary>
@@ -221,7 +380,7 @@ public static class FormulaUtils
             // TODO: If attacker is AI, apply Ring of Namira effect
             ApplyConditionDamageThroughPhysicalHit(weapon, attacker, damage);
 
-            DaggerfallUnityItem shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+            Item shield = target.ItemEquipTable.GetItem(EquipSlots.LeftHand);
             bool shieldTakesDamage = false;
             if (shield != null)
             {
@@ -255,54 +414,55 @@ public static class FormulaUtils
     /// <param name="bypassResistance">Whether it should bypass resistances</param>
     public static void InflictPoison(Actor attacker, Actor target, Poisons poisonType, bool bypassResistance)
     {
-        // Target must have an entity behaviour and effect manager
-        EntityEffectManager effectManager = null;
-        if (target.EntityBehaviour != null)
-        {
-            effectManager = target.EntityBehaviour.GetComponent<EntityEffectManager>();
-            if (effectManager == null)
-                return;
-        }
-        else
-        {
-            return;
-        }
+        throw new System.NotSupportedException();
+        // // Target must have an entity behaviour and effect manager
+        // EntityEffectManager effectManager = null;
+        // if (target.EntityBehaviour != null)
+        // {
+        //     effectManager = target.EntityBehaviour.GetComponent<EntityEffectManager>();
+        //     if (effectManager == null)
+        //         return;
+        // }
+        // else
+        // {
+        //     return;
+        // }
 
-        // Note: In classic, AI characters' immunity to poison is ignored, although the level 1 check below still gives rats immunity
-        DFCareer.Tolerance toleranceFlags = target.Career.Poison;
-        if (toleranceFlags == DFCareer.Tolerance.Immune)
-            return;
+        // // Note: In classic, AI characters' immunity to poison is ignored, although the level 1 check below still gives rats immunity
+        // DFCareer.Tolerance toleranceFlags = target.Career.Poison;
+        // if (toleranceFlags == DFCareer.Tolerance.Immune)
+        //     return;
 
-        // Handle player with racial resistance to poison
-        if (target is Hero)
-        {
-            RaceTemplate raceTemplate = (target as PlayerEntity).GetLiveRaceTemplate();
-            if ((raceTemplate.ImmunityFlags & DFCareer.EffectFlags.Poison) == DFCareer.EffectFlags.Poison)
-                return;
-        }
+        // // Handle player with racial resistance to poison
+        // if (target is Hero)
+        // {
+        //     RaceTemplate raceTemplate = (target as PlayerEntity).GetLiveRaceTemplate();
+        //     if ((raceTemplate.ImmunityFlags & DFCareer.EffectFlags.Poison) == DFCareer.EffectFlags.Poison)
+        //         return;
+        // }
 
-        if (bypassResistance || SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Poison, target, 0) != 0)
-        {
-            if (target.Level != 1)
-            {
-                // Infect target
-                EntityEffectBundle bundle = effectManager.CreatePoison(poisonType);
-                effectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
-            }
-        }
-        else
-        {
-            Debug.LogFormat("Poison resisted by {0}.", target.EntityBehaviour.name);
-        }
+        // if (bypassResistance || SavingThrow(DFCareer.Elements.DiseaseOrPoison, DFCareer.EffectFlags.Poison, target, 0) != 0)
+        // {
+        //     if (target.Level != 1)
+        //     {
+        //         // Infect target
+        //         EntityEffectBundle bundle = effectManager.CreatePoison(poisonType);
+        //         effectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+        //     }
+        // }
+        // else
+        // {
+        //     Debug.LogFormat("Poison resisted by {0}.", target.EntityBehaviour.name);
+        // }
     }
 
     public static int CalculateWeaponAttackDamage(Actor attacker, Actor target, int damageModifier, int weaponAnimTime, Item weapon)
     {
         int damage = UnityEngine.Random.Range(weapon.GetBaseDamageMin(), weapon.GetBaseDamageMax() + 1) + damageModifier;
 
-        if (target != GameManager.Instance.PlayerEntity)
+        if (target != Main.Inst.hero)
         {
-            if ((target as EnemyEntity).CareerIndex == (int)MonsterCareers.SkeletalWarrior)
+            if ((target as Monster).CareerIndex == (int)MonsterCareers.SkeletalWarrior)
             {
                 // Apply edged-weapon damage modifier for Skeletal Warrior
                 if ((weapon.flags & 0x10) == 0)
@@ -393,21 +553,22 @@ public static class FormulaUtils
         }
         else if (target is Hero)
         {
-            if (GameManager.Instance.PlayerEffectManager.HasVampirism()) // Vampires are undead, therefore use undead modifier
-            {
-                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                    damage += attacker.Level;
-                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                    damage -= attacker.Level;
-            }
-            else
-            {
-                // Player is assumed humanoid
-                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-                    damage += attacker.Level;
-                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-                    damage -= attacker.Level;
-            }
+            throw new System.NotSupportedException();
+            // if (GameManager.Instance.PlayerEffectManager.HasVampirism()) // Vampires are undead, therefore use undead modifier
+            // {
+            //     if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+            //         damage += attacker.Level;
+            //     if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+            //         damage -= attacker.Level;
+            // }
+            // else
+            // {
+            //     // Player is assumed humanoid
+            //     if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+            //         damage += attacker.Level;
+            //     if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+            //         damage -= attacker.Level;
+            // }
         }
 
         return damage;

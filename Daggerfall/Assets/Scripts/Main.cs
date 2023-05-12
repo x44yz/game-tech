@@ -22,7 +22,7 @@ public class Main : MonoBehaviour
     {
         Inst = this;
 
-        Races.Init();
+        // Races.Init();
         Classes.Init();
         Talents.Init();
 
