@@ -206,7 +206,7 @@ public class Actor : MonoBehaviour
     protected string name;
     public string Name { get { return name; } set { name = value; } }
 
-    EntityTypes entityType = EntityTypes.None;
+    public EntityTypes entityType = EntityTypes.None;
     public EntityTypes EntityType
     {
         get { return entityType; }

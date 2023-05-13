@@ -1024,6 +1024,21 @@ public static class FormulaUtils
     {
         return (int)Mathf.Floor((float)intelligence * multiplier);
     }
+
+
+    // Generates health for enemy classes based on level and class
+    public static int RollEnemyClassMaxHealth(int level, int hitPointsPerLevel)
+    {
+        const int baseHealth = 10;
+        int maxHealth = baseHealth;
+
+        for (int i = 0; i < level; i++)
+        {
+            maxHealth += UnityEngine.Random.Range(1, hitPointsPerLevel + 1);
+        }
+        return maxHealth;
+    }
+
 }
 
 public class Dice100

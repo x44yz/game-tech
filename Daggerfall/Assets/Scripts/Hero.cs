@@ -42,6 +42,8 @@ public class Hero : Actor
     /// </summary>
     public void AssignCharacter(int level = 1 /*, int maxHealth = 0, bool fillVitals = true*/)
     {
+        entityType = EntityTypes.Player;
+
         // TODO: Add some bonus points to stats
         career = Classes.GetClassCareerTemplate(ClassCareers.Mage);
         if (career != null)

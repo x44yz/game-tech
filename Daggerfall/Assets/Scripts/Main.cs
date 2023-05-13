@@ -11,6 +11,7 @@ public class Main : MonoBehaviour
     public string heroClass;
     public string heroWeapon;
     public int heroLevel;
+    public int enemyIndex;
     public ActorRender heroRender;
     public ActorRender monsterRender;
 
@@ -32,10 +33,6 @@ public class Main : MonoBehaviour
 
         monster = monsterRender.gameObject.AddComponent<Monster>();
         monsterRender.actor = monster;
-    }
-
-    void Start()
-    {
         
     }
 
