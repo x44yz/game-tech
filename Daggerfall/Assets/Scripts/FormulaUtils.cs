@@ -205,6 +205,7 @@ public static class FormulaUtils
         // }
         //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
 
+        Debug.Log("CalculateAttackDamage > " + damage);
         return damage;
     }
 
@@ -372,7 +373,6 @@ public static class FormulaUtils
     /// </summary>
     public static void DamageEquipment(Actor attacker, Actor target, int damage, Item weapon, int struckBodyPart)
     {
-        throw new System.NotImplementedException();
         // // If damage was done by a weapon, damage the weapon and armor of the hit body part.
         // // In classic, shields are never damaged, only armor specific to the hitbody part is.
         // // Here, if an equipped shield covers the hit body part, it takes damage instead.
@@ -951,6 +951,78 @@ public static class FormulaUtils
             default:
                 return DFCareer.EnemyGroups.None;
         }
+    }
+
+      // Generates player health based on level and career hit points per level
+    public static int RollMaxHealth(Hero player)
+    {
+        const int baseHealth = 25;
+        int maxHealth = baseHealth + player.Career.HitPointsPerLevel;
+
+        for (int i = 1; i < player.Level; i++)
+        {
+            maxHealth += CalculateHitPointsPerLevelUp(player);
+        }
+
+        return maxHealth;
+    }
+
+    // Calculate hit points player gains per level.
+    public static int CalculateHitPointsPerLevelUp(Hero player)
+    {
+        int minRoll = player.Career.HitPointsPerLevel / 2;
+        int maxRoll = player.Career.HitPointsPerLevel;
+        DFRandom.Seed = (uint)Time.renderedFrameCount;
+        int addHitPoints = DFRandom.random_range_inclusive(minRoll, maxRoll);
+        addHitPoints += HitPointsModifier(player.Stats.PermanentEndurance);
+        if (addHitPoints < 1)
+            addHitPoints = 1;
+        return addHitPoints;
+    }
+
+    public static int HitPointsModifier(int endurance)
+    {
+        return (int)Mathf.Floor((float)endurance / 10f) - 5;
+    }
+
+    // Calculate how much health the player should recover per hour of rest
+    public static int CalculateHealthRecoveryRate(Hero player)
+    {
+        short medical = player.Skills.GetLiveSkillValue(Skills.Medical);
+        int endurance = player.Stats.LiveEndurance;
+        int maxHealth = player.MaxHealth;
+        // PlayerEnterExit playerEnterExit;
+        // playerEnterExit = GameManager.Instance.PlayerGPS.GetComponent<PlayerEnterExit>();
+        DFCareer.RapidHealingFlags rapidHealingFlags = player.Career.RapidHealing;
+
+        short addToMedical = 60;
+
+        if (rapidHealingFlags == DFCareer.RapidHealingFlags.Always)
+            addToMedical = 100;
+        // else if (DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.IsDay && !playerEnterExit.IsPlayerInside)
+        // {
+        //     if (rapidHealingFlags == DFCareer.RapidHealingFlags.InLight)
+        //         addToMedical = 100;
+        // }
+        else if (rapidHealingFlags == DFCareer.RapidHealingFlags.InDarkness)
+            addToMedical = 100;
+
+        medical += addToMedical;
+
+        return Mathf.Max((int)Mathf.Floor(HealingRateModifier(endurance) + medical * maxHealth / 1000), 1);
+    }
+
+    public static int HealingRateModifier(int endurance)
+    {
+        // Original Daggerfall seems to have a bug where negative endurance modifiers on healing rate
+        // are applied as modifier + 1. Not recreating that here.
+        return (int)Mathf.Floor((float)endurance / 10f) - 5;
+    }
+
+
+    public static int SpellPoints(int intelligence, float multiplier)
+    {
+        return (int)Mathf.Floor((float)intelligence * multiplier);
     }
 }
 

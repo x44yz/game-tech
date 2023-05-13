@@ -530,7 +530,7 @@ public class DFCareer
     /// CFGData constructor.
     /// </summary>
     /// <param name="cfg">CFGData to load into class.</param>
-    public DFCareer(CFGData cfg)
+    public DFCareer(ClassCfg cfg)
     {
         StructureData(cfg);
     }
@@ -539,21 +539,21 @@ public class DFCareer
 
     #region Public Methods
 
-    /// <summary>
+   /// <summary>
     /// Reads RawData into structured data.
     /// </summary>
-    public void StructureData(CFGData cfg)
+    public void StructureData(ClassCfg cfg)
     {
         this.Name = cfg.Name;
 
-        this.Strength = cfg.Attributes[0];
-        this.Intelligence = cfg.Attributes[1];
-        this.Willpower = cfg.Attributes[2];
-        this.Agility = cfg.Attributes[3];
-        this.Endurance = cfg.Attributes[4];
-        this.Personality = cfg.Attributes[5];
-        this.Speed = cfg.Attributes[6];
-        this.Luck = cfg.Attributes[7];
+        this.Strength = cfg.Strength;
+        this.Intelligence = cfg.Intelligence;
+        this.Willpower = cfg.Willpower;
+        this.Agility = cfg.Agility;
+        this.Endurance = cfg.Endurance;
+        this.Personality = cfg.Personality;
+        this.Speed = cfg.Speed;
+        this.Luck = cfg.Luck;
 
         this.PrimarySkill1 = (Skills)cfg.PrimarySkill1;
         this.PrimarySkill2 = (Skills)cfg.PrimarySkill2;
@@ -682,7 +682,7 @@ public class DFCareer
     /// </summary>
     /// <param name="flags">EffectFlags to test.</param>
     /// <returns>True if resistant.</returns>
-    bool HasResistance(CFGData cfg, EffectFlags flags)
+    bool HasResistance(ClassCfg cfg, EffectFlags flags)
     {
         return ((cfg.ResistanceFlags & (byte)flags) == (byte)flags) ? true : false;
     }
@@ -692,7 +692,7 @@ public class DFCareer
     /// </summary>
     /// <param name="flags">EffectFlags to test.</param>
     /// <returns>True if immune.</returns>
-    bool HasImmunity(CFGData cfg, EffectFlags flags)
+    bool HasImmunity(ClassCfg cfg, EffectFlags flags)
     {
         return ((cfg.ImmunityFlags & (byte)flags) == (byte)flags) ? true : false;
     }
@@ -702,7 +702,7 @@ public class DFCareer
     /// </summary>
     /// <param name="flags">EffectFlags to test.</param>
     /// <returns>True if low tolerance.</returns>
-    bool HasLowTolerance(CFGData cfg, EffectFlags flags)
+    bool HasLowTolerance(ClassCfg cfg, EffectFlags flags)
     {
         return ((cfg.LowToleranceFlags & (byte)flags) == (byte)flags) ? true : false;
     }
@@ -712,7 +712,7 @@ public class DFCareer
     /// </summary>
     /// <param name="flags">EffectFlags to test.</param>
     /// <returns>True if critical weakness.</returns>
-    bool HasCriticalWeakness(CFGData cfg, EffectFlags flags)
+    bool HasCriticalWeakness(ClassCfg cfg, EffectFlags flags)
     {
         return ((cfg.CriticalWeaknessFlags & (byte)flags) == (byte)flags) ? true : false;
     }
@@ -722,7 +722,7 @@ public class DFCareer
     /// </summary>
     /// <param name="flags">SpecialAbilityFlags to test.</param>
     /// <returns>True if has special ability.</returns>
-    bool HasSpecialAbility(CFGData cfg, SpecialAbilityFlags flags)
+    bool HasSpecialAbility(ClassCfg cfg, SpecialAbilityFlags flags)
     {
         return ((cfg.AbilityFlagsAndSpellPointsBitfield & (byte)flags) == (byte)flags) ? true : false;
     }
@@ -731,7 +731,7 @@ public class DFCareer
 
     #region Private Methods
 
-    Tolerance GetTolerance(CFGData cfg, EffectFlags flags)
+    Tolerance GetTolerance(ClassCfg cfg, EffectFlags flags)
     {
         Tolerance result;
 
@@ -763,7 +763,7 @@ public class DFCareer
         return result;
     }
 
-    SpellPointMultipliers GetSpellPointMultiplier(CFGData cfg)
+    SpellPointMultipliers GetSpellPointMultiplier(ClassCfg cfg)
     {
         SpellPointMultipliers result;
 
@@ -802,7 +802,7 @@ public class DFCareer
         return result;
     }
 
-    AttackModifier GetAttackModifier(CFGData cfg, EnemyGroups group)
+    AttackModifier GetAttackModifier(ClassCfg cfg, EnemyGroups group)
     {
         AttackModifier result = AttackModifier.Normal;
 

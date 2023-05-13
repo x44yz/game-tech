@@ -173,22 +173,17 @@ public enum EntityTypes
     EnemyClass,
 }
 
+// [Serializable]
 public class Actor : MonoBehaviour
 {
     public int Weight;
-
-    public int MinDamage;                       // Minimum damage per first hit of attack
-    public int MaxDamage;                       // Maximum damage per first hit of attack
-    public int MinDamage2;                      // Minimum damage per second hit of attack
-    public int MaxDamage2;                      // Maximum damage per second hit of attack
-    public int MinDamage3;                      // Minimum damage per third hit of attack
-    public int MaxDamage3;                      // Maximum damage per third hit of attack
 
     protected WeaponMaterialTypes minMetalToHit;
     public WeaponMaterialTypes MinMetalToHit { get { return minMetalToHit; } set { minMetalToHit = value; } }
     protected DSkills skills;
     public DSkills Skills { get { return skills; } set { skills.Copy(value); } }
-    public int Level;
+    public int level;
+    public int Level { get { return level; } set { level = value; } }
 
     public const int NumberBodyParts = 7;
     protected sbyte[] armorValues = new sbyte[NumberBodyParts];
@@ -202,11 +197,14 @@ public class Actor : MonoBehaviour
     public int MaxHealth { get { return GetMaxHealth(); } set { maxHealth = value; } }
     public int CurrentHealth { get { return GetCurrentHealth(); } set { SetHealth(value); } }
 
-    protected DStats stats = new DStats();
+    public DStats stats = new DStats();
     public DStats Stats { get { return stats; } set { stats.Copy(value); } }
 
-    protected DFCareer career = new DFCareer();
+    public DFCareer career = new DFCareer();
     public DFCareer Career { get { return career; } set { career = value; } }
+
+    protected string name;
+    public string Name { get { return name; } set { name = value; } }
 
     EntityTypes entityType = EntityTypes.None;
     public EntityTypes EntityType
@@ -222,11 +220,25 @@ public class Actor : MonoBehaviour
 
     public int DecreaseHealth(int amount)
     {
-        throw new System.NotImplementedException();
+        // Allow an active shield effect to mitigate incoming damage from all sources
+        // Testing classic shows that Shield will mitigate physical, magical, and fall damage
+        // if (EntityBehaviour)
+        // {
+        //     EntityEffectManager manager = EntityBehaviour.GetComponent<EntityEffectManager>();
+        //     if (manager)
+        //     {
+        //         Shield shield = (Shield)manager.FindIncumbentEffect<Shield>();
+        //         if (shield != null)
+        //             amount = shield.DamageShield(amount);
+        //     }
+        // }
+        // TODO
+
+        return SetHealth(currentHealth - amount);
     }
 
     public int MaxHealthLimiter { get; private set; }
-    protected int maxHealth;
+    public int maxHealth;
     // Gets maximum health with effect limiter
     int GetMaxHealth()
     {
@@ -237,7 +249,7 @@ public class Actor : MonoBehaviour
         return (MaxHealthLimiter < maxHealth) ? MaxHealthLimiter : maxHealth;
     }
 
-    protected int currentHealth;
+    public int currentHealth;
     int GetCurrentHealth()
     {
         return currentHealth;
@@ -255,7 +267,8 @@ public class Actor : MonoBehaviour
     public int CurrentFatigue { get { return GetCurrentFatigue(); } set { SetFatigue(value); } }
     public const int FatigueMultiplier = 64;
     public int MaxFatigue { get { return (stats.LiveStrength + stats.LiveEndurance) * FatigueMultiplier; } }
-    protected int currentFatigue;
+    // 疲劳值
+    public int currentFatigue;
     public virtual int SetFatigue(int amount, bool restoreMode = false)
     {
         currentFatigue = (restoreMode) ? amount : Mathf.Clamp(amount, 0, MaxFatigue);
@@ -272,8 +285,38 @@ public class Actor : MonoBehaviour
 
     // public EffectManager effectManager => GetComponent<EffectManager>();
 
-    void Awake()
+    // 魔法值
+    public int currentMagicka;
+    public int maxMagicka;
+    public int MaxMagicka { get { return GetMaxMagicka(); } set { maxMagicka = value; } }
+    public int MaxMagickaModifier { get; private set; }
+    // Gets maximum magicka with effect modifier
+    int GetMaxMagicka()
     {
+        int effectiveMagicka = GetRawMaxMagicka() + MaxMagickaModifier;
+        if (effectiveMagicka < 0)
+            effectiveMagicka = 0;
+
+        return effectiveMagicka;
+    }
+    // Gets raw maximum magicka without modifier
+    int GetRawMaxMagicka()
+    {
+        // Player's maximum magicka determined by career and intelligence, enemies are set by level elsewhere
+        if (career != null && this == Main.Inst.hero)
+            return FormulaUtils.SpellPoints(stats.LiveIntelligence, career.SpellPointMultiplierValue);
+        else
+            return maxMagicka;
+    }
+
+    public void FillVitalSigns()
+    {
+        currentHealth = MaxHealth;
+        currentFatigue = MaxFatigue;
+        currentMagicka = MaxMagicka;
+    }
+
+    private void Awake() {
         skills = new DSkills();
     }
 }

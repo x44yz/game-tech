@@ -74,8 +74,16 @@ public enum MobileAffinity
     Human,              // A human creature
 }
 
+// [Serializable]
 public class Monster : Actor
 {
+    public int MinDamage;                       // Minimum damage per first hit of attack
+    public int MaxDamage;                       // Maximum damage per first hit of attack
+    public int MinDamage2;                      // Minimum damage per second hit of attack
+    public int MaxDamage2;                      // Maximum damage per second hit of attack
+    public int MinDamage3;                      // Minimum damage per third hit of attack
+    public int MaxDamage3;                      // Maximum damage per third hit of attack
+
     public MobileAffinity Affinity;             // Affinity of mobile
 
     public DFCareer.EnemyGroups GetEnemyGroup()

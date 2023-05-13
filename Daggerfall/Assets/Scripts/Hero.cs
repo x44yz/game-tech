@@ -15,6 +15,7 @@ public enum PlayerReflexes
     VeryLow = 4,
 }
 
+// [Serializable]
 public class Hero : Actor
 {
     public RaceTemplate RaceTemplate { get { return GetLiveRaceTemplate(); } }
@@ -34,6 +35,35 @@ public class Hero : Actor
         //     return racialOverrideEffect.CustomRace;
         // else
         return raceTemplate;
+    }
+
+    /// <summary>
+    /// Assigns player entity settings from a character document.
+    /// </summary>
+    public void AssignCharacter(int level = 1 /*, int maxHealth = 0, bool fillVitals = true*/)
+    {
+        // TODO: Add some bonus points to stats
+        career = Classes.GetClassCareerTemplate(ClassCareers.Mage);
+        if (career != null)
+        {
+            raceTemplate = RacesTemp.GetRaceTemplate(Races.Breton);
+            // faceIndex = 0;
+            reflexes = PlayerReflexes.Average;
+            // gender = Genders.Male;
+            stats.SetPermanentFromCareer(career);
+            this.level = level;
+            maxHealth = FormulaUtils.RollMaxHealth(this);
+            name = "Nameless";
+            // stats.SetDefaults();
+            skills.SetDefaults();
+            FillVitalSigns();
+            for (int i = 0; i < ArmorValues.Length; i++)
+            {
+                ArmorValues[i] = 100;
+            }
+        }
+
+        Debug.Log("Assigned character " + this.name);
     }
 
     public bool WeaponDamage(Item strikingWeapon, bool arrowHit, bool arrowSummoned, Actor target, Vector3 impactPosition, Vector3 direction)

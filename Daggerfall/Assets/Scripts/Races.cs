@@ -63,12 +63,36 @@
 //     }
 // }
 
-// public static class Races
-// {
-//     public static List<RaceCfg> raceCfgs;
+public static class RacesTemp
+{
+    // public static List<RaceCfg> raceCfgs;
 
-//     public static void Init()
-//     {
-//         raceCfgs = CSVLoader.LoadCSV<RaceCfg>("Assets/Configs/races.csv");
-//     }
-// }
+    // public static void Init()
+    // {
+    //     raceCfgs = CSVLoader.LoadCSV<RaceCfg>("Assets/Configs/races.csv");
+    // }
+
+    public static RaceTemplate GetRaceTemplate(Races race)
+    {
+        switch (race)
+        {
+            default:
+            case Races.Breton:
+                return new Breton();
+            case Races.Redguard:
+                return new Redguard();
+            case Races.Nord:
+                return new Nord();
+            case Races.DarkElf:
+                return new DarkElf();
+            case Races.HighElf:
+                return new HighElf();
+            case Races.WoodElf:
+                return new WoodElf();
+            case Races.Khajiit:
+                return new Khajiit();
+            case Races.Argonian:
+                return new Argonian();
+        }
+    }
+}

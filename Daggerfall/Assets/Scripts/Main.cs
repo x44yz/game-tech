@@ -10,7 +10,7 @@ public class Main : MonoBehaviour
     public string heroRace;
     public string heroClass;
     public string heroWeapon;
-
+    public int heroLevel;
     public ActorRender heroRender;
     public ActorRender monsterRender;
 
@@ -26,10 +26,11 @@ public class Main : MonoBehaviour
         Classes.Init();
         Talents.Init();
 
-        hero = new Hero();
+        hero = heroRender.gameObject.AddComponent<Hero>();
+        hero.AssignCharacter(heroLevel);
         heroRender.actor = hero;
 
-        monster = new Monster();
+        monster = monsterRender.gameObject.AddComponent<Monster>();
         monsterRender.actor = monster;
     }
 
@@ -43,8 +44,8 @@ public class Main : MonoBehaviour
         float dt = Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            // hero.Attack(monster);
-            heroRender.Attack();
+            hero.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
+            // heroRender.Attack();
         }
     }
 }
