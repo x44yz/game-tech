@@ -1039,6 +1039,38 @@ public static class FormulaUtils
         return maxHealth;
     }
 
+
+     /// <summary>
+    /// Gets a random material based on player level.
+    /// Note, this is called by default RandomArmorMaterial function.
+    /// </summary>
+    /// <param name="playerLevel">Player level, possibly adjusted.</param>
+    /// <returns>WeaponMaterialTypes value of material selected.</returns>
+    public static WeaponMaterialTypes RandomMaterial(int playerLevel)
+    {
+        int levelModifier = (playerLevel - 10);
+
+        if (levelModifier >= 0)
+            levelModifier *= 2;
+        else
+            levelModifier *= 4;
+
+        int randomModifier = UnityEngine.Random.Range(0, 256);
+
+        int combinedModifiers = levelModifier + randomModifier;
+        combinedModifiers = Mathf.Clamp(combinedModifiers, 0, 256);
+
+        int material = 0; // initialize to iron
+
+        // The higher combinedModifiers is, the higher the material
+        while (ItemBuilder.materialsByModifier[material] < combinedModifiers)
+        {
+            combinedModifiers -= ItemBuilder.materialsByModifier[material++];
+        }
+
+        return (WeaponMaterialTypes)(material);
+    }
+
 }
 
 public class Dice100

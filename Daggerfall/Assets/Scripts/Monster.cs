@@ -375,7 +375,7 @@ public class Monster : Actor
         {
             // right-hand weapon
             int item = UnityEngine.Random.Range((int)Weapons.Broadsword, (int)(Weapons.Longsword) + 1);
-            Item weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+            Item weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
             enemyEntity.Items.AddItem(weapon);
 
