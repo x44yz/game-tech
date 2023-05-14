@@ -88,13 +88,12 @@ public class ClassCfg : ICSVParser
 
 public static class Classes
 {
-    public static List<ClassCfg> classCfgs;
     public static List<DFCareer> careers;
+    public static List<DFCareer> monsterCareers;
 
     public static void Init()
     {
-        classCfgs = CSVLoader.LoadCSV<ClassCfg>("Assets/Configs/classes.csv");
-
+        var classCfgs = CSVLoader.LoadCSV<ClassCfg>("Assets/Configs/classes.csv");
         careers = new List<DFCareer>();
         for (int i = 0; i < classCfgs.Count; ++i)
         {
@@ -102,10 +101,24 @@ public static class Classes
             career.StructureData(classCfgs[i]);
             careers.Add(career);
         }
+
+        classCfgs = CSVLoader.LoadCSV<ClassCfg>("Assets/Configs/monsterClasses.csv");
+        monsterCareers = new List<DFCareer>();
+        for (int i = 0; i < classCfgs.Count; ++i)
+        {
+            var career = new DFCareer();
+            career.StructureData(classCfgs[i]);
+            monsterCareers.Add(career);
+        }
     }
 
     public static DFCareer GetClassCareerTemplate(ClassCareers ctype)
     {
         return careers.Find(x => x.Name == ctype.ToString());
+    }
+
+    public static DFCareer GetMonsterCareerTemplate(MonsterCareers career)
+    {
+        return monsterCareers.Find(x => x.Name == career.ToString());
     }
 }
