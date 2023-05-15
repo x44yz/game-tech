@@ -115,6 +115,18 @@ public enum ItemGroups
     Currency = 28,
 }
 
+/// <summary>
+/// Defines a custom enchantment for items.
+/// Classic enchantments use a type/param number pair in DaggerfallEnchantment.
+/// Custom enchantments use a key/param string pair in CustomEnchantment.
+/// </summary>
+[Serializable]
+public struct CustomEnchantment
+{
+    public string EffectKey;                                    // Define the effect used by this enchantment
+    public string CustomParam;                                  // Passed back to effect to locate/invoke enchantment settings
+}
+
 public class Item
 {
     public int TemplateIndex; // item id
@@ -128,7 +140,7 @@ public class Item
         get { return currentUID++; }
     }
 
-    ulong uid;
+    public ulong uid;
     ItemGroups itemGroup;
     int groupIndex;
     public float weightInKg;
@@ -143,14 +155,87 @@ public class Item
     public int enchantmentPoints;
     public int stackCount = 1;
     public DEnchantment[] legacyMagic = null;
+    public CustomEnchantment[] customMagic = null;
     
     const ushort identifiedMask = 0x20;
     const ushort artifactMask = 0x800;
+
+    public Item()
+    {
+        uid = NextUID;
+    }
 
     public Item(ItemGroups itemGroup, int groupIndex)
     {
         uid = NextUID;
         SetItem(itemGroup, groupIndex);
+    }
+
+    public Item(Item item)
+    {
+        uid = NextUID;
+        FromItem(item);
+    }
+
+    /// <summary>
+    /// Creates from another item instance.
+    /// </summary>
+    void FromItem(Item other)
+    {
+        // shortName = other.shortName;
+        itemGroup = other.itemGroup;
+        groupIndex = other.groupIndex;
+        // playerTextureArchive = other.playerTextureArchive;
+        // playerTextureRecord = other.playerTextureRecord;
+        // worldTextureArchive = other.worldTextureArchive;
+        // worldTextureRecord = other.worldTextureRecord;
+        nativeMaterialValue = other.nativeMaterialValue;
+        // dyeColor = other.dyeColor;
+        weightInKg = other.weightInKg;
+        drawOrder = other.drawOrder;
+        currentVariant = other.currentVariant;
+        value = other.value;
+        unknown = other.unknown;
+        flags = other.flags;
+        currentCondition = other.currentCondition;
+        maxCondition = other.maxCondition;
+        unknown2 = other.unknown2;
+        stackCount = other.stackCount;
+        enchantmentPoints = other.enchantmentPoints;
+        // message = other.message;
+        // potionRecipeKey = other.potionRecipeKey;
+        // timeHealthLeechLastUsed = other.timeHealthLeechLastUsed;
+        // artifactIndexBitfield = other.artifactIndexBitfield;
+
+        // isQuestItem = other.isQuestItem;
+        // questUID = other.questUID;
+        // questItemSymbol = other.questItemSymbol;
+
+        if (other.legacyMagic != null)
+            legacyMagic = (DEnchantment[])other.legacyMagic.Clone();
+
+        if (other.customMagic != null)
+            customMagic = (CustomEnchantment[])other.customMagic.Clone();
+    }
+
+    /// <summary>
+    /// Gets or sets item group.
+    /// Setting will reset item data from new template.
+    /// </summary>
+    public ItemGroups ItemGroup
+    {
+        get { return itemGroup; }
+        set { SetItem(value, groupIndex); }
+    }
+
+    /// <summary>
+    /// Gets or sets item group index.
+    /// Setting will reset item data from new template.
+    /// </summary>
+    public virtual int GroupIndex
+    {
+        get { return groupIndex; }
+        set { SetItem(itemGroup, value); }
     }
 
     /// <summary>
@@ -273,6 +358,11 @@ public class Item
     public virtual int GetBaseDamageMax()
     {
         return FormulaUtils.CalculateWeaponMaxDamage((Weapons)TemplateIndex);
+    }
+
+    public bool IsAStack() 
+    {
+        return stackCount > 1;
     }
 
     public int nativeMaterialValue;
@@ -441,4 +531,218 @@ public class Item
         float matQuarterKgs = (float)(quarterKgs * weightMultipliersByMaterial[(int)material]) / 4;
         return Mathf.Round(matQuarterKgs) / 4;
     }
+
+    // 魔法创造的物品消失时间
+    // Time for magically-created item to disappear
+    uint timeForItemToDisappear = 0;
+
+    // 是否是一个召唤物品
+    /// <summary>
+    /// Get flag checking if this is a summoned item.
+    /// Summoned items have a specific future game time they expire.
+    /// Non-summoned items have 0 in this field.
+    /// </summary>
+    public bool IsSummoned
+    {
+        get { return timeForItemToDisappear != 0; }
+    }
+
+    /// <summary>
+    /// Determines if item is stackable.
+    /// Only ingredients, potions, gold pieces, oil and arrows are stackable,
+    /// but equipped items, enchanted ingredients and quest items are never stackable.
+    /// </summary>
+    /// <returns>True if item stackable.</returns>
+    public virtual bool IsStackable()
+    {
+        if (IsSummoned)
+        {
+            // Only allowing summoned arrows to stack at this time
+            // But they should only stack with other summoned arrows
+            if (!IsOfTemplate(ItemGroups.Weapons, (int)Weapons.Arrow))
+                return false;
+        }
+
+        // Equipped, quest and enchanted items cannot stack.
+        if (IsEquipped || IsQuestItem || IsEnchanted)
+            return false;
+
+        return FormulaUtils.IsItemStackable(this);
+    }
+
+   /// <summary>
+    /// Checks if item is of both group and template index.
+    /// </summary>
+    /// <param name="itemGroup">Item group to check.</param>
+    /// <param name="templateIndex">Template index to check.</param>
+    /// <returns>True if item matches both group and template index.</returns>
+    public bool IsOfTemplate(ItemGroups itemGroup, int templateIndex)
+    {
+        if (ItemGroup == itemGroup && TemplateIndex == templateIndex)
+            return true;
+        else
+            return false;
+    }
+
+    /// <summary>
+    /// Checks if item is of template index.
+    /// </summary>
+    /// <param name="templateIndex">Template index to check.</param>
+    /// <returns>True if item matches template index.</returns>
+    public bool IsOfTemplate(int templateIndex)
+    {
+        return (TemplateIndex == templateIndex);
+    }
+
+    // References current slot if equipped
+    EquipSlots equipSlot = EquipSlots.None;
+    /// <summary>
+    /// Checks if this item is equipped.
+    /// </summary>
+    public bool IsEquipped
+    {
+        get { return equipSlot != EquipSlots.None; }
+    }
+    /// <summary>
+    /// Gets temp equip slot.
+    /// </summary>
+    public EquipSlots EquipSlot
+    {
+        get { return equipSlot; }
+        set { equipSlot = value; }
+    }
+
+    // TODO:@dongl1n
+    // why None
+    public virtual EquipSlots GetEquipSlot()
+    {
+        return EquipSlots.None;
+    }
+
+    public virtual ItemHands GetItemHands()
+    {
+        return ItemHands.None;
+    }
+
+    public bool IsQuestItem => false;
+
+    public void LowerCondition(int amount, Actor unequipFromOwner = null, ItemCollection removeFromCollectionWhenBreaks = null)
+    {
+        currentCondition -= amount;
+        if (currentCondition <= 0)
+        {
+            // Handle breaking - if AllowMagicRepairs enabled then item will not disappear
+            currentCondition = 0;
+            ItemBreaks(unequipFromOwner);
+            if (removeFromCollectionWhenBreaks != null && !DaggerfallUnity.Settings.AllowMagicRepairs)
+                removeFromCollectionWhenBreaks.RemoveItem(this);
+        }
+    }
+
+    public void UnequipItem(Actor owner)
+    {
+        if (owner == null)
+            return;
+
+        foreach (EquipSlots slot in Enum.GetValues(typeof(EquipSlots)))
+        {
+            if (owner.ItemEquipTable.GetItem(slot) == this)
+            {
+                owner.ItemEquipTable.UnequipItem(slot);
+                owner.UpdateEquippedArmorValues(this, false);
+            }
+        }
+    }
+
+    protected void ItemBreaks(Actor owner)
+    {
+        // Classic does not have the plural version of this string, and uses the short name rather than the long one.
+        // Also the classic string says "is" instead of "has"
+        // string itemBroke = "";
+        // if (TemplateIndex == (int)Armor.Boots || TemplateIndex == (int)Armor.Gauntlets || TemplateIndex == (int)Armor.Greaves)
+        //     itemBroke = TextManager.Instance.GetLocalizedText("itemHasBrokenPlural");
+        // else
+        //     itemBroke = TextManager.Instance.GetLocalizedText("itemHasBroken");
+        // itemBroke = itemBroke.Replace("%s", LongName);
+        // DaggerfallUI.Instance.PopupMessage(itemBroke);
+
+        // Unequip item if owner specified
+        if (owner != null)
+            UnequipItem(owner);
+        else
+            return;
+
+        // Breaks payload callback on owner effect manager
+        if (owner)
+        {
+            EffectManager ownerEffectManager = owner.GetComponent<EffectManager>();
+            if (ownerEffectManager)
+                ownerEffectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Breaks, this, owner.Items, owner);
+        }
+    }
+
+    /// <summary>
+    /// Get this item's template data.
+    /// </summary>
+    public ItemTemplate ItemTemplate
+    {
+        get { return GetCachedItemTemplate(); }
+    }
+
+    // Item template is cached for faster checks
+    // Does not need to be serialized
+    ItemTemplate cachedItemTemplate;
+    ItemGroups cachedItemGroup = ItemGroups.None;
+    int cachedGroupIndex = -1;
+    /// <summary>
+    /// Caches item template.
+    /// </summary>
+    ItemTemplate GetCachedItemTemplate()
+    {
+        if (itemGroup != cachedItemGroup || groupIndex != cachedGroupIndex)
+        {
+            cachedItemTemplate = Items.GetItemTemplate(itemGroup, groupIndex);
+            cachedItemGroup = itemGroup;
+            cachedGroupIndex = groupIndex;
+        }
+
+        return cachedItemTemplate;
+    }
+}
+
+/// <summary>
+/// Equipment slots available to equip items.
+/// Indices match Daggerfall's legacy equip slots for import.
+/// Some unknowns still need to be resolved.
+/// </summary>
+public enum EquipSlots
+{
+    None = -1,
+    Amulet0 = 0,            // Amulets / Torcs
+    Amulet1 = 1,
+    Bracelet0 = 2,          // Bracelets
+    Bracelet1 = 3,
+    Ring0 = 4,              // Rings
+    Ring1 = 5,
+    Bracer0 = 6,            // Bracers
+    Bracer1 = 7,
+    Mark0 = 8,              // Marks
+    Mark1 = 9,
+    Crystal0 = 10,          // Gems
+    Crystal1 = 11,
+    Head = 12,              // Helm
+    RightArm = 13,          // Right pauldron
+    Cloak1 = 14,            // Cloaks
+    LeftArm = 15,           // Left pauldron
+    Cloak2 = 16,            // Cloaks
+    ChestClothes = 17,      // Shirt / Straps / Armband / Eodoric / Tunic / Surcoat / Plain robes / etc.
+    ChestArmor = 18,        // Cuirass
+    RightHand = 19,         // Right weapon / Two-handed weapon
+    Gloves = 20,            // Gauntlets
+    LeftHand = 21,          // Left weapon / Shields
+    Unknown1 = 22,
+    LegsArmor = 23,         // Greaves
+    LegsClothes = 24,       // Khajiit suit / Loincloth / Skirt / etc.
+    Unknown2 = 25,
+    Feet = 26,              // Boots / Shoes / Sandals / etc.
 }

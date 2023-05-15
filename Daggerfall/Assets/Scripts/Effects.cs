@@ -4,6 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// Flags to modify behaviour of assigning effect bundles.
+/// </summary>
+[Flags]
+public enum AssignBundleFlags
+{
+    None = 0,
+    ShowNonPlayerFailures = 1,
+    BypassSavingThrows = 2,
+    SpecialInfection = 4,
+    BypassChance = 8,
+}
+
+/// <summary>
 /// Supported bundle types.
 /// This helps determine lifetime and usage of a bundle.
 /// </summary>

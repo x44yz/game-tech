@@ -1247,6 +1247,17 @@ public static class FormulaUtils
     {
         return (int)Mathf.Floor((float)willpower / 10f);
     }
+
+    public static bool IsItemStackable(Item item)
+    {
+        if (item.IsIngredient || item.IsPotion || (item.ItemGroup == ItemGroups.Books) ||
+            item.IsOfTemplate(ItemGroups.Currency, (int)Currency.Gold_pieces) ||
+            item.IsOfTemplate(ItemGroups.Weapons, (int)Weapons.Arrow) ||
+            item.IsOfTemplate(ItemGroups.UselessItems2, (int)UselessItems2.Oil))
+            return true;
+        else
+            return false;
+    }
 }
 
 /// <summary>

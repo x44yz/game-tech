@@ -178,7 +178,7 @@ public class Monster : Actor
         //     {
         //         // Default like a class enemy
         //         level = GameManager.Instance.PlayerEntity.Level;
-        //         maxHealth = FormulaHelper.RollEnemyClassMaxHealth(level, career.HitPointsPerLevel);
+        //         maxHealth = FormulaUtils.RollEnemyClassMaxHealth(level, career.HitPointsPerLevel);
         //     }
         // }
         // else 
@@ -435,7 +435,7 @@ public class Monster : Actor
             item = UnityEngine.Random.Range((int)Armor.Buckler, (int)(Armor.Round_Shield) + 1);
             if (Dice100.SuccessRoll(chance))
             {
-                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, (Items.Armor)item, FormulaHelper.RandomArmorMaterial(itemLevel));
+                DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, (Items.Armor)item, FormulaUtils.RandomArmorMaterial(itemLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
@@ -443,7 +443,7 @@ public class Monster : Actor
             else if (Dice100.SuccessRoll(chance))
             {
                 item = UnityEngine.Random.Range((int)Weapons.Dagger, (int)(Weapons.Shortsword) + 1);
-                weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+                weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
                 enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
                 enemyEntity.Items.AddItem(weapon);
             }
@@ -452,7 +452,7 @@ public class Monster : Actor
         {
             // right-hand weapon
             int item = UnityEngine.Random.Range((int)Weapons.Claymore, (int)(Weapons.Battle_Axe) + 1);
-            DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaHelper.RandomMaterial(itemLevel));
+            DaggerfallUnityItem weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
             enemyEntity.Items.AddItem(weapon);
 
@@ -464,42 +464,42 @@ public class Monster : Actor
         // helm
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Helm, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Helm, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // right pauldron
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // left pauldron
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // cuirass
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Cuirass, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Cuirass, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // greaves
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Greaves, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Greaves, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // boots
         if (Dice100.SuccessRoll(chance))
         {
-            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Boots, FormulaHelper.RandomArmorMaterial(itemLevel));
+            DaggerfallUnityItem armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Boots, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }

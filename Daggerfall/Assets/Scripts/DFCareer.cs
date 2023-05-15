@@ -342,6 +342,7 @@ public class DFCareer
         ReducedPowerInDarkness = 2,
     }
 
+    // 法术吸收标记
     /// <summary>
     /// Flags for spell absorption.
     /// </summary>

@@ -429,4 +429,8 @@ public class Actor : MonoBehaviour
             }
         }
     }
+
+    protected ItemCollection items = new ItemCollection();
+    public ItemCollection Items { get { return items; } set { items.ReplaceAll(value); } }
+    public ItemEquipTable ItemEquipTable { get { return equipTable; } }
 }

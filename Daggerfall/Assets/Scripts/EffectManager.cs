@@ -670,7 +670,7 @@ public class EffectManager : MonoBehaviour
                 sourceBundle.Settings.TargetType != TargetTypes.CasterOnly)
             {
                 // Immune if saving throw made
-                if (FormulaHelper.SavingThrow(effect, entityBehaviour.Entity) == 0)
+                if (FormulaUtils.SavingThrow(effect, entityBehaviour.Entity) == 0)
                 {
                     if (IsPlayerEntity || showNonPlayerFailures)
                     {
@@ -1195,11 +1195,11 @@ public class EffectManager : MonoBehaviour
             if (results.Value.removeItem)
                 sourceCollection.RemoveItem(item);
             else if (results.Value.durabilityLoss > 0)
-                item.LowerCondition(results.Value.durabilityLoss, GameManager.Instance.PlayerEntity, sourceCollection);
+                item.LowerCondition(results.Value.durabilityLoss, Main.Inst.hero, sourceCollection);
         }
     }
 
-    int StrikeWithItem(IEntityEffect effectTemplate, Item item, EnchantmentSettings settings, DaggerfallEntityBehaviour targetEntity, int damageIn)
+    int StrikeWithItem(IEntityEffect effectTemplate, Item item, EnchantmentSettings settings, Actor targetEntity, int damageIn)
     {
         // Strikes payload callback
         EnchantmentParam param = new EnchantmentParam() { ClassicParam = settings.ClassicParam, CustomParam = settings.CustomParam };
@@ -1207,7 +1207,7 @@ public class EffectManager : MonoBehaviour
         if (results != null)
         {
             if (results.Value.durabilityLoss > 0)
-                item.LowerCondition(results.Value.durabilityLoss, entityBehaviour.Entity, entityBehaviour.Entity.Items);
+                item.LowerCondition(results.Value.durabilityLoss, entityBehaviour, entityBehaviour.Items);
 
             return results.Value.strikesModulateDamage;
         }
@@ -1328,7 +1328,7 @@ public class EffectManager : MonoBehaviour
             // Redirect source bundle back on caster entity
             // They will have all their usual processes to absorb or resist spell on arrival
             sourceBundle.IncrementReflectionCount();
-            EntityEffectManager casterEffectManager = sourceBundle.CasterEntityBehaviour.GetComponent<EntityEffectManager>();
+            EffectManager casterEffectManager = sourceBundle.CasterEntityBehaviour.GetComponent<EffectManager>();
             casterEffectManager.AssignBundle(sourceBundle);
 
             // Output "Spell was reflected." when player is the one reflecting spell
@@ -1373,8 +1373,8 @@ public class EffectManager : MonoBehaviour
 
     int GetEffectCastingCost(IEntityEffect effect, TargetTypes targetType, Actor casterEntity)
     {            
-        (int _, int spellPointCost) = FormulaHelper.CalculateEffectCosts(effect, effect.Settings, casterEntity);
-        spellPointCost = FormulaHelper.ApplyTargetCostMultiplier(spellPointCost, targetType);
+        (int _, int spellPointCost) = FormulaUtils.CalculateEffectCosts(effect, effect.Settings, casterEntity);
+        spellPointCost = FormulaUtils.ApplyTargetCostMultiplier(spellPointCost, targetType);
 
         // Spells always cost at least 5 spell points
         // Otherwise it's possible for absorbs to make spell point pool go down as spell costs 5 but caster absorbs 0
@@ -1400,22 +1400,22 @@ public class EffectManager : MonoBehaviour
         if (spellAbsorption == DFCareer.SpellAbsorptionFlags.Always)
             return true;
 
-        // Resist in darkness (inside building or dungeon or outside at night)
-        // Use player for inside/outside context - everything is where the player is
-        if (spellAbsorption == DFCareer.SpellAbsorptionFlags.InDarkness)
-        {
-            if (GameManager.Instance.PlayerEnterExit.IsPlayerInside)
-                return true;
-            else if (DaggerfallUnity.Instance.WorldTime.Now.IsNight)
-                return true;
-        }
+        // // Resist in darkness (inside building or dungeon or outside at night)
+        // // Use player for inside/outside context - everything is where the player is
+        // if (spellAbsorption == DFCareer.SpellAbsorptionFlags.InDarkness)
+        // {
+        //     if (GameManager.Instance.PlayerEnterExit.IsPlayerInside)
+        //         return true;
+        //     else if (DaggerfallUnity.Instance.WorldTime.Now.IsNight)
+        //         return true;
+        // }
 
-        // Resist in light (outside during the day)
-        if (spellAbsorption == DFCareer.SpellAbsorptionFlags.InLight)
-        {
-            if (!GameManager.Instance.PlayerEnterExit.IsPlayerInside && DaggerfallUnity.Instance.WorldTime.Now.IsDay)
-                return true;
-        }
+        // // Resist in light (outside during the day)
+        // if (spellAbsorption == DFCareer.SpellAbsorptionFlags.InLight)
+        // {
+        //     if (!GameManager.Instance.PlayerEnterExit.IsPlayerInside && DaggerfallUnity.Instance.WorldTime.Now.IsDay)
+        //         return true;
+        // }
 
         return false;
     }
@@ -1781,10 +1781,10 @@ public class EffectManager : MonoBehaviour
     void DoConstantEffects()
     {
         // Clear existing constant effects
-        entityBehaviour.Entity.ClearConstantEffects();
+        entityBehaviour.ClearConstantEffects();
 
         // Do nothing further if entity has perished or object disabled
-        if (entityBehaviour.Entity.CurrentHealth <= 0 || !entityBehaviour.enabled)
+        if (entityBehaviour.CurrentHealth <= 0 || !entityBehaviour.enabled)
             return;
 
         foreach (LiveEffectBundle bundle in instancedBundles)
@@ -1810,13 +1810,13 @@ public class EffectManager : MonoBehaviour
     void DoMagicRound()
     {
         // Clear direct mods
-        Array.Clear(directStatMods, 0, DaggerfallStats.Count);
-        Array.Clear(directSkillMods, 0, DaggerfallSkills.Count);
+        Array.Clear(directStatMods, 0, DStats.Count);
+        Array.Clear(directSkillMods, 0, DSkills.Count);
         if (IsPlayerEntity)
-            (entityBehaviour.Entity as PlayerEntity).ClearReactionMods();
+            (entityBehaviour as PlayerEntity).ClearReactionMods();
 
         // Do nothing further if no bundles, entity has perished, or object disabled
-        if (instancedBundles.Count == 0 || entityBehaviour.Entity.CurrentHealth <= 0 || !entityBehaviour.enabled)
+        if (instancedBundles.Count == 0 || entityBehaviour.CurrentHealth <= 0 || !entityBehaviour.enabled)
             return;
 
         // Run all bundles
@@ -1931,10 +1931,10 @@ public class EffectManager : MonoBehaviour
     void UpdateEntityMods()
     {
         // Clear all mods
-        Array.Clear(combinedStatMods, 0, DaggerfallStats.Count);
-        Array.Clear(combinedStatMaxMods, 0, DaggerfallStats.Count);
-        Array.Clear(combinedSkillMods, 0, DaggerfallSkills.Count);
-        Array.Clear(combinedResistanceMods, 0, DaggerfallResistances.Count);
+        Array.Clear(combinedStatMods, 0, DStats.Count);
+        Array.Clear(combinedStatMaxMods, 0, DStats.Count);
+        Array.Clear(combinedSkillMods, 0, DSkills.Count);
+        Array.Clear(combinedResistanceMods, 0, DResistances.Count);
 
         // Add together every mod for every live effect
         foreach (LiveEffectBundle bundle in instancedBundles)
@@ -1952,16 +1952,16 @@ public class EffectManager : MonoBehaviour
         MergeDirectMods();
 
         // Assign to host entity
-        entityBehaviour.Entity.Stats.AssignMods(combinedStatMods, combinedStatMaxMods);
-        entityBehaviour.Entity.Skills.AssignMods(combinedSkillMods);
-        entityBehaviour.Entity.Resistances.AssignMods(combinedResistanceMods);
+        entityBehaviour.Stats.AssignMods(combinedStatMods, combinedStatMaxMods);
+        entityBehaviour.Skills.AssignMods(combinedSkillMods);
+        entityBehaviour.Resistances.AssignMods(combinedResistanceMods);
 
         // Kill host if any stat is reduced to 0 live total
-        for (int i = 0; i < DaggerfallStats.Count; i++)
+        for (int i = 0; i < DStats.Count; i++)
         {
-            if (entityBehaviour.Entity.Stats.GetLiveStatValue(i) == 0)
+            if (entityBehaviour.Stats.GetLiveStatValue(i) == 0)
             {
-                entityBehaviour.Entity.CurrentHealth = 0;
+                entityBehaviour.CurrentHealth = 0;
                 return;
             }
         }
@@ -2012,7 +2012,7 @@ public class EffectManager : MonoBehaviour
         }
     }
 
-    ulong GetCasterLoadID(DaggerfallEntityBehaviour caster)
+    ulong GetCasterLoadID(Actor caster)
     {
         // Only supporting LoadID from enemies at this time
         if (caster.EntityType == EntityTypes.EnemyMonster || caster.EntityType == EntityTypes.EnemyClass)
@@ -2035,8 +2035,8 @@ public class EffectManager : MonoBehaviour
         {
             // Output "You are silenced." if the host manager is player
             // Just to let them know why casting isn't working
-            if (entityBehaviour == GameManager.Instance.PlayerEntityBehaviour)
-                DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("youAreSilenced"), 1.5f);
+            // if (entityBehaviour == GameManager.Instance.PlayerEntityBehaviour)
+            //     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("youAreSilenced"), 1.5f);
 
             readySpell = null;
             return true;
@@ -2045,7 +2045,7 @@ public class EffectManager : MonoBehaviour
         return false;
     }
 
-    public void PlayCastSound(DaggerfallEntityBehaviour casterEntityBehaviour, int castSoundID, bool throttle = false)
+    public void PlayCastSound(Actor casterEntityBehaviour, int castSoundID, bool throttle = false)
     {
         // Throttle casting sound to once per 0.5f seconds to prevent playing overlapping effects on item equip/recast
         if (throttle && Time.realtimeSinceStartup - timeLastCastSoundPlayed < 0.5f)
@@ -2053,9 +2053,9 @@ public class EffectManager : MonoBehaviour
 
         if (casterEntityBehaviour)
         {
-            DaggerfallAudioSource audioSource = casterEntityBehaviour.GetComponent<DaggerfallAudioSource>();
-            if (castSoundID != -1 && audioSource)
-                audioSource.PlayOneShot((uint)castSoundID);
+            // DaggerfallAudioSource audioSource = casterEntityBehaviour.GetComponent<DaggerfallAudioSource>();
+            // if (castSoundID != -1 && audioSource)
+            //     audioSource.PlayOneShot((uint)castSoundID);
         }
 
         timeLastCastSoundPlayed = Time.realtimeSinceStartup;
@@ -2091,7 +2091,7 @@ public class EffectManager : MonoBehaviour
         // Instantiate effect
         EffectBundleSettings settings = new EffectBundleSettings()
         {
-            Version = EntityEffectBroker.CurrentSpellVersion,
+            Version = Effects.CurrentSpellVersion,
             BundleType = BundleTypes.None,
             Effects = new EffectEntry[] { new EffectEntry(PassiveSpecialsEffect.EffectKey) },
         };
@@ -2176,7 +2176,7 @@ public class EffectManager : MonoBehaviour
         }
         else
         {
-            DaggerfallMissile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
+            Missile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
             if (missile)
                 missile.Payload = readySpell;
         }
@@ -2219,7 +2219,7 @@ public class EffectManager : MonoBehaviour
         }
         else
         {
-            DaggerfallMissile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
+            Missile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
             if (missile)
                 missile.Payload = readySpell;
         }
@@ -2255,10 +2255,10 @@ public class EffectManager : MonoBehaviour
         WipeAllBundles();
     }
 
-    private void Entity_OnDeath(DaggerfallEntity entity)
+    private void Entity_OnDeath(Actor entity)
     {
         wipeAllBundles = true;
-        entityBehaviour.Entity.OnDeath -= Entity_OnDeath;
+        entityBehaviour.OnDeath -= Entity_OnDeath;
         //Debug.LogFormat("Cleared all effect bundles after death of {0}", entity.Name);
     }
 
@@ -2276,7 +2276,7 @@ public class EffectManager : MonoBehaviour
 
     #region Serialization
 
-    [fsObject("v1")]
+    // [fsObject("v1")]
     public struct EffectBundleSaveData_v1
     {
         public int version;
@@ -2286,7 +2286,7 @@ public class EffectManager : MonoBehaviour
         public BundleRuntimeFlags runtimeFlags;
         public string name;
         public int iconIndex;
-        public SpellIcon icon;
+        // public SpellIcon icon;
         public EntityTypes casterEntityType;
         public ulong casterLoadID;
         public ulong fromEquippedItemID;
@@ -2295,7 +2295,7 @@ public class EffectManager : MonoBehaviour
         public EffectSaveData_v1[] liveEffects;
     }
 
-    [fsObject("v1")]
+    // [fsObject("v1")]
     public struct EffectSaveData_v1
     {
         public string key;
@@ -2329,7 +2329,7 @@ public class EffectManager : MonoBehaviour
             bundleData.runtimeFlags = bundle.runtimeFlags;
             bundleData.name = bundle.name;
             bundleData.iconIndex = bundle.iconIndex;
-            bundleData.icon = bundle.icon;
+            // bundleData.icon = bundle.icon;
             bundleData.casterEntityType = bundle.casterEntityType;
             bundleData.casterLoadID = bundle.casterLoadID;
             if (bundle.fromEquippedItem != null) bundleData.fromEquippedItemID = bundle.fromEquippedItem.UID;
@@ -2392,15 +2392,15 @@ public class EffectManager : MonoBehaviour
             instancedBundle.runtimeFlags = bundleData.runtimeFlags;
             instancedBundle.name = bundleData.name;
             instancedBundle.iconIndex = bundleData.iconIndex;
-            instancedBundle.icon = bundleData.icon;
+            // instancedBundle.icon = bundleData.icon;
             instancedBundle.casterEntityType = bundleData.casterEntityType;
             instancedBundle.casterLoadID = bundleData.casterLoadID;
             instancedBundle.liveEffects = new List<IEntityEffect>();
             instancedBundle.caster = GetCasterReference(bundleData.casterEntityType, bundleData.casterLoadID);
             if (instancedBundle.caster)
             {
-                instancedBundle.fromEquippedItem = instancedBundle.caster.Entity.Items.GetItem(bundleData.fromEquippedItemID);
-                instancedBundle.castByItem = instancedBundle.caster.Entity.Items.GetItem(bundleData.castByItemID);
+                instancedBundle.fromEquippedItem = instancedBundle.caster.Items.GetItem(bundleData.fromEquippedItemID);
+                instancedBundle.castByItem = instancedBundle.caster.Items.GetItem(bundleData.castByItemID);
             }
 
             // If bundle is supposed to be an equipped item, and we did not find that item, then do not restore bundle
@@ -2409,8 +2409,8 @@ public class EffectManager : MonoBehaviour
 
             // Migrate from old spell icon index
             // The old icon index will be changed into a SpellIcon with a null pack key
-            if (string.IsNullOrEmpty(instancedBundle.icon.key) && instancedBundle.icon.index == 0)
-                instancedBundle.icon.index = instancedBundle.iconIndex;
+            // if (string.IsNullOrEmpty(instancedBundle.icon.key) && instancedBundle.icon.index == 0)
+            //     instancedBundle.icon.index = instancedBundle.iconIndex;
 
             // Resume effects
             foreach (EffectSaveData_v1 effectData in bundleData.liveEffects)
@@ -2456,14 +2456,14 @@ public class EffectManager : MonoBehaviour
     /// Already have strategies in mind to resolve this, depending on how bad problem is in practice.
     /// Don't want to "prematurely optimise" until this is actually a problem worth fixing.
     /// </summary>
-    DaggerfallEntityBehaviour GetCasterReference(EntityTypes casterEntityType, ulong loadID)
+    Actor GetCasterReference(EntityTypes casterEntityType, ulong loadID)
     {
-        DaggerfallEntityBehaviour caster = null;
+        Actor caster = null;
 
         // Only supporting player and enemy entity types as casters for now
         if (casterEntityType == EntityTypes.Player)
         {
-            caster = GameManager.Instance.PlayerEntityBehaviour;
+            caster = Main.Inst.hero;
         }
         else if ((casterEntityType == EntityTypes.EnemyMonster || casterEntityType == EntityTypes.EnemyClass) && loadID != 0)
         {
@@ -2474,7 +2474,7 @@ public class EffectManager : MonoBehaviour
                 return null;
             }
 
-            caster = serializableEnemy.GetComponent<DaggerfallEntityBehaviour>();
+            caster = serializableEnemy.GetComponent<Actor>();
             if (!caster)
                 throw new Exception(string.Format("EntityEffect.RestoreEffectSaveData() could not find DaggerfallEntityBehaviour for LoadID {0} in StateManager.", loadID));
         }

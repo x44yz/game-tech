@@ -45,7 +45,7 @@ public class DResistances
 
     #region Constructors
 
-    public DaggerfallResistances()
+    public DResistances()
     {
         SetDefaults();
     }
@@ -64,7 +64,7 @@ public class DResistances
         Array.Clear(mods, 0, Count);
     }
 
-    public void Copy(DaggerfallResistances other)
+    public void Copy(DResistances other)
     {
         Fire = other.Fire;
         Frost = other.Frost;
