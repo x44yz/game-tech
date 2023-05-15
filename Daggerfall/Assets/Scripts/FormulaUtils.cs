@@ -69,7 +69,7 @@ public static class FormulaUtils
             skillID = (short)Skills.HandToHand;
         }
 
-        chanceToHitMod = attacker.Skills.GetLiveSkillValue(skillID);
+        chanceToHitMod = attacker.tSkills.GetLiveSkillValue(skillID);
 
         // 玩家
         if (attacker == player)
@@ -496,8 +496,8 @@ public static class FormulaUtils
 
     public static int CalculateHandToHandAttackDamage(Actor attacker, Actor target, int damageModifier, bool player)
     {
-        int minBaseDamage = CalculateHandToHandMinDamage(attacker.Skills.GetLiveSkillValue(Skills.HandToHand));
-        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.Skills.GetLiveSkillValue(Skills.HandToHand));
+        int minBaseDamage = CalculateHandToHandMinDamage(attacker.tSkills.GetLiveSkillValue(Skills.HandToHand));
+        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.tSkills.GetLiveSkillValue(Skills.HandToHand));
         int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
 
         // Apply damage modifiers.
@@ -661,12 +661,12 @@ public static class FormulaUtils
         // Apply dodging modifier.
         // This modifier is bugged in classic and the attacker's dodging skill is used rather than the target's.
         // DF Chronicles says the dodging calculation is (dodging / 10), but it actually seems to be (dodging / 4).
-        chanceToHitMod -= target.Skills.GetLiveSkillValue(Skills.Dodging) / 4;
+        chanceToHitMod -= target.tSkills.GetLiveSkillValue(Skills.Dodging) / 4;
 
         // Apply critical strike modifier.
-        if (Dice100.SuccessRoll(attacker.Skills.GetLiveSkillValue(Skills.CriticalStrike)))
+        if (Dice100.SuccessRoll(attacker.tSkills.GetLiveSkillValue(Skills.CriticalStrike)))
         {
-            chanceToHitMod += attacker.Skills.GetLiveSkillValue(Skills.CriticalStrike) / 10;
+            chanceToHitMod += attacker.tSkills.GetLiveSkillValue(Skills.CriticalStrike) / 10;
         }
 
         return chanceToHitMod;
@@ -813,7 +813,7 @@ public static class FormulaUtils
         if (isEnemyFacingAwayFromPlayer)
         {
             // player.TallySkill(DFCareer.Skills.Backstabbing, 1);
-            return player.Skills.GetLiveSkillValue(Skills.Backstabbing);
+            return player.tSkills.GetLiveSkillValue(Skills.Backstabbing);
         }
         return 0;
     }
@@ -988,7 +988,7 @@ public static class FormulaUtils
     // Calculate how much health the player should recover per hour of rest
     public static int CalculateHealthRecoveryRate(Hero player)
     {
-        short medical = player.Skills.GetLiveSkillValue(Skills.Medical);
+        short medical = player.tSkills.GetLiveSkillValue(Skills.Medical);
         int endurance = player.Stats.LiveEndurance;
         int maxHealth = player.MaxHealth;
         // PlayerEnterExit playerEnterExit;

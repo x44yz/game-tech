@@ -137,6 +137,12 @@ public class CSVLoader
         return Utils.ToInt(value);
     }
 
+    public byte ReadByte(string fieldName, byte? defaultValue = null)
+    {
+        var value = GetFieldValue(fieldName, defaultValue == null);
+        return Convert.ToByte(value, defaultValue ?? 0);
+    }
+
     public int ReadInt(string fieldName, int? defaultValue = null)
     {
         var value = GetFieldValue(fieldName, defaultValue == null);

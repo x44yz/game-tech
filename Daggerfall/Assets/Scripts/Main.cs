@@ -25,7 +25,7 @@ public class Main : MonoBehaviour
 
         // Races.Init();
         Classes.Init();
-        Talents.Init();
+        Items.Init();
 
         hero = heroRender.gameObject.AddComponent<Hero>();
         hero.AssignCharacter(heroLevel);

@@ -181,7 +181,7 @@ public class Actor : MonoBehaviour
     protected WeaponMaterialTypes minMetalToHit;
     public WeaponMaterialTypes MinMetalToHit { get { return minMetalToHit; } set { minMetalToHit = value; } }
     protected DSkills skills;
-    public DSkills Skills { get { return skills; } set { skills.Copy(value); } }
+    public DSkills tSkills { get { return skills; } set { skills.Copy(value); } }
     public int level;
     public int Level { get { return level; } set { level = value; } }
 
@@ -319,4 +319,6 @@ public class Actor : MonoBehaviour
     private void Awake() {
         skills = new DSkills();
     }
+
+    protected List<EffectBundleSettings> spellbook = new List<EffectBundleSettings>();
 }

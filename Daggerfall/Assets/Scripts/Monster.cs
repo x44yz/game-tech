@@ -133,6 +133,22 @@ public class Monster : Actor
         }
     }
 
+ // From FALL.EXE offset 0x1C0F14
+    static byte[] ImpSpells            = { 0x07, 0x0A, 0x1D, 0x2C };
+    static byte[] GhostSpells          = { 0x22 };
+    static byte[] OrcShamanSpells      = { 0x06, 0x07, 0x16, 0x19, 0x1F };
+    static byte[] WraithSpells         = { 0x1C, 0x1F };
+    static byte[] FrostDaedraSpells    = { 0x10, 0x14 };
+    static byte[] FireDaedraSpells     = { 0x0E, 0x19 };
+    static byte[] DaedrothSpells       = { 0x16, 0x17, 0x1F };
+    static byte[] VampireSpells        = { 0x33 };
+    static byte[] SeducerSpells        = { 0x34, 0x43 };
+    static byte[] VampireAncientSpells = { 0x08, 0x32 };
+    static byte[] DaedraLordSpells     = { 0x08, 0x0A, 0x0E, 0x3C, 0x43 };
+    static byte[] LichSpells           = { 0x08, 0x0A, 0x0E, 0x22, 0x3C };
+    static byte[] AncientLichSpells    = { 0x08, 0x0A, 0x0E, 0x1D, 0x1F, 0x22, 0x3C };
+    static byte[][] EnemyClassSpells   = { FrostDaedraSpells, DaedrothSpells, OrcShamanSpells, VampireAncientSpells, DaedraLordSpells, LichSpells, AncientLichSpells };
+
     int careerIndex = -1;
     /// <summary>
     /// Sets enemy career and prepares entity settings.
@@ -279,19 +295,52 @@ public class Monster : Actor
         }
 
         // Chance of adding map
-        DaggerfallLoot.RandomlyAddMap(mobileEnemy.MapChance, items);
+        // DaggerfallLoot.RandomlyAddMap(mobileEnemy.MapChance, items);
 
-        if (!string.IsNullOrEmpty(mobileEnemy.LootTableKey))
-        {
-            // Chance of adding potion
-            DaggerfallLoot.RandomlyAddPotion(3, items);
-            // Chance of adding potion recipe
-            DaggerfallLoot.RandomlyAddPotionRecipe(2, items);
-        }
+        // if (!string.IsNullOrEmpty(mobileEnemy.LootTableKey))
+        // {
+        //     // Chance of adding potion
+        //     DaggerfallLoot.RandomlyAddPotion(3, items);
+        //     // Chance of adding potion recipe
+        //     DaggerfallLoot.RandomlyAddPotionRecipe(2, items);
+        // }
 
-        OnLootSpawned?.Invoke(this, new EnemyLootSpawnedEventArgs { MobileEnemy = mobileEnemy, EnemyCareer = career, Items = items });
+        // OnLootSpawned?.Invoke(this, new EnemyLootSpawnedEventArgs { MobileEnemy = mobileEnemy, EnemyCareer = career, Items = items });
 
         FillVitalSigns();
+    }
+
+    public void SetEnemySpells(byte[] spellList)
+    {
+        // Enemies don't follow same rule as player for maximum spell points
+        MaxMagicka = 10 * level + 100;
+        currentMagicka = MaxMagicka;
+        skills.SetPermanentSkillValue(Skills.Destruction, 80);
+        skills.SetPermanentSkillValue(Skills.Restoration, 80);
+        skills.SetPermanentSkillValue(Skills.Illusion, 80);
+        skills.SetPermanentSkillValue(Skills.Alteration, 80);
+        skills.SetPermanentSkillValue(Skills.Thaumaturgy, 80);
+        skills.SetPermanentSkillValue(Skills.Mysticism, 80);
+
+        // Add spells to enemy from standard list
+        foreach (byte spellID in spellList)
+        {
+            SpellRecord.SpellRecordData spellData;
+            GameManager.Instance.EntityEffectBroker.GetClassicSpellRecord(spellID, out spellData);
+            if (spellData.index == -1)
+            {
+                Debug.LogError("Failed to locate enemy spell in standard spells list.");
+                continue;
+            }
+
+            EffectBundleSettings bundle; 
+            if (!GameManager.Instance.EntityEffectBroker.ClassicSpellRecordDataToEffectBundleSettings(spellData, BundleTypes.Spell, out bundle))
+            {
+                Debug.LogError("Failed to create effect bundle for enemy spell: " + spellData.spellName);
+                continue;
+            }
+            AddSpell(bundle);
+        }
     }
 
 
@@ -360,7 +409,8 @@ public class Monster : Actor
     }
 
     // variant 变量
-    public void AssignEnemyStartingEquipment(Hero player, Monster enemyEntity, int variant)
+    public void AssignEnemyStartingEquipment(Hero player, Monster enemyEntity, 
+        int variant)
     {
         int itemLevel = player.Level;
         Genders playerGender = player.Gender;
