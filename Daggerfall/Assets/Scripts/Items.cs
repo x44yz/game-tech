@@ -690,6 +690,21 @@ public static class Items
     }
 
     /// <summary>
+    /// Gets item template from direct template index.
+    /// </summary>
+    public static ItemTemplate GetItemTemplate(int templateIndex)
+    {
+        if (templateIndex < 0 || templateIndex >= itemTemplates.Count)
+        {
+            string message = string.Format("Item template index out of range: TemplateIndex={0}", templateIndex);
+            Debug.Log(message);
+            return new ItemTemplate();
+        }
+
+        return itemTemplates[templateIndex];
+    }
+
+    /// <summary>
     /// Gets artifact template from magic item template data.
     /// </summary>
     public static MagicItemTemplate GetArtifactTemplate(int artifactIndex)

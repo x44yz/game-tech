@@ -285,12 +285,27 @@ public class Actor : MonoBehaviour
 
     // public EffectManager effectManager => GetComponent<EffectManager>();
 
+    public int MagicResist { get { return FormulaUtils.MagicResist(stats.LiveWillpower); } }
+
     // 魔法值
     public int currentMagicka;
     public int maxMagicka;
     public int MaxMagicka { get { return GetMaxMagicka(); } set { maxMagicka = value; } }
     public int MaxMagickaModifier { get; private set; }
     // Gets maximum magicka with effect modifier
+    public int CurrentMagicka { get { return GetCurrentMagicka(); } set { SetMagicka(value); } }
+    public virtual int SetMagicka(int amount, bool restoreMode = false)
+    {
+        currentMagicka = (restoreMode) ? amount : Mathf.Clamp(amount, 0, MaxMagicka);
+        // if (currentMagicka <= 0)
+        //     RaiseOnMagickaDepletedEvent();
+        return currentMagicka;
+    }
+    int GetCurrentMagicka()
+    {
+        return currentMagicka;
+    }
+    
     int GetMaxMagicka()
     {
         int effectiveMagicka = GetRawMaxMagicka() + MaxMagickaModifier;
@@ -321,4 +336,97 @@ public class Actor : MonoBehaviour
     }
 
     protected List<EffectBundleSettings> spellbook = new List<EffectBundleSettings>();
+
+    bool[] resistanceFlags = new bool[5];     // Indices map to DFCareer.Elements 0-4
+    int[] resistanceChances = new int[5];
+    /// <summary>
+    /// Check if entity has a specific resistance flag raised.
+    /// </summary>
+    /// <param name="elementType">Element type.</param>
+    public bool HasResistanceFlag(DFCareer.Elements elementType)
+    {
+        return resistanceFlags[(int)elementType];
+    }
+
+    /// <summary>
+    /// Handle shared logic when player attacks entity.
+    /// </summary>
+    public void HandleAttackFromSource(Actor sourceEntityBehaviour)
+    {
+        // Break "normal power" concealment effects on source
+        if (sourceEntityBehaviour && sourceEntityBehaviour.Entity.IsMagicallyConcealedNormalPower)
+            EntityEffectManager.BreakNormalPowerConcealmentEffects(sourceEntityBehaviour);
+
+        // When source is player
+        if (sourceEntityBehaviour == Main.Inst.hero)
+        {
+            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            // Handle civilian NPC crime reporting
+            if (EntityType == EntityTypes.CivilianNPC)
+            {
+                MobilePersonNPC mobileNpc = transform.GetComponent<MobilePersonNPC>();
+                if (mobileNpc)
+                {
+                    // Handle assault or murder
+                    if (Entity.CurrentHealth > 0)
+                    {
+                        playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
+                        playerEntity.SpawnCityGuards(true);
+                    }
+                    else
+                    {
+                        if (!mobileNpc.IsGuard)
+                        {
+                            playerEntity.TallyCrimeGuildRequirements(false, 5);
+                            playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
+                            playerEntity.SpawnCityGuards(true);
+                        }
+                        else
+                        {
+                            playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
+                            playerEntity.SpawnCityGuard(mobileNpc.transform.position, mobileNpc.transform.forward);
+                        }
+
+                        // Disable when dead
+                        mobileNpc.Motor.gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            // Handle equipped Azura's Star trapping slain enemy monsters
+            // This is always successful if Azura's Star is empty and equipped
+            if (EntityType == EntityTypes.EnemyMonster && playerEntity.IsAzurasStarEquipped && entity.CurrentHealth <= 0)
+            {
+                EnemyEntity enemyEntity = entity as EnemyEntity;
+                if (SoulTrap.FillEmptyTrapItem((MobileTypes)enemyEntity.MobileEnemy.ID, true))
+                {
+                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("trapSuccess"), 1.5f);
+                }
+            }
+
+            // Handle mobile enemy aggro
+            if (EntityType == EntityTypes.EnemyClass || EntityType == EntityTypes.EnemyMonster)
+            {
+                // Make enemy aggressive to player
+                EnemyMotor enemyMotor = transform.GetComponent<EnemyMotor>();
+                if (enemyMotor)
+                {
+                    // 将区域内敌人变得敌对
+                    if (!enemyMotor.IsHostile)
+                    {
+                        GameManager.Instance.MakeEnemiesHostile();
+                    }
+                    enemyMotor.MakeEnemyHostileToAttacker(GameManager.Instance.PlayerEntityBehaviour);
+                }
+
+                // Handle killing guards
+                EnemyEntity enemyEntity = entity as EnemyEntity;
+                if (enemyEntity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch && entity.CurrentHealth <= 0)
+                {
+                    playerEntity.TallyCrimeGuildRequirements(false, 1);
+                    playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
+                }
+            }
+        }
+    }
 }

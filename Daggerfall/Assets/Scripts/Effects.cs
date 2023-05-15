@@ -153,9 +153,27 @@ public struct EffectBundleSettings
     public int? StandardSpellIndex;
 }
 
+/// <summary>
+/// Flags defining which magic crafting stations can serve this effect.
+/// What constitutes a magic crafting station is likely to expand over time.
+/// For example, custom character creator is potentially a type of crafting station for advantages/disadvantages.
+/// Just leaving as main three stations (spellmaker, potionmaker, itemmaker) for now.
+/// </summary>
+[Flags]
+public enum MagicCraftingStations
+{
+    None = 0,
+    SpellMaker = 1,
+    PotionMaker = 2,
+    ItemMaker = 4,
+}
+
 public class Effects
 {
     public const int CurrentSpellVersion = 1;
+
+    public const MagicCraftingStations MagicCraftingFlags_None = MagicCraftingStations.None;
+    public const MagicCraftingStations MagicCraftingFlags_All = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker | MagicCraftingStations.ItemMaker;
 
     /// <summary>
     /// Maps classic target index to TargetTypes.
@@ -225,7 +243,7 @@ public class Effects
         int classicKey = BaseEntityEffect.MakeClassicKey((byte)type, (byte)subType);
 
         // Attempt to find the effect template
-        IEntityEffect result = GameManager.Instance.EntityEffectBroker.GetEffectTemplate(classicKey);
+        IEntityEffect result = GetEffectTemplate(classicKey);
         if (result == null)
             Debug.LogWarningFormat("Could not find effect template for type={0} subType={1}", type, subType);
 
@@ -358,6 +376,19 @@ public class Effects
 
         return true;
     }
+}
+
+/// <summary>
+/// Determines how effect chance will function.
+/// OnCast: is checked at cast time by EntityEffectManager receiving effect - effect is rejected on failure.
+/// Custom: is always allowed by EntityEffectManager, but still generates ChanceSuccess flag on Start().
+/// This allows custom chance handling elsewhere by either by the effect itself or elsewhere in effect back-end.
+/// A Custom chance effect can then decide to check for ChanceSuccess at any time, even do something else entirely.
+/// </summary>
+public enum ChanceFunction
+{
+    OnCast,
+    Custom,
 }
 
 /// <summary>
@@ -587,7 +618,7 @@ public class PotionRecipe : IEqualityComparer<PotionRecipe.Ingredient[]>
         string result = string.Empty;
         for (int i = 0; i < ingredients.Length; i++)
         {
-            ItemTemplate template = DaggerfallUnity.Instance.ItemHelper.GetItemTemplate(ingredients[i].id);
+            ItemTemplate template = Items.GetItemTemplate(ingredients[i].id);
             result += template.name;
             if (i < ingredients.Length - 1)
                 result += ", ";
@@ -758,6 +789,187 @@ public struct EnchantmentSettings : IEquatable<EnchantmentSettings>
     }
 }
 
+/// <summary>
+/// Stores an instanced effect bundle for executing effects.
+/// </summary>
+public class LiveEffectBundle
+{
+    public int version;
+    public BundleTypes bundleType;
+    public TargetTypes targetType;
+    public ElementTypes elementType;
+    public BundleRuntimeFlags runtimeFlags;
+    public string name;
+    public int iconIndex;
+    // public SpellIcon icon;
+    public Actor caster;
+    public EntityTypes casterEntityType;
+    public ulong casterLoadID;
+    public Item fromEquippedItem;
+    public Item castByItem;
+    public List<IEntityEffect> liveEffects;
+}
+
+/// <summary>
+/// Defines flags for additional feature support at item maker.
+/// </summary>
+[Flags]
+public enum ItemMakerFlags
+{
+    None = 0,
+    AllowMultiplePrimaryInstances = 1,
+    AllowMultipleSecondaryInstances = 2,
+    AlphaSortSecondaryList = 4,
+    WeaponOnly = 8,
+}
+
+/// <summary>
+/// Optional information returned to framework by enchantment payload callbacks.
+/// </summary>
+[Serializable]
+public struct PayloadCallbackResults
+{
+    public int strikesModulateDamage;                           // Amount to plus/minus from damage after Strikes effect payload
+    public int durabilityLoss;                                  // Amount of durability lost after callback
+    public bool removeItem;                                     // Removes item from collection if true
+}
+
+/// <summary>
+/// Flags to inform magic framework when enchantment effect should receive callbacks to execute its payload.
+/// As Daggerfall Unity supports custom effects there is more granularity to payload execution than classic.
+/// Note these are distinct from "cast when used", "cast when held", etc. Rather, the CastWhenUsed and CastWhenHeld
+/// effects will deliver their payload from callbacks related to these flags.
+/// </summary>
+[Flags]
+public enum EnchantmentPayloadFlags
+{
+    None = 0,
+    Enchanted = 1,      // Payload executed only once when item is enchanted at item maker
+    Used = 2,           // Payload executed when item is used from inventory or "use item" UI
+    Equipped = 4,       // Payload executed when item is equipped - i.e. payload will execute once every time item is equipped
+    Unequipped = 8,     // Payload executed when item is unequipped - i.e. payload will execute once every time item is unequipped
+    Held = 16,          // Payload executed for duration item is equipped - i.e. effect bundle will be persistently attached to entity until unequipped
+    Strikes = 32,       // Payload executed when a weapon item strikes another entity
+    Breaks = 64,        // Payload executed when item breaks after durability reaches zero or less
+    MagicRound = 128,   // Payload executed once per magic round
+    RerollEffect = 256, // Payload executed when effects are recast on item
+}
+
+/// <summary>
+/// A list of mobile enemy types with ID range 0-42 (monsters) and 128-146 (humanoids).
+/// Do not extend this enum.
+/// </summary>
+public enum MobileTypes
+{
+    // Monster IDs are 0-42
+    Rat,
+    Imp,
+    Spriggan,
+    GiantBat,
+    GrizzlyBear,
+    SabertoothTiger,
+    Spider,
+    Orc,
+    Centaur,
+    Werewolf,
+    Nymph,
+    Slaughterfish,
+    OrcSergeant,
+    Harpy,
+    Wereboar,
+    SkeletalWarrior,
+    Giant,
+    Zombie,
+    Ghost,
+    Mummy,
+    GiantScorpion,
+    OrcShaman,
+    Gargoyle,
+    Wraith,
+    OrcWarlord,
+    FrostDaedra,
+    FireDaedra,
+    Daedroth,
+    Vampire,
+    DaedraSeducer,
+    VampireAncient,
+    DaedraLord,
+    Lich,
+    AncientLich,
+    Dragonling,
+    FireAtronach,
+    IronAtronach,
+    FleshAtronach,
+    IceAtronach,
+    Horse_Invalid,              // Not used and no matching texture (294 missing). Crashes DF when spawned in-game.
+    Dragonling_Alternate,       // Another dragonling. Seems to work fine when spawned in-game.
+    Dreugh,
+    Lamia,
+
+    // Humanoid IDs are 128-146
+    Mage = 128,
+    Spellsword,
+    Battlemage,
+    Sorcerer,
+    Healer,
+    Nightblade,
+    Bard,
+    Burglar,
+    Rogue,
+    Acrobat,
+    Thief,
+    Assassin,
+    Monk,
+    Archer,
+    Ranger,
+    Barbarian,
+    Warrior,
+    Knight,
+    Knight_CityWatch,           // Just called Knight in-game, but renamed CityWatch here for uniqueness. HALT!
+
+    // No enemy type
+    None = (int)0xffff,
+}
+
+/// <summary>
+/// Mobile animation states.
+/// </summary>
+public enum MobileStates
+{
+    Move,                   // Records 0-4      (Flying and swimming mobs also uses this animation set for idle)
+    PrimaryAttack,          // Records 5-9      (Usually a melee attack animation)
+    Hurt,                   // Records 10-14    (Mob has been struck)
+    Idle,                   // Records 15-19    (Frost and ice Daedra have animated idle states)
+    RangedAttack1,          // Records 20-24    (Bow attack)
+    Spell,                  // Records 20-24 or, if absent, copy of PrimaryAttack
+    RangedAttack2,          // Records 25-29    (Bow attack on 475, 489, 490 only, absent on other humanoids)
+    SeducerTransform1,      // Record 23        (Crouch and grow wings)
+    SeducerTransform2,      // Record 22        (Stand and spread wings)
+}
+
+/// <summary>
+/// Defines a single forced enchantment effect with param.
+/// </summary>
+public struct ForcedEnchantment
+{
+    public string key;
+    public EnchantmentParam param;
+
+    public ForcedEnchantment(string key, short classicParam = -1)
+    {
+        this.key = key;
+        param = new EnchantmentParam() { ClassicParam = classicParam, CustomParam = string.Empty };
+    }
+}
+
+/// <summary>
+/// Contains a set of forced effects keyed to a valid mobile type.
+/// </summary>
+public struct ForcedEnchantmentSet
+{
+    public MobileTypes soulType;
+    public ForcedEnchantment[] forcedEffects;
+}
 
 /// <summary>
 /// Interface to an entity effect.
@@ -897,12 +1109,12 @@ public interface IEntityEffect /*: IMacroContextProvider*/
     /// Called by an EntityEffectManager when parent bundle is attached to host entity.
     /// Use this for setup or immediate work performed only once.
     /// </summary>
-    void Start(EntityEffectManager manager, Actor caster = null);
+    void Start(EffectManager manager, Actor caster = null);
 
     /// <summary>
     /// Called by an EntityEffect manage when parent bundle is resumed from save.
     /// </summary>
-    void Resume(EntityEffectManager.EffectSaveData_v1 effectData, EntityEffectManager manager, Actor caster = null);
+    void Resume(EffectManager.EffectSaveData_v1 effectData, EffectManager manager, Actor caster = null);
 
     /// <summary>
     /// Use this for work performed every frame.
@@ -953,7 +1165,7 @@ public interface IEntityEffect /*: IMacroContextProvider*/
     /// These callbacks are performed directly from template, not from a live instance of effect. Do not store state in effect during callbacks.
     /// Not used by EnchantmentPayloadFlags.Held - rather, an effect instance bundle is assigned to entity's effect manager to execute as normal.
     /// </summary>
-    PayloadCallbackResults? EnchantmentPayloadCallback(EnchantmentPayloadFlags context, EnchantmentParam? param = null, DaggerfallEntityBehaviour sourceEntity = null, DaggerfallEntityBehaviour targetEntity = null, DaggerfallUnityItem sourceItem = null, int sourceDamage = 0);
+    PayloadCallbackResults? EnchantmentPayloadCallback(EnchantmentPayloadFlags context, EnchantmentParam? param = null, Actor sourceEntity = null, Actor targetEntity = null, Item sourceItem = null, int sourceDamage = 0);
 
     /// <summary>
     /// Gets related enchantments that will be forced onto item along with this enchantment.
@@ -988,7 +1200,7 @@ public interface IEntityEffect /*: IMacroContextProvider*/
 /// Classic magic effects are included in build for cross-platform compatibility.
 /// Custom effects can be added later using mod system (todo:).
 /// </summary>
-public abstract partial class BaseEntityEffect : IEntityEffect
+public abstract class BaseEntityEffect : IEntityEffect
 {
     #region Fields
 
@@ -996,7 +1208,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     protected EffectSettings settings = new EffectSettings();
     protected PotionProperties potionProperties = new PotionProperties();
     protected Actor caster = null;
-    protected EntityEffectManager manager = null;
+    protected EffectManager manager = null;
     protected int variantCount = 1;
     protected int currentVariant = 0;
     protected bool bypassSavingThrows = false;
@@ -1234,7 +1446,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// These callbacks are performed directly from template, not from a live instance of effect. Do not store state in effect during callbacks.
     /// Not used by EnchantmentPayloadFlags.Held - rather, an effect instance bundle is assigned to entity's effect manager to execute as normal.
     /// </summary>
-    public virtual PayloadCallbackResults? EnchantmentPayloadCallback(EnchantmentPayloadFlags context, EnchantmentParam? param = null, DaggerfallEntityBehaviour sourceEntity = null, DaggerfallEntityBehaviour targetEntity = null, DaggerfallUnityItem sourceItem = null, int sourceDamage = 0)
+    public virtual PayloadCallbackResults? EnchantmentPayloadCallback(EnchantmentPayloadFlags context, EnchantmentParam? param = null, Actor sourceEntity = null, Actor targetEntity = null, Item sourceItem = null, int sourceDamage = 0)
     {
         return null;
     }
@@ -1263,7 +1475,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// Child classes must call base.Start() when overriding.
     /// NOTE: Start() is only called when effect is first instantiated - it not called again on load, see Resume().
     /// </summary>
-    public virtual void Start(EntityEffectManager manager, DaggerfallEntityBehaviour caster = null)
+    public virtual void Start(EffectManager manager, Actor caster = null)
     {
         this.manager = manager;
         this.caster = caster;
@@ -1274,14 +1486,14 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// <summary>
     /// Restarts effect running after deserialization. Does not execute a MagicRound() tick.
     /// </summary>
-    public virtual void Resume(EntityEffectManager.EffectSaveData_v1 effectData, EntityEffectManager manager, DaggerfallEntityBehaviour caster = null)
+    public virtual void Resume(EffectManager.EffectSaveData_v1 effectData, EffectManager manager, Actor caster = null)
     {
         this.manager = manager;
         this.caster = caster;
         roundsRemaining = effectData.roundsRemaining;
         chanceSuccess = effectData.chanceSuccess;
         statMods = effectData.statMods;
-        statMaxMods = (effectData.statMaxMods != null) ? effectData.statMaxMods : new int[DaggerfallStats.Count];
+        statMaxMods = (effectData.statMaxMods != null) ? effectData.statMaxMods : new int[DStats.Count];
         skillMods = effectData.skillMods;
         variantCount = effectData.variantCount;
         currentVariant = effectData.currentVariant;
@@ -1397,7 +1609,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// </summary>
     public virtual void CureAttributeDamage()
     {
-        for (int i = 0; i < DaggerfallStats.Count; i++)
+        for (int i = 0; i < DStats.Count; i++)
         {
             int amount = GetAttributeMod((DFCareer.Stats)i);
             if (amount < 0)
@@ -1433,7 +1645,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// </summary>
     public virtual void CureSkillDamage()
     {
-        for (int i = 0; i < DaggerfallSkills.Count; i++)
+        for (int i = 0; i < DSkills.Count; i++)
         {
             int amount = GetSkillMod((DFCareer.Skills)i);
             if (amount < 0)
@@ -1477,7 +1689,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     /// <returns>Chance value.</returns>
     public int ChanceValue()
     {
-        int casterLevel = (caster) ? FormulaHelper.CalculateCasterLevel(caster.Entity, this) : 1;
+        int casterLevel = (caster) ? FormulaUtils.CalculateCasterLevel(caster, this) : 1;
         //Debug.LogFormat("{5} ChanceValue {0} = base + plus * (level/chancePerLevel) = {1} + {2} * ({3}/{4})", settings.ChanceBase + settings.ChancePlus * (int)Mathf.Floor(casterLevel / settings.ChancePerLevel), settings.ChanceBase, settings.ChancePlus, casterLevel, settings.ChancePerLevel, Key);
         return settings.ChanceBase + settings.ChancePlus * (int)Mathf.Floor(casterLevel / settings.ChancePerLevel);
     }
@@ -1512,16 +1724,16 @@ public abstract partial class BaseEntityEffect : IEntityEffect
 
     #region Protected Helpers
 
-    protected DaggerfallEntityBehaviour GetPeeredEntityBehaviour(EntityEffectManager manager)
+    protected Actor GetPeeredEntityBehaviour(EffectManager manager)
     {
         // Return cached entity behaviour or attempt to get component directly
         if (manager && manager.EntityBehaviour)
             return manager.EntityBehaviour;
         else
-            return manager.GetComponent<DaggerfallEntityBehaviour>();
+            return manager.GetComponent<Actor>();
     }
 
-    protected int GetMagnitude(DaggerfallEntityBehaviour caster = null)
+    protected int GetMagnitude(Actor caster = null)
     {
         if (caster == null)
             Debug.LogWarningFormat("GetMagnitude() for {0} has no caster. Using caster level 1 for magnitude.", Properties.Key);
@@ -1532,7 +1744,7 @@ public abstract partial class BaseEntityEffect : IEntityEffect
         int magnitude = 0;
         if (Properties.SupportMagnitude)
         {
-            int casterLevel = (caster) ? FormulaHelper.CalculateCasterLevel(caster.Entity, this) : 1;
+            int casterLevel = (caster) ? FormulaUtils.CalculateCasterLevel(caster, this) : 1;
             int baseMagnitude = UnityEngine.Random.Range(settings.MagnitudeBaseMin, settings.MagnitudeBaseMax + 1);
             int plusMagnitude = UnityEngine.Random.Range(settings.MagnitudePlusMin, settings.MagnitudePlusMax + 1);
             int multiplier = (int)Mathf.Floor(casterLevel / settings.MagnitudePerLevel);
@@ -1541,11 +1753,11 @@ public abstract partial class BaseEntityEffect : IEntityEffect
 
         int initialMagnitude = magnitude;
         if (ParentBundle.targetType != TargetTypes.CasterOnly)
-            magnitude = FormulaHelper.ModifyEffectAmount(this, manager.EntityBehaviour.Entity, magnitude);
+            magnitude = FormulaUtils.ModifyEffectAmount(this, manager.EntityBehaviour, magnitude);
 
         // Output "Save versus spell made." when magnitude is fully reduced to 0 by saving throw
-        if (initialMagnitude > 0 && magnitude == 0)
-            DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
+        // if (initialMagnitude > 0 && magnitude == 0)
+        //     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
 
         return magnitude;
     }
@@ -1553,11 +1765,11 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     protected void PlayerAggro()
     {
         // Caster must be player
-        if (caster != GameManager.Instance.PlayerEntityBehaviour)
+        if (caster != Main.Inst.hero)
             return;
 
         // Get peered entity gameobject
-        DaggerfallEntityBehaviour entityBehaviour = GetPeeredEntityBehaviour(manager);
+        Actor entityBehaviour = GetPeeredEntityBehaviour(manager);
         if (!entityBehaviour)
             return;
 
@@ -1652,12 +1864,12 @@ public abstract partial class BaseEntityEffect : IEntityEffect
         else if (!string.IsNullOrEmpty(groupName) && string.IsNullOrEmpty(subGroupName))
             return groupName;
         else
-            return TextManager.Instance.GetLocalizedText("noName");
+            return "noName";
     }
 
     void SetDuration()
     {
-        int casterLevel = (caster) ? FormulaHelper.CalculateCasterLevel(caster.Entity, this) : 1;
+        int casterLevel = (caster) ? FormulaUtils.CalculateCasterLevel(caster, this) : 1;
         if (Properties.SupportDuration)
         {
             // Multiplier clamped at 1 or player can lose a round depending on spell settings and level
@@ -1777,4 +1989,16 @@ public abstract partial class BaseEntityEffect : IEntityEffect
     }
 
     #endregion
+}
+
+/// <summary>
+/// Allows tuning of cost per setting.
+/// </summary>
+[Serializable]
+public struct EffectCosts
+{
+    public float OffsetGold;                                    // Increase base gold cost
+    public float Factor;                                        // Scaling factor applied to spellpoint cost
+    public float CostA;                                         // First magic number related to costs
+    public float CostB;                                         // Second magic number related to costs
 }

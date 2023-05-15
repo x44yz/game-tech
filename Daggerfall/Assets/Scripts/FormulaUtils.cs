@@ -1071,6 +1071,197 @@ public static class FormulaUtils
         return (WeaponMaterialTypes)(material);
     }
 
+    public static int CalculateCasterLevel(Actor caster, IEntityEffect effect)
+    {
+        return caster != null ? caster.Level : 1;
+    }
+
+    public static int ModifyEffectAmount(IEntityEffect sourceEffect, Actor target, int amount)
+    {
+        if (sourceEffect == null || sourceEffect.ParentBundle == null)
+            return amount;
+
+        int percentDamageOrDuration = SavingThrow(sourceEffect, target);
+        float percent = percentDamageOrDuration / 100f;
+
+        return (int)(amount * percent);
+    }
+
+    public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, Actor target, int modifier)
+    {
+        // Handle resistances granted by magical effects
+        if (target.HasResistanceFlag(elementType))
+        {
+            int chance = target.GetResistanceChance(elementType);
+            if (Dice100.SuccessRoll(chance))
+                return 0;
+        }
+
+        // Magic effect resistances did not stop the effect. Try with career flags and biography modifiers
+        int savingThrow = 50;
+        DFCareer.ToleranceFlags toleranceFlags = DFCareer.ToleranceFlags.Normal;
+        int biographyMod = 0;
+
+        PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+        if ((effectFlags & DFCareer.EffectFlags.Paralysis) != 0)
+        {
+            toleranceFlags |= GetToleranceFlag(target.Career.Paralysis);
+            // Innate immunity if high elf. Start with 100 saving throw, but can be modified by
+            // tolerance flags. Note this differs from classic, where high elves have 100% immunity
+            // regardless of tolerance flags.
+            if (target == playerEntity && playerEntity.Race == Races.HighElf)
+                savingThrow = 100;
+        }
+        if ((effectFlags & DFCareer.EffectFlags.Magic) != 0)
+        {
+            toleranceFlags |= GetToleranceFlag(target.Career.Magic);
+            if (target == playerEntity)
+                biographyMod += playerEntity.BiographyResistMagicMod;
+        }
+        if ((effectFlags & DFCareer.EffectFlags.Poison) != 0)
+        {
+            toleranceFlags |= GetToleranceFlag(target.Career.Poison);
+            if (target == playerEntity)
+                biographyMod += playerEntity.BiographyResistPoisonMod;
+        }
+        if ((effectFlags & DFCareer.EffectFlags.Fire) != 0)
+            toleranceFlags |= GetToleranceFlag(target.Career.Fire);
+        if ((effectFlags & DFCareer.EffectFlags.Frost) != 0)
+            toleranceFlags |= GetToleranceFlag(target.Career.Frost);
+        if ((effectFlags & DFCareer.EffectFlags.Shock) != 0)
+            toleranceFlags |= GetToleranceFlag(target.Career.Shock);
+        if ((effectFlags & DFCareer.EffectFlags.Disease) != 0)
+        {
+            toleranceFlags |= GetToleranceFlag(target.Career.Disease);
+            if (target == playerEntity)
+                biographyMod += playerEntity.BiographyResistDiseaseMod;
+        }
+
+        // Note: Differing from classic implementation here. In classic
+        // immune grants always 100% resistance and critical weakness is
+        // always 0% resistance if there is no immunity. Here we are using
+        // a method that allows mixing different tolerance flags, getting
+        // rid of related exploits when creating a character class.
+        if ((toleranceFlags & DFCareer.ToleranceFlags.Immune) != 0)
+            savingThrow += 50;
+        if ((toleranceFlags & DFCareer.ToleranceFlags.CriticalWeakness) != 0)
+            savingThrow -= 50;
+        if ((toleranceFlags & DFCareer.ToleranceFlags.LowTolerance) != 0)
+            savingThrow -= 25;
+        if ((toleranceFlags & DFCareer.ToleranceFlags.Resistant) != 0)
+            savingThrow += 25;
+
+        savingThrow += biographyMod + modifier;
+        if (elementType == DFCareer.Elements.Frost && target == playerEntity && playerEntity.Race == Races.Nord)
+            savingThrow += 30;
+        else if (elementType == DFCareer.Elements.Magic && target == playerEntity && playerEntity.Race == Races.Breton)
+            savingThrow += 30;
+
+        // Handle perfect immunity of 100% or greater
+        // Otherwise clamping to 5-95 allows a perfectly immune character to sometimes receive incoming payload
+        // This doesn't seem to match immunity intent or player expectations from classic
+        if (savingThrow >= 100)
+            return 0;
+
+        // Increase saving throw by MagicResist, equal to LiveWillpower / 10 (rounded down)
+        savingThrow += target.MagicResist;
+
+        savingThrow = Mathf.Clamp(savingThrow, 5, 95);
+
+        int percentDamageOrDuration = 100;
+        int roll = Dice100.Roll();
+
+        if (roll <= savingThrow)
+        {
+            // Percent damage/duration is prorated at within 20 of failed roll, as described in DF Chronicles
+            if (savingThrow - 20 <= roll)
+                percentDamageOrDuration = 100 - 5 * (savingThrow - roll);
+            else
+                percentDamageOrDuration = 0;
+        }
+
+        return Mathf.Clamp(percentDamageOrDuration, 0, 100);
+    }
+
+    public static int SavingThrow(IEntityEffect sourceEffect, Actor target)
+    {
+        if (sourceEffect == null || sourceEffect.ParentBundle == null)
+            return 100;
+
+        DFCareer.EffectFlags effectFlags = GetEffectFlags(sourceEffect);
+        DFCareer.Elements elementType = GetElementType(sourceEffect);
+        int modifier = GetResistanceModifier(effectFlags, target);
+
+        return SavingThrow(elementType, effectFlags, target, modifier);
+    }
+
+    /// <summary>
+    /// Performs complete gold and spellpoint costs for an array of effects.
+    /// Also calculates multipliers for target type.
+    /// </summary>
+    /// <param name="effectEntries">EffectEntry array for spell.</param>
+    /// <param name="targetType">Target type of spell.</param>
+    /// <param name="totalGoldCostOut">Total gold cost out.</param>
+    /// <param name="totalSpellPointCostOut">Total spellpoint cost out.</param>
+    /// <param name="casterEntity">Caster entity. Assumed to be player if null.</param>
+    /// <param name="minimumCastingCost">Spell point always costs minimum (e.g. from vampirism). Do not set true for reflection/absorption cost calculations.</param>
+    public static SpellCost CalculateTotalEffectCosts(EffectEntry[] effectEntries, TargetTypes targetType, Actor casterEntity = null, bool minimumCastingCost = false)
+    {
+        const int castCostFloor = 5;
+
+        SpellCost totalCost;
+        totalCost.goldCost = 0;
+        totalCost.spellPointCost = 0;
+
+        // Must have effect entries
+        if (effectEntries == null || effectEntries.Length == 0)
+            return totalCost;
+
+        // Add costs for each active effect slot
+        for (int i = 0; i < effectEntries.Length; i++)
+        {
+            if (string.IsNullOrEmpty(effectEntries[i].Key))
+                continue;
+
+            (int goldCost, int spellPointCost) = CalculateEffectCosts(effectEntries[i], casterEntity);
+            totalCost.goldCost += goldCost;
+            totalCost.spellPointCost += spellPointCost;
+        }
+
+        // Multipliers for target type
+        totalCost.goldCost = ApplyTargetCostMultiplier(totalCost.goldCost, targetType);
+        totalCost.spellPointCost = ApplyTargetCostMultiplier(totalCost.spellPointCost, targetType);
+
+        // Set vampire spell cost
+        if (minimumCastingCost)
+            totalCost.spellPointCost = castCostFloor;
+
+        // Enforce minimum
+        if (totalCost.spellPointCost < castCostFloor)
+            totalCost.spellPointCost = castCostFloor;
+
+        return totalCost;
+    }
+
+    public static int MagicResist(int willpower)
+    {
+        return (int)Mathf.Floor((float)willpower / 10f);
+    }
+}
+
+/// <summary>
+/// A structure containing both the gold and spell point cost of either a single effect, or an entire spell
+/// </summary>
+public struct SpellCost
+{
+    public int goldCost;
+    public int spellPointCost;
+
+    public void Deconstruct(out int gcost, out int spcost)
+    {
+        gcost = goldCost;
+        spcost = spellPointCost;
+    }
 }
 
 public class Dice100
