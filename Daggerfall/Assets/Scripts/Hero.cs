@@ -18,13 +18,25 @@ public enum PlayerReflexes
 // [Serializable]
 public class Hero : Actor
 {
+    public Races Race { get { return (Races)RaceTemplate.ID; } }
     public RaceTemplate RaceTemplate { get { return GetLiveRaceTemplate(); } }
+
+    protected int biographyResistDiseaseMod = 0;
+    protected int biographyResistMagicMod = 0;
+    protected int biographyAvoidHitMod = 0;
+    protected int biographyResistPoisonMod = 0;
+    protected int biographyFatigueMod = 0;
+    protected int biographyReactionMod = 0;
+
+    public int BiographyResistDiseaseMod { get { return biographyResistDiseaseMod; } set { biographyResistDiseaseMod = value; } }
+    public int BiographyResistMagicMod { get { return biographyResistMagicMod; } set { biographyResistMagicMod = value; } }
+    public int BiographyAvoidHitMod { get { return biographyAvoidHitMod; } set { biographyAvoidHitMod = value; } }
+    public int BiographyResistPoisonMod { get { return biographyResistPoisonMod; } set { biographyResistPoisonMod = value; } }
+    public int BiographyFatigueMod { get { return biographyFatigueMod; } set { biographyFatigueMod = value; } }
+    public int BiographyReactionMod { get { return biographyReactionMod; } set { biographyReactionMod = value; } }
 
     protected PlayerReflexes reflexes;
     public PlayerReflexes Reflexes { get { return reflexes; } set { reflexes = value; } }
-
-    protected int biographyAvoidHitMod = 0;
-    public int BiographyAvoidHitMod { get { return biographyAvoidHitMod; } set { biographyAvoidHitMod = value; } }
 
     protected RaceTemplate raceTemplate;
     public RaceTemplate GetLiveRaceTemplate()

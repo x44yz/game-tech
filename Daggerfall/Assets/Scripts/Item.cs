@@ -557,6 +557,22 @@ public class Item
     }
 
     /// <summary>
+    /// Checks if this item is a potion.
+    /// </summary>
+    public bool IsPotion
+    {
+        get { return ItemGroup == ItemGroups.UselessItems1 && TemplateIndex == (int)UselessItems1.Glass_Bottle; }
+    }
+
+    /// <summary>
+    /// Checks if this is an ingredient.
+    /// </summary>
+    public bool IsIngredient
+    {
+        get { return ItemTemplate.isIngredient; }
+    }
+
+    /// <summary>
     /// Determines if item is stackable.
     /// Only ingredients, potions, gold pieces, oil and arrows are stackable,
     /// but equipped items, enchanted ingredients and quest items are never stackable.

@@ -1063,9 +1063,9 @@ public static class FormulaUtils
         int material = 0; // initialize to iron
 
         // The higher combinedModifiers is, the higher the material
-        while (ItemBuilder.materialsByModifier[material] < combinedModifiers)
+        while (Item.materialsByModifier[material] < combinedModifiers)
         {
-            combinedModifiers -= ItemBuilder.materialsByModifier[material++];
+            combinedModifiers -= Item.materialsByModifier[material++];
         }
 
         return (WeaponMaterialTypes)(material);
@@ -1086,6 +1086,28 @@ public static class FormulaUtils
 
         return (int)(amount * percent);
     }
+    
+    public static DFCareer.ToleranceFlags GetToleranceFlag(DFCareer.Tolerance tolerance)
+    {
+        DFCareer.ToleranceFlags flag = DFCareer.ToleranceFlags.Normal;
+        switch (tolerance)
+        {
+            case DFCareer.Tolerance.Immune:
+                flag = DFCareer.ToleranceFlags.Immune;
+                break;
+            case DFCareer.Tolerance.Resistant:
+                flag = DFCareer.ToleranceFlags.Resistant;
+                break;
+            case DFCareer.Tolerance.LowTolerance:
+                flag = DFCareer.ToleranceFlags.LowTolerance;
+                break;
+            case DFCareer.Tolerance.CriticalWeakness:
+                flag = DFCareer.ToleranceFlags.CriticalWeakness;
+                break;
+        }
+
+        return flag;
+    }
 
     public static int SavingThrow(DFCareer.Elements elementType, DFCareer.EffectFlags effectFlags, Actor target, int modifier)
     {
@@ -1102,7 +1124,7 @@ public static class FormulaUtils
         DFCareer.ToleranceFlags toleranceFlags = DFCareer.ToleranceFlags.Normal;
         int biographyMod = 0;
 
-        PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+        var playerEntity = Main.Inst.hero;
         if ((effectFlags & DFCareer.EffectFlags.Paralysis) != 0)
         {
             toleranceFlags |= GetToleranceFlag(target.Career.Paralysis);
@@ -1183,6 +1205,94 @@ public static class FormulaUtils
         return Mathf.Clamp(percentDamageOrDuration, 0, 100);
     }
 
+    /// <summary>
+    /// Gets DFCareer.EffectFlags from an effect.
+    /// Note: If effect is not instanced by a bundle then it will not have an element type.
+    /// </summary>
+    /// <param name="effect">Source effect.</param>
+    /// <returns>DFCareer.EffectFlags.</returns>
+    public static DFCareer.EffectFlags GetEffectFlags(IEntityEffect effect)
+    {
+        DFCareer.EffectFlags result = DFCareer.EffectFlags.None;
+
+        // Paralysis/Disease
+        // if (effect is Paralyze)
+        //     result |= DFCareer.EffectFlags.Paralysis;
+        // if (effect is DiseaseEffect)
+        //     result |= DFCareer.EffectFlags.Disease;
+
+        // Elemental
+        switch (effect.ParentBundle.elementType)
+        {
+            case ElementTypes.Fire:
+                result |= DFCareer.EffectFlags.Fire;
+                break;
+            case ElementTypes.Cold:
+                result |= DFCareer.EffectFlags.Frost;
+                break;
+            case ElementTypes.Poison:
+                result |= DFCareer.EffectFlags.Poison;
+                break;
+            case ElementTypes.Shock:
+                result |= DFCareer.EffectFlags.Shock;
+                break;
+            case ElementTypes.Magic:
+                result |= DFCareer.EffectFlags.Magic;
+                break;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Gets a resistance element based on effect element.
+    /// </summary>
+    /// <param name="effect">Source effect.</param>
+    /// <returns>DFCareer.Elements</returns>
+    public static DFCareer.Elements GetElementType(IEntityEffect effect)
+    {
+        // Always return magic for non-elemental (i.e. magic-only) effects
+        if (effect.Properties.AllowedElements == ElementTypes.Magic)
+            return DFCareer.Elements.Magic;
+
+        // Otherwise return element selected by parent spell bundle
+        switch (effect.ParentBundle.elementType)
+        {
+            case ElementTypes.Fire:
+                return DFCareer.Elements.Fire;
+            case ElementTypes.Cold:
+                return DFCareer.Elements.Frost;
+            case ElementTypes.Poison:
+                return DFCareer.Elements.DiseaseOrPoison;
+            case ElementTypes.Shock:
+                return DFCareer.Elements.Shock;
+            case ElementTypes.Magic:
+                return DFCareer.Elements.Magic;
+            default:
+                return DFCareer.Elements.None;
+        }
+    }
+
+    public static int GetResistanceModifier(DFCareer.EffectFlags effectFlags, Actor target)
+    {
+        int result = 0;
+
+        // Will only read best matching resistance modifier from flags - priority is given to disease/poison over elemental
+        // Note disease/poison resistance are both the same here for purposes of saving throw
+        if ((effectFlags & DFCareer.EffectFlags.Disease) == DFCareer.EffectFlags.Disease || (effectFlags & DFCareer.EffectFlags.Poison) == DFCareer.EffectFlags.Poison)
+            result = target.Resistances.LiveDiseaseOrPoison;
+        else if ((effectFlags & DFCareer.EffectFlags.Fire) == DFCareer.EffectFlags.Fire)
+            result = target.Resistances.LiveFire;
+        else if ((effectFlags & DFCareer.EffectFlags.Frost) == DFCareer.EffectFlags.Frost)
+            result = target.Resistances.LiveFrost;
+        else if ((effectFlags & DFCareer.EffectFlags.Shock) == DFCareer.EffectFlags.Shock)
+            result = target.Resistances.LiveShock;
+        else if ((effectFlags & DFCareer.EffectFlags.Magic) == DFCareer.EffectFlags.Magic)
+            result = target.Resistances.LiveMagic;
+
+        return result;
+    }
+
     public static int SavingThrow(IEntityEffect sourceEffect, Actor target)
     {
         if (sourceEffect == null || sourceEffect.ParentBundle == null)
@@ -1241,6 +1351,42 @@ public static class FormulaUtils
             totalCost.spellPointCost = castCostFloor;
 
         return totalCost;
+    }
+
+    public static int ApplyTargetCostMultiplier(int cost, TargetTypes targetType)
+    {
+        switch (targetType)
+        {
+            default:
+            case TargetTypes.CasterOnly:                // x1.0
+            case TargetTypes.ByTouch:
+                // These do not change costs, just including here for completeness
+                break;
+            case TargetTypes.SingleTargetAtRange:       // x1.5
+                cost = (int)(cost * 1.5f);
+                break;
+            case TargetTypes.AreaAroundCaster:          // x2.0
+                cost = (int)(cost * 2.0f);
+                break;
+            case TargetTypes.AreaAtRange:               // x2.5
+                cost = (int)(cost * 2.5f);
+                break;
+        }
+
+        return cost;
+    }
+
+    /// <summary>
+    /// Calculate effect costs from an EffectEntry.
+    /// </summary>
+    public static SpellCost CalculateEffectCosts(EffectEntry effectEntry, Actor casterEntity = null)
+    {
+        // Get effect template
+        // IEntityEffect effectTemplate = Effects.GetEffectTemplate(effectEntry.Key);
+        // if (effectTemplate == null)
+            return new SpellCost { goldCost = 0, spellPointCost = 0 };
+
+        // return CalculateEffectCosts(effectTemplate, effectEntry.Settings, casterEntity);
     }
 
     public static int MagicResist(int willpower)

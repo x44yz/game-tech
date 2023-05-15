@@ -340,6 +340,9 @@ public class Actor : MonoBehaviour
 
     bool[] resistanceFlags = new bool[5];     // Indices map to DFCareer.Elements 0-4
     int[] resistanceChances = new int[5];
+
+    protected DResistances resistances = new DResistances();
+    public DResistances Resistances { get { return resistances; } set { resistances.Copy(value); } }
     /// <summary>
     /// Check if entity has a specific resistance flag raised.
     /// </summary>
@@ -347,6 +350,17 @@ public class Actor : MonoBehaviour
     public bool HasResistanceFlag(DFCareer.Elements elementType)
     {
         return resistanceFlags[(int)elementType];
+    }
+
+    /// <summary>
+    /// Gets current total resistance chance for an element.
+    /// This is only used when corresponding elemental resistance flag is raised by effect.
+    /// </summary>
+    /// <param name="elementType">Element type to check total resistance value of.</param>
+    /// <returns>Resistance chance for that element.</returns>
+    public int GetResistanceChance(DFCareer.Elements elementType)
+    {
+        return resistanceChances[(int)elementType];
     }
 
     /// <summary>
