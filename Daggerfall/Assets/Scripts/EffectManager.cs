@@ -268,46 +268,46 @@ public class EffectManager : MonoBehaviour
         }
 
         // Only player listens for release frame
-        if (IsPlayerEntity)
-            GameManager.Instance.PlayerSpellCasting.OnReleaseFrame += PlayerSpellCasting_OnReleaseFrame;
+        // if (IsPlayerEntity)
+        //     GameManager.Instance.PlayerSpellCasting.OnReleaseFrame += PlayerSpellCasting_OnReleaseFrame;
 
         // Wire up events
-        EntityEffectBroker.OnNewMagicRound += EntityEffectBroker_OnNewMagicRound;
-        SaveLoadManager.OnStartLoad += SaveLoadManager_OnStartLoad;
-        StartGameBehaviour.OnNewGame += StartGameBehaviour_OnNewGame;
-        if (IsPlayerEntity)
-        {
-            DaggerfallRestWindow.OnSleepEnd += DaggerfallRestWindow_OnSleepEnd;
-            EntityEffectBroker.OnEndSyntheticTimeIncrease += EntityEffectBroker_OnEndSyntheticTimeIncrease;
-        }
+        // EntityEffectBroker.OnNewMagicRound += EntityEffectBroker_OnNewMagicRound;
+        // SaveLoadManager.OnStartLoad += SaveLoadManager_OnStartLoad;
+        // StartGameBehaviour.OnNewGame += StartGameBehaviour_OnNewGame;
+        // if (IsPlayerEntity)
+        // {
+        //     DaggerfallRestWindow.OnSleepEnd += DaggerfallRestWindow_OnSleepEnd;
+        //     EntityEffectBroker.OnEndSyntheticTimeIncrease += EntityEffectBroker_OnEndSyntheticTimeIncrease;
+        // }
     }
 
     private void Start()
     {
         // Listen for entity death to remove effect bundles
-        if (entityBehaviour && entityBehaviour.Entity != null)
-        {
-            entityBehaviour.Entity.OnDeath += Entity_OnDeath;
-        }
+        // if (entityBehaviour && entityBehaviour != null)
+        // {
+        //     entityBehaviour.Entity.OnDeath += Entity_OnDeath;
+        // }
     }
 
     private void OnDestroy()
     {
-        EntityEffectBroker.OnNewMagicRound -= EntityEffectBroker_OnNewMagicRound;
-        SaveLoadManager.OnStartLoad -= SaveLoadManager_OnStartLoad;
-        StartGameBehaviour.OnNewGame -= StartGameBehaviour_OnNewGame;
-        if (IsPlayerEntity)
-        {
-            DaggerfallRestWindow.OnSleepEnd -= DaggerfallRestWindow_OnSleepEnd;
-            EntityEffectBroker.OnEndSyntheticTimeIncrease -= EntityEffectBroker_OnEndSyntheticTimeIncrease;
-        }
+        // EntityEffectBroker.OnNewMagicRound -= EntityEffectBroker_OnNewMagicRound;
+        // SaveLoadManager.OnStartLoad -= SaveLoadManager_OnStartLoad;
+        // StartGameBehaviour.OnNewGame -= StartGameBehaviour_OnNewGame;
+        // if (IsPlayerEntity)
+        // {
+        //     DaggerfallRestWindow.OnSleepEnd -= DaggerfallRestWindow_OnSleepEnd;
+        //     EntityEffectBroker.OnEndSyntheticTimeIncrease -= EntityEffectBroker_OnEndSyntheticTimeIncrease;
+        // }
     }
 
     private void Update()
     {
         // Do nothing if no peer entity, game not in play, or load in progress
-        if (!entityBehaviour || !GameManager.Instance.IsPlayingGame() || SaveLoadManager.Instance.LoadInProgress)
-            return;
+        // if (!entityBehaviour || !GameManager.Instance.IsPlayingGame() || SaveLoadManager.Instance.LoadInProgress)
+        //     return;
 
         // Remove any bundles pending deletion
         RemovePendingBundles();
@@ -353,28 +353,28 @@ public class EffectManager : MonoBehaviour
             }
 
             // Cast spell
-            if (InputManager.Instance.ActionStarted(InputManager.Actions.ActivateCenterObject) && readySpell != null)
-            {
-                CastReadySpell();
-                return;
-            }
+            // if (InputManager.Instance.ActionStarted(InputManager.Actions.ActivateCenterObject) && readySpell != null)
+            // {
+            //     CastReadySpell();
+            //     return;
+            // }
 
-            // Recast spell - not available while playing another spell animation
-            if (InputManager.Instance.ActionStarted(InputManager.Actions.RecastSpell) && lastSpell != null &&
-                !GameManager.Instance.PlayerSpellCasting.IsPlayingAnim)
-            {
-                if (GameManager.Instance.PlayerEntity.Items.Contains(ItemGroups.MiscItems, (int)MiscItems.Spellbook))
-                    SetReadySpell(lastSpell);
-                else
-                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("noSpellbook"));
-                return;
-            }
+            // // Recast spell - not available while playing another spell animation
+            // if (InputManager.Instance.ActionStarted(InputManager.Actions.RecastSpell) && lastSpell != null &&
+            //     !GameManager.Instance.PlayerSpellCasting.IsPlayingAnim)
+            // {
+            //     if (GameManager.Instance.PlayerEntity.Items.Contains(ItemGroups.MiscItems, (int)MiscItems.Spellbook))
+            //         SetReadySpell(lastSpell);
+            //     else
+            //         DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("noSpellbook"));
+            //     return;
+            // }
 
-            // Abort spell
-            if (InputManager.Instance.ActionStarted(InputManager.Actions.AbortSpell) && readySpell != null)
-            {
-                AbortReadySpell();
-            }
+            // // Abort spell
+            // if (InputManager.Instance.ActionStarted(InputManager.Actions.AbortSpell) && readySpell != null)
+            // {
+            //     AbortReadySpell();
+            // }
         }
         // Enemies always cast ready spell instantly once queued
         else
@@ -392,14 +392,14 @@ public class EffectManager : MonoBehaviour
     /// </summary>
     public bool SetReadySpell(int classicSpellIndex, bool noSpellPointCost = false)
     {
-        SpellRecord.SpellRecordData spell;
-        if (GameManager.Instance.EntityEffectBroker.GetClassicSpellRecord(classicSpellIndex, out spell))
+        SpellRecordData spell;
+        if (Effects.GetClassicSpellRecord(classicSpellIndex, out spell))
         {
             // Create effect bundle settings from classic spell
             EffectBundleSettings bundleSettings = new EffectBundleSettings();
-            if (GameManager.Instance.EntityEffectBroker.ClassicSpellRecordDataToEffectBundleSettings(spell, BundleTypes.Spell, out bundleSettings))
+            if (Effects.ClassicSpellRecordDataToEffectBundleSettings(spell, BundleTypes.Spell, out bundleSettings))
             {
-                EntityEffectBundle bundle = new EntityEffectBundle(bundleSettings, GameManager.Instance.PlayerEntityBehaviour);
+                EntityEffectBundle bundle = new EntityEffectBundle(bundleSettings, Main.Inst.hero);
                 return SetReadySpell(bundle, noSpellPointCost);
             }
         }
@@ -430,15 +430,15 @@ public class EffectManager : MonoBehaviour
         readySpellCastingCost = spellPointCost;
 
         // Allow casting spells of any cost if entity is player and godmode enabled
-        bool godModeCast = (IsPlayerEntity && GameManager.Instance.PlayerEntity.GodMode);
+        bool godModeCast = (IsPlayerEntity && Main.Inst.hero.GodMode);
 
         // Enforce spell point costs - Daggerfall does this when setting ready spell
         // Classic does not enforce this for enemies, they can cast any spell as long as they still have at least 1 spell point.
         // Doing the same here. This also matters for classic AI combat logic, as it uses the existence of any remaining spell points
         // to determine whether or not it can still cast spells.
-        if (IsPlayerEntity && entityBehaviour.Entity.CurrentMagicka < readySpellCastingCost && !godModeCast && !noSpellPointCost)
+        if (IsPlayerEntity && entityBehaviour.CurrentMagicka < readySpellCastingCost && !godModeCast && !noSpellPointCost)
         {
-            DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText(youDontHaveTheSpellPointsMessageKey));
+            // DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText(youDontHaveTheSpellPointsMessageKey));
 
             readySpell = null;
             readySpellCastingCost = 0;
@@ -452,10 +452,10 @@ public class EffectManager : MonoBehaviour
         if (readySpell.Settings.TargetType == TargetTypes.CasterOnly)
             instantCast = true;
 
-        if (IsPlayerEntity && !instantCast)
-        {
-            DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("pressButtonToFireSpell"), 0.4f);
-        }
+        // if (IsPlayerEntity && !instantCast)
+        // {
+        //     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("pressButtonToFireSpell"), 0.4f);
+        // }
 
         return true;
     }
@@ -480,14 +480,14 @@ public class EffectManager : MonoBehaviour
         }
         else
         {
-            DaggerfallMissile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
+            Missile missile = InstantiateSpellMissile(readySpell.Settings.ElementType);
             if (missile)
                 missile.Payload = readySpell;
         }
 
         // Deduct spellpoint cost from entity if not free (magic item, innate ability)
         if (!readySpellDoesNotCostSpellPoints)
-            entityBehaviour.Entity.DecreaseMagicka(readySpellCastingCost);
+            entityBehaviour.DecreaseMagicka(readySpellCastingCost);
 
         // Clear ready spell and reset casting - do not store last spell for no anim spells (prevent spamming)
         RaiseOnCastReadySpell(readySpell);
@@ -514,18 +514,18 @@ public class EffectManager : MonoBehaviour
         // Enemies use AI to only cast touch spells within range
         if (IsPlayerEntity && readySpell.Settings.TargetType == TargetTypes.ByTouch)
         {
-            Vector3 aimPosition = GameManager.Instance.MainCamera.transform.position;
-            Vector3 aimDirection = GameManager.Instance.MainCamera.transform.forward;
-            if (DaggerfallMissile.GetEntityTargetInTouchRange(aimPosition, aimDirection) == null)
-            {
-                //Debug.Log("Target entity not in range for touch spell.");
-                return;
-            }
+            // Vector3 aimPosition = GameManager.Instance.MainCamera.transform.position;
+            // Vector3 aimDirection = GameManager.Instance.MainCamera.transform.forward;
+            // if (DaggerfallMissile.GetEntityTargetInTouchRange(aimPosition, aimDirection) == null)
+            // {
+            //     //Debug.Log("Target entity not in range for touch spell.");
+            //     return;
+            // }
         }
 
         // Deduct spellpoint cost from entity if not free (magic item, innate ability)
         if (!readySpellDoesNotCostSpellPoints)
-            entityBehaviour.Entity.DecreaseMagicka(readySpellCastingCost);
+            entityBehaviour.DecreaseMagicka(readySpellCastingCost);
 
         // Play casting animation based on element type
         // Spell is released by event handler PlayerSpellCasting_OnReleaseFrame
@@ -533,7 +533,7 @@ public class EffectManager : MonoBehaviour
         if (IsPlayerEntity)
         {
             // Play casting animation and block further casting attempts until previous cast is complete
-            GameManager.Instance.PlayerSpellCasting.PlayOneShot(readySpell.Settings.ElementType);
+            // GameManager.Instance.PlayerSpellCasting.PlayOneShot(readySpell.Settings.ElementType);
             castInProgress = true;
         }
         else
@@ -614,7 +614,7 @@ public class EffectManager : MonoBehaviour
                     totalAbsorbed += absorbSpellPoints;
 
                     // Output "Spell was absorbed."
-                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("spellAbsorbed"));
+                    // DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("spellAbsorbed"));
 
                     continue;
                 }
@@ -641,12 +641,12 @@ public class EffectManager : MonoBehaviour
                 if (IsPlayerEntity && sourceBundle.Settings.TargetType == TargetTypes.CasterOnly)
                 {
                     // Output "Spell effect failed." for caster only spells
-                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("spellEffectFailed"));
+                    // DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("spellEffectFailed"));
                 }
                 else if (IsPlayerEntity || showNonPlayerFailures)
                 {
                     // Output "Save versus spell made." for external contact spells
-                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
+                    // DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
                 }
 
                 continue;
@@ -670,20 +670,20 @@ public class EffectManager : MonoBehaviour
                 sourceBundle.Settings.TargetType != TargetTypes.CasterOnly)
             {
                 // Immune if saving throw made
-                if (FormulaUtils.SavingThrow(effect, entityBehaviour.Entity) == 0)
+                if (FormulaUtils.SavingThrow(effect, entityBehaviour) == 0)
                 {
                     if (IsPlayerEntity || showNonPlayerFailures)
                     {
                         // Output "Save versus spell made." for external contact spells
-                        DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
+                        // DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("saveVersusSpellMade"));
                     }
                     continue;
                 }
             }
 
             // Player is immune to paralysis in god mode
-            if (IsPlayerEntity && GameManager.Instance.PlayerEntity.GodMode && effect is Paralyze)
-                continue;
+            // if (IsPlayerEntity && Main.Inst.hero.GodMode && effect is Paralyze)
+            //     continue;
 
             // Add effect
             instancedBundle.liveEffects.Add(effect);
@@ -705,7 +705,7 @@ public class EffectManager : MonoBehaviour
             if (sourceBundle.CasterEntityBehaviour == entityBehaviour && lastReadySpellCastingCost > 0 && totalAbsorbed > lastReadySpellCastingCost)
                 totalAbsorbed = lastReadySpellCastingCost;
 
-            entityBehaviour.Entity.IncreaseMagicka(totalAbsorbed);
+            entityBehaviour.IncreaseMagicka(totalAbsorbed);
             //Debug.LogFormat("Absorbed {0} total spellpoints", totalAbsorbed);
         }
 
@@ -725,14 +725,14 @@ public class EffectManager : MonoBehaviour
     public bool IsEntityImmuneToDisease()
     {
         // Entity is hard immune from career or effect
-        if (entityBehaviour.Entity.Career.Disease == DFCareer.Tolerance.Immune || entityBehaviour.Entity.IsImmuneToDisease)
+        if (entityBehaviour.Career.Disease == DFCareer.Tolerance.Immune || entityBehaviour.IsImmuneToDisease)
             return true;
 
         // Player entity is hard immune from racial template unless they have an overriding career weakness
-        if (IsPlayerEntity && (((PlayerEntity)entityBehaviour.Entity).GetLiveRaceTemplate().ImmunityFlags & DFCareer.EffectFlags.Disease) != 0)
+        if (IsPlayerEntity && (((Hero)entityBehaviour).GetLiveRaceTemplate().ImmunityFlags & DFCareer.EffectFlags.Disease) != 0)
         {
-            return entityBehaviour.Entity.Career.Disease != DFCareer.Tolerance.LowTolerance &&
-                    entityBehaviour.Entity.Career.Disease != DFCareer.Tolerance.CriticalWeakness;
+            return entityBehaviour.Career.Disease != DFCareer.Tolerance.LowTolerance &&
+                    entityBehaviour.Career.Disease != DFCareer.Tolerance.CriticalWeakness;
         }
 
         // Not hard immune - fallback to saving throws where entity may still have enhanced resistance
@@ -746,14 +746,14 @@ public class EffectManager : MonoBehaviour
     public bool IsEntityImmuneToParalysis()
     {
         // Entity is hard immune from career or effect
-        if (entityBehaviour.Entity.Career.Paralysis == DFCareer.Tolerance.Immune || entityBehaviour.Entity.IsImmuneToParalysis)
+        if (entityBehaviour.Career.Paralysis == DFCareer.Tolerance.Immune || entityBehaviour.IsImmuneToParalysis)
             return true;
 
         // Player entity is hard immune from racial template unless they have an overriding career weakness
-        if (IsPlayerEntity && (((PlayerEntity)entityBehaviour.Entity).GetLiveRaceTemplate().ImmunityFlags & DFCareer.EffectFlags.Paralysis) != 0)
+        if (IsPlayerEntity && (((Hero)entityBehaviour).GetLiveRaceTemplate().ImmunityFlags & DFCareer.EffectFlags.Paralysis) != 0)
         {
-            return entityBehaviour.Entity.Career.Paralysis != DFCareer.Tolerance.LowTolerance &&
-                    entityBehaviour.Entity.Career.Paralysis != DFCareer.Tolerance.CriticalWeakness;
+            return entityBehaviour.Career.Paralysis != DFCareer.Tolerance.LowTolerance &&
+                    entityBehaviour.Career.Paralysis != DFCareer.Tolerance.CriticalWeakness;
         }
 
         // Not hard immune - fallback to saving throws where entity may still have enhanced resistance
@@ -1022,7 +1022,7 @@ public class EffectManager : MonoBehaviour
             potionEffects[0] = new EffectEntry(potionEffect.Key, potionRecipe.Settings);
             for (int i = 0; i < secondaryEffects.Count; i++)
             {
-                IEntityEffect effect = effectBroker.GetEffectTemplate(secondaryEffects[i]);
+                IEntityEffect effect = Effects.GetEffectTemplate(secondaryEffects[i]);
                 potionEffects[i+1] = new EffectEntry(effect.Key, potionRecipe.Settings);
             }
         }
@@ -1141,7 +1141,7 @@ public class EffectManager : MonoBehaviour
         EnchantmentParam param = new EnchantmentParam() { ClassicParam = settings.ClassicParam, CustomParam = settings.CustomParam };
         PayloadCallbackResults? results = effectTemplate.EnchantmentPayloadCallback(EnchantmentPayloadFlags.Equipped, param, entityBehaviour, entityBehaviour, item);
         if (results != null && results.Value.durabilityLoss > 0)
-            item.LowerCondition(results.Value.durabilityLoss, entityBehaviour.Entity, entityBehaviour.Entity.Items);
+            item.LowerCondition(results.Value.durabilityLoss, entityBehaviour, entityBehaviour.Items);
     }
 
     void StartHeldItem(IEntityEffect effectTemplate, Item item, EnchantmentSettings settings)
@@ -1175,7 +1175,7 @@ public class EffectManager : MonoBehaviour
         // Check all running bundles for any linked to this item and schedule instant removal
         foreach (LiveEffectBundle bundle in instancedBundles)
         {
-            if (bundle.fromEquippedItem != null && bundle.fromEquippedItem.UID == item.UID)
+            if (bundle.fromEquippedItem != null && bundle.fromEquippedItem.uid == item.uid)
             {
                 if (!bundlesToRemove.Contains(bundle))
                     bundlesToRemove.Add(bundle);
@@ -1711,40 +1711,42 @@ public class EffectManager : MonoBehaviour
 
     public bool HasVampirism()
     {
-        return racialOverrideEffect is VampirismEffect;
+        // return racialOverrideEffect is VampirismEffect;
+        return false;
     }
 
     public bool HasLycanthropy()
     {
-        return racialOverrideEffect is LycanthropyEffect;
+        // return racialOverrideEffect is LycanthropyEffect;
+        return false;
     }
 
     public LycanthropyTypes LycanthropyType()
     {
-        if (HasLycanthropy())
-            return (racialOverrideEffect as LycanthropyEffect).InfectionType;
-        else
+        // if (HasLycanthropy())
+        //     return (racialOverrideEffect as LycanthropyEffect).InfectionType;
+        // else
             return LycanthropyTypes.None;
     }
 
     public bool IsTransformedLycanthrope()
     {
-        if (HasLycanthropy())
-            return (racialOverrideEffect as LycanthropyEffect).IsTransformed;
-        else
+        // if (HasLycanthropy())
+        //     return (racialOverrideEffect as LycanthropyEffect).IsTransformed;
+        // else
             return false;
     }
 
     public void EndVampirism()
     {
-        if (HasVampirism())
-            (racialOverrideEffect as VampirismEffect).CureVampirism();
+        // if (HasVampirism())
+        //     (racialOverrideEffect as VampirismEffect).CureVampirism();
     }
 
     public void EndLycanthropy()
     {
-        if (HasLycanthropy())
-            (racialOverrideEffect as LycanthropyEffect).CureLycanthropy();
+        // if (HasLycanthropy())
+        //     (racialOverrideEffect as LycanthropyEffect).CureLycanthropy();
     }
 
     #endregion
@@ -1845,13 +1847,13 @@ public class EffectManager : MonoBehaviour
                 if (IsPlayerEntity)
                 {
                     // Track individual held items for magic round callback
-                    if (!activeMagicItemsInRound.ContainsKey(bundle.fromEquippedItem.UID))
-                        activeMagicItemsInRound.Add(bundle.fromEquippedItem.UID, bundle.fromEquippedItem);
+                    if (!activeMagicItemsInRound.ContainsKey(bundle.fromEquippedItem.uid))
+                        activeMagicItemsInRound.Add(bundle.fromEquippedItem.uid, bundle.fromEquippedItem);
 
                     // Schedule items pending reroll
                     uint hoursSinceLastReroll = (currentTime - bundle.fromEquippedItem.timeEffectsLastRerolled) / DaggerfallDateTime.MinutesPerHour;
-                    if (hoursSinceLastReroll >= rerollMinimumHours && !itemsPendingReroll.ContainsKey(bundle.fromEquippedItem.UID))
-                        itemsPendingReroll.Add(bundle.fromEquippedItem.UID, bundle.fromEquippedItem);
+                    if (hoursSinceLastReroll >= rerollMinimumHours && !itemsPendingReroll.ContainsKey(bundle.fromEquippedItem.uid))
+                        itemsPendingReroll.Add(bundle.fromEquippedItem.uid, bundle.fromEquippedItem);
                 }
             }
 
@@ -2112,7 +2114,7 @@ public class EffectManager : MonoBehaviour
             // Schedule live bundles from this item to be removed
             foreach (LiveEffectBundle bundle in instancedBundles)
             {
-                if (bundle.fromEquippedItem != null && bundle.fromEquippedItem.UID == item.UID &&
+                if (bundle.fromEquippedItem != null && bundle.fromEquippedItem.uid == item.uid &&
                     (bundle.runtimeFlags & BundleRuntimeFlags.ItemRecastEnabled) == BundleRuntimeFlags.ItemRecastEnabled)
                 {
                     bundlesToRemove.Add(bundle);
@@ -2243,11 +2245,11 @@ public class EffectManager : MonoBehaviour
         DoMagicRound();
     }
 
-    private void SaveLoadManager_OnStartLoad(SaveData_v1 saveData)
-    {
-        ClearReadySpellHistory();
-        WipeAllBundles();
-    }
+    // private void SaveLoadManager_OnStartLoad(SaveData_v1 saveData)
+    // {
+    //     ClearReadySpellHistory();
+    //     WipeAllBundles();
+    // }
 
     private void StartGameBehaviour_OnNewGame()
     {
@@ -2332,8 +2334,8 @@ public class EffectManager : MonoBehaviour
             // bundleData.icon = bundle.icon;
             bundleData.casterEntityType = bundle.casterEntityType;
             bundleData.casterLoadID = bundle.casterLoadID;
-            if (bundle.fromEquippedItem != null) bundleData.fromEquippedItemID = bundle.fromEquippedItem.UID;
-            if (bundle.castByItem != null) bundleData.castByItemID = bundle.castByItem.UID;
+            if (bundle.fromEquippedItem != null) bundleData.fromEquippedItemID = bundle.fromEquippedItem.uid;
+            if (bundle.castByItem != null) bundleData.castByItemID = bundle.castByItem.uid;
 
             List<EffectSaveData_v1> liveEffectsSaveData = new List<EffectSaveData_v1>();
             foreach (IEntityEffect effect in bundle.liveEffects)

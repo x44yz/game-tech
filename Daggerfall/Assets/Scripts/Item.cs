@@ -177,6 +177,15 @@ public class Item
         FromItem(item);
     }
 
+    // Horses, carts, arrows and maps are not counted against encumbrance.
+    public float EffectiveUnitWeightInKg()
+    {
+        if (ItemGroup == ItemGroups.Transportation || TemplateIndex == (int)Weapons.Arrow ||
+            IsOfTemplate(ItemGroups.MiscItems, (int)MiscItems.Map))
+            return 0f;
+        return weightInKg;
+    }
+
     /// <summary>
     /// Creates from another item instance.
     /// </summary>

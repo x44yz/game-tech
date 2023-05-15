@@ -333,6 +333,7 @@ public class Actor : MonoBehaviour
 
     private void Awake() {
         skills = new DSkills();
+        equipTable = new ItemEquipTable(this);
     }
 
     protected List<EffectBundleSettings> spellbook = new List<EffectBundleSettings>();
@@ -354,8 +355,8 @@ public class Actor : MonoBehaviour
     public void HandleAttackFromSource(Actor sourceEntityBehaviour)
     {
         // Break "normal power" concealment effects on source
-        if (sourceEntityBehaviour && sourceEntityBehaviour.Entity.IsMagicallyConcealedNormalPower)
-            EntityEffectManager.BreakNormalPowerConcealmentEffects(sourceEntityBehaviour);
+        if (sourceEntityBehaviour && sourceEntityBehaviour.IsMagicallyConcealedNormalPower)
+            EffectManager.BreakNormalPowerConcealmentEffects(sourceEntityBehaviour);
 
         // When source is player
         if (sourceEntityBehaviour == Main.Inst.hero)
@@ -395,13 +396,13 @@ public class Actor : MonoBehaviour
 
             // Handle equipped Azura's Star trapping slain enemy monsters
             // This is always successful if Azura's Star is empty and equipped
-            if (EntityType == EntityTypes.EnemyMonster && playerEntity.IsAzurasStarEquipped && entity.CurrentHealth <= 0)
+            if (EntityType == EntityTypes.EnemyMonster && playerEntity.IsAzurasStarEquipped && CurrentHealth <= 0)
             {
-                EnemyEntity enemyEntity = entity as EnemyEntity;
-                if (SoulTrap.FillEmptyTrapItem((MobileTypes)enemyEntity.MobileEnemy.ID, true))
-                {
-                    DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("trapSuccess"), 1.5f);
-                }
+                // EnemyEntity enemyEntity = entity as EnemyEntity;
+                // if (SoulTrap.FillEmptyTrapItem((MobileTypes)enemyEntity.MobileEnemy.ID, true))
+                // {
+                //     DaggerfallUI.AddHUDText(TextManager.Instance.GetLocalizedText("trapSuccess"), 1.5f);
+                // }
             }
 
             // Handle mobile enemy aggro
@@ -432,5 +433,7 @@ public class Actor : MonoBehaviour
 
     protected ItemCollection items = new ItemCollection();
     public ItemCollection Items { get { return items; } set { items.ReplaceAll(value); } }
+
+    protected ItemEquipTable equipTable;
     public ItemEquipTable ItemEquipTable { get { return equipTable; } }
 }

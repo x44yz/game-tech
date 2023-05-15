@@ -111,26 +111,26 @@ public class ItemCollection
     /// </summary>
     public void RemoveExpiredItems()
     {
-        uint gameMinutes = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
-        List<Item> itemsToRemove = new List<Item>();
+        // uint gameMinutes = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+        // List<Item> itemsToRemove = new List<Item>();
 
-        foreach (Item item in items.Values)
-        {
-            if (item.TimeForItemToDisappear != 0 && item.TimeForItemToDisappear < gameMinutes)
-            {
-                Entity.PlayerEntity player = GameManager.Instance.PlayerEntity;
-                foreach (EquipSlots slotToCheck in Enum.GetValues(typeof(EquipSlots)))
-                {
-                    if (player.ItemEquipTable.GetItem(slotToCheck) == item)
-                        player.ItemEquipTable.UnequipItem(slotToCheck);
-                }
-                itemsToRemove.Add(item);
-            }
-        }
-        foreach (Item item in itemsToRemove)
-        {
-            RemoveItem(item);
-        }
+        // foreach (Item item in items.Values)
+        // {
+        //     if (item.TimeForItemToDisappear != 0 && item.TimeForItemToDisappear < gameMinutes)
+        //     {
+        //         Entity.PlayerEntity player = GameManager.Instance.PlayerEntity;
+        //         foreach (EquipSlots slotToCheck in Enum.GetValues(typeof(EquipSlots)))
+        //         {
+        //             if (player.ItemEquipTable.GetItem(slotToCheck) == item)
+        //                 player.ItemEquipTable.UnequipItem(slotToCheck);
+        //         }
+        //         itemsToRemove.Add(item);
+        //     }
+        // }
+        // foreach (Item item in itemsToRemove)
+        // {
+        //     RemoveItem(item);
+        // }
     }
 
     /// <summary>
@@ -353,7 +353,7 @@ public class ItemCollection
     /// <returns>An item of this type, or null if none found.</returns>
     public Item GetItem(ItemGroups itemGroup, int itemIndex, bool allowEnchantedItem = true, bool allowQuestItem = true, bool priorityToConjured = false)
     {
-        int groupIndex = DaggerfallUnity.Instance.ItemHelper.GetGroupIndex(itemGroup, itemIndex);
+        int groupIndex = Items.GetGroupIndex(itemGroup, itemIndex);
         if (!priorityToConjured)
         {
             foreach (Item item in items.Values)
@@ -371,13 +371,13 @@ public class ItemCollection
             {
                 if (item.ItemGroup == itemGroup && item.GroupIndex == groupIndex && (allowEnchantedItem || !item.IsEnchanted) && (allowQuestItem || !item.IsQuestItem))
                 {
-                    if (item.IsSummoned)
-                    {
-                        // pick conjured items with shortest life
-                        if (selectedItem == null || !selectedItem.IsSummoned || selectedItem.TimeForItemToDisappear > item.TimeForItemToDisappear)
-                            selectedItem = item;
-                    }
-                    else // real item
+                    // if (item.IsSummoned)
+                    // {
+                    //     // pick conjured items with shortest life
+                    //     if (selectedItem == null || !selectedItem.IsSummoned || selectedItem.TimeForItemToDisappear > item.TimeForItemToDisappear)
+                    //         selectedItem = item;
+                    // }
+                    // else // real item
                         if (selectedItem == null)
                             selectedItem = item;
                 }

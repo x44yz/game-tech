@@ -4,6 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
+/// Lycanthropy variants.
+/// </summary>
+public enum LycanthropyTypes
+{
+    None = 0,
+    Werewolf = 1,
+    Wereboar = 2,
+}
+
+/// <summary>
 /// Flags to modify behaviour of assigning effect bundles.
 /// </summary>
 [Flags]
@@ -184,6 +194,15 @@ public enum MagicCraftingStations
 public class Effects
 {
     public const int CurrentSpellVersion = 1;
+
+    public const TargetTypes TargetFlags_None = TargetTypes.None;
+        public const TargetTypes TargetFlags_Self = TargetTypes.CasterOnly;
+        public const TargetTypes TargetFlags_Other = TargetTypes.ByTouch | TargetTypes.SingleTargetAtRange | TargetTypes.AreaAroundCaster | TargetTypes.AreaAtRange;
+        public const TargetTypes TargetFlags_All = TargetTypes.CasterOnly | TargetTypes.ByTouch | TargetTypes.SingleTargetAtRange | TargetTypes.AreaAroundCaster | TargetTypes.AreaAtRange;
+
+        public const ElementTypes ElementFlags_None = ElementTypes.None;
+        public const ElementTypes ElementFlags_MagicOnly = ElementTypes.Magic;
+        public const ElementTypes ElementFlags_All = ElementTypes.Fire | ElementTypes.Cold | ElementTypes.Poison | ElementTypes.Shock | ElementTypes.Magic;
 
     public const MagicCraftingStations MagicCraftingFlags_None = MagicCraftingStations.None;
     public const MagicCraftingStations MagicCraftingFlags_All = MagicCraftingStations.SpellMaker | MagicCraftingStations.PotionMaker | MagicCraftingStations.ItemMaker;
@@ -414,8 +433,8 @@ public class Effects
 
 /// <summary>
 /// Determines how effect chance will function.
-/// OnCast: is checked at cast time by EntityEffectManager receiving effect - effect is rejected on failure.
-/// Custom: is always allowed by EntityEffectManager, but still generates ChanceSuccess flag on Start().
+/// OnCast: is checked at cast time by EffectManager receiving effect - effect is rejected on failure.
+/// Custom: is always allowed by EffectManager, but still generates ChanceSuccess flag on Start().
 /// This allows custom chance handling elsewhere by either by the effect itself or elsewhere in effect back-end.
 /// A Custom chance effect can then decide to check for ChanceSuccess at any time, even do something else entirely.
 /// </summary>
@@ -1140,7 +1159,7 @@ public interface IEntityEffect /*: IMacroContextProvider*/
     bool BypassSavingThrows { get; }
 
     /// <summary>
-    /// Called by an EntityEffectManager when parent bundle is attached to host entity.
+    /// Called by an EffectManager when parent bundle is attached to host entity.
     /// Use this for setup or immediate work performed only once.
     /// </summary>
     void Start(EffectManager manager, Actor caster = null);
@@ -2035,4 +2054,556 @@ public struct EffectCosts
     public float Factor;                                        // Scaling factor applied to spellpoint cost
     public float CostA;                                         // First magic number related to costs
     public float CostB;                                         // Second magic number related to costs
+}
+
+/// <summary>
+/// Some effects in Daggerfall add to the state an existing like-kind effect (the incumbent)
+/// rather than become instantiated as a new effect on the host entity.
+/// One example is a drain effect which only adds to the magnitude of incumbent drain for same stat.
+/// Another example is an effect which tops up the duration of same effect in progress.
+/// This class establishes a base for these incumbent effects to coordinate.
+/// NOTES:
+///  Unflagged incumbent effects (IsIncumbent == false) do not persist beyond AddState() call.
+///  They will never receive a single MagicRound() call and are never saved/loaded.
+///  The flagged incumbent (IsIncumbent == true) receives MagicRound() calls and is saved/load as normal.
+/// </summary>
+public abstract class IncumbentEffect : BaseEntityEffect
+{
+    bool isIncumbent = false;
+
+    public override void Start(EffectManager manager, Actor caster = null)
+    {
+        base.Start(manager, caster);
+        AttachHost();
+    }
+
+    public override void Resume(EffectManager.EffectSaveData_v1 effectData, EffectManager manager, Actor caster = null)
+    {
+        base.Resume(effectData, manager, caster);
+        isIncumbent = effectData.isIncumbent;
+    }
+
+    public bool IsIncumbent
+    {
+        get { return isIncumbent; }
+    }
+
+    void AttachHost()
+    {
+        IncumbentEffect incumbent = FindIncumbent();
+        if (incumbent == null)
+        {
+            // First instance of effect on this host becomes flagged incumbent
+            isIncumbent = true;
+            BecomeIncumbent();
+
+            //Debug.LogFormat("Creating incumbent effect '{0}' on host '{1}'", DisplayName, manager.name);
+        }
+        else
+        {
+            // Subsequent instances add to state of flagged incumbent
+            AddState(incumbent);
+
+            //Debug.LogFormat("Adding state to incumbent effect '{0}' on host '{1}'", incumbent.DisplayName, incumbent.manager.name);
+        }
+    }
+
+    IncumbentEffect FindIncumbent()
+    {
+        // Search for any incumbents on this host matching group
+        LiveEffectBundle[] bundles = manager.EffectBundles;
+        foreach (LiveEffectBundle bundle in bundles)
+        {
+            if (bundle.bundleType == ParentBundle.bundleType)
+            {
+                foreach (IEntityEffect effect in bundle.liveEffects)
+                {
+                    if (effect is IncumbentEffect)
+                    {
+                        // Effect must be flagged incumbent and agree with like-kind test
+                        IncumbentEffect other = effect as IncumbentEffect;
+                        if (other.IsIncumbent && other.IsLikeKind(this))
+                            return other;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Resign as incumbent effect.
+    /// This allows an incumbent to immediately allow for a new incumbent to take over its post.
+    /// Useful for when incumbent does not want to receive any further AddState() calls and cannot wait for magic round tick to expire.
+    /// </summary>
+    protected void ResignAsIncumbent()
+    {
+        isIncumbent = false;
+    }
+
+    protected virtual void BecomeIncumbent()
+    {
+    }
+
+    protected abstract bool IsLikeKind(IncumbentEffect other);
+    protected abstract void AddState(IncumbentEffect incumbent);
+}
+
+
+/// <summary>
+/// Spell Absorption
+/// </summary>
+public class SpellAbsorption : IncumbentEffect
+{
+    public static readonly string EffectKey = "SpellAbsorption";
+
+    public override void SetProperties()
+    {
+        properties.Key = EffectKey;
+        properties.ClassicKey = MakeClassicKey(20, 255);
+        properties.SupportDuration = true;
+        properties.SupportChance = true;
+        properties.ChanceFunction = ChanceFunction.Custom;
+        properties.AllowedTargets = Effects.TargetFlags_All;
+        properties.AllowedElements = Effects.ElementFlags_MagicOnly;
+        properties.AllowedCraftingStations = MagicCraftingStations.SpellMaker;
+        properties.MagicSkill = DFCareer.MagicSkills.Restoration;
+        properties.DurationCosts = MakeEffectCosts(28, 140);
+        properties.ChanceCosts = MakeEffectCosts(28, 140);
+    }
+
+    // public override string GroupName => TextManager.Instance.GetLocalizedText("spellAbsorption");
+    // public override TextFile.Token[] SpellMakerDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1568);
+    // public override TextFile.Token[] SpellBookDescription => DaggerfallUnity.Instance.TextProvider.GetRSCTokens(1268);
+
+    protected override bool IsLikeKind(IncumbentEffect other)
+    {
+        return (other.Key == Key) ? true : false;
+    }
+
+    protected override void AddState(IncumbentEffect incumbent)
+    {
+        incumbent.RoundsRemaining += RoundsRemaining;
+    }
+}
+
+/// <summary>
+/// Usage flags for custom spell bundle offer.
+/// Informs other systems if they can use this spell.
+/// </summary>
+[Flags]
+public enum CustomSpellBundleOfferUsage
+{
+    None = 0,
+    SpellsForSale = 1,
+    CastWhenUsedEnchantment = 2,
+    CastWhenHeldEnchantment = 4,
+    CastWhenStrikesEnchantment = 8,
+    All = 15,
+}
+
+/// <summary>
+/// A custom spell bundle offer.
+/// </summary>
+public struct CustomSpellBundleOffer
+{
+    public string Key;
+    public CustomSpellBundleOfferUsage Usage;
+    public EffectBundleSettings BundleSetttings;
+    public int EnchantmentCost;
+}
+
+/// <summary>
+/// Allows an effect to override player's racial display information such as race name and portrait.
+/// Used for vampirism and lycanthropy and possibly could be used for future racial overrides.
+/// Considered a minimal implementation at this time for core game to support vamp/were only.
+/// Only intended to be used on player entity. Will be permanent until removed.
+/// Only a single racial override incumbent effect can be active on player at one time.
+/// </summary>
+public abstract class RacialOverrideEffect : IncumbentEffect
+{
+    #region Fields
+
+    protected int forcedRoundsRemaining = 1;
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Allow racial override to suppress Combat Voices option as required.
+    /// </summary>
+    public virtual bool SuppressOptionalCombatVoices
+    {
+        get { return false; }
+    }
+
+    /// <summary>
+    /// Allow racial override to suppress paper doll body and items to show background only.
+    /// </summary>
+    public virtual bool SuppressPaperDollBodyAndItems
+    {
+        get { return false; }
+    }
+
+    /// <summary>
+    /// Allows racial override to suppress crimes by player.
+    /// </summary>
+    public virtual bool SuppressCrime
+    {
+        get { return false; }
+    }
+
+    /// <summary>
+    /// Allows racial override to suppress population spawns.
+    /// </summary>
+    public virtual bool SuppressPopulationSpawns
+    {
+        get { return false; }
+    }
+
+    #endregion
+
+    #region Overrides
+
+    // Always present at least one round remaining so effect system does not remove
+    public override int RoundsRemaining
+    {
+        get { return forcedRoundsRemaining; }
+    }
+
+    // Racial overrides are permanent until removed so we manage our own lifecycle
+    protected override int RemoveRound()
+    {
+        return forcedRoundsRemaining;
+    }
+
+    protected override bool IsLikeKind(IncumbentEffect other)
+    {
+        return (other is RacialOverrideEffect);
+    }
+
+    protected override void AddState(IncumbentEffect incumbent)
+    {
+        return;
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    /// <summary>
+    /// Called by WeaponManager when player hits an entity with a weapon (includes hand-to-hand).
+    /// Target entity may be null, racial overrides should handle this.
+    /// </summary>
+    public virtual void OnWeaponHitEntity(Hero playerEntity, Actor targetEntity = null)
+    {
+    }
+
+    /// <summary>
+    /// Checks if custom race can initiate fast travel.
+    /// Return true to allow fast travel or false to block it.
+    /// </summary>
+    public virtual bool CheckFastTravel(Hero playerEntity)
+    {
+        return true;
+    }
+
+    /// <summary>
+    /// Checks if custom race can initiate rest.
+    /// Return true to allow rest or false to block it.
+    /// </summary>
+    public virtual bool CheckStartRest(Hero playerEntity)
+    {
+        return true;
+    }
+
+    /// <summary>
+    /// Starts custom racial quest.
+    ///  * Called every 38 days with isCureQuest = false
+    ///  * Called every 84 days with isCureQuest = true
+    /// Mainly used by vampirism and lycanthropy in core.
+    /// Custom racial override effects can ignore this virtual to start and manage quests however they like.
+    /// </summary>
+    /// <param name="isCureQuest">True when this should start cure quest.</param>
+    public virtual void StartQuest(bool isCureQuest)
+    {
+    }
+
+    /// <summary>
+    /// Allow racial override to suppress inventory UI.
+    /// Some care might need to be taken by other systems this does not crash game like classic.
+    /// </summary>
+    /// <param name="suppressInventoryMessage">Optional message to display when inventory suppressed.</param>
+    /// <returns>True if inventory should be suppressed.</returns>
+    public virtual bool GetSuppressInventory(out string suppressInventoryMessage)
+    {
+        suppressInventoryMessage = string.Empty;
+        return false;
+    }
+
+    /// <summary>
+    /// Allow racial overrides to suppress talk UI.
+    /// </summary>
+    /// <param name="suppressTalkMessage">Optional message to display when talk suppressed.</param>
+    /// <returns>True if talk should be suppressed.</returns>
+    public virtual bool GetSuppressTalk(out string suppressTalkMessage)
+    {
+        suppressTalkMessage = string.Empty;
+        return false;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// Gets custom race exposed by this override
+    /// </summary>
+    public abstract RaceTemplate CustomRace { get; }
+
+    #endregion
+}
+
+/// <summary>
+/// Uber-effect used to deliver passive special advantages and disadvantages to player.
+/// More active specials (e.g. critical strike, disallowed armour types) are handled in related systems.
+/// NOTES:
+///  * This effect is a work in progress and will be added to over time.
+///  * Could also be assigned to other entities but at this time only using on player.
+/// </summary>
+public class PassiveSpecialsEffect : IncumbentEffect
+{
+    #region Fields
+
+    public static readonly string EffectKey = "Passive-Specials";
+    const int sunDamageAmount = 12;
+    const int holyDamageAmount = 12;
+    const int regenerateAmount = 1;
+    const int sunDamagePerRounds = 4;
+    const int holyDamagePerRounds = 4;
+    const int regeneratePerRounds = 4;
+
+    int forcedRoundsRemaining = 1;
+    Actor entityBehaviour;
+
+    #endregion
+
+    #region Overrides
+
+    public override void SetProperties()
+    {
+        properties.Key = EffectKey;
+        properties.ShowSpellIcon = false;
+        bypassSavingThrows = true;
+    }
+
+    public override int RoundsRemaining
+    {
+        get { return forcedRoundsRemaining; }
+    }
+
+    protected override int RemoveRound()
+    {
+        return forcedRoundsRemaining;
+    }
+
+    protected override bool IsLikeKind(IncumbentEffect other)
+    {
+        return (other is PassiveSpecialsEffect);
+    }
+
+    protected override void AddState(IncumbentEffect incumbent)
+    {
+        return;
+    }
+
+    public override void Start(EffectManager manager, Actor caster = null)
+    {
+        base.Start(manager, caster);
+        CacheReferences();
+    }
+
+    public override void Resume(EffectManager.EffectSaveData_v1 effectData, EffectManager manager, Actor caster = null)
+    {
+        base.Resume(effectData, manager, caster);
+        CacheReferences();
+    }
+
+    public override void ConstantEffect()
+    {
+        base.ConstantEffect();
+
+        // Execute constant advantages/disadvantages
+        if (entityBehaviour)
+        {
+            LightPoweredMagery();
+            DarknessPoweredMagery();
+        }
+    }
+
+    public override void MagicRound()
+    {
+        base.MagicRound();
+
+        // Execute round-based effects
+        if (entityBehaviour)
+        {
+            RegenerateHealth();
+            DamageFromSunlight();
+            DamageFromHolyPlaces();
+        }
+    }
+
+    #endregion
+
+    #region Regeneration
+
+    void RegenerateHealth()
+    {
+        // // This special only triggers once every regeneratePerRounds
+        // if (GameManager.Instance.EntityEffectBroker.MagicRoundsSinceStartup % regeneratePerRounds != 0)
+        //     return;
+
+        // // Check for regenerate conditions
+        // bool regenerate = false;
+        // switch(entityBehaviour.Entity.Career.Regeneration)
+        // {
+        //     default:
+        //     case DFCareer.RegenerationFlags.None:
+        //         return;
+        //     case DFCareer.RegenerationFlags.Always:
+        //         regenerate = true;
+        //         break;
+        //     case DFCareer.RegenerationFlags.InDarkness:
+        //         regenerate = DaggerfallUnity.Instance.WorldTime.Now.IsNight || GameManager.Instance.PlayerEnterExit.WorldContext == WorldContext.Dungeon;
+        //         break;
+        //     case DFCareer.RegenerationFlags.InLight:
+        //         regenerate = DaggerfallUnity.Instance.WorldTime.Now.IsDay && GameManager.Instance.PlayerEnterExit.WorldContext != WorldContext.Dungeon;
+        //         break;
+        //     case DFCareer.RegenerationFlags.InWater:
+        //         regenerate = manager.IsPlayerEntity && (GameManager.Instance.PlayerMotor.IsSwimming || GameManager.Instance.PlayerMotor.OnExteriorWater == PlayerMotor.OnExteriorWaterMethod.Swimming);
+        //         break;
+        // }
+
+        // // Tick regeneration when conditions are right
+        // if (regenerate)
+        //     entityBehaviour.Entity.IncreaseHealth(regenerateAmount);
+    }
+
+    #endregion
+
+    #region Sun Damage
+
+    void DamageFromSunlight()
+    {
+        // // This special only triggers once every sunDamagePerRounds
+        // if (GameManager.Instance.EntityEffectBroker.MagicRoundsSinceStartup % sunDamagePerRounds != 0)
+        //     return;
+
+        // // From entity career (e.g. vampire enemy mobile)
+        // bool fromCareer = entityBehaviour.Entity.Career.DamageFromSunlight;
+
+        // // From player race (e.g. vampire curse)
+        // bool fromRace = (manager.IsPlayerEntity) ?
+        //     ((entityBehaviour.Entity as PlayerEntity).RaceTemplate.SpecialAbilities & DFCareer.SpecialAbilityFlags.SunDamage) == DFCareer.SpecialAbilityFlags.SunDamage :
+        //     false;
+
+        // // Must have career or race active
+        // if (!fromCareer && !fromRace)
+        //     return;
+
+        // // Apply damage while in sunlight
+        // if (GameManager.Instance.PlayerEnterExit.IsPlayerInSunlight)
+        // {
+        //     entityBehaviour.Entity.DecreaseHealth(sunDamageAmount);
+        //     //Debug.LogFormat("Applied {0} points of sun damage after {1} magic (game minutes)", sunDamageAmount, sunDamagePerRounds);
+        // }
+    }
+
+    #endregion
+
+    #region Holy Damage
+
+    void DamageFromHolyPlaces()
+    {
+        // This special only triggers once every holyDamagePerRounds
+        // if (GameManager.Instance.EntityEffectBroker.MagicRoundsSinceStartup % holyDamagePerRounds != 0)
+        //     return;
+
+        // // From entity career (e.g. vampire enemy mobile)
+        // bool fromCareer = entityBehaviour.Entity.Career.DamageFromHolyPlaces;
+
+        // // From player race (e.g. vampire curse)
+        // bool fromRace = (manager.IsPlayerEntity) ?
+        //     ((entityBehaviour.Entity as PlayerEntity).RaceTemplate.SpecialAbilities & DFCareer.SpecialAbilityFlags.HolyDamage) == DFCareer.SpecialAbilityFlags.HolyDamage :
+        //     false;
+
+        // // Must have career or race active
+        // if (!fromCareer && !fromRace)
+        //     return;
+
+        // // Apply damage when inside a holy place
+        // if (GameManager.Instance.PlayerEnterExit.IsPlayerInHolyPlace)
+        // {
+        //     entityBehaviour.Entity.DecreaseHealth(holyDamageAmount);
+        //     //Debug.LogFormat("Applied {0} points of holy damage after {1} magic rounds (game minutes)", holyDamageAmount, holyDamagePerRounds);
+        // }
+    }
+
+    #endregion
+
+    #region Light & Dark Powered Magery
+
+    void LightPoweredMagery()
+    {
+        // Entity suffers darkness disadvantage at night or inside dungeons and buildings
+        // if (DaggerfallUnity.Instance.WorldTime.Now.IsNight || GameManager.Instance.PlayerEnterExit.IsPlayerInside)
+        // {
+        //     // Disadvantage has two variants
+        //     switch (entityBehaviour.Entity.Career.LightPoweredMagery)
+        //     {
+        //         case DFCareer.LightMageryFlags.ReducedPowerInDarkness:
+        //             entityBehaviour.Entity.ChangeMaxMagickaModifier((int)(entityBehaviour.Entity.RawMaxMagicka * -0.33f));  // 33% less magicka in darkness
+        //             break;
+
+        //         case DFCareer.LightMageryFlags.UnableToCastInDarkness:
+        //             entityBehaviour.Entity.ChangeMaxMagickaModifier(-10000000);                                             // 0 magicka in light
+        //             break;
+        //     }
+        // }
+    }
+
+    void DarknessPoweredMagery()
+    {
+        // Entity suffers light disadvantage during the day while outside
+        // if (GameManager.Instance.PlayerEnterExit.IsPlayerInSunlight)
+        // {
+        //     // Disadvantage has two variants
+        //     switch (entityBehaviour.Entity.Career.DarknessPoweredMagery)
+        //     {
+        //         case DFCareer.DarknessMageryFlags.ReducedPowerInLight:
+        //             entityBehaviour.Entity.ChangeMaxMagickaModifier((int)(entityBehaviour.Entity.RawMaxMagicka * -0.33f));  // 33% less magicka in light
+        //             break;
+
+        //         case DFCareer.DarknessMageryFlags.UnableToCastInLight:
+        //             entityBehaviour.Entity.ChangeMaxMagickaModifier(-10000000);                                             // 0 magicka in light
+        //             break;
+        //     }
+        // }
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    void CacheReferences()
+    {
+        // Cache reference to peered entity behaviour
+        if (!entityBehaviour)
+            entityBehaviour = GetPeeredEntityBehaviour(manager);
+    }
+
+    #endregion
 }
