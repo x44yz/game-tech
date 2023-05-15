@@ -389,6 +389,27 @@ public class Effects
 
         return true;
     }
+
+    readonly Dictionary<int, string> classicEffectMapping = new Dictionary<int, string>();
+    readonly Dictionary<string, BaseEntityEffect> magicEffectTemplates = new Dictionary<string, BaseEntityEffect>();
+    readonly Dictionary<int, BaseEntityEffect> potionEffectTemplates = new Dictionary<int, BaseEntityEffect>();
+    readonly Dictionary<int, SpellRecordData> standardSpells = new Dictionary<int, SpellRecordData>();
+    readonly Dictionary<string, CustomSpellBundleOffer> customSpellBundleOffers = new Dictionary<string, CustomSpellBundleOffer>();
+    /// <summary>
+    /// Gets PotionRecipe from effect that matches the recipeKey provided.
+    /// </summary>
+    /// <param name="recipeKey">Hashcode of a set of ingredients.</param>
+    /// <returns>PotionRecipe if the key matches one from an effect, otherwise null.</returns>
+    public PotionRecipe GetPotionRecipe(int recipeKey)
+    {
+        if (potionEffectTemplates.ContainsKey(recipeKey))
+        {
+            foreach (PotionRecipe recipe in potionEffectTemplates[recipeKey].PotionProperties.Recipes)
+                if (recipe.GetHashCode() == recipeKey)
+                    return recipe;
+        }
+        return null;
+    }
 }
 
 /// <summary>

@@ -1009,9 +1009,9 @@ public class EffectManager : MonoBehaviour
             return;
 
         // Get potion recipe and main effect. (most potions only have one effect)
-        EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
-        PotionRecipe potionRecipe = effectBroker.GetPotionRecipe(item.PotionRecipeKey);
-        IEntityEffect potionEffect = effectBroker.GetPotionRecipeEffect(potionRecipe);
+        // EntityEffectBroker effectBroker = GameManager.Instance.EntityEffectBroker;
+        PotionRecipe potionRecipe = Effects.GetPotionRecipe(item.PotionRecipeKey);
+        IEntityEffect potionEffect = Effects.GetPotionRecipeEffect(potionRecipe);
 
         // Get any secondary effects and generate the effect entry array. (a single settings struct is shared between the effects)
         EffectEntry[] potionEffects;
