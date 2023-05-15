@@ -325,8 +325,8 @@ public class Monster : Actor
         // Add spells to enemy from standard list
         foreach (byte spellID in spellList)
         {
-            SpellRecord.SpellRecordData spellData;
-            GameManager.Instance.EntityEffectBroker.GetClassicSpellRecord(spellID, out spellData);
+            SpellRecordData spellData;
+            Spells.GetClassicSpellRecord(spellID, out spellData);
             if (spellData.index == -1)
             {
                 Debug.LogError("Failed to locate enemy spell in standard spells list.");
@@ -334,7 +334,7 @@ public class Monster : Actor
             }
 
             EffectBundleSettings bundle; 
-            if (!GameManager.Instance.EntityEffectBroker.ClassicSpellRecordDataToEffectBundleSettings(spellData, BundleTypes.Spell, out bundle))
+            if (!Effects.ClassicSpellRecordDataToEffectBundleSettings(spellData, BundleTypes.Spell, out bundle))
             {
                 Debug.LogError("Failed to create effect bundle for enemy spell: " + spellData.spellName);
                 continue;

@@ -80,4 +80,20 @@ public class Spells
     {
         spellRecordDatas = CSVLoader.LoadCSV<SpellRecordData>("Assets/Configs/spells.csv");
     }
+
+    public static bool GetClassicSpellRecord(int id, out SpellRecordData spellOut)
+    {
+        for (int i = 0; i < spellRecordDatas.Count; ++i)
+        {
+            if (spellRecordDatas[i].index == id)
+            {
+                spellOut = spellRecordDatas[i];
+                return true;
+            }
+        }
+
+        Debug.LogError("xx-- cant find spell > " + id);
+        spellOut = new SpellRecordData();
+        return false;
+    }
 }
