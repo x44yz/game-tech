@@ -353,5 +353,148 @@ public class Actor : MonoBehaviour
         get { return (!IsImmuneToParalysis && isParalyzed); }
         set { isParalyzed = value; }
     }
+
+    /// <summary>
+    /// Gets or sets resisting fire flag.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsResistingFire
+    {
+        get { return resistanceFlags[(int)DFCareer.Elements.Fire]; }
+        set { resistanceFlags[(int)DFCareer.Elements.Fire] = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets resisting frost flag.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsResistingFrost
+    {
+        get { return resistanceFlags[(int)DFCareer.Elements.Frost]; }
+        set { resistanceFlags[(int)DFCareer.Elements.Frost] = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets resisting disease or poison flag.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsResistingDiseaseOrPoison
+    {
+        get { return resistanceFlags[(int)DFCareer.Elements.DiseaseOrPoison]; }
+        set { resistanceFlags[(int)DFCareer.Elements.DiseaseOrPoison] = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets resisting shock flag.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsResistingShock
+    {
+        get { return resistanceFlags[(int)DFCareer.Elements.Shock]; }
+        set { resistanceFlags[(int)DFCareer.Elements.Shock] = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets resisting magic flag.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsResistingMagic
+    {
+        get { return resistanceFlags[(int)DFCareer.Elements.Magic]; }
+        set { resistanceFlags[(int)DFCareer.Elements.Magic] = value; }
+    }
+
+    /// <summary>
+    /// Constant effects are cleared each frame by peered entity effect manager and must be actively set by effects maintaining them.
+    /// </summary>
+    public virtual void ClearConstantEffects()
+    {
+        IsParalyzed = false;
+        IsImmuneToParalysis = false;
+        IsImmuneToDisease = false;
+        IsSilenced = false;
+        IsWaterWalking = false;
+        IsWaterBreathing = false;
+        MagicalConcealmentFlags = MagicalConcealmentFlags.None;
+        IsEnhancedClimbing = false;
+        IsEnhancedJumping = false;
+        IsSlowFalling = false;
+        IsAbsorbingSpells = false;
+        MaxMagickaModifier = 0;
+        MaxHealthLimiter = 0;
+        IncreasedWeightAllowanceMultiplier = 0;
+        IncreasedArmorValueModifier = 0;
+        DecreasedArmorValueModifier = 0;
+        ChanceToHitModifier = 0;
+        ImprovedAcuteHearing = false;
+        ImprovedAthleticism = false;
+        ImprovedAdrenalineRush = false;
+        IsResistingFire = false;
+        IsResistingFrost = false;
+        IsResistingDiseaseOrPoison = false;
+        IsResistingShock = false;
+        IsResistingMagic = false;
+        resistanceChances[0] = 0;
+        resistanceChances[1] = 0;
+        resistanceChances[2] = 0;
+        resistanceChances[3] = 0;
+        resistanceChances[4] = 0;
+    }
+
+    /// <summary>
+    /// Update armor values after equipping or unequipping a piece of armor.
+    /// </summary>
+    public void UpdateEquippedArmorValues(Item armor, bool equipping)
+    {
+        if (armor.ItemGroup == ItemGroups.Armor ||
+            (armor.ItemGroup == ItemGroups.MensClothing && armor.GroupIndex >= 6 && armor.GroupIndex <= 8) ||
+            (armor.ItemGroup == ItemGroups.WomensClothing && armor.GroupIndex >= 4 && armor.GroupIndex <= 6)
+            )
+        {
+            if (!armor.IsShield)
+            {
+                // Get slot used by this armor
+                EquipSlots slot = ItemEquipTable.GetEquipSlot(armor);
+
+                // Get equip index with out of range check
+                int index = (int)Item.GetBodyPartForEquipSlot(slot);
+                if (armorValues == null || index < 0 || index >= armorValues.Length)
+                    return;
+
+                if (equipping)
+                {
+                    armorValues[index] -= (sbyte)(armor.GetMaterialArmorValue() * 5);
+                }
+                else
+                {
+                    armorValues[index] += (sbyte)(armor.GetMaterialArmorValue() * 5);
+                }
+            }
+            else
+            {
+                // Shield armor values in classic are unaffected by their material type.
+                int[] values = { 0, 0, 0, 0, 0, 0, 0 }; // shield's effect on the 7 armor values
+                int armorBonus = armor.GetShieldArmorValue();
+                BodyParts[] protectedBodyParts = armor.GetShieldProtectedBodyParts();
+
+                foreach (var BodyPart in protectedBodyParts)
+                {
+                    values[(int)BodyPart] = armorBonus;
+                }
+
+                for (int i = 0; i < armorValues.Length; i++)
+                {
+                    if (equipping)
+                    {
+                        armorValues[i] -= (sbyte)(values[i] * 5);
+                    }
+                    else
+                    {
+                        armorValues[i] += (sbyte)(values[i] * 5);
+                    }
+                }
+            }
+        }
+    }
 }
 

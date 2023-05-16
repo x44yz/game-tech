@@ -33,6 +33,8 @@ public class Item
     public int stackCount = 1;
     public DEnchantment[] legacyMagic = null;
     public CustomEnchantment[] customMagic = null;
+    public uint timeHealthLeechLastUsed;
+    public uint timeEffectsLastRerolled;
     
     const ushort identifiedMask = 0x20;
     const ushort artifactMask = 0x800;
@@ -571,7 +573,7 @@ public class Item
             // Handle breaking - if AllowMagicRepairs enabled then item will not disappear
             currentCondition = 0;
             ItemBreaks(unequipFromOwner);
-            if (removeFromCollectionWhenBreaks != null && !DaggerfallUnity.Settings.AllowMagicRepairs)
+            if (removeFromCollectionWhenBreaks != null /*&& !DaggerfallUnity.Settings.AllowMagicRepairs*/)
                 removeFromCollectionWhenBreaks.RemoveItem(this);
         }
     }
@@ -684,5 +686,158 @@ public class Item
         }
 
         return cachedItemTemplate;
+    }
+
+    /// <summary>
+    /// Checks if this item is of any shield type.
+    /// </summary>
+    public bool IsShield
+    {
+        get { return GetIsShield(); }
+    }
+
+    // Check if this is a shield
+    bool GetIsShield()
+    {
+        if (ItemGroup == ItemGroups.Armor)
+        {
+            if (TemplateIndex == (int)Armor.Kite_Shield ||
+                TemplateIndex == (int)Armor.Round_Shield ||
+                TemplateIndex == (int)Armor.Tower_Shield ||
+                TemplateIndex == (int)Armor.Buckler)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Get the body part that matches to an equip slot.
+    /// Used in armor calculations.
+    /// </summary>
+    public static BodyParts GetBodyPartForEquipSlot(EquipSlots equipSlot)
+    {
+        switch (equipSlot)
+        {
+            case EquipSlots.Head:
+                return BodyParts.Head;
+            case EquipSlots.RightArm:
+                return BodyParts.RightArm;
+            case EquipSlots.LeftArm:
+                return BodyParts.LeftArm;
+            case EquipSlots.ChestArmor:
+                return BodyParts.Chest;
+            case EquipSlots.Gloves:
+                return BodyParts.Hands;
+            case EquipSlots.LegsArmor:
+                return BodyParts.Legs;
+            case EquipSlots.Feet:
+                return BodyParts.Feet;
+
+            default:
+                return BodyParts.None;
+        }
+    }
+
+    public virtual int GetMaterialArmorValue()
+    {
+        int result = 0;
+        if (!IsShield)
+        {
+            switch (nativeMaterialValue)
+            {
+                case (int)ArmorMaterialTypes.Leather:
+                    result = 3;
+                    break;
+                case (int)ArmorMaterialTypes.Chain:
+                case (int)ArmorMaterialTypes.Chain2:
+                    result = 6;
+                    break;
+                case (int)ArmorMaterialTypes.Iron:
+                    result = 7;
+                    break;
+                case (int)ArmorMaterialTypes.Steel:
+                case (int)ArmorMaterialTypes.Silver:
+                    result = 9;
+                    break;
+                case (int)ArmorMaterialTypes.Elven:
+                    result = 11;
+                    break;
+                case (int)ArmorMaterialTypes.Dwarven:
+                    result = 13;
+                    break;
+                case (int)ArmorMaterialTypes.Mithril:
+                case (int)ArmorMaterialTypes.Adamantium:
+                    result = 15;
+                    break;
+                case (int)ArmorMaterialTypes.Ebony:
+                    result = 17;
+                    break;
+                case (int)ArmorMaterialTypes.Orcish:
+                    result = 19;
+                    break;
+                case (int)ArmorMaterialTypes.Daedric:
+                    result = 21;
+                    break;
+            }
+        }
+        else
+        {
+            return GetShieldArmorValue();
+        }
+
+        // Armor artifact appear to use armor rating divided by 2 rounded down
+        if (IsArtifact && ItemGroup == ItemGroups.Armor)
+            result /= 2;
+
+        return result;
+    }
+
+    /// <summary>
+    /// Checks if this item is an artifact.
+    /// </summary>
+    public bool IsArtifact
+    {
+        get { return (flags & artifactMask) > 0; }
+    }
+
+    public virtual int GetShieldArmorValue()
+    {
+        switch (TemplateIndex)
+        {
+            case (int)Armor.Buckler:
+                return 1;
+            case (int)Armor.Round_Shield:
+                return 2;
+            case (int)Armor.Kite_Shield:
+                return 3;
+            case (int)Armor.Tower_Shield:
+                return 4;
+
+            default:
+                return 0;
+        }
+    }
+
+    /// <summary>
+    /// Get body parts protected by a shield.
+    /// </summary>
+    public virtual BodyParts[] GetShieldProtectedBodyParts()
+    {
+        switch (TemplateIndex)
+        {
+            case (int)Armor.Buckler:
+                return new BodyParts[] { BodyParts.LeftArm, BodyParts.Hands };
+            case (int)Armor.Round_Shield:
+            case (int)Armor.Kite_Shield:
+                return new BodyParts[] { BodyParts.LeftArm, BodyParts.Hands, BodyParts.Legs };
+            case (int)Armor.Tower_Shield:
+                return new BodyParts[] { BodyParts.Head, BodyParts.LeftArm, BodyParts.Hands, BodyParts.Legs };
+
+            default:
+                return new BodyParts[] { };
+        }
     }
 }

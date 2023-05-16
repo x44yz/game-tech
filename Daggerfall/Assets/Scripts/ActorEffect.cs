@@ -1276,7 +1276,7 @@ public class ActorEffect : MonoBehaviour
         // Get casting cost for this effect
         // Costs are calculated as if target cast the spell, not the actual caster
         // Note that if player self-absorbs a spell this will be equal anyway
-        int effectCastingCost = GetEffectCastingCost(effect, targetType, entityBehaviour.Entity);
+        int effectCastingCost = GetEffectCastingCost(effect, targetType, entityBehaviour);
 
         // The entity must have enough spell points free to absorb incoming effect
         int availableSpellPoints = entityBehaviour.MaxMagicka - entityBehaviour.CurrentMagicka;
@@ -1501,12 +1501,12 @@ public class ActorEffect : MonoBehaviour
         string effectKey;
         switch (infectionType)
         {
-            case LycanthropyTypes.Werewolf:
-                effectKey = WerewolfInfection.WerewolfInfectionKey;
-                break;
-            case LycanthropyTypes.Wereboar:
-                effectKey = WereboarInfection.WereboarInfectionKey;
-                break;
+            // case LycanthropyTypes.Werewolf:
+            //     effectKey = WerewolfInfection.WerewolfInfectionKey;
+            //     break;
+            // case LycanthropyTypes.Wereboar:
+            //     effectKey = WereboarInfection.WereboarInfectionKey;
+            //     break;
             default:
                 throw new Exception("CreateLycanthropyInfection() infectionType cannot be LycanthropyTypes.None");
         }
@@ -1527,14 +1527,15 @@ public class ActorEffect : MonoBehaviour
     /// <returns>EntityEffectBundle.</returns>
     public EntityEffectBundle CreateVampirismCurse()
     {
-        EffectBundleSettings settings = new EffectBundleSettings()
-        {
-            Version = Effects.CurrentSpellVersion,
-            BundleType = BundleTypes.None,
-            Effects = new EffectEntry[] { new EffectEntry(VampirismEffect.VampirismCurseKey) },
-        };
+        throw new System.NotImplementedException();
+        // EffectBundleSettings settings = new EffectBundleSettings()
+        // {
+        //     Version = Effects.CurrentSpellVersion,
+        //     BundleType = BundleTypes.None,
+        //     Effects = new EffectEntry[] { new EffectEntry(VampirismEffect.VampirismCurseKey) },
+        // };
 
-        return new EntityEffectBundle(settings, entityBehaviour);
+        // return new EntityEffectBundle(settings, entityBehaviour);
     }
 
     /// <summary>
@@ -1543,14 +1544,15 @@ public class ActorEffect : MonoBehaviour
     /// <returns>EntityEffectBundle.</returns>
     public EntityEffectBundle CreateLycanthropyCurse()
     {
-        EffectBundleSettings settings = new EffectBundleSettings()
-        {
-            Version = Effects.CurrentSpellVersion,
-            BundleType = BundleTypes.None,
-            Effects = new EffectEntry[] { new EffectEntry(LycanthropyEffect.LycanthropyCurseKey) },
-        };
+        throw new System.NotImplementedException();
+        // EffectBundleSettings settings = new EffectBundleSettings()
+        // {
+        //     Version = Effects.CurrentSpellVersion,
+        //     BundleType = BundleTypes.None,
+        //     Effects = new EffectEntry[] { new EffectEntry(LycanthropyEffect.LycanthropyCurseKey) },
+        // };
 
-        return new EntityEffectBundle(settings, entityBehaviour);
+        // return new EntityEffectBundle(settings, entityBehaviour);
     }
 
     public void CureDisease(Diseases disease)
@@ -1770,7 +1772,8 @@ public class ActorEffect : MonoBehaviour
 
         // End Shadow-Normal
         if (entityBehaviour.HasConcealment(MagicalConcealmentFlags.ShadeNormal))
-            manager.EndIncumbentEffect<ShadowNormal>();
+            // manager.EndIncumbentEffect<ShadowNormal>();
+            throw new System.NotImplementedException();
     }
 
     #endregion
@@ -1955,7 +1958,7 @@ public class ActorEffect : MonoBehaviour
 
         // Assign to host entity
         entityBehaviour.Stats.AssignMods(combinedStatMods, combinedStatMaxMods);
-        entityBehaviour.Skills.AssignMods(combinedSkillMods);
+        entityBehaviour.tSkills.AssignMods(combinedSkillMods);
         entityBehaviour.Resistances.AssignMods(combinedResistanceMods);
 
         // Kill host if any stat is reduced to 0 live total
@@ -2158,16 +2161,16 @@ public class ActorEffect : MonoBehaviour
         if (readySpell.Settings.TargetType != TargetTypes.SingleTargetAtRange &&
             readySpell.Settings.TargetType != TargetTypes.AreaAtRange)
         {
-            EnemyBlood sparkles = readySpell.CasterEntityBehaviour.GetComponent<EnemyBlood>();
+            // EnemyBlood sparkles = readySpell.CasterEntityBehaviour.GetComponent<EnemyBlood>();
 
-            CharacterController targetController = entityBehaviour.transform.GetComponent<CharacterController>();
-            Vector3 sparklesPos = entityBehaviour.transform.position + targetController.center;
-            sparklesPos.y += targetController.height / 8;
+            // CharacterController targetController = entityBehaviour.transform.GetComponent<CharacterController>();
+            // Vector3 sparklesPos = entityBehaviour.transform.position + targetController.center;
+            // sparklesPos.y += targetController.height / 8;
 
-            if (sparkles)
-            {
-                sparkles.ShowMagicSparkles(sparklesPos);
-            }
+            // if (sparkles)
+            // {
+            //     sparkles.ShowMagicSparkles(sparklesPos);
+            // }
         }
 
         // Assign bundle directly to self if target is caster
@@ -2260,7 +2263,7 @@ public class ActorEffect : MonoBehaviour
     private void Entity_OnDeath(Actor entity)
     {
         wipeAllBundles = true;
-        entityBehaviour.OnDeath -= Entity_OnDeath;
+        // entityBehaviour.OnDeath -= Entity_OnDeath;
         //Debug.LogFormat("Cleared all effect bundles after death of {0}", entity.Name);
     }
 

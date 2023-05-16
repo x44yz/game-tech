@@ -428,52 +428,52 @@ public class DFCareer
         Luck = 7,
     }
 
-    /// <summary>
-    /// Skills.
-    /// The indices below match those in BIOG*.TXT files and CLASS*.CFG files.
-    /// Likely to be the same indices using internally by the game.
-    /// TEXT.RSC description records start at 1360, but are in a different order to below.
-    /// </summary>
-    public enum Skills
-    {
-        None = -1,
-        Medical = 0,
-        Etiquette = 1,
-        Streetwise = 2,
-        Jumping = 3,
-        Orcish = 4,
-        Harpy = 5,
-        Giantish = 6,
-        Dragonish = 7,
-        Nymph = 8,
-        Daedric = 9,
-        Spriggan = 10,
-        Centaurian = 11,
-        Impish = 12,
-        Lockpicking = 13,
-        Mercantile = 14,
-        Pickpocket = 15,
-        Stealth = 16,
-        Swimming = 17,
-        Climbing = 18,
-        Backstabbing = 19,
-        Dodging = 20,
-        Running = 21,
-        Destruction = 22,
-        Restoration = 23,
-        Illusion = 24,
-        Alteration = 25,
-        Thaumaturgy = 26,
-        Mysticism = 27,
-        ShortBlade = 28,
-        LongBlade = 29,
-        HandToHand = 30,
-        Axe = 31,
-        BluntWeapon = 32,
-        Archery = 33,
-        CriticalStrike = 34,
-        Count = 35, // Not a valid skill
-    }
+    // /// <summary>
+    // /// Skills.
+    // /// The indices below match those in BIOG*.TXT files and CLASS*.CFG files.
+    // /// Likely to be the same indices using internally by the game.
+    // /// TEXT.RSC description records start at 1360, but are in a different order to below.
+    // /// </summary>
+    // public enum Skills
+    // {
+    //     None = -1,
+    //     Medical = 0,
+    //     Etiquette = 1,
+    //     Streetwise = 2,
+    //     Jumping = 3,
+    //     Orcish = 4,
+    //     Harpy = 5,
+    //     Giantish = 6,
+    //     Dragonish = 7,
+    //     Nymph = 8,
+    //     Daedric = 9,
+    //     Spriggan = 10,
+    //     Centaurian = 11,
+    //     Impish = 12,
+    //     Lockpicking = 13,
+    //     Mercantile = 14,
+    //     Pickpocket = 15,
+    //     Stealth = 16,
+    //     Swimming = 17,
+    //     Climbing = 18,
+    //     Backstabbing = 19,
+    //     Dodging = 20,
+    //     Running = 21,
+    //     Destruction = 22,
+    //     Restoration = 23,
+    //     Illusion = 24,
+    //     Alteration = 25,
+    //     Thaumaturgy = 26,
+    //     Mysticism = 27,
+    //     ShortBlade = 28,
+    //     LongBlade = 29,
+    //     HandToHand = 30,
+    //     Axe = 31,
+    //     BluntWeapon = 32,
+    //     Archery = 33,
+    //     CriticalStrike = 34,
+    //     Count = 35, // Not a valid skill
+    // }
 
     /// <summary>
     /// Elements for resistances and saving throws.

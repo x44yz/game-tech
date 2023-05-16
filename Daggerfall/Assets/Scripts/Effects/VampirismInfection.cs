@@ -81,12 +81,12 @@ public class VampirismInfection : DiseaseEffect
     {
         base.Start(manager, caster);
 
-        // Record starting day of infection
-        startingDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
+        // // Record starting day of infection
+        // startingDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
 
-        // Record region of infection for clan at time of deployment
-        // Think classic uses current region at time of turning, this will use current region at time of infection
-        infectionRegionIndex = GameManager.Instance.PlayerGPS.CurrentRegionIndex;
+        // // Record region of infection for clan at time of deployment
+        // // Think classic uses current region at time of turning, this will use current region at time of infection
+        // infectionRegionIndex = GameManager.Instance.PlayerGPS.CurrentRegionIndex;
     }
 
     public override void Resume(ActorEffect.EffectSaveData_v1 effectData, ActorEffect manager, Actor caster = null)
@@ -104,38 +104,38 @@ public class VampirismInfection : DiseaseEffect
 
     void ProgressDisease()
     {
-        const string dreamVideoName = "ANIM0004.VID";   // Vampire dream video
-        const string deathVideoName = "ANIM0012.VID";   // Death video
+        // const string dreamVideoName = "ANIM0004.VID";   // Vampire dream video
+        // const string deathVideoName = "ANIM0012.VID";   // Death video
 
-        // Do nothing if not incumbent or effect ended
-        if (!IsIncumbent || forcedRoundsRemaining == 0 || daysOfSymptomsLeft == completedDiseaseValue)
-            return;
+        // // Do nothing if not incumbent or effect ended
+        // if (!IsIncumbent || forcedRoundsRemaining == 0 || daysOfSymptomsLeft == completedDiseaseValue)
+        //     return;
 
-        // Get current day and number of days that have passed (e.g. fast travel can progress time several days)
-        uint currentDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
-        int daysPast = (int)(currentDay - startingDay);
+        // // Get current day and number of days that have passed (e.g. fast travel can progress time several days)
+        // uint currentDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
+        // int daysPast = (int)(currentDay - startingDay);
 
-        // Show dream after 1 day has passed, progress to full-blown vampirism after 3 days have passed
-        if (daysPast > 0 && !warningDreamVideoScheduled && !warningDreamVideoPlayed)
-        {
-            // Play infection warning dream video
-            DaggerfallVidPlayerWindow vidPlayerWindow = (DaggerfallVidPlayerWindow)
-                UIWindowFactory.GetInstanceWithArgs(UIWindowType.VidPlayer, new object[] { DaggerfallUI.UIManager, dreamVideoName });
-            vidPlayerWindow.EndOnAnyKey = false;
-            DaggerfallUI.UIManager.PushWindow(vidPlayerWindow);
-            vidPlayerWindow.OnClose += WarningDreamVideoCompleted;
-            warningDreamVideoScheduled = true;
-        }
-        else if (daysPast > 3 && warningDreamVideoPlayed && !fakeDeathVideoPlayed)
-        {
-            // Play "death" video ahead of final stage of infection
-            DaggerfallVidPlayerWindow vidPlayerWindow = (DaggerfallVidPlayerWindow)
-                UIWindowFactory.GetInstanceWithArgs(UIWindowType.VidPlayer, new object[] { DaggerfallUI.UIManager, deathVideoName });
-            vidPlayerWindow.EndOnAnyKey = false;
-            DaggerfallUI.UIManager.PushWindow(vidPlayerWindow);
-            vidPlayerWindow.OnClose += DeployFullBlownVampirism;
-            fakeDeathVideoPlayed = true;
-        }
+        // // Show dream after 1 day has passed, progress to full-blown vampirism after 3 days have passed
+        // if (daysPast > 0 && !warningDreamVideoScheduled && !warningDreamVideoPlayed)
+        // {
+        //     // Play infection warning dream video
+        //     DaggerfallVidPlayerWindow vidPlayerWindow = (DaggerfallVidPlayerWindow)
+        //         UIWindowFactory.GetInstanceWithArgs(UIWindowType.VidPlayer, new object[] { DaggerfallUI.UIManager, dreamVideoName });
+        //     vidPlayerWindow.EndOnAnyKey = false;
+        //     DaggerfallUI.UIManager.PushWindow(vidPlayerWindow);
+        //     vidPlayerWindow.OnClose += WarningDreamVideoCompleted;
+        //     warningDreamVideoScheduled = true;
+        // }
+        // else if (daysPast > 3 && warningDreamVideoPlayed && !fakeDeathVideoPlayed)
+        // {
+        //     // Play "death" video ahead of final stage of infection
+        //     DaggerfallVidPlayerWindow vidPlayerWindow = (DaggerfallVidPlayerWindow)
+        //         UIWindowFactory.GetInstanceWithArgs(UIWindowType.VidPlayer, new object[] { DaggerfallUI.UIManager, deathVideoName });
+        //     vidPlayerWindow.EndOnAnyKey = false;
+        //     DaggerfallUI.UIManager.PushWindow(vidPlayerWindow);
+        //     vidPlayerWindow.OnClose += DeployFullBlownVampirism;
+        //     fakeDeathVideoPlayed = true;
+        // }
     }
 
     private void WarningDreamVideoCompleted()
@@ -145,72 +145,72 @@ public class VampirismInfection : DiseaseEffect
 
     private void DeployFullBlownVampirism()
     {
-        const int deathIsNotEternalTextID = 401;
+        // const int deathIsNotEternalTextID = 401;
 
-        // Cancel rest window if sleeping
-        if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallRestWindow)
-            (DaggerfallUI.Instance.UserInterfaceManager.TopWindow as DaggerfallRestWindow).CloseWindow();
+        // // Cancel rest window if sleeping
+        // if (DaggerfallUI.Instance.UserInterfaceManager.TopWindow is DaggerfallRestWindow)
+        //     (DaggerfallUI.Instance.UserInterfaceManager.TopWindow as DaggerfallRestWindow).CloseWindow();
 
-        // Halt random enemy spawns for next playerEntity update so player isn't bombarded by spawned enemies after transform time
-        GameManager.Instance.PlayerEntity.PreventEnemySpawns = true;
+        // // Halt random enemy spawns for next playerEntity update so player isn't bombarded by spawned enemies after transform time
+        // GameManager.Instance.PlayerEntity.PreventEnemySpawns = true;
 
-        // Raise game time to an evening two weeks later
-        float raiseTime = (2 * DaggerfallDateTime.SecondsPerWeek) + (DaggerfallDateTime.DuskHour + 1 - DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.Hour) * 3600;
-        DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.RaiseTime(raiseTime);
-        GameManager.Instance.EntityEffectBroker.SyntheticTimeIncrease = true;
+        // // Raise game time to an evening two weeks later
+        // float raiseTime = (2 * DaggerfallDateTime.SecondsPerWeek) + (DaggerfallDateTime.DuskHour + 1 - DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.Hour) * 3600;
+        // DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.RaiseTime(raiseTime);
+        // GameManager.Instance.EntityEffectBroker.SyntheticTimeIncrease = true;
 
-        // Transfer player to a random cemetery
-        // Always using a small cemetery, nothing spoils that first vampire moment like being lost the guts of a massive dungeon
-        // Intentionally not spawning enemies, for this time the PLAYER is the monster lurking inside the crypt
-        DFLocation location = GetRandomCemetery();
-        DFPosition mapPixel = MapsFile.LongitudeLatitudeToMapPixel(location.MapTableData.Longitude, location.MapTableData.Latitude);
-        DFPosition worldPos = MapsFile.MapPixelToWorldCoord(mapPixel.X, mapPixel.Y);
-        GameManager.Instance.PlayerEnterExit.RespawnPlayer(
-            worldPos.X,
-            worldPos.Y,
-            true,
-            false);
+        // // Transfer player to a random cemetery
+        // // Always using a small cemetery, nothing spoils that first vampire moment like being lost the guts of a massive dungeon
+        // // Intentionally not spawning enemies, for this time the PLAYER is the monster lurking inside the crypt
+        // DFLocation location = GetRandomCemetery();
+        // DFPosition mapPixel = MapsFile.LongitudeLatitudeToMapPixel(location.MapTableData.Longitude, location.MapTableData.Latitude);
+        // DFPosition worldPos = MapsFile.MapPixelToWorldCoord(mapPixel.X, mapPixel.Y);
+        // GameManager.Instance.PlayerEnterExit.RespawnPlayer(
+        //     worldPos.X,
+        //     worldPos.Y,
+        //     true,
+        //     false);
 
-        // Assign vampire spells to spellbook
-        GameManager.Instance.PlayerEntity.AssignPlayerVampireSpells(InfectionVampireClan);
+        // // Assign vampire spells to spellbook
+        // GameManager.Instance.PlayerEntity.AssignPlayerVampireSpells(InfectionVampireClan);
 
-        // Fade in from black
-        DaggerfallUI.Instance.FadeBehaviour.FadeHUDFromBlack(1.0f);
+        // // Fade in from black
+        // DaggerfallUI.Instance.FadeBehaviour.FadeHUDFromBlack(1.0f);
 
-        // Start permanent vampirism effect stage two
-        EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateVampirismCurse();
-        GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
+        // // Start permanent vampirism effect stage two
+        // EntityEffectBundle bundle = GameManager.Instance.PlayerEffectManager.CreateVampirismCurse();
+        // GameManager.Instance.PlayerEffectManager.AssignBundle(bundle, AssignBundleFlags.BypassSavingThrows);
 
-        // Display popup
-        DaggerfallMessageBox mb = DaggerfallUI.MessageBox(deathIsNotEternalTextID);
-        mb.Show();
+        // // Display popup
+        // DaggerfallMessageBox mb = DaggerfallUI.MessageBox(deathIsNotEternalTextID);
+        // mb.Show();
 
-        // Terminate custom disease lifecycle
-        EndDisease();
+        // // Terminate custom disease lifecycle
+        // EndDisease();
     }
 
-    DFLocation GetRandomCemetery()
-    {
-        // Get player region data
-        int regionIndex = GameManager.Instance.PlayerGPS.CurrentRegionIndex;
-        DFRegion regionData = DaggerfallUnity.Instance.ContentReader.MapFileReader.GetRegion(regionIndex);
+    // DFLocation GetRandomCemetery()
+    // {
+    //     // Get player region data
+    //     int regionIndex = GameManager.Instance.PlayerGPS.CurrentRegionIndex;
+    //     DFRegion regionData = DaggerfallUnity.Instance.ContentReader.MapFileReader.GetRegion(regionIndex);
 
-        // Collect all cemetery locations
-        List<int> foundLocationIndices = new List<int>();
-        for (int i = 0; i < regionData.LocationCount; i++)
-        {
-            if (((int)regionData.MapTable[i].DungeonType) == (int)DFRegion.DungeonTypes.Cemetery)
-                foundLocationIndices.Add(i);
-        }
+    //     // Collect all cemetery locations
+    //     List<int> foundLocationIndices = new List<int>();
+    //     for (int i = 0; i < regionData.LocationCount; i++)
+    //     {
+    //         if (((int)regionData.MapTable[i].DungeonType) == (int)DFRegion.DungeonTypes.Cemetery)
+    //             foundLocationIndices.Add(i);
+    //     }
 
-        // Select one at random
-        int index = UnityEngine.Random.Range(0, foundLocationIndices.Count);
-        DFLocation location = DaggerfallUnity.Instance.ContentReader.MapFileReader.GetLocation(regionIndex, foundLocationIndices[index]);
-        if (!location.Loaded)
-            throw new System.Exception("VampirismInfection.GetRandomCemetery() could not find a cemetery in this region.");
+    //     // Select one at random
+    //     int index = UnityEngine.Random.Range(0, foundLocationIndices.Count);
+    //     DFLocation location = DaggerfallUnity.Instance.ContentReader.MapFileReader.GetLocation(regionIndex, foundLocationIndices[index]);
+    //     if (!location.Loaded)
+    //         throw new System.Exception("VampirismInfection.GetRandomCemetery() could not find a cemetery in this region.");
 
-        return location;
-    }
+    //     return location;
+    // }
 
     #endregion
 

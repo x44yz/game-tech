@@ -384,9 +384,9 @@ public abstract class BaseEffect : IEntityEffect
     /// </summary>
     /// <param name="skill">Skill to query.</param>
     /// <returns>Current skill modifier.</returns>
-    protected int GetSkillMod(DFCareer.Skills skill)
+    protected int GetSkillMod(Skills skill)
     {
-        if (skill == DFCareer.Skills.None)
+        if (skill == Skills.None)
             return 0;
 
         return skillMods[(int)skill];
@@ -435,7 +435,7 @@ public abstract class BaseEffect : IEntityEffect
     /// </summary>
     /// <param name="skill">Skill to heal.</param>
     /// <param name="amount">Amount to heal. Must be positive value.</param>
-    public virtual void HealSkillDamage(DFCareer.Skills skill, int amount)
+    public virtual void HealSkillDamage(Skills skill, int amount)
     {
         if (amount < 0)
         {
@@ -620,17 +620,17 @@ public abstract class BaseEffect : IEntityEffect
         statMaxMods[(int)stat] += amount;
     }
 
-    protected void SetSkillMod(DFCareer.Skills skill, int value)
+    protected void SetSkillMod(Skills skill, int value)
     {
-        if (skill == DFCareer.Skills.None)
+        if (skill == Skills.None)
             return;
 
         skillMods[(int)skill] = value;
     }
 
-    protected void ChangeSkillMod(DFCareer.Skills skill, int amount)
+    protected void ChangeSkillMod(Skills skill, int amount)
     {
-        if (skill == DFCareer.Skills.None)
+        if (skill == Skills.None)
             return;
 
         skillMods[(int)skill] += amount;

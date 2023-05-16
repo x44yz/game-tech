@@ -1382,11 +1382,94 @@ public static class FormulaUtils
     public static SpellCost CalculateEffectCosts(EffectEntry effectEntry, Actor casterEntity = null)
     {
         // Get effect template
-        // IEntityEffect effectTemplate = Effects.GetEffectTemplate(effectEntry.Key);
-        // if (effectTemplate == null)
+        IEntityEffect effectTemplate = Effects.GetEffectTemplate(effectEntry.Key);
+        if (effectTemplate == null)
             return new SpellCost { goldCost = 0, spellPointCost = 0 };
 
-        // return CalculateEffectCosts(effectTemplate, effectEntry.Settings, casterEntity);
+        return CalculateEffectCosts(effectTemplate, effectEntry.Settings, casterEntity);
+    }
+
+    /// <summary>
+    /// Calculates effect costs from an IEntityEffect and custom settings.
+    /// </summary>
+    public static SpellCost CalculateEffectCosts(IEntityEffect effect, EffectSettings settings, Actor casterEntity = null)
+    {
+        bool activeComponents = false;            
+
+        // Get related skill
+        int skillValue = 0;
+        if (casterEntity == null)
+        {
+            // From player
+            skillValue = Main.Inst.hero.tSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
+        }
+        else
+        {
+            // From another entity
+            skillValue = casterEntity.tSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
+        }
+
+        // Duration costs
+        int durationGoldCost = 0;
+        if (effect.Properties.SupportDuration)
+        {
+            activeComponents = true;
+            durationGoldCost = GetEffectComponentCosts(
+                effect.Properties.DurationCosts,
+                settings.DurationBase,
+                settings.DurationPlus,
+                settings.DurationPerLevel,
+                skillValue);
+
+            //Debug.LogFormat("Duration: gold {0} spellpoints {1}", durationGoldCost, durationSpellPointCost);
+        }
+
+        // Chance costs
+        int chanceGoldCost = 0;
+        if (effect.Properties.SupportChance)
+        {
+            activeComponents = true;
+            chanceGoldCost = GetEffectComponentCosts(
+                effect.Properties.ChanceCosts,
+                settings.ChanceBase,
+                settings.ChancePlus,
+                settings.ChancePerLevel,
+                skillValue);
+
+            //Debug.LogFormat("Chance: gold {0} spellpoints {1}", chanceGoldCost, chanceSpellPointCost);
+        }
+
+        // Magnitude costs
+        int magnitudeGoldCost = 0;
+        if (effect.Properties.SupportMagnitude)
+        {
+            activeComponents = true;
+            int magnitudeBase = (settings.MagnitudeBaseMax + settings.MagnitudeBaseMin) / 2;
+            int magnitudePlus = (settings.MagnitudePlusMax + settings.MagnitudePlusMin) / 2;
+            magnitudeGoldCost = GetEffectComponentCosts(
+                effect.Properties.MagnitudeCosts,
+                magnitudeBase,
+                magnitudePlus,
+                settings.MagnitudePerLevel,
+                skillValue);
+
+            //Debug.LogFormat("Magnitude: gold {0} spellpoints {1}", magnitudeGoldCost, magnitudeSpellPointCost);
+        }
+
+        // If there are no active components (e.g. Teleport) then fudge some costs
+        // This gives the same casting cost outcome as classic and supplies a reasonable gold cost
+        // Note: Classic does not assign a gold cost when a zero-component effect is the only effect present, which seems like a bug
+        int fudgeGoldCost = 0;
+        if (!activeComponents)
+            fudgeGoldCost = GetEffectComponentCosts(BaseEntityEffect.MakeEffectCosts(60, 100, 160), 1, 1, 1, skillValue);
+
+        // Add gold costs together and calculate spellpoint cost from the result
+        SpellCost effectCost;
+        effectCost.goldCost = durationGoldCost + chanceGoldCost + magnitudeGoldCost + fudgeGoldCost;
+        effectCost.spellPointCost = effectCost.goldCost * (110 - skillValue) / 400;
+
+        //Debug.LogFormat("Costs: gold {0} spellpoints {1}", finalGoldCost, finalSpellPointCost);
+        return effectCost;
     }
 
     public static int MagicResist(int willpower)
@@ -1431,29 +1514,29 @@ public static class FormulaUtils
     // Gets vampire clan based on region
     public static VampireClans GetVampireClan(int regionIndex)
     {
-        FactionFile.FactionData factionData;
-        GameManager.Instance.PlayerEntity.FactionData.GetRegionFaction(regionIndex, out factionData);
-        switch ((FactionFile.FactionIDs) factionData.vam)
-        {
-            case FactionFile.FactionIDs.The_Vraseth:
-                return VampireClans.Vraseth;
-            case FactionFile.FactionIDs.The_Haarvenu:
-                return VampireClans.Haarvenu;
-            case FactionFile.FactionIDs.The_Thrafey:
-                return VampireClans.Thrafey;
-            case FactionFile.FactionIDs.The_Lyrezi:
-                return VampireClans.Lyrezi;
-            case FactionFile.FactionIDs.The_Montalion:
-                return VampireClans.Montalion;
-            case FactionFile.FactionIDs.The_Khulari:
-                return VampireClans.Khulari;
-            case FactionFile.FactionIDs.The_Garlythi:
-                return VampireClans.Garlythi;
-            case FactionFile.FactionIDs.The_Anthotis:
-                return VampireClans.Anthotis;
-            case FactionFile.FactionIDs.The_Selenu:
-                return VampireClans.Selenu;
-        }
+        // FactionFile.FactionData factionData;
+        // GameManager.Instance.PlayerEntity.FactionData.GetRegionFaction(regionIndex, out factionData);
+        // switch ((FactionFile.FactionIDs) factionData.vam)
+        // {
+        //     case FactionFile.FactionIDs.The_Vraseth:
+        //         return VampireClans.Vraseth;
+        //     case FactionFile.FactionIDs.The_Haarvenu:
+        //         return VampireClans.Haarvenu;
+        //     case FactionFile.FactionIDs.The_Thrafey:
+        //         return VampireClans.Thrafey;
+        //     case FactionFile.FactionIDs.The_Lyrezi:
+        //         return VampireClans.Lyrezi;
+        //     case FactionFile.FactionIDs.The_Montalion:
+        //         return VampireClans.Montalion;
+        //     case FactionFile.FactionIDs.The_Khulari:
+        //         return VampireClans.Khulari;
+        //     case FactionFile.FactionIDs.The_Garlythi:
+        //         return VampireClans.Garlythi;
+        //     case FactionFile.FactionIDs.The_Anthotis:
+        //         return VampireClans.Anthotis;
+        //     case FactionFile.FactionIDs.The_Selenu:
+        //         return VampireClans.Selenu;
+        // }
 
         // The Lyrezi are the default like in classic
         return VampireClans.Lyrezi;

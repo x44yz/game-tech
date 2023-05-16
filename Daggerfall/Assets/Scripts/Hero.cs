@@ -18,6 +18,8 @@ public enum PlayerReflexes
 // [Serializable]
 public class Hero : Actor
 {
+    protected Genders gender;
+    public Genders Gender { get { return gender; } set { gender = value; } }
     public Races Race { get { return (Races)RaceTemplate.ID; } }
     public RaceTemplate RaceTemplate { get { return GetLiveRaceTemplate(); } }
 
@@ -52,6 +54,13 @@ public class Hero : Actor
         //     return racialOverrideEffect.CustomRace;
         // else
         return raceTemplate;
+    }
+
+    const int socialGroupCount = 11;
+    int[] reactionMods = new int[socialGroupCount];     // Indices map to FactionFile.SocialGroups 0-10 - do not serialize, set by live effects
+    public void ClearReactionMods()
+    {
+        Array.Clear(reactionMods, 0, socialGroupCount);
     }
 
     /// <summary>

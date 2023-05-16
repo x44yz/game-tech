@@ -442,11 +442,11 @@ public class Monster : Actor
         if (player.Level > 1)
         {
             Item weapon = enemyEntity.ItemEquipTable.GetItem(EquipSlots.RightHand);
-            if (weapon != null && (enemyEntity.EntityType == EntityTypes.EnemyClass || enemyEntity.MobileEnemy.ID == (int)MobileTypes.Orc
-                    || enemyEntity.ID == (int)MobileTypes.Centaur || enemyEntity.MobileEnemy.ID == (int)MobileTypes.OrcSergeant))
+            if (weapon != null && (enemyEntity.EntityType == EntityTypes.EnemyClass || enemyEntity.ID == (int)MobileTypes.Orc
+                    || enemyEntity.ID == (int)MobileTypes.Centaur || enemyEntity.ID == (int)MobileTypes.OrcSergeant))
             {
                 int chanceToPoison = 5;
-                if (enemyEntity.MobileEnemy.ID == (int)MobileTypes.Assassin)
+                if (enemyEntity.ID == (int)MobileTypes.Assassin)
                     chanceToPoison = 60;
 
                 if (Dice100.SuccessRoll(chanceToPoison))
