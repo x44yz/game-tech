@@ -500,6 +500,19 @@ public class Effects
     }
 
     /// <summary>
+    /// Gets interface to effect template from classic key.
+    /// </summary>
+    /// <param name="classicKey">Classic key.</param>
+    /// <returns>Interface to effect template only (has default effect settings).</returns>
+    public static IEntityEffect GetEffectTemplate(int classicKey)
+    {
+        if (!HasEffectTemplate(classicKey))
+            return null;
+
+        return magicEffectTemplates[classicEffectMapping[classicKey]];
+    }
+
+    /// <summary>
     /// Creates a new instance of effect with specified settings.
     /// Use this to create a new effect with unique settings for actual use.
     /// </summary>

@@ -1826,7 +1826,7 @@ public class ActorEffect : MonoBehaviour
 
         // Run all bundles
         activeMagicItemsInRound.Clear();
-        uint currentTime = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+        uint currentTime = Main.Inst.ToClassicDaggerfallTime();
         foreach (LiveEffectBundle bundle in instancedBundles)
         {
             // Run effects for this bundle
@@ -2019,19 +2019,20 @@ public class ActorEffect : MonoBehaviour
 
     ulong GetCasterLoadID(Actor caster)
     {
+        throw new System.NotImplementedException();
         // Only supporting LoadID from enemies at this time
-        if (caster.EntityType == EntityTypes.EnemyMonster || caster.EntityType == EntityTypes.EnemyClass)
-        {
-            ISerializableGameObject serializableEnemy = caster.GetComponent<ISerializableGameObject>();
-            if (serializableEnemy == null)
-                return 0;
+        // if (caster.EntityType == EntityTypes.EnemyMonster || caster.EntityType == EntityTypes.EnemyClass)
+        // {
+        //     ISerializableGameObject serializableEnemy = caster.GetComponent<ISerializableGameObject>();
+        //     if (serializableEnemy == null)
+        //         return 0;
 
-            return serializableEnemy.LoadID;
-        }
-        else
-        {
-            return 0;
-        }
+        //     return serializableEnemy.LoadID;
+        // }
+        // else
+        // {
+        //     return 0;
+        // }
     }
 
     bool SilenceCheck()
@@ -2112,7 +2113,7 @@ public class ActorEffect : MonoBehaviour
         // Recast enchantments in item flagged for reroll
         foreach (Item item in itemsPendingReroll.Values)
         {
-            Debug.LogFormat("Rerolling flagged item effects on {0}", item.LongName);
+            // Debug.LogFormat("Rerolling flagged item effects on {0}", item.LongName);
 
             // Schedule live bundles from this item to be removed
             foreach (LiveEffectBundle bundle in instancedBundles)
@@ -2131,7 +2132,7 @@ public class ActorEffect : MonoBehaviour
                 DoItemEnchantmentPayloads(EnchantmentPayloadFlags.RerollEffect, item);
 
                 // Update recast time in item
-                item.timeEffectsLastRerolled = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+                item.timeEffectsLastRerolled = Main.Inst.ToClassicDaggerfallTime();
             }
         }
 
@@ -2464,25 +2465,26 @@ public class ActorEffect : MonoBehaviour
     Actor GetCasterReference(EntityTypes casterEntityType, ulong loadID)
     {
         Actor caster = null;
+        throw new System.NotImplementedException();
 
         // Only supporting player and enemy entity types as casters for now
-        if (casterEntityType == EntityTypes.Player)
-        {
-            caster = Main.Inst.hero;
-        }
-        else if ((casterEntityType == EntityTypes.EnemyMonster || casterEntityType == EntityTypes.EnemyClass) && loadID != 0)
-        {
-            SerializableEnemy serializableEnemy = SaveLoadManager.StateManager.GetEnemy(loadID);
-            if (!serializableEnemy)
-            {
-                Debug.LogWarning(string.Format("EntityEffect.RestoreEffectSaveData() could not find SerializableEnemy for LoadID {0} in StateManager.", loadID));
-                return null;
-            }
+        // if (casterEntityType == EntityTypes.Player)
+        // {
+        //     caster = Main.Inst.hero;
+        // }
+        // else if ((casterEntityType == EntityTypes.EnemyMonster || casterEntityType == EntityTypes.EnemyClass) && loadID != 0)
+        // {
+        //     SerializableEnemy serializableEnemy = SaveLoadManager.StateManager.GetEnemy(loadID);
+        //     if (!serializableEnemy)
+        //     {
+        //         Debug.LogWarning(string.Format("EntityEffect.RestoreEffectSaveData() could not find SerializableEnemy for LoadID {0} in StateManager.", loadID));
+        //         return null;
+        //     }
 
-            caster = serializableEnemy.GetComponent<Actor>();
-            if (!caster)
-                throw new Exception(string.Format("EntityEffect.RestoreEffectSaveData() could not find DaggerfallEntityBehaviour for LoadID {0} in StateManager.", loadID));
-        }
+        //     caster = serializableEnemy.GetComponent<Actor>();
+        //     if (!caster)
+        //         throw new Exception(string.Format("EntityEffect.RestoreEffectSaveData() could not find DaggerfallEntityBehaviour for LoadID {0} in StateManager.", loadID));
+        // }
 
         return caster;
     }

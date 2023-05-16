@@ -213,6 +213,19 @@ public class Actor : MonoBehaviour
     }
 
     /// <summary>
+    /// True if entity is magically concealed by invisibility/chameleon/shadow (normal only).
+    /// </summary>
+    public bool IsMagicallyConcealedNormalPower
+    {
+        get
+        {
+            return (HasConcealment(MagicalConcealmentFlags.InvisibleNormal) ||
+                    HasConcealment(MagicalConcealmentFlags.BlendingNormal) ||
+                    HasConcealment(MagicalConcealmentFlags.ShadeNormal));
+        }
+    }
+
+    /// <summary>
     /// Handle shared logic when player attacks entity.
     /// </summary>
     public void HandleAttackFromSource(Actor sourceEntityBehaviour)
@@ -224,37 +237,37 @@ public class Actor : MonoBehaviour
         // When source is player
         if (sourceEntityBehaviour == Main.Inst.hero)
         {
-            PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+            var playerEntity = Main.Inst.hero;
             // Handle civilian NPC crime reporting
             if (EntityType == EntityTypes.CivilianNPC)
             {
-                MobilePersonNPC mobileNpc = transform.GetComponent<MobilePersonNPC>();
-                if (mobileNpc)
-                {
-                    // Handle assault or murder
-                    if (Entity.CurrentHealth > 0)
-                    {
-                        playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
-                        playerEntity.SpawnCityGuards(true);
-                    }
-                    else
-                    {
-                        if (!mobileNpc.IsGuard)
-                        {
-                            playerEntity.TallyCrimeGuildRequirements(false, 5);
-                            playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
-                            playerEntity.SpawnCityGuards(true);
-                        }
-                        else
-                        {
-                            playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
-                            playerEntity.SpawnCityGuard(mobileNpc.transform.position, mobileNpc.transform.forward);
-                        }
+                // MobilePersonNPC mobileNpc = transform.GetComponent<Actor>();
+                // if (mobileNpc)
+                // {
+                //     // Handle assault or murder
+                //     if (Entity.CurrentHealth > 0)
+                //     {
+                //         playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
+                //         playerEntity.SpawnCityGuards(true);
+                //     }
+                //     else
+                //     {
+                //         if (!mobileNpc.IsGuard)
+                //         {
+                //             playerEntity.TallyCrimeGuildRequirements(false, 5);
+                //             playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
+                //             playerEntity.SpawnCityGuards(true);
+                //         }
+                //         else
+                //         {
+                //             playerEntity.CrimeCommitted = PlayerEntity.Crimes.Assault;
+                //             playerEntity.SpawnCityGuard(mobileNpc.transform.position, mobileNpc.transform.forward);
+                //         }
 
-                        // Disable when dead
-                        mobileNpc.Motor.gameObject.SetActive(false);
-                    }
-                }
+                //         // Disable when dead
+                //         mobileNpc.Motor.gameObject.SetActive(false);
+                //     }
+                // }
             }
 
             // Handle equipped Azura's Star trapping slain enemy monsters
@@ -272,24 +285,24 @@ public class Actor : MonoBehaviour
             if (EntityType == EntityTypes.EnemyClass || EntityType == EntityTypes.EnemyMonster)
             {
                 // Make enemy aggressive to player
-                EnemyMotor enemyMotor = transform.GetComponent<EnemyMotor>();
-                if (enemyMotor)
-                {
-                    // 将区域内敌人变得敌对
-                    if (!enemyMotor.IsHostile)
-                    {
-                        GameManager.Instance.MakeEnemiesHostile();
-                    }
-                    enemyMotor.MakeEnemyHostileToAttacker(GameManager.Instance.PlayerEntityBehaviour);
-                }
+                // EnemyMotor enemyMotor = transform.GetComponent<EnemyMotor>();
+                // if (enemyMotor)
+                // {
+                //     // 将区域内敌人变得敌对
+                //     // if (!enemyMotor.IsHostile)
+                //     // {
+                //     //     GameManager.Instance.MakeEnemiesHostile();
+                //     // }
+                //     enemyMotor.MakeEnemyHostileToAttacker(Main.Inst.hero);
+                // }
 
-                // Handle killing guards
-                EnemyEntity enemyEntity = entity as EnemyEntity;
-                if (enemyEntity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch && entity.CurrentHealth <= 0)
-                {
-                    // playerEntity.TallyCrimeGuildRequirements(false, 1);
-                    playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
-                }
+                // // Handle killing guards
+                // EnemyEntity enemyEntity = entity as EnemyEntity;
+                // if (enemyEntity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch && entity.CurrentHealth <= 0)
+                // {
+                //     // playerEntity.TallyCrimeGuildRequirements(false, 1);
+                //     playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
+                // }
             }
         }
     }
@@ -299,6 +312,16 @@ public class Actor : MonoBehaviour
 
     protected ItemEquipTable equipTable;
     public ItemEquipTable ItemEquipTable { get { return equipTable; } }
+
+    public int IncreaseFatigue(int amount, bool assignMultiplier = false)
+    {
+        // Optionally assign fatigue multiplier
+        // This seems to be case for spell effects that heal fatigue
+        if (assignMultiplier)
+            amount *= FatigueMultiplier;
+
+        return SetFatigue(currentFatigue + amount);
+    }
 
         /// <summary>
     /// Helper to check if specific magical concealment flags are active on player.

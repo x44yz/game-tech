@@ -56,6 +56,13 @@ public class Hero : Actor
         return raceTemplate;
     }
 
+    bool godMode = false;
+    public bool GodMode { get { return godMode; } set { godMode = value; } }
+
+    // Player-only constant effects
+    // Note: These properties are intentionally not serialized. They should only be set by live effects.
+    public bool IsAzurasStarEquipped { get; set; }
+
     const int socialGroupCount = 11;
     int[] reactionMods = new int[socialGroupCount];     // Indices map to FactionFile.SocialGroups 0-10 - do not serialize, set by live effects
     public void ClearReactionMods()

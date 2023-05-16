@@ -46,4 +46,9 @@ public class Main : MonoBehaviour
             // heroRender.Attack();
         }
     }
+
+    public uint ToClassicDaggerfallTime()
+    {
+        return (uint)Time.time;
+    }
 }

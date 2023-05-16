@@ -458,9 +458,9 @@ public abstract class BaseEffect : IEntityEffect
     {
         for (int i = 0; i < DSkills.Count; i++)
         {
-            int amount = GetSkillMod((DFCareer.Skills)i);
+            int amount = GetSkillMod((Skills)i);
             if (amount < 0)
-                HealSkillDamage((DFCareer.Skills)i, Mathf.Abs(amount));
+                HealSkillDamage((Skills)i, Mathf.Abs(amount));
         }
     }
 

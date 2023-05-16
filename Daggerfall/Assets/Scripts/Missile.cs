@@ -194,12 +194,13 @@ public class Missile : MonoBehaviour
         // Setup arrow
         if (isArrow)
         {
+            throw new System.NotImplementedException();
             // Create and orient 3d arrow
-            goModel = GameObjectHelper.CreateDaggerfallMeshGameObject(99800, transform);
-            MeshCollider arrowCollider = goModel.GetComponent<MeshCollider>();
-            arrowCollider.sharedMesh = goModel.GetComponent<MeshFilter>().sharedMesh;
-            arrowCollider.convex = true;
-            arrowCollider.isTrigger = true;
+            // goModel = GameObjectHelper.CreateDaggerfallMeshGameObject(99800, transform);
+            // MeshCollider arrowCollider = goModel.GetComponent<MeshCollider>();
+            // arrowCollider.sharedMesh = goModel.GetComponent<MeshFilter>().sharedMesh;
+            // arrowCollider.convex = true;
+            // arrowCollider.isTrigger = true;
 
             // Offset up so it comes from same place LOS check is done from
             // Vector3 adjust;
@@ -576,14 +577,15 @@ public class Missile : MonoBehaviour
         // 非玩家的伤害处理走 EnemyAttack
         if (caster != Main.Inst.hero)
         {
-            if (targetEntities[0] == caster.GetComponent<EnemySenses>().Target)
-            {
-                EnemyAttack attack = caster.GetComponent<EnemyAttack>();
-                if (attack)
-                {
-                    attack.BowDamage(goModel.transform.forward);
-                }
-            }
+            throw new System.NotImplementedException();
+            // if (targetEntities[0] == caster.GetComponent<EnemySenses>().Target)
+            // {
+            //     EnemyAttack attack = caster.GetComponent<EnemyAttack>();
+            //     if (attack)
+            //     {
+            //         attack.BowDamage(goModel.transform.forward);
+            //     }
+            // }
         }
         else
         {

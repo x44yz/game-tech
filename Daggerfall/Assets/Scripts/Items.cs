@@ -55,12 +55,12 @@ public class ItemTemplate : ICSVParser
 public class DEnchantment : ICSVStrParser
 {
     public EnchantmentTypes type;
-    public int param;      
+    public short param;      
 
     public void ParseStr(string[] values)
     {
         type = Utils.ToEnum<EnchantmentTypes>(values[0]);
-        param = Utils.ToInt(values[1]);
+        param = (short)Utils.ToInt(values[1]);
     }
 }
 

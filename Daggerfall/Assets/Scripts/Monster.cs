@@ -293,6 +293,9 @@ public class Monster : Actor
     //     return monsterFile.GetMonsterClass((int)career);
     // }
 
+    public delegate void EnemyStartingEquipment(Hero player, Monster enemyEntity, int variant);
+    public static EnemyStartingEquipment AssignEnemyEquipment = Monster.AssignEnemyStartingEquipment;
+
     public void SetEnemyEquipment(int variant)
     {
         // Assign the enemies starting equipment.
@@ -343,7 +346,7 @@ public class Monster : Actor
     }
 
     // variant 变量
-    public void AssignEnemyStartingEquipment(Hero player, Monster enemyEntity, 
+    public static void AssignEnemyStartingEquipment(Hero player, Monster enemyEntity, 
         int variant)
     {
         int itemLevel = player.Level;

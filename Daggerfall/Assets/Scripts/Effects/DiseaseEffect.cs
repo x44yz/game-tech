@@ -78,7 +78,7 @@ public abstract class DiseaseEffect : IncumbentEffect
         }
 
         // Store first day of infection - diseases operate in 24-hour ticks from the very next day after infection
-        lastDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
+        lastDay = Main.Inst.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
 
         // If disease not permanent then set a range for how long stats will fall
         // Otherwise stats will continue to fall until cured
@@ -118,7 +118,7 @@ public abstract class DiseaseEffect : IncumbentEffect
             return;
 
         // Get current day and number of days that have passed (e.g. fast travel can progress time several days)
-        uint currentDay = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
+        uint currentDay = Main.Inst.ToClassicDaggerfallTime() / DaggerfallDateTime.MinutesPerDay;
         int daysPast = (int)(currentDay - lastDay);
 
         // Do nothing if still same day or disease has run its course

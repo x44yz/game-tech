@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -1461,7 +1462,7 @@ public static class FormulaUtils
         // Note: Classic does not assign a gold cost when a zero-component effect is the only effect present, which seems like a bug
         int fudgeGoldCost = 0;
         if (!activeComponents)
-            fudgeGoldCost = GetEffectComponentCosts(BaseEntityEffect.MakeEffectCosts(60, 100, 160), 1, 1, 1, skillValue);
+            fudgeGoldCost = GetEffectComponentCosts(BaseEffect.MakeEffectCosts(60, 100, 160), 1, 1, 1, skillValue);
 
         // Add gold costs together and calculate spellpoint cost from the result
         SpellCost effectCost;
@@ -1470,6 +1471,19 @@ public static class FormulaUtils
 
         //Debug.LogFormat("Costs: gold {0} spellpoints {1}", finalGoldCost, finalSpellPointCost);
         return effectCost;
+    }
+
+    // Just makes formulas more readable
+    static int trunc(double value) { return (int)Math.Truncate(value); }
+    static int GetEffectComponentCosts(
+        EffectCosts costs,
+        int starting,
+        int increase,
+        int perLevel,
+        int skillValue)
+    {
+        //Calculate effect gold cost, spellpoint cost is calculated from gold cost after adding up for duration, chance and magnitude
+        return trunc(costs.OffsetGold + costs.CostA * starting + costs.CostB * trunc(increase / perLevel));
     }
 
     public static int MagicResist(int willpower)
@@ -1567,17 +1581,17 @@ public class Dice100
 
     public static int Roll()
     {
-        return Random.Range(1, 101);
+        return UnityEngine.Random.Range(1, 101);
     }
 
     public static bool SuccessRoll(int chanceSuccess)
     {
-        return Random.Range(0, 100) < chanceSuccess; // Same as Random.Range(1, 101) <= chanceSuccess
+        return UnityEngine.Random.Range(0, 100) < chanceSuccess; // Same as Random.Range(1, 101) <= chanceSuccess
     }
 
     public static bool FailedRoll(int chanceSuccess)
     {
-        return Random.Range(0, 100) >= chanceSuccess; // Same as Random.Range(1, 101) > chanceSuccess
+        return UnityEngine.Random.Range(0, 100) >= chanceSuccess; // Same as Random.Range(1, 101) > chanceSuccess
     }
 }
 

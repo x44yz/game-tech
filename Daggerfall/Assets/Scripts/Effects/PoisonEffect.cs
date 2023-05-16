@@ -114,7 +114,7 @@ public class PoisonEffect : IncumbentEffect
             return;
 
         // Store first minute of infection - poisons operate in 1-minute ticks
-        lastMinute = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+        lastMinute = Main.Inst.ToClassicDaggerfallTime();
 
                                         // Poison types. 0-7 are weapon poisons. 8-11 are drugs
                                         // 0     1    2     3     4     5    6    7     8    9   10   11
@@ -171,7 +171,7 @@ public class PoisonEffect : IncumbentEffect
             return;
 
         // Get current minute and number of minutes that have passed (e.g. fast travel can progress time several days)
-        uint currentMinute = DaggerfallUnity.Instance.WorldTime.DaggerfallDateTime.ToClassicDaggerfallTime();
+        uint currentMinute = Main.Inst.ToClassicDaggerfallTime();
         int minutesPassed = (int)(currentMinute - lastMinute);
 
         // Increment poison effect for each game minute passed or until poison is complete
