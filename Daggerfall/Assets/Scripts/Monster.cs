@@ -370,10 +370,10 @@ public class Monster : Actor
             ArmorValues[i] = 100;
         }
         // Calculate armor values from equipment
-        for (int i = (int)Game.Items.EquipSlots.Head; i < (int)Game.Items.EquipSlots.Feet; i++)
+        for (int i = (int)EquipSlots.Head; i < (int)EquipSlots.Feet; i++)
         {
-            Items.Item item = ItemEquipTable.GetItem((Items.EquipSlots)i);
-            if (item != null && item.ItemGroup == Game.Items.ItemGroups.Armor)
+            var item = ItemEquipTable.GetItem((EquipSlots)i);
+            if (item != null && item.ItemGroup == ItemGroups.Armor)
             {
                 UpdateEquippedArmorValues(item, true);
             }
@@ -425,7 +425,7 @@ public class Monster : Actor
         {
             // right-hand weapon
             int item = UnityEngine.Random.Range((int)Weapons.Broadsword, (int)(Weapons.Longsword) + 1);
-            Item weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
+            Item weapon = ItemUtils.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
             enemyEntity.Items.AddItem(weapon);
 
@@ -435,7 +435,7 @@ public class Monster : Actor
             item = UnityEngine.Random.Range((int)Armor.Buckler, (int)(Armor.Round_Shield) + 1);
             if (Dice100.SuccessRoll(chance))
             {
-                Item armor = ItemBuilder.CreateArmor(playerGender, race, (Items.Armor)item, FormulaUtils.RandomArmorMaterial(itemLevel));
+                Item armor = ItemUtils.CreateArmor(playerGender, race, (Items.Armor)item, FormulaUtils.RandomArmorMaterial(itemLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
@@ -443,7 +443,7 @@ public class Monster : Actor
             else if (Dice100.SuccessRoll(chance))
             {
                 item = UnityEngine.Random.Range((int)Weapons.Dagger, (int)(Weapons.Shortsword) + 1);
-                weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
+                weapon = ItemUtils.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
                 enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
                 enemyEntity.Items.AddItem(weapon);
             }
@@ -452,7 +452,7 @@ public class Monster : Actor
         {
             // right-hand weapon
             int item = UnityEngine.Random.Range((int)Weapons.Claymore, (int)(Weapons.Battle_Axe) + 1);
-            Item weapon = ItemBuilder.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
+            Item weapon = ItemUtils.CreateWeapon((Weapons)item, FormulaUtils.RandomMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(weapon, true, false);
             enemyEntity.Items.AddItem(weapon);
 
@@ -464,42 +464,42 @@ public class Monster : Actor
         // helm
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Helm, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Helm, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // right pauldron
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Right_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // left pauldron
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Left_Pauldron, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // cuirass
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Cuirass, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Cuirass, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // greaves
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Greaves, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Greaves, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }
         // boots
         if (Dice100.SuccessRoll(chance))
         {
-            Item armor = ItemBuilder.CreateArmor(playerGender, race, Armor.Boots, FormulaUtils.RandomArmorMaterial(itemLevel));
+            Item armor = ItemUtils.CreateArmor(playerGender, race, Armor.Boots, FormulaUtils.RandomArmorMaterial(itemLevel));
             enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
             enemyEntity.Items.AddItem(armor);
         }

@@ -580,6 +580,42 @@ public class MagicItemTemplate : ICSVParser
 
 public static class Items
 {
+    public enum MiscellaneousIngredients1  //checked
+    {
+        Holy_relic = 55,
+        Big_tooth = 56,
+        Medium_tooth = 57,
+        Small_tooth = 58,
+        Pure_water = 59,
+        Rain_water = 60,
+        Elixir_vitae = 62,
+        Nectar = 63,
+        Ichor = 64,
+    }
+
+    public enum PlantIngredients2  //checked
+    {
+        Twigs = 8,
+        Green_leaves = 9,
+        Red_flowers = 10,
+        Yellow_flowers = 11,
+        Root_tendrils = 12,
+        Root_bulb = 13,
+        Green_berries = 15,
+        Red_berries = 16,
+        Yellow_berries = 17,
+        Black_rose = 21,
+        White_rose = 22,
+        Black_poppy = 24,
+        White_poppy = 26,
+        Ginkgo_leaves = 27,
+        Bamboo = 28,
+        Palm = 29,
+        Aloe = 30,
+        Fig = 31,
+        Cactus = 32,
+    }
+
     public static List<ItemTemplate> itemTemplates;
     public static List<MagicItemTemplate> allMagicItemTemplates;
     public static List<MagicItemTemplate> artifactItemTemplates;
@@ -671,6 +707,37 @@ public static class Items
         }
     }
 
+
+    /// <summary>
+    /// Gets item group index from group and template index.
+    /// </summary>
+    /// <returns>Item group index, or -1 if not found.</returns>
+    public static int GetGroupIndex(ItemGroups itemGroup, int templateIndex)
+    {
+        // Items added by mods are after last DF template, and groupIndex == templateIndex
+        // if (templateIndex > LastDFTemplate)
+        //     return templateIndex;
+
+        Array values = GetEnumArray(itemGroup);
+        for (int i = 0; i < values.Length; i++)
+        {
+            int checkTemplateIndex = Convert.ToInt32(values.GetValue(i));
+            if (checkTemplateIndex == templateIndex)
+                return i;
+        }
+
+        return -1;
+    }
+
+
+    static Dictionary<ItemGroups, List<int>> customItemGroups = new Dictionary<ItemGroups, List<int>>();
+    public static int[] GetCustomItemsForGroup(ItemGroups itemGroup)
+    {
+        if (customItemGroups.ContainsKey(itemGroup))
+            return customItemGroups[itemGroup].ToArray();
+        return new int[0];
+    }
+
     /// <summary>
     /// Gets item template data using group and index.
     /// </summary>
@@ -719,20 +786,20 @@ public static class Items
         return artifactItemTemplates[artifactIndex];
     }
 
-    /// <summary>
-    /// Gets item group index from group and template index.
-    /// </summary>
-    /// <returns>Item group index, or -1 if not found.</returns>
-    public static int GetGroupIndex(ItemGroups itemGroup, int templateIndex)
-    {
-        Array values = GetEnumArray(itemGroup);
-        for (int i = 0; i < values.Length; i++)
-        {
-            int checkTemplateIndex = Convert.ToInt32(values.GetValue(i));
-            if (checkTemplateIndex == templateIndex)
-                return i;
-        }
+    // /// <summary>
+    // /// Gets item group index from group and template index.
+    // /// </summary>
+    // /// <returns>Item group index, or -1 if not found.</returns>
+    // public static int GetGroupIndex(ItemGroups itemGroup, int templateIndex)
+    // {
+    //     Array values = GetEnumArray(itemGroup);
+    //     for (int i = 0; i < values.Length; i++)
+    //     {
+    //         int checkTemplateIndex = Convert.ToInt32(values.GetValue(i));
+    //         if (checkTemplateIndex == templateIndex)
+    //             return i;
+    //     }
 
-        return -1;
-    }
+    //     return -1;
+    // }
 }

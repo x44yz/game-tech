@@ -38,6 +38,11 @@ public class Hero : Actor
     protected PlayerReflexes reflexes;
     public PlayerReflexes Reflexes { get { return reflexes; } set { reflexes = value; } }
 
+    public Item currentRightHandWeapon = null;
+    public Item currentLeftHandWeapon = null;
+    public Item lastBowUsed = null;
+    public Item LastBowUsed { get { return lastBowUsed; } }
+
     protected RaceTemplate raceTemplate;
     public RaceTemplate GetLiveRaceTemplate()
     {

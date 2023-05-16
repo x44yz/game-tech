@@ -3,129 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// public enum Weapons  //checked
-// {
-//     Dagger = 113,
-//     Tanto = 114,
-//     Staff = 115,
-//     Shortsword = 116,
-//     Wakazashi = 117,
-//     Broadsword = 118,
-//     Saber = 119,
-//     Longsword = 120,
-//     Katana = 121,
-//     Claymore = 122,
-//     Dai_Katana = 123,
-//     Mace = 124,
-//     Flail = 125,
-//     Warhammer = 126,
-//     Battle_Axe = 127,
-//     War_Axe = 128,
-//     Short_Bow = 129,
-//     Long_Bow = 130,
-//     Arrow = 131,
-// }
-
-/// <summary>
-/// Weapon material values.
-/// </summary>
-public enum WeaponMaterialTypes
-{
-    None        = -1,
-    Iron        = 0x0000,
-    Steel       = 0x0001,
-    Silver      = 0x0002,
-    Elven       = 0x0003,
-    Dwarven     = 0x0004,
-    Mithril     = 0x0005,
-    Adamantium  = 0x0006,
-    Ebony       = 0x0007,
-    Orcish      = 0x0008,
-    Daedric     = 0x0009,
-}
-
-/// <summary>
-/// Proficiency flags for forbidden weapons and weapon expertise.
-/// </summary>
-[Flags]
-public enum ProficiencyFlags
-{
-    ShortBlades = 1,
-    LongBlades = 2,
-    HandToHand = 4,
-    Axes = 8,
-    BluntWeapons = 16,
-    MissileWeapons = 32,
-}
-
-/// <summary>
-/// Poison IDs. The first 8 are found on enemy weapons. The last 4 are created by ingesting drugs.
-/// </summary>
-public enum Poisons
-{
-    None = -1,
-    Nux_Vomica = 128,
-    Arsenic = 129,
-    Moonseed = 130,
-    Drothweed = 131,
-    Somnalius = 132,
-    Pyrrhic_Acid = 133,
-    Magebane = 134,
-    Thyrwort = 135,
-    Indulcet = 136,
-    Sursum = 137,
-    Quaesto_Vil = 138,
-    Aegrotat = 139,
-}
-
-/// <summary>
-/// Base group of item.
-/// </summary>
-public enum ItemGroups
-{
-    None = -1,
-    Drugs = 0,
-    UselessItems1 = 1,
-    Armor = 2,
-    Weapons = 3,
-    MagicItems = 4,
-    Artifacts = 5,
-    MensClothing = 6,
-    Books = 7,
-    Furniture = 8,
-    UselessItems2 = 9,
-    ReligiousItems = 10,
-    Maps = 11,
-    WomensClothing = 12,
-    Paintings = 13,
-    Gems = 14,
-    PlantIngredients1 = 15,
-    PlantIngredients2 = 16,
-    CreatureIngredients1 = 17,
-    CreatureIngredients2 = 18,
-    CreatureIngredients3 = 19,
-    MiscellaneousIngredients1 = 20,
-    MetalIngredients = 21,
-    MiscellaneousIngredients2 = 22,
-    Transportation = 23,
-    Deeds = 24,
-    Jewellery = 25,
-    QuestItems = 26,
-    MiscItems = 27,
-    Currency = 28,
-}
-
-/// <summary>
-/// Defines a custom enchantment for items.
-/// Classic enchantments use a type/param number pair in DaggerfallEnchantment.
-/// Custom enchantments use a key/param string pair in CustomEnchantment.
-/// </summary>
-[Serializable]
-public struct CustomEnchantment
-{
-    public string EffectKey;                                    // Define the effect used by this enchantment
-    public string CustomParam;                                  // Passed back to effect to locate/invoke enchantment settings
-}
 
 public class Item
 {
@@ -679,6 +556,46 @@ public class Item
         }
     }
 
+    /// <summary>
+    /// Creates a new copy of this item.
+    /// </summary>
+    /// <returns>Cloned item.</returns>
+    public Item Clone()
+    {
+        return new Item(this);
+    }
+
+
+    /// <summary>
+    /// Gets current variant of this item.
+    /// </summary>
+    public virtual int CurrentVariant
+    {
+        get { return currentVariant; }
+        set { SetCurrentVariant(value); }
+    }
+
+    /// <summary>
+    /// Sets current variant and clamps within valid range.
+    /// </summary>
+    void SetCurrentVariant(int variant)
+    {
+        if (variant < 0)
+            currentVariant = 0;
+        else if (variant >= TotalVariants)
+            currentVariant = TotalVariants - 1;
+        else
+            currentVariant = variant;
+    }
+
+    /// <summary>
+    /// Gets total variants of this item.
+    /// </summary>
+    public int TotalVariants
+    {
+        get { return ItemTemplate.variants; }
+    }
+
     protected void ItemBreaks(Actor owner)
     {
         // Classic does not have the plural version of this string, and uses the short name rather than the long one.
@@ -700,7 +617,7 @@ public class Item
         // Breaks payload callback on owner effect manager
         if (owner)
         {
-            EffectManager ownerEffectManager = owner.GetComponent<EffectManager>();
+            ActorEffect ownerEffectManager = owner.GetComponent<ActorEffect>();
             if (ownerEffectManager)
                 ownerEffectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Breaks, this, owner.Items, owner);
         }
@@ -733,41 +650,4 @@ public class Item
 
         return cachedItemTemplate;
     }
-}
-
-/// <summary>
-/// Equipment slots available to equip items.
-/// Indices match Daggerfall's legacy equip slots for import.
-/// Some unknowns still need to be resolved.
-/// </summary>
-public enum EquipSlots
-{
-    None = -1,
-    Amulet0 = 0,            // Amulets / Torcs
-    Amulet1 = 1,
-    Bracelet0 = 2,          // Bracelets
-    Bracelet1 = 3,
-    Ring0 = 4,              // Rings
-    Ring1 = 5,
-    Bracer0 = 6,            // Bracers
-    Bracer1 = 7,
-    Mark0 = 8,              // Marks
-    Mark1 = 9,
-    Crystal0 = 10,          // Gems
-    Crystal1 = 11,
-    Head = 12,              // Helm
-    RightArm = 13,          // Right pauldron
-    Cloak1 = 14,            // Cloaks
-    LeftArm = 15,           // Left pauldron
-    Cloak2 = 16,            // Cloaks
-    ChestClothes = 17,      // Shirt / Straps / Armband / Eodoric / Tunic / Surcoat / Plain robes / etc.
-    ChestArmor = 18,        // Cuirass
-    RightHand = 19,         // Right weapon / Two-handed weapon
-    Gloves = 20,            // Gauntlets
-    LeftHand = 21,          // Left weapon / Shields
-    Unknown1 = 22,
-    LegsArmor = 23,         // Greaves
-    LegsClothes = 24,       // Khajiit suit / Loincloth / Skirt / etc.
-    Unknown2 = 25,
-    Feet = 26,              // Boots / Shoes / Sandals / etc.
 }

@@ -104,7 +104,7 @@ public class EntityEffectBundle
     /// <returns>True if bundle contains effect matching classic effect record.</returns>
     public bool HasMatchForClassicEffect(EffectRecordData effectRecord)
     {
-        int classicKey = BaseEntityEffect.MakeClassicKey((byte)effectRecord.type, (byte)effectRecord.subType);
+        int classicKey = BaseEffect.MakeClassicKey((byte)effectRecord.type, (byte)effectRecord.subType);
         foreach(EffectEntry entry in settings.Effects)
         {
             IEntityEffect effectTemplate = Effects.GetEffectTemplate(entry.Key);
@@ -142,7 +142,7 @@ public class EntityEffectBundle
 /// Used by player and enemies to send and receive magic effects from various sources.
 /// NOTE: Under active development and subject to frequent change.
 /// </summary>
-public class EffectManager : MonoBehaviour
+public class ActorEffect : MonoBehaviour
 {
     #region Fields
 
@@ -566,7 +566,7 @@ public class EffectManager : MonoBehaviour
         instancedBundle.runtimeFlags = sourceBundle.Settings.RuntimeFlags;
         instancedBundle.name = sourceBundle.Settings.Name;
         instancedBundle.iconIndex = sourceBundle.Settings.IconIndex;
-        instancedBundle.icon = sourceBundle.Settings.Icon;
+        // instancedBundle.icon = sourceBundle.Settings.Icon;
         instancedBundle.fromEquippedItem = sourceBundle.FromEquippedItem;
         instancedBundle.castByItem = sourceBundle.CastByItem;
         instancedBundle.liveEffects = new List<IEntityEffect>();
@@ -828,7 +828,7 @@ public class EffectManager : MonoBehaviour
         int remaining = amount;
         foreach (LiveEffectBundle bundle in instancedBundles)
         {
-            foreach (BaseEntityEffect effect in bundle.liveEffects)
+            foreach (BaseEffect effect in bundle.liveEffects)
             {
                 // Get attribute modifier of this effect and ignore if attribute not damaged
                 int mod = effect.GetAttributeMod(stat);
@@ -985,7 +985,7 @@ public class EffectManager : MonoBehaviour
     public EntityEffectBundle CreateSpellBundle(string effectKey, ElementTypes element = ElementTypes.Magic, EffectSettings? effectSettings = null)
     {
         if (effectSettings == null)
-            effectSettings = BaseEntityEffect.DefaultEffectSettings();
+            effectSettings = BaseEffect.DefaultEffectSettings();
 
         EffectBundleSettings settings = new EffectBundleSettings()
         {
@@ -1328,7 +1328,7 @@ public class EffectManager : MonoBehaviour
             // Redirect source bundle back on caster entity
             // They will have all their usual processes to absorb or resist spell on arrival
             sourceBundle.IncrementReflectionCount();
-            EffectManager casterEffectManager = sourceBundle.CasterEntityBehaviour.GetComponent<EffectManager>();
+            ActorEffect casterEffectManager = sourceBundle.CasterEntityBehaviour.GetComponent<ActorEffect>();
             casterEffectManager.AssignBundle(sourceBundle);
 
             // Output "Spell was reflected." when player is the one reflecting spell
@@ -1653,7 +1653,7 @@ public class EffectManager : MonoBehaviour
         {
             foreach (IEntityEffect effect in bundle.liveEffects)
             {
-                (effect as BaseEntityEffect).CureAttributeDamage();
+                (effect as BaseEffect).CureAttributeDamage();
             }
         }
     }
@@ -1664,7 +1664,7 @@ public class EffectManager : MonoBehaviour
         {
             foreach (IEntityEffect effect in bundle.liveEffects)
             {
-                (effect as BaseEntityEffect).CureSkillDamage();
+                (effect as BaseEffect).CureSkillDamage();
             }
         }
     }
@@ -1675,7 +1675,7 @@ public class EffectManager : MonoBehaviour
         {
             foreach (IEntityEffect effect in bundle.liveEffects)
             {
-                if (!(effect as BaseEntityEffect).AllAttributesHealed())
+                if (!(effect as BaseEffect).AllAttributesHealed())
                     return true;
             }
         }
@@ -1689,7 +1689,7 @@ public class EffectManager : MonoBehaviour
         {
             foreach (IEntityEffect effect in bundle.liveEffects)
             {
-                if (!(effect as BaseEntityEffect).AllSkillsHealed())
+                if (!(effect as BaseEffect).AllSkillsHealed())
                     return true;
             }
         }
@@ -1756,7 +1756,7 @@ public class EffectManager : MonoBehaviour
     public static void BreakNormalPowerConcealmentEffects(Actor entityBehaviour)
     {
         // Get entity effect manager
-        EffectManager manager = entityBehaviour.GetComponent<EffectManager>();
+        ActorEffect manager = entityBehaviour.GetComponent<ActorEffect>();
         if (!manager)
             return;
 
@@ -1815,7 +1815,7 @@ public class EffectManager : MonoBehaviour
         Array.Clear(directStatMods, 0, DStats.Count);
         Array.Clear(directSkillMods, 0, DSkills.Count);
         if (IsPlayerEntity)
-            (entityBehaviour as PlayerEntity).ClearReactionMods();
+            (entityBehaviour as Hero).ClearReactionMods();
 
         // Do nothing further if no bundles, entity has perished, or object disabled
         if (instancedBundles.Count == 0 || entityBehaviour.CurrentHealth <= 0 || !entityBehaviour.enabled)
@@ -2073,9 +2073,9 @@ public class EffectManager : MonoBehaviour
         // Normally spells will have no more than 3 effects
         for (int i = 0; i < readySpell.Settings.Effects.Length; i++)
         {
-            IEntityEffect effect = GameManager.Instance.EntityEffectBroker.GetEffectTemplate(readySpell.Settings.Effects[i].Key);
-            if (effect != null)
-                GameManager.Instance.PlayerEntity.TallySkill((DFCareer.Skills)effect.Properties.MagicSkill, 1);
+            IEntityEffect effect = Effects.GetEffectTemplate(readySpell.Settings.Effects[i].Key);
+            // if (effect != null)
+            //     Main.Inst.TallySkill((DFCareer.Skills)effect.Properties.MagicSkill, 1);
         }
     }
 
@@ -2417,7 +2417,7 @@ public class EffectManager : MonoBehaviour
             // Resume effects
             foreach (EffectSaveData_v1 effectData in bundleData.liveEffects)
             {
-                IEntityEffect effect = GameManager.Instance.EntityEffectBroker.InstantiateEffect(effectData.key, effectData.effectSettings);
+                IEntityEffect effect = Effects.InstantiateEffect(effectData.key, effectData.effectSettings);
                 if (effect == null)
                 {
                     Debug.LogWarningFormat("RestoreInstancedBundleSaveData() could not restore effect as key '{0}' was not found by broker.", effectData.key);

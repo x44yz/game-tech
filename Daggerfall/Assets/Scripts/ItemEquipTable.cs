@@ -569,7 +569,7 @@ public class ItemEquipTable
     {
         if (parentEntity != null && parentEntity)
         {
-            EffectManager manager = parentEntity.GetComponent<EffectManager>();
+            ActorEffect manager = parentEntity.GetComponent<ActorEffect>();
             if (manager)
                 manager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Equipped | EnchantmentPayloadFlags.Held, item);
         }
@@ -579,7 +579,7 @@ public class ItemEquipTable
     {
         if (parentEntity != null && parentEntity)
         {
-            EffectManager manager = parentEntity.GetComponent<EffectManager>();
+            ActorEffect manager = parentEntity.GetComponent<ActorEffect>();
             if (manager)
                 manager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Unequipped, item);
         }

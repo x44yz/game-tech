@@ -472,27 +472,27 @@ public class Missile : MonoBehaviour
 
         // Aim direction should be from camera for player or facing for other mobile
         Vector3 aimDirection = Vector3.zero;
-        if (caster == GameManager.Instance.PlayerEntityBehaviour)
-        {
-            aimDirection = GameManager.Instance.MainCamera.transform.forward;
-        }
-        else if (enemySenses)
-        {
-            Vector3 predictedPosition;
-            if (DaggerfallUnity.Settings.EnhancedCombatAI)
-                predictedPosition = enemySenses.PredictNextTargetPos(MovementSpeed);
-            else
-                predictedPosition = enemySenses.LastKnownTargetPos;
+        // if (caster == Main.Inst.hero)
+        // {
+        //     aimDirection = GameManager.Instance.MainCamera.transform.forward;
+        // }
+        // else if (enemySenses)
+        // {
+        //     Vector3 predictedPosition;
+        //     if (DaggerfallUnity.Settings.EnhancedCombatAI)
+        //         predictedPosition = enemySenses.PredictNextTargetPos(MovementSpeed);
+        //     else
+        //         predictedPosition = enemySenses.LastKnownTargetPos;
 
-            if (predictedPosition == EnemySenses.ResetPlayerPos)
-                aimDirection = caster.transform.forward;
-            else
-                aimDirection = (predictedPosition - caster.transform.position).normalized;
+        //     if (predictedPosition == EnemySenses.ResetPlayerPos)
+        //         aimDirection = caster.transform.forward;
+        //     else
+        //         aimDirection = (predictedPosition - caster.transform.position).normalized;
 
-            // Enemy archers must aim lower to compensate for crouched player capsule
-            if (IsArrow && enemySenses.Target?.EntityType == EntityTypes.Player && GameManager.Instance.PlayerMotor.IsCrouching)
-                aimDirection += Vector3.down * 0.05f;
-        }
+        //     // Enemy archers must aim lower to compensate for crouched player capsule
+        //     if (IsArrow && enemySenses.Target?.EntityType == EntityTypes.Player && GameManager.Instance.PlayerMotor.IsCrouching)
+        //         aimDirection += Vector3.down * 0.05f;
+        // }
 
         return aimDirection;
     }
@@ -500,21 +500,21 @@ public class Missile : MonoBehaviour
     void UseSpellBillboardAnims(int record = 0, bool oneShot = false)
     {
         // Destroy any existing billboard game object
-        if (myBillboard)
-        {
-            myBillboard.gameObject.SetActive(false);
-            Destroy(myBillboard.gameObject);
-        }
+        // if (myBillboard)
+        // {
+        //     myBillboard.gameObject.SetActive(false);
+        //     Destroy(myBillboard.gameObject);
+        // }
 
-        // Add new billboard parented to this missile
-        GameObject go = GameObjectHelper.CreateDaggerfallBillboardGameObject(GetMissileTextureArchive(), record, transform);
-        go.transform.localPosition = Vector3.zero;
-        go.layer = gameObject.layer;
-        myBillboard = go.GetComponent<Billboard>();
-        myBillboard.FramesPerSecond = BillboardFramesPerSecond;
-        myBillboard.FaceY = true;
-        myBillboard.OneShot = oneShot;
-        myBillboard.GetComponent<MeshRenderer>().receiveShadows = false;
+        // // Add new billboard parented to this missile
+        // GameObject go = GameObjectHelper.CreateDaggerfallBillboardGameObject(GetMissileTextureArchive(), record, transform);
+        // go.transform.localPosition = Vector3.zero;
+        // go.layer = gameObject.layer;
+        // myBillboard = go.GetComponent<Billboard>();
+        // myBillboard.FramesPerSecond = BillboardFramesPerSecond;
+        // myBillboard.FaceY = true;
+        // myBillboard.OneShot = oneShot;
+        // myBillboard.GetComponent<MeshRenderer>().receiveShadows = false;
     }
 
     // void UpdateLight()
@@ -557,7 +557,7 @@ public class Missile : MonoBehaviour
         foreach (Actor entityBehaviour in targetEntities)
         {
             // Target must have an effect manager component
-            EffectManager effectManager = entityBehaviour.GetComponent<EffectManager>();
+            ActorEffect effectManager = entityBehaviour.GetComponent<ActorEffect>();
             if (!effectManager)
                 continue;
 
@@ -588,7 +588,8 @@ public class Missile : MonoBehaviour
         else
         {
             Transform hitTransform = arrowHitCollider.gameObject.transform;
-            GameManager.Instance.WeaponManager.WeaponDamage(GameManager.Instance.WeaponManager.LastBowUsed, true, isArrowSummoned, hitTransform, hitTransform.position, goModel.transform.forward);
+            var target = hitTransform.GetComponent<Actor>();
+            Main.Inst.hero.WeaponDamage(Main.Inst.hero.LastBowUsed, true, isArrowSummoned, target, hitTransform.position, goModel.transform.forward);
         }
     }
 

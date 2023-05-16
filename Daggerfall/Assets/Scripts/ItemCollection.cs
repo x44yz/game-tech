@@ -650,16 +650,16 @@ public class ItemCollection
         {
             if (item.IsQuestItem)
             {
-                Quest quest = GameManager.Instance.QuestMachine.GetQuest(item.QuestUID);
-                if (quest == null)
-                    itemsToRemove.Add(item);
-                else if (quest.QuestTombstoned)
-                    itemsToRemove.Add(item);
+                // Quest quest = GameManager.Instance.QuestMachine.GetQuest(item.QuestUID);
+                // if (quest == null)
+                //     itemsToRemove.Add(item);
+                // else if (quest.QuestTombstoned)
+                //     itemsToRemove.Add(item);
             }
-            else if (string.IsNullOrEmpty(item.shortName))
-            {
-                itemsToRemove.Add(item);
-            }
+            // else if (string.IsNullOrEmpty(item.shortName))
+            // {
+            //     itemsToRemove.Add(item);
+            // }
         }
 
         // Remove scheduled items

@@ -1404,6 +1404,29 @@ public static class FormulaUtils
         else
             return false;
     }
+
+    /// <summary>
+    /// Gets a random armor material based on player level.
+    /// </summary>
+    /// <param name="playerLevel">Player level, possibly adjusted.</param>
+    /// <returns>ArmorMaterialTypes value of material selected.</returns>
+    public static ArmorMaterialTypes RandomArmorMaterial(int playerLevel)
+    {
+        // Random armor material
+        int roll = Dice100.Roll();
+        if (roll >= 70)
+        {
+            if (roll >= 90)
+            {
+                WeaponMaterialTypes plateMaterial = FormulaUtils.RandomMaterial(playerLevel);
+                return (ArmorMaterialTypes)(0x0200 + plateMaterial);
+            }
+            else
+                return ArmorMaterialTypes.Chain;
+        }
+        else
+            return ArmorMaterialTypes.Leather;
+    }
 }
 
 /// <summary>
