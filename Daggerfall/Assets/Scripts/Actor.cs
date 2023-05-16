@@ -140,6 +140,16 @@ public class Actor : MonoBehaviour
     {
         return currentMagicka;
     }
+
+    public int DecreaseFatigue(int amount, bool assignMultiplier = false)
+    {
+        // Optionally assign fatigue multiplier
+        // This seems to be case for spell effects that damage fatigue
+        if (assignMultiplier)
+            amount *= FatigueMultiplier;
+
+        return SetFatigue(currentFatigue - amount);
+    }
     
     int GetMaxMagicka()
     {
@@ -172,6 +182,10 @@ public class Actor : MonoBehaviour
     }
 
     protected List<EffectBundleSettings> spellbook = new List<EffectBundleSettings>();
+    public void AddSpell(EffectBundleSettings spell)
+    {
+        spellbook.Add(spell);
+    }
 
     bool[] resistanceFlags = new bool[5];     // Indices map to DFCareer.Elements 0-4
     int[] resistanceChances = new int[5];
@@ -273,7 +287,7 @@ public class Actor : MonoBehaviour
                 EnemyEntity enemyEntity = entity as EnemyEntity;
                 if (enemyEntity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch && entity.CurrentHealth <= 0)
                 {
-                    playerEntity.TallyCrimeGuildRequirements(false, 1);
+                    // playerEntity.TallyCrimeGuildRequirements(false, 1);
                     playerEntity.CrimeCommitted = PlayerEntity.Crimes.Murder;
                 }
             }
@@ -295,6 +309,49 @@ public class Actor : MonoBehaviour
     public bool HasConcealment(MagicalConcealmentFlags flags)
     {
         return ((MagicalConcealmentFlags & flags) == flags);
+    }
+
+    public int IncreaseMagicka(int amount)
+    {
+        return SetMagicka(currentMagicka + amount);
+    }
+
+    public int DecreaseMagicka(int amount)
+    {
+        return SetMagicka(currentMagicka - amount);
+    }
+
+    public bool IsImmuneToParalysis { get; set; }
+    public bool IsImmuneToDisease { get; set; }
+    public bool IsSilenced { get; set; }
+    public bool IsWaterWalking { get; set; }
+    public bool IsWaterBreathing { get; set; }
+    // public MagicalConcealmentFlags MagicalConcealmentFlags { get; set; }
+    public bool IsEnhancedClimbing { get; set; }
+    public bool IsEnhancedJumping { get; set; }
+    public bool IsSlowFalling { get; set; }
+    public bool IsAbsorbingSpells { get; set; }
+    // public int MaxMagickaModifier { get; private set; }
+    // public int MaxHealthLimiter { get; private set; }
+    public float IncreasedWeightAllowanceMultiplier { get; private set; }
+    // public int IncreasedArmorValueModifier { get; private set; }
+    // public int DecreasedArmorValueModifier { get; private set; }
+    // public int ChanceToHitModifier { get; private set; }
+    public bool ImprovedAcuteHearing { get; set; }
+    public bool ImprovedAthleticism { get; set; }
+    // public bool ImprovedAdrenalineRush { get; set; }
+
+    bool isParalyzed = false;
+    /// <summary>
+    /// Gets or sets paralyzation flag.
+    /// Always returns false when isImmuneToParalysis is true.
+    /// Each entity type will need to act on paralyzation in their own unique way.
+    /// Note: This value is intentionally not serialized. It should only be set by live effects.
+    /// </summary>
+    public bool IsParalyzed
+    {
+        get { return (!IsImmuneToParalysis && isParalyzed); }
+        set { isParalyzed = value; }
     }
 }
 

@@ -435,7 +435,7 @@ public class Monster : Actor
             item = UnityEngine.Random.Range((int)Armor.Buckler, (int)(Armor.Round_Shield) + 1);
             if (Dice100.SuccessRoll(chance))
             {
-                Item armor = ItemUtils.CreateArmor(playerGender, race, (Items.Armor)item, FormulaUtils.RandomArmorMaterial(itemLevel));
+                Item armor = ItemUtils.CreateArmor(playerGender, race, (Armor)item, FormulaUtils.RandomArmorMaterial(itemLevel));
                 enemyEntity.ItemEquipTable.EquipItem(armor, true, false);
                 enemyEntity.Items.AddItem(armor);
             }
@@ -518,7 +518,7 @@ public class Monster : Actor
                 if (Dice100.SuccessRoll(chanceToPoison))
                 {
                     // Apply poison
-                    weapon.poisonType = (Items.Poisons)UnityEngine.Random.Range(128, 135 + 1);
+                    weapon.poisonType = (Poisons)UnityEngine.Random.Range(128, 135 + 1);
                 }
             }
         }

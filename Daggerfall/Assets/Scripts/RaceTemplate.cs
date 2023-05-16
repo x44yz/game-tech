@@ -22,11 +22,11 @@ public class RaceTemplate
     public string PaperDollHeadsMale;                       // CIF filename of male head selection
     public string PaperDollHeadsFemale;                     // CIF filename of female head selection
 
-    // public DFCareer.EffectFlags ResistanceFlags;            // Racial resistances
-    // public DFCareer.EffectFlags ImmunityFlags;              // Racial immunity
-    // public DFCareer.EffectFlags LowToleranceFlags;          // Racial low tolerance
-    // public DFCareer.EffectFlags CriticalWeaknessFlags;      // Racial critical weakness
-    // public DFCareer.SpecialAbilityFlags SpecialAbilities;   // Racial special abilities
+    public DFCareer.EffectFlags ResistanceFlags;            // Racial resistances
+    public DFCareer.EffectFlags ImmunityFlags;              // Racial immunity
+    public DFCareer.EffectFlags LowToleranceFlags;          // Racial low tolerance
+    public DFCareer.EffectFlags CriticalWeaknessFlags;      // Racial critical weakness
+    public DFCareer.SpecialAbilityFlags SpecialAbilities;   // Racial special abilities
 
     /// <summary>
     /// Clones this race template.
@@ -46,11 +46,11 @@ public class RaceTemplate
         clone.PaperDollBodyFemaleClothed = PaperDollBodyFemaleClothed;
         clone.PaperDollHeadsMale = PaperDollHeadsMale;
         clone.PaperDollHeadsFemale = PaperDollHeadsFemale;
-        // clone.ResistanceFlags = ResistanceFlags;
-        // clone.ImmunityFlags = ImmunityFlags;
-        // clone.LowToleranceFlags = LowToleranceFlags;
-        // clone.CriticalWeaknessFlags = CriticalWeaknessFlags;
-        // clone.SpecialAbilities = SpecialAbilities;
+        clone.ResistanceFlags = ResistanceFlags;
+        clone.ImmunityFlags = ImmunityFlags;
+        clone.LowToleranceFlags = LowToleranceFlags;
+        clone.CriticalWeaknessFlags = CriticalWeaknessFlags;
+        clone.SpecialAbilities = SpecialAbilities;
 
         return clone;
     }

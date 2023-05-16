@@ -35,11 +35,11 @@ public class ChameleonNormal : ConcealmentEffect
             "chameleonForm",
             200,
             DefaultEffectSettings(),
-            (int)Items.MiscellaneousIngredients1.Rain_water,
-            (int)Items.MiscellaneousIngredients1.Nectar,
-            (int)Items.PlantIngredients2.Green_leaves,
-            (int)Items.PlantIngredients2.Yellow_flowers,
-            (int)Items.PlantIngredients2.Red_berries);
+            (int)ItemId.MiscellaneousIngredients1.Rain_water,
+            (int)ItemId.MiscellaneousIngredients1.Nectar,
+            (int)ItemId.PlantIngredients2.Green_leaves,
+            (int)ItemId.PlantIngredients2.Yellow_flowers,
+            (int)ItemId.PlantIngredients2.Red_berries);
 
         chameleonForm.TextureRecord = 33;
         AssignPotionRecipes(chameleonForm);

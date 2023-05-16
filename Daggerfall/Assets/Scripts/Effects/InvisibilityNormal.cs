@@ -35,10 +35,10 @@ public class InvisibilityNormal : ConcealmentEffect
             "invisibility",
             250,
             DefaultEffectSettings(),
-            (int)Items.MiscellaneousIngredients1.Rain_water,
-            (int)Items.MiscellaneousIngredients1.Nectar,
-            (int)Items.CreatureIngredients1.Ectoplasm,
-            (int)Items.Gems.Diamond);
+            (int)ItemId.MiscellaneousIngredients1.Rain_water,
+            (int)ItemId.MiscellaneousIngredients1.Nectar,
+            (int)ItemId.CreatureIngredients1.Ectoplasm,
+            (int)ItemId.Gems.Diamond);
 
         invisibility.TextureRecord = 33;
         AssignPotionRecipes(invisibility);

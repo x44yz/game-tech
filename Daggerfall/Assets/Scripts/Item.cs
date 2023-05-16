@@ -37,6 +37,41 @@ public class Item
     const ushort identifiedMask = 0x20;
     const ushort artifactMask = 0x800;
 
+    // Potion recipe
+    int potionRecipeKey;
+
+    // Time for magically-created item to disappear
+    // uint timeForItemToDisappear = 0;
+
+    /// <summary>
+    /// Gets/sets the key of the potion recipe allocated to this item.
+    /// Has a side effect (ugh, sorry) of populating the item value from the recipe price.
+    /// (due to value not being encapsulated) Also populates texture record for potions.
+    /// </summary>
+    public int PotionRecipeKey
+    {
+        get { return potionRecipeKey; }
+        set {
+            PotionRecipe potionRecipe = Effects.GetPotionRecipe(value);
+            if (potionRecipe != null)
+            {
+                potionRecipeKey = value;
+                this.value = potionRecipe.Price;
+                // if (IsPotion)
+                //     worldTextureRecord = potionRecipe.TextureRecord;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the time for this item to disappear.
+    /// </summary>
+    public uint TimeForItemToDisappear
+    {
+        get { return timeForItemToDisappear; }
+        set { timeForItemToDisappear = value; }
+    }
+
     public Item()
     {
         uid = NextUID;

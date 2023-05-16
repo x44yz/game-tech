@@ -216,7 +216,7 @@ public class ItemCollection
             // Log and exit if duplicate key found
             if (items.Contains(item.uid))
             {
-                UnityEngine.Debug.LogError("AddItem() encountered a duplicate item UID for " + item.LongName);
+                // UnityEngine.Debug.LogError("AddItem() encountered a duplicate item UID for " + item.LongName);
                 return;
             }
 
@@ -691,7 +691,7 @@ public class ItemCollection
         {
             if (checkItem != item && 
                 checkItem.ItemGroup == itemGroup && checkItem.GroupIndex == groupIndex &&
-                checkItem.message == item.message &&
+                // checkItem.message == item.message &&
                 checkItem.PotionRecipeKey == item.PotionRecipeKey &&
                 checkItem.TimeForItemToDisappear == item.TimeForItemToDisappear &&
                 checkItem.IsStackable())

@@ -275,11 +275,29 @@ public class Effects
         int classicKey = BaseEffect.MakeClassicKey((byte)type, (byte)subType);
 
         // Attempt to find the effect template
-        IEntityEffect result = GetEffectTemplate(classicKey);
+        IEntityEffect result = Effects.GetEffectTemplate(classicKey);
         if (result == null)
             Debug.LogWarningFormat("Could not find effect template for type={0} subType={1}", type, subType);
 
         return result;
+    }
+
+    /// <summary>
+    /// Gets classic spell record data.
+    /// </summary>
+    /// <param name="id">ID of spell.</param>
+    /// <param name="spellOut">Spell record data (if found).</param>
+    /// <returns>True if spell found, otherwise false.</returns>
+    public static bool GetClassicSpellRecord(int id, out SpellRecordData spellOut)
+    {
+        if (standardSpells.ContainsKey(id))
+        {
+            spellOut = standardSpells[id];
+            return true;
+        }
+
+        spellOut = new SpellRecordData();
+        return false;
     }
 
     /// <summary>
@@ -409,17 +427,17 @@ public class Effects
         return true;
     }
 
-    readonly Dictionary<int, string> classicEffectMapping = new Dictionary<int, string>();
-    readonly Dictionary<string, BaseEffect> magicEffectTemplates = new Dictionary<string, BaseEffect>();
-    readonly Dictionary<int, BaseEffect> potionEffectTemplates = new Dictionary<int, BaseEffect>();
-    readonly Dictionary<int, SpellRecordData> standardSpells = new Dictionary<int, SpellRecordData>();
-    readonly Dictionary<string, CustomSpellBundleOffer> customSpellBundleOffers = new Dictionary<string, CustomSpellBundleOffer>();
+    static readonly Dictionary<int, string> classicEffectMapping = new Dictionary<int, string>();
+    static readonly Dictionary<string, BaseEffect> magicEffectTemplates = new Dictionary<string, BaseEffect>();
+    static readonly Dictionary<int, BaseEffect> potionEffectTemplates = new Dictionary<int, BaseEffect>();
+    static readonly Dictionary<int, SpellRecordData> standardSpells = new Dictionary<int, SpellRecordData>();
+    static readonly Dictionary<string, CustomSpellBundleOffer> customSpellBundleOffers = new Dictionary<string, CustomSpellBundleOffer>();
     /// <summary>
     /// Gets PotionRecipe from effect that matches the recipeKey provided.
     /// </summary>
     /// <param name="recipeKey">Hashcode of a set of ingredients.</param>
     /// <returns>PotionRecipe if the key matches one from an effect, otherwise null.</returns>
-    public PotionRecipe GetPotionRecipe(int recipeKey)
+    public static PotionRecipe GetPotionRecipe(int recipeKey)
     {
         if (potionEffectTemplates.ContainsKey(recipeKey))
         {
@@ -428,6 +446,88 @@ public class Effects
                     return recipe;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Gets IEntityEffect from PotionRecipe.
+    /// </summary>
+    /// <param name="recipe">Input recipe.</param>
+    /// <returns>IEntityEffect if this recipe is linked to an effect, otherwise null.</returns>
+    public static IEntityEffect GetPotionRecipeEffect(PotionRecipe recipe)
+    {
+        if (recipe != null)
+        {
+            int recipeKey = recipe.GetHashCode();
+            if (potionEffectTemplates.ContainsKey(recipeKey))
+                return potionEffectTemplates[recipeKey];
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Determine if a key exists in the templates dictionary.
+    /// </summary>
+    /// <param name="key">Key for template.</param>
+    /// <returns>True if template exists.</returns>
+    public static bool HasEffectTemplate(string key)
+    {
+        return magicEffectTemplates.ContainsKey(key);
+    }
+
+    /// <summary>
+    /// Determine if a classic key exists in the templates dictionary.
+    /// </summary>
+    /// <param name="classicKey">Classic key for template.</param>
+    /// <returns>True if template exists.</returns>
+    public static bool HasEffectTemplate(int classicKey)
+    {
+        return classicEffectMapping.ContainsKey(classicKey);
+    }
+
+    /// <summary>
+    /// Gets interface to effect template.
+    /// Use this to query properties to all effects with this key.
+    /// </summary>
+    /// <param name="key">Effect key.</param>
+    /// <returns>Interface to effect template only (has default effect settings).</returns>
+    public static IEntityEffect GetEffectTemplate(string key)
+    {
+        if (!HasEffectTemplate(key))
+            return null;
+
+        return magicEffectTemplates[key];
+    }
+
+    /// <summary>
+    /// Creates a new instance of effect with specified settings.
+    /// Use this to create a new effect with unique settings for actual use.
+    /// </summary>
+    /// <param name="effectEntry">EffectEntry with effect settings.</param>
+    /// <returns>Interface to new effect instance.</returns>
+    public static IEntityEffect InstantiateEffect(EffectEntry effectEntry)
+    {
+        return InstantiateEffect(effectEntry.Key, effectEntry.Settings);
+    }
+
+    /// <summary>
+    /// Creates a new instance of effect with specified settings.
+    /// Use this to create a new effect with unique settings for actual use.
+    /// </summary>
+    /// <param name="key">Effect key.</param>
+    /// <param name="settings">Effect settings.</param>
+    /// <returns>Interface to new effect instance.</returns>
+    public static IEntityEffect InstantiateEffect(string key, EffectSettings settings)
+    {
+        if (!HasEffectTemplate(key))
+            return null;
+
+        IEntityEffect effectTemplate = magicEffectTemplates[key];
+        IEntityEffect effectInstance = Activator.CreateInstance(effectTemplate.GetType()) as IEntityEffect;
+        effectInstance.Settings = settings;
+        effectInstance.CurrentVariant = effectTemplate.CurrentVariant;
+
+        return effectInstance;
     }
 }
 

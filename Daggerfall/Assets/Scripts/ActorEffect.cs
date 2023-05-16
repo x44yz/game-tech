@@ -582,7 +582,7 @@ public class ActorEffect : MonoBehaviour
         for (int i = 0; i < sourceBundle.Settings.Effects.Length; i++)
         {
             // Instantiate effect
-            IEntityEffect effect = GameManager.Instance.EntityEffectBroker.InstantiateEffect(sourceBundle.Settings.Effects[i]);
+            IEntityEffect effect = Effects.InstantiateEffect(sourceBundle.Settings.Effects[i]);
             if (effect == null)
             {
                 Debug.LogWarningFormat("AssignBundle() could not add effect as key '{0}' was not found by broker.", sourceBundle.Settings.Effects[i].Key);
@@ -608,7 +608,7 @@ public class ActorEffect : MonoBehaviour
             {
                 // Spell Absorption
                 int absorbSpellPoints;
-                if (sourceBundle.Settings.BundleType == BundleTypes.Spell && TryAbsorption(effect, sourceBundle.Settings.TargetType, sourceBundle.CasterEntityBehaviour.Entity, out absorbSpellPoints))
+                if (sourceBundle.Settings.BundleType == BundleTypes.Spell && TryAbsorption(effect, sourceBundle.Settings.TargetType, sourceBundle.CasterEntityBehaviour, out absorbSpellPoints))
                 {
                     // Spell passed all checks and was absorbed - tally cost output to target
                     totalAbsorbed += absorbSpellPoints;
@@ -1083,7 +1083,7 @@ public class ActorEffect : MonoBehaviour
         foreach (EnchantmentSettings settings in enchantments)
         {
             // Get effect template
-            IEntityEffect effectTemplate = GameManager.Instance.EntityEffectBroker.GetEffectTemplate(settings.EffectKey);
+            IEntityEffect effectTemplate = Effects.GetEffectTemplate(settings.EffectKey);
             if (effectTemplate == null)
             {
                 Debug.LogWarningFormat("DoItemEnchantmentPayloads() effect key {0} not found in broker.", settings.EffectKey);
@@ -1287,11 +1287,11 @@ public class ActorEffect : MonoBehaviour
 
         // Handle effect-based absorption
         SpellAbsorption absorbEffect = FindIncumbentEffect<SpellAbsorption>() as SpellAbsorption;
-        if (absorbEffect != null && TryEffectBasedAbsorption(effect, absorbEffect, entityBehaviour.Entity))
+        if (absorbEffect != null && TryEffectBasedAbsorption(effect, absorbEffect, entityBehaviour))
             return true;
 
         // Handle career-based absorption
-        if (entityBehaviour.Career.SpellAbsorption != DFCareer.SpellAbsorptionFlags.None && TryCareerBasedAbsorption(effect, entityBehaviour.Entity))
+        if (entityBehaviour.Career.SpellAbsorption != DFCareer.SpellAbsorptionFlags.None && TryCareerBasedAbsorption(effect, entityBehaviour))
             return true;
 
         // Handle persistant absorption (e.g. special advantage general/day/night or from weapon effects)
