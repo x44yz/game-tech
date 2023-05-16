@@ -1427,6 +1427,38 @@ public static class FormulaUtils
         else
             return ArmorMaterialTypes.Leather;
     }
+
+    // Gets vampire clan based on region
+    public static VampireClans GetVampireClan(int regionIndex)
+    {
+        FactionFile.FactionData factionData;
+        GameManager.Instance.PlayerEntity.FactionData.GetRegionFaction(regionIndex, out factionData);
+        switch ((FactionFile.FactionIDs) factionData.vam)
+        {
+            case FactionFile.FactionIDs.The_Vraseth:
+                return VampireClans.Vraseth;
+            case FactionFile.FactionIDs.The_Haarvenu:
+                return VampireClans.Haarvenu;
+            case FactionFile.FactionIDs.The_Thrafey:
+                return VampireClans.Thrafey;
+            case FactionFile.FactionIDs.The_Lyrezi:
+                return VampireClans.Lyrezi;
+            case FactionFile.FactionIDs.The_Montalion:
+                return VampireClans.Montalion;
+            case FactionFile.FactionIDs.The_Khulari:
+                return VampireClans.Khulari;
+            case FactionFile.FactionIDs.The_Garlythi:
+                return VampireClans.Garlythi;
+            case FactionFile.FactionIDs.The_Anthotis:
+                return VampireClans.Anthotis;
+            case FactionFile.FactionIDs.The_Selenu:
+                return VampireClans.Selenu;
+        }
+
+        // The Lyrezi are the default like in classic
+        return VampireClans.Lyrezi;
+    }
+
 }
 
 /// <summary>
