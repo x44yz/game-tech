@@ -45,6 +45,7 @@ public class Actor : MonoBehaviour
     public EntityTypes EntityType
     {
         get { return entityType; }
+        set { entityType = value; }
     }
 
     int careerIndex = -1;

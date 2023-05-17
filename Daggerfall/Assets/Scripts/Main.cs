@@ -34,7 +34,27 @@ public class Main : MonoBehaviour
 
         monster = monsterRender.gameObject.AddComponent<Monster>();
         monsterRender.actor = monster;
-        
+
+
+        MobileEnemy mobileEnemy = null;
+        for (int i = 0; i < MobileEnemies.Enemies.Length; ++i)
+        {
+            if (MobileEnemies.Enemies[i].ID == enemyIndex)
+            {
+                mobileEnemy = MobileEnemies.Enemies[i];
+                break;
+            }
+        }
+        if (enemyIndex >= 0 && enemyIndex <= 42)
+        {
+            monster.EntityType = EntityTypes.EnemyMonster;
+            monster.SetEnemyCareer(mobileEnemy, EntityTypes.EnemyMonster);
+        }
+        else if (enemyIndex >= 128 && enemyIndex <= 146)
+        {
+            monster.EntityType = EntityTypes.EnemyClass;
+            monster.SetEnemyCareer(mobileEnemy, EntityTypes.EnemyClass);
+        }
     }
 
     void Update()
