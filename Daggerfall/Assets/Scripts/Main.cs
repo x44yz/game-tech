@@ -62,7 +62,7 @@ public class Main : MonoBehaviour
         float dt = Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            hero.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
+            // hero.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
             // heroRender.Attack();
         }
     }
@@ -70,5 +70,17 @@ public class Main : MonoBehaviour
     public uint ToClassicDaggerfallTime()
     {
         return (uint)Time.time;
+    }
+
+    public void HeroAttack()
+    {
+        hero.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
+        heroRender.Attack();
+    }
+
+    public void MonsterAttack()
+    {
+        monster.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
+        monsterRender.Attack();
     }
 }

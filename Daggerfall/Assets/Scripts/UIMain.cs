@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using QuickDemo;
+using UnityEngine.UI;
 
 public class UIMain : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public UIWidget panelHUD;
+
     void Start()
+    {
+        InitPanelHUD();
+    }
+
+    void Update()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    void InitPanelHUD()
     {
-        
+        panelHUD.Get<Button>("BtnHeroAttack").onClick.AddListener(()=>{
+            Debug.Log("xx-- Hero Attack");
+            Main.Inst.HeroAttack();
+        });
+        panelHUD.Get<Button>("BtnMonsterAttack").onClick.AddListener(()=>{
+            Debug.Log("xx-- Monster Attack");
+            Main.Inst.MonsterAttack();
+        });
     }
 }

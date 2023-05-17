@@ -461,4 +461,61 @@ public class Monster : Actor
         }
     }
 
+    private int ApplyDamageToPlayer(Item weapon)
+    {
+        const int doYouSurrenderToGuardsTextID = 15;
+
+        EnemyEntity entity = entityBehaviour.Entity as EnemyEntity;
+        PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+
+        // Calculate damage
+        damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, false, 0, weapon);
+
+        // Break any "normal power" concealment effects on enemy
+        if (entity.IsMagicallyConcealedNormalPower && damage > 0)
+            EntityEffectManager.BreakNormalPowerConcealmentEffects(entityBehaviour);
+
+        // Tally player's dodging skill
+        playerEntity.TallySkill(DFCareer.Skills.Dodging, 1);
+
+        // Handle Strikes payload from enemy to player target - this could change damage amount
+        if (damage > 0 && weapon != null && weapon.IsEnchanted)
+        {
+            EntityEffectManager effectManager = GetComponent<EntityEffectManager>();
+            if (effectManager)
+                damage = effectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Strikes, weapon, entity.Items, playerEntity.EntityBehaviour, damage);
+        }
+
+        if (damage > 0)
+        {
+            if (entity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch)
+            {
+                // If hit by a guard, lower reputation and show the surrender dialogue
+                if (!playerEntity.HaveShownSurrenderToGuardsDialogue && playerEntity.CrimeCommitted != PlayerEntity.Crimes.None)
+                {
+                    playerEntity.LowerRepForCrime();
+
+                    DaggerfallMessageBox messageBox = new DaggerfallMessageBox(DaggerfallUI.UIManager);
+                    messageBox.SetTextTokens(DaggerfallUnity.Instance.TextProvider.GetRSCTokens(doYouSurrenderToGuardsTextID));
+                    messageBox.ParentPanel.BackgroundColor = Color.clear;
+                    messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
+                    messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
+                    messageBox.OnButtonClick += SurrenderToGuardsDialogue_OnButtonClick;
+                    messageBox.Show();
+
+                    playerEntity.HaveShownSurrenderToGuardsDialogue = true;
+                }
+                // Surrender dialogue has been shown and player refused to surrender
+                // Guard damages player if player can survive hit, or if hit is fatal but guard rejects player's forced surrender
+                else if (playerEntity.CurrentHealth > damage || !playerEntity.SurrenderToCityGuards(false))
+                    SendDamageToPlayer();
+            }
+            else
+                SendDamageToPlayer();
+        }
+        else
+            sounds.PlayMissSound(weapon);
+
+        return damage;
+    }
 }
