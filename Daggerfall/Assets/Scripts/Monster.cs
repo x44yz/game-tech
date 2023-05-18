@@ -461,61 +461,125 @@ public class Monster : Actor
         }
     }
 
-    private int ApplyDamageToPlayer(Item weapon)
+    public void MeleeDamage(Hero hero)
+    {
+        var entity = this;
+        Actor targetEntity = hero;
+
+        // if (senses.Target != null && senses.Target != GameManager.Instance.PlayerEntityBehaviour)
+        //     targetEntity = senses.Target.Entity as EnemyEntity;
+
+        // Switch to hand-to-hand if enemy is immune to weapon
+        var weapon = entity.ItemEquipTable.GetItem(EquipSlots.RightHand);
+        if (weapon != null && targetEntity != null && targetEntity.MinMetalToHit > (WeaponMaterialTypes)weapon.NativeMaterialValue)
+            weapon = null;
+
+        int damage = 0;
+
+        // Melee hit detection, matched to classic
+        // if (senses.Target != null && senses.TargetInSight && (senses.DistanceToTarget <= 0.25f
+        //     || (senses.DistanceToTarget <= MeleeDistance && senses.TargetIsWithinYawAngle(35.156f, senses.Target.transform.position))))
+        // {
+        //     if (senses.Target == GameManager.Instance.PlayerEntityBehaviour)
+                damage = ApplyDamageToPlayer(hero, weapon);
+        //     else
+        //         damage = ApplyDamageToNonPlayer(weapon, transform.forward);
+        // }
+        // Handle bashing door
+        // else if (motor.Bashing && senses.LastKnownDoor != null && senses.DistanceToDoor <= MeleeDistance && !senses.LastKnownDoor.IsOpen)
+        // {
+        //     senses.LastKnownDoor.AttemptBash(false);
+        // }
+        // else
+        // {
+        //     sounds.PlayMissSound(weapon);
+        // }
+
+        // if (DaggerfallUnity.Settings.CombatVoices && entity.EntityType == EntityTypes.EnemyClass && Dice100.SuccessRoll(20))
+        // {
+        //     Genders gender;
+        //     if (mobile.Enemy.Gender == MobileGender.Male || entity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch)
+        //         gender = Genders.Male;
+        //     else
+        //         gender = Genders.Female;
+
+        //     sounds.PlayCombatVoice(gender, true);
+        // }
+    }
+
+    private int ApplyDamageToPlayer(Hero hero, Item weapon)
     {
         const int doYouSurrenderToGuardsTextID = 15;
 
-        EnemyEntity entity = entityBehaviour.Entity as EnemyEntity;
-        PlayerEntity playerEntity = GameManager.Instance.PlayerEntity;
+        var playerEntity = hero;
 
         // Calculate damage
-        damage = FormulaHelper.CalculateAttackDamage(entity, playerEntity, false, 0, weapon);
+        var damage = FormulaUtils.CalculateAttackDamage(this, playerEntity, false, 0, weapon);
 
         // Break any "normal power" concealment effects on enemy
-        if (entity.IsMagicallyConcealedNormalPower && damage > 0)
-            EntityEffectManager.BreakNormalPowerConcealmentEffects(entityBehaviour);
+        // if (entity.IsMagicallyConcealedNormalPower && damage > 0)
+        //     EntityEffectManager.BreakNormalPowerConcealmentEffects(entityBehaviour);
 
+        // 为升级
         // Tally player's dodging skill
-        playerEntity.TallySkill(DFCareer.Skills.Dodging, 1);
+        // playerEntity.TallySkill(DFCareer.Skills.Dodging, 1);
 
         // Handle Strikes payload from enemy to player target - this could change damage amount
         if (damage > 0 && weapon != null && weapon.IsEnchanted)
         {
-            EntityEffectManager effectManager = GetComponent<EntityEffectManager>();
+            var effectManager = GetComponent<ActorEffect>();
             if (effectManager)
-                damage = effectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Strikes, weapon, entity.Items, playerEntity.EntityBehaviour, damage);
+                damage = effectManager.DoItemEnchantmentPayloads(EnchantmentPayloadFlags.Strikes, weapon, Items, playerEntity, damage);
         }
 
         if (damage > 0)
         {
-            if (entity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch)
-            {
-                // If hit by a guard, lower reputation and show the surrender dialogue
-                if (!playerEntity.HaveShownSurrenderToGuardsDialogue && playerEntity.CrimeCommitted != PlayerEntity.Crimes.None)
-                {
-                    playerEntity.LowerRepForCrime();
+            // if (entity.MobileEnemy.ID == (int)MobileTypes.Knight_CityWatch)
+            // {
+            //     // If hit by a guard, lower reputation and show the surrender dialogue
+            //     if (!playerEntity.HaveShownSurrenderToGuardsDialogue && playerEntity.CrimeCommitted != PlayerEntity.Crimes.None)
+            //     {
+            //         playerEntity.LowerRepForCrime();
 
-                    DaggerfallMessageBox messageBox = new DaggerfallMessageBox(DaggerfallUI.UIManager);
-                    messageBox.SetTextTokens(DaggerfallUnity.Instance.TextProvider.GetRSCTokens(doYouSurrenderToGuardsTextID));
-                    messageBox.ParentPanel.BackgroundColor = Color.clear;
-                    messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
-                    messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
-                    messageBox.OnButtonClick += SurrenderToGuardsDialogue_OnButtonClick;
-                    messageBox.Show();
+            //         DaggerfallMessageBox messageBox = new DaggerfallMessageBox(DaggerfallUI.UIManager);
+            //         messageBox.SetTextTokens(DaggerfallUnity.Instance.TextProvider.GetRSCTokens(doYouSurrenderToGuardsTextID));
+            //         messageBox.ParentPanel.BackgroundColor = Color.clear;
+            //         messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.Yes);
+            //         messageBox.AddButton(DaggerfallMessageBox.MessageBoxButtons.No);
+            //         messageBox.OnButtonClick += SurrenderToGuardsDialogue_OnButtonClick;
+            //         messageBox.Show();
 
-                    playerEntity.HaveShownSurrenderToGuardsDialogue = true;
-                }
-                // Surrender dialogue has been shown and player refused to surrender
-                // Guard damages player if player can survive hit, or if hit is fatal but guard rejects player's forced surrender
-                else if (playerEntity.CurrentHealth > damage || !playerEntity.SurrenderToCityGuards(false))
-                    SendDamageToPlayer();
-            }
-            else
+            //         playerEntity.HaveShownSurrenderToGuardsDialogue = true;
+            //     }
+            //     // Surrender dialogue has been shown and player refused to surrender
+            //     // Guard damages player if player can survive hit, or if hit is fatal but guard rejects player's forced surrender
+            //     else if (playerEntity.CurrentHealth > damage || !playerEntity.SurrenderToCityGuards(false))
+            //         SendDamageToPlayer();
+            // }
+            // else
+            // {
                 SendDamageToPlayer();
+            // }
         }
         else
-            sounds.PlayMissSound(weapon);
+        {
+            // sounds.PlayMissSound(weapon);
+        }
 
         return damage;
+    }
+
+    private void SendDamageToPlayer()
+    {
+        // GameManager.Instance.PlayerObject.SendMessage("RemoveHealth", damage);
+
+        var entity = this;
+        var weapon = entity.ItemEquipTable.GetItem(EquipSlots.RightHand);
+        if (weapon == null)
+            weapon = entity.ItemEquipTable.GetItem(EquipSlots.LeftHand);
+        // if (weapon != null)
+        //     GameManager.Instance.PlayerObject.SendMessage("PlayWeaponHitSound");
+        // else
+        //     GameManager.Instance.PlayerObject.SendMessage("PlayWeaponlessHitSound");
     }
 }

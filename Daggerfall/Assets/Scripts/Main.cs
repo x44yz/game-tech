@@ -80,7 +80,7 @@ public class Main : MonoBehaviour
 
     public void MonsterAttack()
     {
-        monster.WeaponDamage(null, false, false, monster, Vector3.zero, Vector3.zero);
+        monster.MeleeDamage(hero);
         monsterRender.Attack();
     }
 }

@@ -195,6 +195,7 @@ GameObject:
   - component: {fileID: 516626384}
   - component: {fileID: 516626383}
   - component: {fileID: 516626382}
+  - component: {fileID: 516626385}
   m_Layer: 5
   m_Name: BtnHeroAttack
   m_TagString: Untagged
@@ -304,6 +305,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 516626380}
   m_CullTransparentMesh: 1
+--- !u!114 &516626385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516626380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822fb537f7714ea49868b6f3a0c13239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elementType: 1
+  refAlias: 
 --- !u!1001 &560307625
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -383,6 +398,7 @@ GameObject:
   - component: {fileID: 786149877}
   - component: {fileID: 786149876}
   - component: {fileID: 786149875}
+  - component: {fileID: 786149878}
   m_Layer: 5
   m_Name: BtnMonsterAttack
   m_TagString: Untagged
@@ -492,6 +508,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 786149873}
   m_CullTransparentMesh: 1
+--- !u!114 &786149878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 786149873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 822fb537f7714ea49868b6f3a0c13239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  elementType: 1
+  refAlias: 
 --- !u!1 &820895804
 GameObject:
   m_ObjectHideFlags: 0
@@ -605,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 361b9e4894dccb54d8ee4c36399c1d0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panelHUD: {fileID: 294308116}
 --- !u!1 &822058786
 GameObject:
   m_ObjectHideFlags: 0
