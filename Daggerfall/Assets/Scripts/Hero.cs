@@ -45,6 +45,19 @@ public class Hero : Actor
     public Item lastBowUsed = null;
     public Item LastBowUsed { get { return lastBowUsed; } }
 
+    // 角色重要的属性
+    // void UpdateSecondaryStatLabels()
+    // {
+    //     DaggerfallStats workingStats = statsRollout.WorkingStats;
+    //     damageModifierLabel.Text = FormulaHelper.DamageModifier(workingStats.LiveStrength).ToString("+0;-0;0");
+    //     maxEncumbranceLabel.Text = FormulaHelper.MaxEncumbrance(workingStats.LiveStrength).ToString();
+    //     spellPointsLabel.Text = FormulaHelper.SpellPoints(workingStats.LiveIntelligence, dfClass.SpellPointMultiplierValue).ToString();
+    //     magicResistLabel.Text = FormulaHelper.MagicResist(workingStats.LiveWillpower).ToString();
+    //     toHitModifierLabel.Text = FormulaHelper.ToHitModifier(workingStats.LiveAgility).ToString("+0;-0;0");
+    //     hitPointsModifierLabel.Text = FormulaHelper.HitPointsModifier(workingStats.LiveEndurance).ToString("+0;-0;0");
+    //     healingRateModifierLabel.Text = FormulaHelper.HealingRateModifier(workingStats.LiveEndurance).ToString("+0;-0;0");
+    // }
+
     protected RaceTemplate raceTemplate;
     public RaceTemplate GetLiveRaceTemplate()
     {

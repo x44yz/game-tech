@@ -77,8 +77,9 @@ public static class FormulaUtils
         {
             // Apply swing modifiers
             // ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
-            // damageModifiers += swingMods.damageMod;
-            // chanceToHitMod += swingMods.toHitMod;
+            ToHitAndDamageMods swingMods = new ToHitAndDamageMods(){damageMod=2, toHitMod=-5};
+            damageModifiers += swingMods.damageMod;
+            chanceToHitMod += swingMods.toHitMod;
 
             // 熟练度
             // Apply proficiency modifiers
@@ -603,31 +604,41 @@ public static class FormulaUtils
             return false;
 
         int chanceToHit = chanceToHitMod;
+        Debug.Log($"[ATK]calc hit init > {chanceToHit}");
 
         // 护甲对命中的影响
         // Get armor value for struck body part
         chanceToHit += CalculateArmorToHit(target, struckBodyPart);
+        Debug.Log($"[ATK]calc hit armor > {chanceToHit}");
 
         // 肾上腺素
         // Apply adrenaline rush modifiers.
         chanceToHit += CalculateAdrenalineRushToHit(attacker, target);
+        Debug.Log($"[ATK]calc hit adrenaline rush > {chanceToHit}");
 
         // 魅力对命中的影响
         // Apply enchantment modifier
         chanceToHit += attacker.ChanceToHitModifier;
+        Debug.Log($"[ATK]calc hit attack hit modifer > {chanceToHit}");
 
         // Apply stat differential modifiers. (default: luck and agility)
         chanceToHit += CalculateStatsToHit(attacker, target);
+        Debug.Log($"[ATK]calc hit attack starts > {chanceToHit}");
 
         // Apply skill modifiers. (default: dodge and crit strike)
         chanceToHit += CalculateSkillsToHit(attacker, target);
+        Debug.Log($"[ATK]calc hit attack skills > {chanceToHit}");
 
         // Apply monster modifier and biography adjustments.
         chanceToHit += CalculateAdjustmentsToHit(attacker, target);
+        Debug.Log($"[ATK]calc hit adjust hit > {chanceToHit}");
 
         chanceToHit = Mathf.Clamp(chanceToHit, 3, 97);
+        Debug.Log($"[ATK]calc hit clamp > {chanceToHit}");
 
-        return Dice100.SuccessRoll(chanceToHit);
+        bool ret = Dice100.SuccessRoll(chanceToHit);
+        Debug.Log($"[ATK]calc hit roll > {ret}");
+        return ret;
     }
 
     public static int CalculateAdjustmentsToHit(Actor attacker, Actor target)
