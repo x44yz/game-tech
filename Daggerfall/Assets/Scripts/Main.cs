@@ -29,10 +29,12 @@ public class Main : MonoBehaviour
         Spells.Init();
 
         hero = heroRender.gameObject.AddComponent<Hero>();
+        hero.gameObject.AddComponent<ActorEffect>();
         hero.AssignCharacter(heroLevel);
         heroRender.actor = hero;
 
         monster = monsterRender.gameObject.AddComponent<Monster>();
+        monster.gameObject.AddComponent<ActorEffect>();
         monsterRender.actor = monster;
 
 

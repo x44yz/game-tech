@@ -10,16 +10,16 @@ using System.Linq;
 // [Serializable]
 public class Monster : Actor
 {
-    public int ID;                              // ID of this mobile
+    public int ID => mobileEnemy.ID;                              // ID of this mobile
 
-    public int MinDamage;                       // Minimum damage per first hit of attack
-    public int MaxDamage;                       // Maximum damage per first hit of attack
-    public int MinDamage2;                      // Minimum damage per second hit of attack
-    public int MaxDamage2;                      // Maximum damage per second hit of attack
-    public int MinDamage3;                      // Minimum damage per third hit of attack
-    public int MaxDamage3;                      // Maximum damage per third hit of attack
-
-    public MobileAffinity Affinity;             // Affinity of mobile
+    public MobileAffinity Affinity => mobileEnemy.Affinity;             // Affinity of mobile
+    public int MinDamage => mobileEnemy.MinDamage;                       // Minimum damage per first hit of attack
+    public int MaxDamage => mobileEnemy.MaxDamage;                       // Maximum damage per first hit of attack
+    public int MinDamage2 => mobileEnemy.MinDamage2;                      // Minimum damage per second hit of attack
+    public int MaxDamage2 => mobileEnemy.MaxDamage2;                      // Maximum damage per second hit of attack
+    public int MinDamage3 => mobileEnemy.MinDamage3;                      // Minimum damage per third hit of attack
+    public int MaxDamage3 => mobileEnemy.MaxDamage3;                      // Maximum damage per third hit of attack
+    
     public MobileEnemy mobileEnemy;
 
     public DFCareer.EnemyGroups GetEnemyGroup()

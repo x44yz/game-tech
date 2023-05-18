@@ -555,22 +555,22 @@ public static class FormulaUtils
         }
         else if (target is Hero)
         {
-            throw new System.NotSupportedException();
-            // if (GameManager.Instance.PlayerEffectManager.HasVampirism()) // Vampires are undead, therefore use undead modifier
-            // {
-            //     if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-            //         damage += attacker.Level;
-            //     if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-            //         damage -= attacker.Level;
-            // }
-            // else
-            // {
-            //     // Player is assumed humanoid
-            //     if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
-            //         damage += attacker.Level;
-            //     if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
-            //         damage -= attacker.Level;
-            // }
+            var effectMgr = target.GetComponent<ActorEffect>();
+            if (effectMgr.HasVampirism()) // Vampires are undead, therefore use undead modifier
+            {
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.UndeadAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
+            else
+            {
+                // Player is assumed humanoid
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Bonus) != 0)
+                    damage += attacker.Level;
+                if (((int)attacker.Career.HumanoidAttackModifier & (int)DFCareer.AttackModifier.Phobia) != 0)
+                    damage -= attacker.Level;
+            }
         }
 
         return damage;
@@ -711,6 +711,9 @@ public static class FormulaUtils
 
     public static int CalculateArmorToHit(Actor target, int struckBodyPart)
     {
+        // NOTE:
+        // 为什么 +ArmorValue，因为默认 Armor 是 100，穿上护甲之后 ArmorValue 会变小
+        // 所以这个 ArmorValue 不是护甲值，而是被击中概率
         int armorValue = 0;
         if (struckBodyPart <= target.ArmorValues.Length)
         {
