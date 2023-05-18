@@ -16,7 +16,7 @@ public class Actor : MonoBehaviour
     protected WeaponMaterialTypes minMetalToHit;
     public WeaponMaterialTypes MinMetalToHit { get { return minMetalToHit; } set { minMetalToHit = value; } }
     protected DSkills skills;
-    public DSkills tSkills { get { return skills; } set { skills.Copy(value); } }
+    public DSkills dSkills { get { return skills; } set { skills.Copy(value); } }
     public int level;
     public int Level { get { return level; } set { level = value; } }
 
@@ -33,7 +33,7 @@ public class Actor : MonoBehaviour
     public int CurrentHealth { get { return GetCurrentHealth(); } set { SetHealth(value); } }
 
     public DStats stats = new DStats();
-    public DStats Stats { get { return stats; } set { stats.Copy(value); } }
+    public DStats dStats { get { return stats; } set { stats.Copy(value); } }
 
     public DFCareer career = new DFCareer();
     public DFCareer Career { get { return career; } set { career = value; } }

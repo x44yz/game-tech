@@ -83,6 +83,29 @@ public class Hero : Actor
         Array.Clear(reactionMods, 0, socialGroupCount);
     }
 
+    const int minBonusRoll = 0;         // The minimum number of points added to each base class stat
+    const int maxBonusRoll = 10;        // The maximum number of points added to each base class stat
+    public void StatReroll()
+    {
+        int strength = stats.PermanentStrength + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int intelligence = stats.PermanentIntelligence + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int willpower = stats.PermanentWillpower + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int agility = stats.PermanentAgility + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int endurance = stats.PermanentEndurance + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int personality = stats.PermanentPersonality + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int speed = stats.PermanentSpeed + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        int luck = stats.PermanentLuck + UnityEngine.Random.Range(minBonusRoll, maxBonusRoll + 1);
+        stats.SetPermanentStatValue(Stats.Strength, strength);
+        stats.SetPermanentStatValue(Stats.Intelligence, intelligence);
+        stats.SetPermanentStatValue(Stats.Willpower, willpower);
+        stats.SetPermanentStatValue(Stats.Agility, agility);
+        stats.SetPermanentStatValue(Stats.Endurance, endurance);
+        stats.SetPermanentStatValue(Stats.Personality, personality);
+        stats.SetPermanentStatValue(Stats.Speed, speed);
+        stats.SetPermanentStatValue(Stats.Luck, luck);
+    }
+  
+
     /// <summary>
     /// Assigns player entity settings from a character document.
     /// </summary>

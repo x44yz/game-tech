@@ -8,5 +8,6 @@
 // 2023年5月18日  
 [x]hero melee attack  
 [x]monster melee attack  
+[x]stats roll  
 
 

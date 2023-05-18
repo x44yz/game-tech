@@ -70,7 +70,7 @@ public static class FormulaUtils
             skillID = (short)Skills.HandToHand;
         }
 
-        chanceToHitMod = attacker.tSkills.GetLiveSkillValue(skillID);
+        chanceToHitMod = attacker.dSkills.GetLiveSkillValue(skillID);
 
         // 玩家
         if (attacker == player)
@@ -480,7 +480,7 @@ public static class FormulaUtils
         // TODO: Apply strength bonus from Mace of Molag Bal
 
         // Apply strength modifier
-        damage += DamageModifier(attacker.Stats.LiveStrength);
+        damage += DamageModifier(attacker.dStats.LiveStrength);
 
         // Apply material modifier.
         // The in-game display in Daggerfall of weapon damages with material modifiers is incorrect. The material modifier is half of what the display suggests.
@@ -498,8 +498,8 @@ public static class FormulaUtils
 
     public static int CalculateHandToHandAttackDamage(Actor attacker, Actor target, int damageModifier, bool player)
     {
-        int minBaseDamage = CalculateHandToHandMinDamage(attacker.tSkills.GetLiveSkillValue(Skills.HandToHand));
-        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.tSkills.GetLiveSkillValue(Skills.HandToHand));
+        int minBaseDamage = CalculateHandToHandMinDamage(attacker.dSkills.GetLiveSkillValue(Skills.HandToHand));
+        int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.dSkills.GetLiveSkillValue(Skills.HandToHand));
         int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
 
         // Apply damage modifiers.
@@ -507,7 +507,7 @@ public static class FormulaUtils
 
         // Apply strength modifier for players. It is not applied in classic despite what the in-game description for the Strength attribute says.
         if (player)
-            damage += DamageModifier(attacker.Stats.LiveStrength);
+            damage += DamageModifier(attacker.dStats.LiveStrength);
 
         damage += GetBonusOrPenaltyByEnemyType(attacker, target);
 
@@ -673,12 +673,12 @@ public static class FormulaUtils
         // Apply dodging modifier.
         // This modifier is bugged in classic and the attacker's dodging skill is used rather than the target's.
         // DF Chronicles says the dodging calculation is (dodging / 10), but it actually seems to be (dodging / 4).
-        chanceToHitMod -= target.tSkills.GetLiveSkillValue(Skills.Dodging) / 4;
+        chanceToHitMod -= target.dSkills.GetLiveSkillValue(Skills.Dodging) / 4;
 
         // Apply critical strike modifier.
-        if (Dice100.SuccessRoll(attacker.tSkills.GetLiveSkillValue(Skills.CriticalStrike)))
+        if (Dice100.SuccessRoll(attacker.dSkills.GetLiveSkillValue(Skills.CriticalStrike)))
         {
-            chanceToHitMod += attacker.tSkills.GetLiveSkillValue(Skills.CriticalStrike) / 10;
+            chanceToHitMod += attacker.dSkills.GetLiveSkillValue(Skills.CriticalStrike) / 10;
         }
 
         return chanceToHitMod;
@@ -689,10 +689,10 @@ public static class FormulaUtils
         int chanceToHitMod = 0;
 
         // Apply luck modifier.
-        chanceToHitMod += (attacker.Stats.LiveLuck - target.Stats.LiveLuck) / 10;
+        chanceToHitMod += (attacker.dStats.LiveLuck - target.dStats.LiveLuck) / 10;
 
         // Apply agility modifier.
-        chanceToHitMod += (attacker.Stats.LiveAgility - target.Stats.LiveAgility) / 10;
+        chanceToHitMod += (attacker.dStats.LiveAgility - target.dStats.LiveAgility) / 10;
 
         return chanceToHitMod;
     }
@@ -828,7 +828,7 @@ public static class FormulaUtils
         if (isEnemyFacingAwayFromPlayer)
         {
             // player.TallySkill(DFCareer.Skills.Backstabbing, 1);
-            return player.tSkills.GetLiveSkillValue(Skills.Backstabbing);
+            return player.dSkills.GetLiveSkillValue(Skills.Backstabbing);
         }
         return 0;
     }
@@ -989,7 +989,7 @@ public static class FormulaUtils
         int maxRoll = player.Career.HitPointsPerLevel;
         DFRandom.Seed = (uint)Time.renderedFrameCount;
         int addHitPoints = DFRandom.random_range_inclusive(minRoll, maxRoll);
-        addHitPoints += HitPointsModifier(player.Stats.PermanentEndurance);
+        addHitPoints += HitPointsModifier(player.dStats.PermanentEndurance);
         if (addHitPoints < 1)
             addHitPoints = 1;
         return addHitPoints;
@@ -1003,8 +1003,8 @@ public static class FormulaUtils
     // Calculate how much health the player should recover per hour of rest
     public static int CalculateHealthRecoveryRate(Hero player)
     {
-        short medical = player.tSkills.GetLiveSkillValue(Skills.Medical);
-        int endurance = player.Stats.LiveEndurance;
+        short medical = player.dSkills.GetLiveSkillValue(Skills.Medical);
+        int endurance = player.dStats.LiveEndurance;
         int maxHealth = player.MaxHealth;
         // PlayerEnterExit playerEnterExit;
         // playerEnterExit = GameManager.Instance.PlayerGPS.GetComponent<PlayerEnterExit>();
@@ -1416,12 +1416,12 @@ public static class FormulaUtils
         if (casterEntity == null)
         {
             // From player
-            skillValue = Main.Inst.hero.tSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
+            skillValue = Main.Inst.hero.dSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
         }
         else
         {
             // From another entity
-            skillValue = casterEntity.tSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
+            skillValue = casterEntity.dSkills.GetLiveSkillValue((Skills)effect.Properties.MagicSkill);
         }
 
         // Duration costs

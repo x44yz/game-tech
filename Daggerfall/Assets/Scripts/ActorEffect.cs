@@ -1957,14 +1957,14 @@ public class ActorEffect : MonoBehaviour
         MergeDirectMods();
 
         // Assign to host entity
-        entityBehaviour.Stats.AssignMods(combinedStatMods, combinedStatMaxMods);
-        entityBehaviour.tSkills.AssignMods(combinedSkillMods);
+        entityBehaviour.dStats.AssignMods(combinedStatMods, combinedStatMaxMods);
+        entityBehaviour.dSkills.AssignMods(combinedSkillMods);
         entityBehaviour.Resistances.AssignMods(combinedResistanceMods);
 
         // Kill host if any stat is reduced to 0 live total
         for (int i = 0; i < DStats.Count; i++)
         {
-            if (entityBehaviour.Stats.GetLiveStatValue(i) == 0)
+            if (entityBehaviour.dStats.GetLiveStatValue(i) == 0)
             {
                 entityBehaviour.CurrentHealth = 0;
                 return;

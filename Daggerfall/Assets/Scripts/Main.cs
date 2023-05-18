@@ -31,6 +31,7 @@ public class Main : MonoBehaviour
         hero = heroRender.gameObject.AddComponent<Hero>();
         hero.gameObject.AddComponent<ActorEffect>();
         hero.AssignCharacter(heroLevel);
+        hero.StatReroll();
         heroRender.actor = hero;
 
         monster = monsterRender.gameObject.AddComponent<Monster>();
