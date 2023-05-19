@@ -249,6 +249,11 @@ public class DSkills
     /// </summary>
     /// <param name="skill">Skill to set.</param>
     /// <param name="value">Skill value.</param>
+    public void SetPermanentSkillValue(Skills skill, int value)
+    {
+        SetPermanentSkillValue(skill, (short)value);
+    }
+
     public void SetPermanentSkillValue(Skills skill, short value)
     {
         switch (skill)

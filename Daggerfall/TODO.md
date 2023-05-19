@@ -2,8 +2,10 @@
 [+]monster range attack
 [+]hero skill  
 [+]monster skill  
-[+]hero equip  
 [+]monster equip  
+
+// 2023年5月19日
+[+]hero equip  
 
 // 2023年5月18日  
 [x]hero melee attack  

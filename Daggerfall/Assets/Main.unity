@@ -1679,7 +1679,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroRace: Human
   heroClass: Mage
-  heroWeapon: 
+  heroWeapon: 116
+  heroWeaponMat: 1
   heroLevel: 1
   enemyIndex: 0
   heroRender: {fileID: 1861473358}
@@ -1693,6 +1694,42 @@ MonoBehaviour:
   debugHeroPersonality: 52
   debugHeroSpeed: 43
   debugHeroLuck: 60
+  debugSkill: 1
+  debugSkillMedical: 22
+  debugSkillEtiquette: 3
+  debugSkillStreetwise: 5
+  debugSkillJumping: 3
+  debugSkillOrcish: 3
+  debugSkillHarpy: 3
+  debugSkillGiantish: 5
+  debugSkillDragonish: 15
+  debugSkillNymph: 4
+  debugSkillDaedric: 20
+  debugSkillSpriggan: 5
+  debugSkillCentaurian: 6
+  debugSkillImpish: 3
+  debugSkillLockpicking: 5
+  debugSkillMercantile: 6
+  debugSkillPickpocket: 4
+  debugSkillStealth: 4
+  debugSkillSwimming: 17
+  debugSkillClimbing: 3
+  debugSkillBackstabbing: 4
+  debugSkillDodging: 16
+  debugSkillRunning: 6
+  debugSkillDestruction: 25
+  debugSkillRestoration: 18
+  debugSkillIllusion: 26
+  debugSkillAlteration: 36
+  debugSkillThaumaturgy: 29
+  debugSkillMysticism: 36
+  debugSkillShortBlade: 14
+  debugSkillLongBlade: 3
+  debugSkillHandToHand: 3
+  debugSkillAxe: 3
+  debugSkillBluntWeapon: 15
+  debugSkillArchery: 5
+  debugSkillCriticalStrike: 5
   hero: {fileID: 0}
   monster: {fileID: 0}
 --- !u!1 &2113002796

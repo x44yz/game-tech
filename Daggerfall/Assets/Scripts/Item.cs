@@ -6,7 +6,10 @@ using UnityEngine;
 
 public class Item
 {
-    public int TemplateIndex; // item id
+    public int TemplateIndex
+    {
+        get { return ItemTemplate.index; }
+    }
     // 伏魔的
     public bool IsEnchanted;
     public Poisons poisonType = Poisons.None;

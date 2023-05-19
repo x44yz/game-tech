@@ -104,8 +104,18 @@ public class Hero : Actor
         stats.SetPermanentStatValue(Stats.Speed, speed);
         stats.SetPermanentStatValue(Stats.Luck, luck);
     }
-  
 
+    public void EquipWeapon(Weapons weapons, WeaponMaterialTypes materialTypes)
+    {
+        var item = ItemUtils.CreateWeapon(weapons, materialTypes);
+        if (item == null)
+        {
+            Debug.LogError("failed equip weapon becase item is null");
+            return;
+        }
+        equipTable.EquipItem(item, true, false);
+    }
+  
     /// <summary>
     /// Assigns player entity settings from a character document.
     /// </summary>
