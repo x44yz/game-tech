@@ -1684,6 +1684,15 @@ MonoBehaviour:
   enemyIndex: 0
   heroRender: {fileID: 1861473358}
   monsterRender: {fileID: 1164366346}
+  debugHeroState: 1
+  debugHeroStrength: 54
+  debugHeroIntelligence: 66
+  debugHeroWillpower: 70
+  debugHeroAgility: 45
+  debugHeroEndurance: 54
+  debugHeroPersonality: 52
+  debugHeroSpeed: 43
+  debugHeroLuck: 60
   hero: {fileID: 0}
   monster: {fileID: 0}
 --- !u!1 &2113002796

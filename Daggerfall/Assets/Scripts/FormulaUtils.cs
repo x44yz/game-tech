@@ -71,35 +71,41 @@ public static class FormulaUtils
         }
 
         chanceToHitMod = attacker.dSkills.GetLiveSkillValue(skillID);
+        Debug.Log($"[ATK]attacker skill {skillID} value {chanceToHitMod}");
 
         // 玩家
         if (attacker == player)
         {
             // Apply swing modifiers
             // ToHitAndDamageMods swingMods = CalculateSwingModifiers(GameManager.Instance.WeaponManager.ScreenWeapon);
-            ToHitAndDamageMods swingMods = new ToHitAndDamageMods(){damageMod=2, toHitMod=-5};
+            ToHitAndDamageMods swingMods = new ToHitAndDamageMods(){damageMod=4, toHitMod=-7};
             damageModifiers += swingMods.damageMod;
             chanceToHitMod += swingMods.toHitMod;
+            Debug.Log($"[ATK]attacker swing mode {swingMods.damageMod}/{swingMods.toHitMod} > {damageModifiers}/{chanceToHitMod}");
 
             // 熟练度
             // Apply proficiency modifiers
             ToHitAndDamageMods proficiencyMods = CalculateProficiencyModifiers(attacker, weapon);
             damageModifiers += proficiencyMods.damageMod;
             chanceToHitMod += proficiencyMods.toHitMod;
+            Debug.Log($"[ATK]attacker proficiency mode {proficiencyMods.damageMod}/{proficiencyMods.toHitMod} > {damageModifiers}/{chanceToHitMod}");
 
             // 种族克制
             // Apply racial bonuses
             ToHitAndDamageMods racialMods = CalculateRacialModifiers(attacker, weapon, player);
             damageModifiers += racialMods.damageMod;
             chanceToHitMod += racialMods.toHitMod;
+            Debug.Log($"[ATK]attacker racial mode {racialMods.damageMod}/{racialMods.toHitMod} > {damageModifiers}/{chanceToHitMod}");
 
             // 背刺，命中增加
             backstabChance = CalculateBackstabChance(player, null, isEnemyFacingAwayFromPlayer);
             chanceToHitMod += backstabChance;
+            Debug.Log($"[ATK]attacker backstab chance {backstabChance} > {chanceToHitMod}");
         }
 
         // Choose struck body part
         int struckBodyPart = CalculateStruckBodyPart();
+        Debug.Log($"[ATK]attacker struck body part {struckBodyPart}");
 
         // Get damage for weaponless attacks
         // 空手攻击  
@@ -108,11 +114,14 @@ public static class FormulaUtils
             // 如果是玩家或种族敌人
             if (attacker == player || (AIAttacker != null && AIAttacker.EntityType == EntityTypes.EnemyClass))
             {
+                Debug.Log($"[ATK]player hit enemyclass with hand > {chanceToHitMod}");
                 if (CalculateSuccessfulHit(attacker, target, chanceToHitMod, struckBodyPart))
                 {
                     damage = CalculateHandToHandAttackDamage(attacker, target, damageModifiers, attacker == player);
+                    Debug.Log($"[ATK]player hit enemyclass with hand > {damage}");
                     // 背刺成功，3倍伤害
                     damage = CalculateBackstabDamage(damage, backstabChance);
+                    Debug.Log($"[ATK]player hit enemyclass with hand + backstable > {damage}");
                 }
             }
             else if (AIAttacker != null) // attacker is a monster
@@ -184,6 +193,8 @@ public static class FormulaUtils
             }
         }
 
+        Debug.Log("CalculateAttackDamage > " + damage);
+
         damage = Mathf.Max(0, damage);
 
         DamageEquipment(attacker, target, damage, weapon, struckBodyPart);
@@ -207,7 +218,7 @@ public static class FormulaUtils
         // }
         //Debug.LogFormat("Damage {0} applied, animTime={1}  ({2})", damage, weaponAnimTime, GameManager.Instance.WeaponManager.ScreenWeapon.WeaponState);
 
-        Debug.Log("CalculateAttackDamage > " + damage);
+        
         return damage;
     }
 
@@ -502,14 +513,21 @@ public static class FormulaUtils
         int maxBaseDamage = CalculateHandToHandMaxDamage(attacker.dSkills.GetLiveSkillValue(Skills.HandToHand));
         int damage = UnityEngine.Random.Range(minBaseDamage, maxBaseDamage + 1);
 
+        Debug.Log($"xx-- str > {minBaseDamage} - {maxBaseDamage} - {damage} - {damageModifier}");
         // Apply damage modifiers.
         damage += damageModifier;
 
         // Apply strength modifier for players. It is not applied in classic despite what the in-game description for the Strength attribute says.
         if (player)
+        {
+            var str = attacker.dStats.LiveStrength;
+            Debug.Log($"xx-- str > {damage} - {str}");
             damage += DamageModifier(attacker.dStats.LiveStrength);
+            Debug.Log($"xx-- str > {damage} - {str}");
+        }
 
         damage += GetBonusOrPenaltyByEnemyType(attacker, target);
+        Debug.Log($"xx-- GetBonusOrPenaltyByEnemyType > {damage}");
 
         return damage;
     }
@@ -636,8 +654,9 @@ public static class FormulaUtils
         chanceToHit = Mathf.Clamp(chanceToHit, 3, 97);
         Debug.Log($"[ATK]calc hit clamp > {chanceToHit}");
 
-        bool ret = Dice100.SuccessRoll(chanceToHit);
-        Debug.Log($"[ATK]calc hit roll > {ret}");
+        int rnd = UnityEngine.Random.Range(0, 100);
+        bool ret = rnd < chanceToHit; // Dice100.SuccessRoll(chanceToHit);
+        Debug.Log($"[ATK]calc hit roll > {ret} - {rnd}/{chanceToHit}");
         return ret;
     }
 

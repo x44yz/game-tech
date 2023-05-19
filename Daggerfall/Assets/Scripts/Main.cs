@@ -15,6 +15,17 @@ public class Main : MonoBehaviour
     public ActorRender heroRender;
     public ActorRender monsterRender;
 
+    [Header("DEBUG")]
+    public bool debugHeroState;
+    public int debugHeroStrength;
+    public int debugHeroIntelligence;
+    public int debugHeroWillpower;
+    public int debugHeroAgility;
+    public int debugHeroEndurance;
+    public int debugHeroPersonality;
+    public int debugHeroSpeed;
+    public int debugHeroLuck;
+
     [Header("RUNTIME")]
     public Hero hero;
     public Monster monster;
@@ -22,6 +33,8 @@ public class Main : MonoBehaviour
     void Awake()
     {
         Inst = this;
+
+        UnityEngine.Random.InitState((int)Time.time);
 
         // Races.Init();
         Classes.Init();
@@ -32,6 +45,17 @@ public class Main : MonoBehaviour
         hero.gameObject.AddComponent<ActorEffect>();
         hero.AssignCharacter(heroLevel);
         hero.StatReroll();
+        if (debugHeroState)
+        {
+            hero.stats.SetPermanentStatValue(Stats.Strength, debugHeroStrength);
+            hero.stats.SetPermanentStatValue(Stats.Intelligence, debugHeroIntelligence);
+            hero.stats.SetPermanentStatValue(Stats.Willpower, debugHeroWillpower);
+            hero.stats.SetPermanentStatValue(Stats.Agility, debugHeroAgility);
+            hero.stats.SetPermanentStatValue(Stats.Endurance, debugHeroEndurance);
+            hero.stats.SetPermanentStatValue(Stats.Personality, debugHeroPersonality);
+            hero.stats.SetPermanentStatValue(Stats.Speed, debugHeroSpeed);
+            hero.stats.SetPermanentStatValue(Stats.Luck, debugHeroLuck);
+        }
         heroRender.actor = hero;
 
         monster = monsterRender.gameObject.AddComponent<Monster>();
