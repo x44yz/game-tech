@@ -393,7 +393,7 @@ public class ActorEffect : MonoBehaviour
     public bool SetReadySpell(int classicSpellIndex, bool noSpellPointCost = false)
     {
         SpellRecordData spell;
-        if (Effects.GetClassicSpellRecord(classicSpellIndex, out spell))
+        if (Spells.GetClassicSpellRecord(classicSpellIndex, out spell))
         {
             // Create effect bundle settings from classic spell
             EffectBundleSettings bundleSettings = new EffectBundleSettings();

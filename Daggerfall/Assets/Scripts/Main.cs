@@ -16,6 +16,7 @@ public class Main : MonoBehaviour
     public ActorRender heroRender;
     public ActorRender monsterRender;
     public Missile misslePrefab;
+    public int heroSpell;
 
     [Header("DEBUG")]
     public bool debugHeroState;
@@ -221,5 +222,10 @@ public class Main : MonoBehaviour
     {
         monster.MeleeDamage(hero);
         monsterRender.Attack();
+    }
+
+    public void HeroSpell()
+    {
+        hero.CastSpell(heroSpell);
     }
 }

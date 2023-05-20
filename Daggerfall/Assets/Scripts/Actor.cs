@@ -520,5 +520,51 @@ public class Actor : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// 9
+    /// Creates spell. Use Action's index to get the spell by index from Spells.STD
+    /// </summary>
+    /// <param name="triggerObj"></param>
+    /// <param name="thisAction"></param>
+    public void CastSpell(int spellIndex)
+    {
+        SpellRecordData spell;
+        if (Spells.GetClassicSpellRecord(spellIndex, out spell))
+        {
+            // Create effect bundle settings from classic spell
+            EffectBundleSettings bundleSettings;
+            if (Effects.ClassicSpellRecordDataToEffectBundleSettings(spell, BundleTypes.Spell, out bundleSettings))
+            {
+                if (bundleSettings.TargetType == TargetTypes.CasterOnly)
+                {
+                    // Spell is readied on player for free
+                    Main.Inst.hero.GetComponent<ActorEffect>().SetReadySpell(spellIndex, true);
+                }
+                else
+                {
+                    // Spell is fired at player, at strength of player level, from triggering object
+                    // DaggerfallMissile missile = GameManager.Instance.PlayerEffectManager.InstantiateSpellMissile(bundleSettings.ElementType);
+                    // missile.Payload = new EntityEffectBundle(bundleSettings);
+                    // Vector3 customAimPosition = thisAction.transform.position;
+                    // customAimPosition.y += 40 * MeshReader.GlobalScale;
+                    // missile.CustomAimPosition = customAimPosition;
+                    // missile.CustomAimDirection = Vector3.Normalize(GameManager.Instance.PlayerObject.transform.position - thisAction.transform.position);
+
+                    // // If action spell payload is "touch" then set to "target at range" (targets player position as above)
+                    // if (missile.Payload.Settings.TargetType == TargetTypes.ByTouch)
+                    // {
+                    //     EffectBundleSettings settings = missile.Payload.Settings;
+                    //     settings.TargetType = TargetTypes.SingleTargetAtRange;
+                    //     missile.Payload.Settings = settings;
+                    // }
+                    var effectManager = Main.Inst.monster.GetComponent<ActorEffect>();
+                    // Instantiate payload bundle on target
+                    var payload = new EntityEffectBundle(bundleSettings);
+                    effectManager.AssignBundle(payload, AssignBundleFlags.ShowNonPlayerFailures);
+                }
+            }
+        }
+    }
 }
 

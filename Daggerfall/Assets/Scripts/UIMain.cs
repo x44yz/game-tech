@@ -24,6 +24,11 @@ public class UIMain : MonoBehaviour
             Debug.Log("xx-- Hero Attack");
             Main.Inst.HeroAttack();
         });
+        panelHUD.Get<Button>("BtnHeroSpell").onClick.AddListener(()=>{
+            Debug.Log("xx-- Hero Spell");
+            Main.Inst.HeroSpell();
+        });
+
         panelHUD.Get<Button>("BtnMonsterAttack").onClick.AddListener(()=>{
             Debug.Log("xx-- Monster Attack");
             Main.Inst.MonsterAttack();

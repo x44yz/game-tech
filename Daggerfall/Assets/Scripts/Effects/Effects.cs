@@ -288,17 +288,14 @@ public class Effects
     /// <param name="id">ID of spell.</param>
     /// <param name="spellOut">Spell record data (if found).</param>
     /// <returns>True if spell found, otherwise false.</returns>
-    public static bool GetClassicSpellRecord(int id, out SpellRecordData spellOut)
-    {
-        if (standardSpells.ContainsKey(id))
-        {
-            spellOut = standardSpells[id];
-            return true;
-        }
-
-        spellOut = new SpellRecordData();
-        return false;
-    }
+    // public static bool GetClassicSpellRecord(int id, out SpellRecordData spellOut)
+    // {
+    //     // if (standardSpells.ContainsKey(id))
+    //     // {
+    //     //     spellOut = standardSpells[id];
+    //     //     return true;
+    //     // }
+    // }
 
     /// <summary>
     /// Generate EffectSettings from classic EffectRecordData.
@@ -430,8 +427,8 @@ public class Effects
     static readonly Dictionary<int, string> classicEffectMapping = new Dictionary<int, string>();
     static readonly Dictionary<string, BaseEffect> magicEffectTemplates = new Dictionary<string, BaseEffect>();
     static readonly Dictionary<int, BaseEffect> potionEffectTemplates = new Dictionary<int, BaseEffect>();
-    static readonly Dictionary<int, SpellRecordData> standardSpells = new Dictionary<int, SpellRecordData>();
-    static readonly Dictionary<string, CustomSpellBundleOffer> customSpellBundleOffers = new Dictionary<string, CustomSpellBundleOffer>();
+    // static readonly Dictionary<int, SpellRecordData> standardSpells = new Dictionary<int, SpellRecordData>();
+    // static readonly Dictionary<string, CustomSpellBundleOffer> customSpellBundleOffers = new Dictionary<string, CustomSpellBundleOffer>();
     /// <summary>
     /// Gets PotionRecipe from effect that matches the recipeKey provided.
     /// </summary>
