@@ -147,6 +147,30 @@ public class Hero : Actor
         Debug.Log("Assigned character " + this.name);
     }
 
+    public bool MeleeDamage(Item weapon)
+    {
+        // raycast
+        // hitEnemy = false;
+
+        // if (!mainCamera || !weapon)
+        //     return;
+
+        // // Fire ray along player facing using weapon range
+        // RaycastHit hit;
+        // Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
+        // if (Physics.SphereCast(ray, SphereCastRadius, out hit, weapon.Reach, playerLayerMask))
+        // {
+        //     DaggerfallUnityItem strikingWeapon = usingRightHand ? currentRightHandWeapon : currentLeftHandWeapon;
+        //     if(!WeaponEnvDamage(strikingWeapon, hit)
+        //         // Fall back to simple ray for narrow cages https://forums.dfworkshop.net/viewtopic.php?f=5&t=2195#p39524
+        //         || Physics.Raycast(ray, out hit, weapon.Reach, playerLayerMask))
+        //     {
+        var monster = Main.Inst.monster;
+        return WeaponDamage(weapon, false, false, monster, Vector3.zero, Vector3.zero);
+        //     }
+        // }
+    }
+
     public bool WeaponDamage(Item strikingWeapon, bool arrowHit, bool arrowSummoned, Actor target, Vector3 impactPosition, Vector3 direction)
     {
         // Calculate damage

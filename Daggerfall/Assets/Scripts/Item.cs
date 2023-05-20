@@ -77,6 +77,11 @@ public class Item
         set { timeForItemToDisappear = value; }
     }
 
+    public virtual WeaponTypes GetWeaponType()
+    {
+        return WeaponTypes.None;
+    }
+
     public Item()
     {
         uid = NextUID;

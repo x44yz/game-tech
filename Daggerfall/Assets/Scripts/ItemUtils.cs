@@ -286,4 +286,97 @@ public static class ItemUtils
         float matQuarterKgs = (float)(quarterKgs * weightMultipliersByMaterial[(int)material]) / 4;
         return Mathf.Round(matQuarterKgs) / 4;
     }
+
+    /// <summary>
+    /// Converts Daggerfall weapon to generic API WeaponType.
+    /// </summary>
+    /// <param name="item">Weapon to convert.</param>
+    /// <returns>WeaponTypes.</returns>
+    public static WeaponTypes ConvertItemToAPIWeaponType(Item item)
+    {
+        // Must be a weapon
+        if (item.ItemGroup != ItemGroups.Weapons)
+            return WeaponTypes.None;
+
+        // Find FPS animation set for this weapon type
+        // Daggerfall re-uses the same animations for many different weapons
+
+        // Check for a custom item weapon type, if None then continue
+        WeaponTypes result = item.GetWeaponType();
+        if (result != WeaponTypes.None)
+            return result;
+
+        switch (item.TemplateIndex)
+        {
+            case (int)Weapons.Dagger:
+                result = WeaponTypes.Dagger;
+                break;
+            case (int)Weapons.Staff:
+                result = WeaponTypes.Staff;
+                break;
+            case (int)Weapons.Tanto:
+            case (int)Weapons.Shortsword:
+            case (int)Weapons.Wakazashi:
+            case (int)Weapons.Broadsword:
+            case (int)Weapons.Saber:
+            case (int)Weapons.Longsword:
+            case (int)Weapons.Katana:
+            case (int)Weapons.Claymore:
+            case (int)Weapons.Dai_Katana:
+                result = WeaponTypes.LongBlade;
+                break;
+            case (int)Weapons.Mace:
+                result = WeaponTypes.Mace;
+                break;
+            case (int)Weapons.Flail:
+                result = WeaponTypes.Flail;
+                break;
+            case (int)Weapons.Warhammer:
+                result = WeaponTypes.Warhammer;
+                break;
+            case (int)Weapons.Battle_Axe:
+            case (int)Weapons.War_Axe:
+                result = WeaponTypes.Battleaxe;
+                break;
+            case (int)Weapons.Short_Bow:
+            case (int)Weapons.Long_Bow:
+                result = WeaponTypes.Bow;
+                break;
+            default:
+                return WeaponTypes.None;
+        }
+
+        // Handle enchanted weapons
+        if (item.IsEnchanted)
+        {
+            switch (result)
+            {
+                case WeaponTypes.Dagger:
+                    result = WeaponTypes.Dagger_Magic;
+                    break;
+                case WeaponTypes.Staff:
+                    result = WeaponTypes.Staff_Magic;
+                    break;
+                case WeaponTypes.LongBlade:
+                    result = WeaponTypes.LongBlade_Magic;
+                    break;
+                case WeaponTypes.Mace:
+                    result = WeaponTypes.Mace_Magic;
+                    break;
+                case WeaponTypes.Flail:
+                    result = WeaponTypes.Flail_Magic;
+                    break;
+                case WeaponTypes.Warhammer:
+                    result = WeaponTypes.Warhammer_Magic;
+                    break;
+                case WeaponTypes.Battleaxe:
+                    result = WeaponTypes.Battleaxe_Magic;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return result;
+    }
 }

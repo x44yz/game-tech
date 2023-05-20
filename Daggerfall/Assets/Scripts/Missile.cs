@@ -64,7 +64,7 @@ public class Missile : MonoBehaviour
     EntityEffectBundle payload;
     bool isArrow = false;
     bool isArrowSummoned = false;
-    GameObject goModel = null;
+    // GameObject goModel = null;
     // EnemySenses enemySenses;
 
     List<Actor> targetEntities = new List<Actor>();
@@ -162,11 +162,11 @@ public class Missile : MonoBehaviour
         // initialIntensity = myLight.intensity;
 
         // Setup collider
-        myCollider = GetComponent<SphereCollider>();
+        myCollider = GetComponentInChildren<SphereCollider>();
         myCollider.radius = ColliderRadius;
 
         // Setup rigidbody
-        myRigidbody = GetComponent<Rigidbody>();
+        myRigidbody = GetComponentInChildren<Rigidbody>();
         myRigidbody.useGravity = false;
 
         // Use payload when available
@@ -194,7 +194,6 @@ public class Missile : MonoBehaviour
         // Setup arrow
         if (isArrow)
         {
-            throw new System.NotImplementedException();
             // Create and orient 3d arrow
             // goModel = GameObjectHelper.CreateDaggerfallMeshGameObject(99800, transform);
             // MeshCollider arrowCollider = goModel.GetComponent<MeshCollider>();
@@ -204,7 +203,7 @@ public class Missile : MonoBehaviour
 
             // Offset up so it comes from same place LOS check is done from
             // Vector3 adjust;
-            // if (caster != GameManager.Instance.PlayerEntityBehaviour)
+            // if (caster != Main.Inst.hero)
             // {
             //     CharacterController controller = caster.transform.GetComponent<CharacterController>();
             //     adjust = caster.transform.forward * 0.6f;
@@ -353,7 +352,7 @@ public class Missile : MonoBehaviour
                 AssignBowDamageToTarget(other);
 
             // Destroy 3d arrow
-            Destroy(goModel.gameObject);
+            Destroy(gameObject);
             impactDetected = true;
         }
 
@@ -591,7 +590,7 @@ public class Missile : MonoBehaviour
         {
             Transform hitTransform = arrowHitCollider.gameObject.transform;
             var target = hitTransform.GetComponent<Actor>();
-            Main.Inst.hero.WeaponDamage(Main.Inst.hero.LastBowUsed, true, isArrowSummoned, target, hitTransform.position, goModel.transform.forward);
+            Main.Inst.hero.WeaponDamage(Main.Inst.hero.LastBowUsed, true, isArrowSummoned, target, hitTransform.position, transform.forward);
         }
     }
 

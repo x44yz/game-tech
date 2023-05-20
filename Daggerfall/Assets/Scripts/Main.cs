@@ -15,6 +15,7 @@ public class Main : MonoBehaviour
     public int enemyIndex;
     public ActorRender heroRender;
     public ActorRender monsterRender;
+    public Missile misslePrefab;
 
     [Header("DEBUG")]
     public bool debugHeroState;
@@ -73,6 +74,8 @@ public class Main : MonoBehaviour
         Inst = this;
 
         UnityEngine.Random.InitState((int)Time.time);
+
+        misslePrefab.gameObject.SetActive(false);
 
         // Races.Init();
         Classes.Init();
@@ -182,7 +185,35 @@ public class Main : MonoBehaviour
         if (weapon == null)
             weapon = hero.ItemEquipTable.GetItem(EquipSlots.LeftHand);
 
-        hero.WeaponDamage(weapon, false, false, monster, Vector3.zero, Vector3.zero);
+        WeaponTypes weaponType = WeaponTypes.Melee;
+        if (weapon != null)
+            weaponType = ItemUtils.ConvertItemToAPIWeaponType(weapon);
+
+        if (weaponType != WeaponTypes.Bow)
+            hero.MeleeDamage(weapon);
+        else
+        {
+            // Missile missile = Instantiate(misslePrefab);
+            // if (missile)
+            // {
+            //     missile.gameObject.SetActive(true);
+            //     // Remove arrow
+            //     // ItemCollection playerItems = playerEntity.Items;
+            //     // DaggerfallUnityItem arrow = playerItems.GetItem(ItemGroups.Weapons, (int)Weapons.Arrow, allowQuestItem: false, priorityToConjured: true);
+            //     // bool isArrowSummoned = arrow.IsSummoned;
+            //     // playerItems.RemoveOne(arrow);
+
+            //     missile.Caster = hero;
+            //     missile.TargetType = TargetTypes.SingleTargetAtRange;
+            //     missile.ElementType = ElementTypes.None;
+            //     missile.IsArrow = true;
+            //     missile.IsArrowSummoned = false; // 非魔法召唤的箭会添加到被攻击方的物品里
+
+            //     hero.lastBowUsed = weapon;
+            // }
+            hero.WeaponDamage(weapon, true, false, monster, Vector3.zero, Vector3.zero);
+        }
+
         heroRender.Attack();
     }
 

@@ -1130,3 +1130,28 @@ public class ItemId
         Gold_pieces = 276,
     }
 }
+
+/// <summary>
+    /// Generic weapon types in Daggerfall.
+    /// </summary>
+    public enum WeaponTypes
+    {
+        None = -1,
+        LongBlade,
+        LongBlade_Magic,
+        Staff,
+        Staff_Magic,
+        Dagger,
+        Dagger_Magic,
+        Mace,
+        Mace_Magic,
+        Flail,
+        Flail_Magic,
+        Warhammer,
+        Warhammer_Magic,
+        Battleaxe,
+        Battleaxe_Magic,
+        Bow,
+        Melee,
+        Werecreature,
+    }
