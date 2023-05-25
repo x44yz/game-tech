@@ -25,3 +25,24 @@ public class Weapon : Item
 		// 	(imbue == Imbue.ACCURACY ? 1.5f : 1.0f);
 	}
 }
+
+public class ShortSword : Weapon
+{
+
+}
+
+public class MissileWeapon : Weapon
+{
+
+}
+
+public class Dart : MissileWeapon
+{
+    public Dart() {
+		quantity = 1;
+	}
+	
+	public Dart( int number ) {
+		quantity = number;
+	}
+}

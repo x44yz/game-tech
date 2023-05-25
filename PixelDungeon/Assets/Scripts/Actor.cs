@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class Actor : MonoBehaviour
 {
-    public int HT;
+    public int HT; // max hp
 	public int HP;
 
     public bool attack( Actor enemy ) {

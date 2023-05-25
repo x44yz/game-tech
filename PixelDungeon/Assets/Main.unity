@@ -939,6 +939,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1164366345}
+  - component: {fileID: 1164366346}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Untagged
@@ -961,6 +962,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+--- !u!114 &1164366346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164366344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5be5012ce9e9404284339d810442dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HT: 0
+  HP: 0
 --- !u!1001 &1241806884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1609,6 +1624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1861473357}
+  - component: {fileID: 1861473358}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -1631,6 +1647,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &1861473358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861473356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0fa69398da1cb64fa2143021fe46c71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HT: 20
+  HP: 20
+  lvl: 1
+  exp: 0
+  awareness: 0.1
+  heroClass: 3
+  subClass: 1
 --- !u!1 &1935380035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,6 +1898,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e554cb0e3011e4699be4b88f112591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hero: {fileID: 1861473358}
+  mob: {fileID: 1164366346}
+  heroLvl: 2
 --- !u!1 &2113002796
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,13 +2,73 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HeroClass
+{
+    NONE,
+    WARRIOR,
+    MAGE,
+    ROGUE,
+    HUNTRESS
+}
+
+public enum HeroSubClass
+{
+    NONE,
+    GLADIATOR,
+    BERSERKER,
+    WARLOCK,
+    BATTLEMAGE,
+    ASSASSIN,
+    FREERUNNER,
+    SNIPER,
+    WARDEN,
+}
+
 public class Hero : Actor
 {
     private int atkVal = 10;
 	private int defVal = 5;
     public int lvl = 1;
 	public int exp = 0;
-    public Weapon handWeapon;
+    public int str = 10;
+    public Weapon weapon;
+    public float awareness = 0.1f;
+    public HeroClass heroClass = HeroClass.ROGUE;
+	public HeroSubClass subClass = HeroSubClass.NONE;
+    public bool weakened;
+	public Armor armor = null;
+	public Ring ring1 = null;
+	public Ring ring2 = null;
+    public Inventory inventory;
+
+    public int STR {
+        set { str = value; }
+        get {
+		    return weakened ? str - 2 : str;
+        }
+	}
+
+    public void Init(int initLvl)
+    {
+        inventory = new Inventory();
+
+        for (int i = this.lvl; i < initLvl; ++i)
+            LevelUp();
+
+        if (heroClass == HeroClass.WARRIOR)
+            initWarrior(this);
+    }
+
+	private static void initWarrior( Hero hero ) {
+		hero.STR = hero.STR + 1;
+		
+		(hero.weapon = new ShortSword()).identify();
+		new Dart( 8 ).identify().collect();
+		
+		// QuickSlot.primaryValue = Dart.class;
+		
+		new PotionOfStrength().setKnown();
+	}
 
     public override int attackSkill( Actor target ) {
 		
@@ -25,12 +85,24 @@ public class Hero : Actor
 		// }
 		
 		// KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
-		if (handWeapon != null) {
-			return (int)(atkVal * accuracy * handWeapon.acuracyFactor( this ));
+		if (weapon != null) {
+			return (int)(atkVal * accuracy * weapon.acuracyFactor( this ));
 		} else {
 			return (int)(defVal * accuracy);
 		}
 	}
+
+    public void LevelUp() {
+        lvl++;
+        HT += 5;
+        HP += 5;			
+        atkVal++;
+        defVal++;
+
+        if (lvl < 10) {
+            updateAwareness();
+        }
+    }
 
 	public void earnExp( int exp ) {
 		
@@ -39,17 +111,9 @@ public class Hero : Actor
 		bool levelUp = false;
 		while (this.exp >= maxExp()) {
 			this.exp -= maxExp();
-			lvl++;
-			
-			HT += 5;
-			HP += 5;			
-			atkVal++;
-			defVal++;
-			
-			if (lvl < 10) {
-				updateAwareness();
-			}
-			
+
+            LevelUp();
+
 			levelUp = true;
 		}
 		
