@@ -10,6 +10,9 @@ using UnityEditor;
 
 public class Actor : MonoBehaviour
 {
+    public int HT;
+	public int HP;
+
     public bool attack( Actor enemy ) {
 		
 		// boolean visibleFight = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];

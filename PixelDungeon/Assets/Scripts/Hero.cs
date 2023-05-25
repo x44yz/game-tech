@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Hero : Actor
 {
-    private int attackSkill = 10;
-	private int defenseSkill = 5;
+    private int atkVal = 10;
+	private int defVal = 5;
     public int lvl = 1;
 	public int exp = 0;
+    public Weapon handWeapon;
 
     public override int attackSkill( Actor target ) {
 		
@@ -23,11 +24,11 @@ public class Hero : Actor
 		// 	accuracy *= 0.5f;
 		// }
 		
-		KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
-		if (wep != null) {
-			return (int)(attackSkill * accuracy * wep.acuracyFactor( this ));
+		// KindOfWeapon wep = rangedWeapon != null ? rangedWeapon : belongings.weapon;
+		if (handWeapon != null) {
+			return (int)(atkVal * accuracy * handWeapon.acuracyFactor( this ));
 		} else {
-			return (int)(attackSkill * accuracy);
+			return (int)(defVal * accuracy);
 		}
 	}
 
@@ -35,15 +36,15 @@ public class Hero : Actor
 		
 		this.exp += exp;
 		
-		boolean levelUp = false;
+		bool levelUp = false;
 		while (this.exp >= maxExp()) {
 			this.exp -= maxExp();
 			lvl++;
 			
 			HT += 5;
 			HP += 5;			
-			attackSkill++;
-			defenseSkill++;
+			atkVal++;
+			defVal++;
 			
 			if (lvl < 10) {
 				updateAwareness();
@@ -54,27 +55,34 @@ public class Hero : Actor
 		
 		if (levelUp) {
 			
-			GLog.p( TXT_NEW_LEVEL, lvl );
-			sprite.showStatus( CharSprite.POSITIVE, TXT_LEVEL_UP );
-			Sample.INSTANCE.play( Assets.SND_LEVELUP );
+			// GLog.p( TXT_NEW_LEVEL, lvl );
+			// sprite.showStatus( CharSprite.POSITIVE, TXT_LEVEL_UP );
+			// Sample.INSTANCE.play( Assets.SND_LEVELUP );
 			
-			Badges.validateLevelReached();
+			// Badges.validateLevelReached();
 		}
 		
-		if (subClass == HeroSubClass.WARLOCK) {
+		// if (subClass == HeroSubClass.WARLOCK) {
 			
-			int value = Math.min( HT - HP, 1 + (Dungeon.depth - 1) / 5 );
-			if (value > 0) {
-				HP += value;
-				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
-			}
+		// 	int value = Math.min( HT - HP, 1 + (Dungeon.depth - 1) / 5 );
+		// 	if (value > 0) {
+		// 		HP += value;
+		// 		sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
+		// 	}
 			
-			((Hunger)buff( Hunger.class )).satisfy( 10 );
-		}
+		// 	((Hunger)buff( Hunger.class )).satisfy( 10 );
+		// }
 	}
 	
 	public int maxExp() {
 		return 5 + lvl * 5;
 	}
 	
+	void updateAwareness() {
+		// awareness = (float)(1 - Math.pow( 
+		// 	(heroClass == HeroClass.ROGUE ? 0.85 : 0.90), 
+		// 	(1 + Math.min( lvl,  9 )) * 0.5 
+		// ));
+        throw new System.NotImplementedException();
+	}
 }
