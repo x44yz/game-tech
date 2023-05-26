@@ -12,26 +12,35 @@ public class Actor : MonoBehaviour
 {
     public int HT; // max hp
 	public int HP;
+    public int atkVal;
+	public int defVal;
+
+	public bool paralysed	= false; // 不能行动的
+	public bool rooted		= false;
+	public bool flying		= false;	
 
     public bool attack( Actor enemy ) {
 		
 		// boolean visibleFight = Dungeon.visible[pos] || Dungeon.visible[enemy.pos];
 		
 		if (hit( this, enemy, false )) {
+			Debug.Log("xx-- success attack");
 			
 			// if (visibleFight) {
 			// 	GLog.i( TXT_HIT, name, enemy.name );
 			// }
 			
-			// // FIXME
-			// int dr = this instanceof Hero && ((Hero)this).rangedWeapon != null && ((Hero)this).subClass == HeroSubClass.SNIPER ? 0 :
-			// 	Random.IntRange( 0, enemy.dr() );
+			// FIXME
+			// 伤害减免
+			int dr = Random.IntRange( 0, enemy.dr() );
+			// if (this is Hero && ((Hero)this).rangedWeapon != null && ((Hero)this).subClass == HeroSubClass.SNIPER ? 0 :
+				// Random.IntRange( 0, enemy.dr() );
 			
-			// int dmg = damageRoll();
-			// int effectiveDamage = Math.max( dmg - dr, 0 );
+			int dmg = damageRoll();
+			int effectiveDamage = Mathf.Max( dmg - dr, 0 );
 			
-			// effectiveDamage = attackProc( enemy, effectiveDamage );
-			// effectiveDamage = enemy.defenseProc( this, effectiveDamage );
+			effectiveDamage = attackProc( enemy, effectiveDamage );
+			effectiveDamage = enemy.defenseProc( this, effectiveDamage );
 			// enemy.damage( effectiveDamage, this );
 			
 			// if (visibleFight) {
@@ -76,6 +85,7 @@ public class Actor : MonoBehaviour
 			return true;
 			
 		} else {
+			Debug.Log("xx-- attack miss");
 			
 			// if (visibleFight) {
 			// 	String defense = enemy.defenseVerb();
@@ -90,7 +100,6 @@ public class Actor : MonoBehaviour
 			// }
 			
 			return false;
-			
 		}
 	}
 
@@ -106,6 +115,22 @@ public class Actor : MonoBehaviour
 	
 	public virtual int defenseSkill( Actor enemy ) {
 		return 0;
+	}
+
+	public virtual int dr(){
+		return 0;
+	}
+
+	public virtual int damageRoll() {
+		return 1;
+	}
+
+	public virtual int attackProc( Actor enemy, int damage ) {
+		return damage;
+	}
+	
+	public virtual int defenseProc( Actor enemy, int damage ) {
+		return damage;
 	}
 }
 

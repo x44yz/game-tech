@@ -976,6 +976,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HT: 0
   HP: 0
+  atkVal: 0
+  defVal: 0
+  paralysed: 0
+  rooted: 0
+  flying: 0
+  mobId: 0
+  EXP: 1
+  maxLvl: 30
+  enemySeen: 1
 --- !u!1001 &1241806884
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1661,11 +1670,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HT: 20
   HP: 20
+  atkVal: 10
+  defVal: 5
+  paralysed: 0
+  rooted: 0
+  flying: 0
   lvl: 1
   exp: 0
+  str: 10
   awareness: 0.1
   heroClass: 3
   subClass: 1
+  weakened: 0
 --- !u!1 &1935380035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1901,6 +1917,7 @@ MonoBehaviour:
   hero: {fileID: 1861473358}
   mob: {fileID: 1164366346}
   heroLvl: 2
+  mobId: 2
 --- !u!1 &2113002796
 GameObject:
   m_ObjectHideFlags: 0

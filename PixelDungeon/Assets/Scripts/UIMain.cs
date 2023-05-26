@@ -22,7 +22,7 @@ public class UIMain : MonoBehaviour
     {
         panelHUD.Get<Button>("BtnHeroAttack").onClick.AddListener(()=>{
             Debug.Log("xx-- Hero Attack");
-            // Main.Inst.HeroAttack();
+            Main.Inst.hero.attack(Main.Inst.mob);
         });
         panelHUD.Get<Button>("BtnHeroSpell").onClick.AddListener(()=>{
             Debug.Log("xx-- Hero Spell");

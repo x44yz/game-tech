@@ -29,7 +29,11 @@ public class Item
 
 public class Armor
 {
-
+    public int STR;
+    public int DR()
+    {
+        return 0;
+    }
 }
 
 public class Ring
