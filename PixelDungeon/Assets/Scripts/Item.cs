@@ -34,6 +34,25 @@ public class Armor
     {
         return 0;
     }
+
+	public int proc( Actor attacker, Actor defender, int damage ) {
+		
+		// if (glyph != null) {
+		// 	damage = glyph.proc( this, attacker, defender, damage );
+		// }
+		
+		// if (!levelKnown) {
+		// 	if (--hitsToKnow <= 0) {
+		// 		levelKnown = true;
+		// 		GLog.w( TXT_IDENTIFY, name(), toString() );
+		// 		Badges.validateItemLevelAquired( this );
+		// 	}
+		// }
+		
+		// use();
+		
+		return damage;
+	}
 }
 
 public class Ring

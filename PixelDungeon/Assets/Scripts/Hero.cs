@@ -244,22 +244,22 @@ public class Hero : Actor
 	}
 
 	public override int defenseProc( Actor enemy, int damage ) {
+	
+		// RingOfThorns.Thorns thorns = buff( RingOfThorns.Thorns.class ); 
+		// if (thorns != null) {
+		// 	int dmg = Random.IntRange( 0, damage );
+		// 	if (dmg > 0) {
+		// 		enemy.damage( dmg, thorns );
+		// 	}
+		// }
 		
-		RingOfThorns.Thorns thorns = buff( RingOfThorns.Thorns.class ); 
-		if (thorns != null) {
-			int dmg = Random.IntRange( 0, damage );
-			if (dmg > 0) {
-				enemy.damage( dmg, thorns );
-			}
-		}
+		// Earthroot.Armor armor = buff( Earthroot.Armor.class );
+		// if (armor != null) {
+		// 	damage = armor.absorb( damage );
+		// }
 		
-		Earthroot.Armor armor = buff( Earthroot.Armor.class );
 		if (armor != null) {
-			damage = armor.absorb( damage );
-		}
-		
-		if (belongings.armor != null) {
-			damage = belongings.armor.proc( enemy, this, damage );
+			damage = armor.proc( enemy, this, damage );
 		}
 		
 		return damage;
