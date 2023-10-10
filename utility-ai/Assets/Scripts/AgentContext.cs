@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AgentContext : IContext
+public class AgentContext : MonoBehaviour, IContext
 {
     public Agent agent;
-    public Vector3? moveTarget;
-    public Vector3 pos => agent.transform.position;
+    // public Vector3? moveTarget;
+    // public Vector3 pos => agent.transform.position;
 
-    public float GetConsiderationVal(string key)
+    public float GetCurTimeNOR()
     {
-        if (key == "IsAtHome")
-        {
+        float t = TimeSystem.Inst.daySecs / TimeSystem.ONEDAY_SECONDS;
+        return Mathf.Clamp01(t);
+    }
 
-        }
-        return 0f;
+    public float GetStatNOR(Stat s)
+    {
+        var v = agent.GetStat(s);
+        var max = agent.GetStatMax(s);
+        return Mathf.Clamp01(v / max);
     }
 }

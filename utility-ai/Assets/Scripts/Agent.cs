@@ -2,29 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// agent.SetVoidActionDelegate("Sleep", Sleep);
-// agent.SetVoidActionDelegate("Shower", Shower);
-// agent.SetVoidActionDelegate("Eat at Restaurant", EatAtRestaurant);
-// agent.SetVoidActionDelegate("Eat at Home", EatAtHome);
-// agent.SetVoidActionDelegate("Watch Movie", WatchMovie);
-// agent.SetVoidActionDelegate("Get Groceries", GetGroceries);
-// agent.SetVoidActionDelegate("Drink Coffee", DrinkCoffee);
-// agent.SetVoidActionDelegate("Work", Work);
-// agent.SetVoidActionDelegate("Work at Home", WorkAtHome);
+public enum Stat
+{
+    NONE = -1,
+    ENERGY = 0,
+    HUNGER = 1,
+    MONEY = 2,
+    COUNT,
+}
 
 public class Agent : MonoBehaviour, IAIAgent
 {
     public UtilityAI utilityAI;
     public AgentContext context;
 
-    private void Update() 
+    [Header("RUNTIME")]
+    public float[] stats;
+    public Action curAction;
+
+    private void Start()
+    {
+        stats = new float[(int)Stat.COUNT];
+    }
+
+    private void Update()
     {
         float dt = Time.deltaTime;
-        utilityAI.Tick(dt);
+        utilityAI.Tick(context, dt);
+        curAction = utilityAI.CurAction;
     }
 
     public IContext Context()
     {
         return context;
+    }
+
+    public float GetStat(Stat s)
+    {
+        return stats[(int)s];
+    }
+
+    public float GetStatMax(Stat s)
+    {
+        return 100f;
     }
 }

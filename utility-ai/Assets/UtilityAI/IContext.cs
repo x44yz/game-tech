@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IContext
 {
-    float GetConsiderationVal(string key);
+    // float GetConsiderationVal(string key);
 }

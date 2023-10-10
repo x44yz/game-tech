@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b9545ae8e16f046b20a3b0cd0b762d, type: 3}
+  m_Name: AEatAtDiner
+  m_EditorClassIdentifier: 
+  preconditions: []
+  considerations:
+  - {fileID: 11400000, guid: 2109dc4bc3283fc429082b91fe830625, type: 2}
+  - {fileID: 11400000, guid: 22fc112773bea4242933309f106ccd7b, type: 2}
+  - {fileID: 11400000, guid: e044b49d5132fa64ba5c62887f8127dc, type: 2}
+  weight: 1

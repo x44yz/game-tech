@@ -9,8 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98987ac1364d61a40859f397e097e773, type: 3}
-  m_Name: MoveToHome
+  m_Script: {fileID: 11500000, guid: 243cfadb7898d2445929b5ac4adeee91, type: 3}
+  m_Name: AWork
   m_EditorClassIdentifier: 
-  considerations: []
+  preconditions: []
+  considerations:
+  - {fileID: 11400000, guid: cd61c6e53eb497a4ebe6b990e65912d7, type: 2}
   weight: 1
