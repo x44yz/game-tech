@@ -1,8 +1,7 @@
-# game-tech
-game tech
-
+## PROJECT
 | project | status<br>+:todo<br>*:deving<br>x:done | env | desc
 |-----|----|----|----|
+|utility-ai|*|unity|
 |Ability|+| unity |
 |AStar|x| unity |
 |CollisionAvoidance|x|unity|
@@ -21,8 +20,8 @@ game tech
 |Daggerfall|x|unity|
 |PixelDungeon|*|unity|
 
-TODO:  
-[+]DevAssist  
-[+]ConfigHotSync  
-[+]AI Planner  
-[+]AI Perception System  
+## TODO
+* DevAssist  
+* ConfigHotSync  
+* AI Planner  
+* AI Perception System  
