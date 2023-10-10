@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de07845da4af2e04bb78576a96e9207f, type: 3}
   m_Name: Test AI
   m_EditorClassIdentifier: 
-  selectInterval: 0
+  selectInterval: 1
   actions:
   - {fileID: 11400000, guid: bfbd99c96175c5144ab777e82242953f, type: 2}
   - {fileID: 11400000, guid: 876c797844a0b9f4cb4d784e3a998aa8, type: 2}
   - {fileID: 11400000, guid: 2cbc1dbdee39cae42a719e9f0ac2ad0b, type: 2}
-  curAction: {fileID: 0}
-  tick: 1.458567
+  curAction: {fileID: 11400000, guid: bfbd99c96175c5144ab777e82242953f, type: 2}
+  tick: 346.73453

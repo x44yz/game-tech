@@ -11,9 +11,9 @@ public enum Stat
     COUNT,
 }
 
-public class Agent : MonoBehaviour, IAIAgent
+public class Agent : MonoBehaviour, IAgentAIOwner
 {
-    public UtilityAI utilityAI;
+    public AgentAI ai;
     public AgentContext context;
 
     [Header("RUNTIME")]
@@ -28,13 +28,18 @@ public class Agent : MonoBehaviour, IAIAgent
     private void Update()
     {
         float dt = Time.deltaTime;
-        utilityAI.Tick(context, dt);
-        curAction = utilityAI.CurAction;
+        ai.Tick(context, dt);
+        curAction = ai.CurAction;
     }
 
-    public IContext Context()
+    public IContext GetContext()
     {
         return context;
+    }
+
+    public AgentAI GetAgentAI()
+    {
+        return ai;
     }
 
     public float GetStat(Stat s)
