@@ -4,48 +4,52 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class WidgetAction : MonoBehaviour
+namespace AI.Utility
 {
-    public TMP_Text txtName;
-    public TMP_Text txtScore;
-    public Button btn;
-
-    private Action action;
-    public System.Action<WidgetAction, Action> onWidgetClick;
-    public System.Action<WidgetAction> onWidgetRefresh;
-
-    private void Start()
+    public class WidgetAction : MonoBehaviour
     {
-        btn.onClick.AddListener(()=>{
-            onWidgetClick?.Invoke(this, action);
-        });
-    }
+        public TMP_Text txtName;
+        public TMP_Text txtScore;
+        public Button btn;
 
-    public void Show(Action act)
-    {
-        gameObject.SetActive(true);
+        private Action action;
+        public System.Action<WidgetAction, Action> onWidgetClick;
+        public System.Action<WidgetAction> onWidgetRefresh;
 
-        this.action = act;
-        act.onScoreChanged += OnActionScoreChanged;
-
-        txtName.text = act.name;
-        txtScore.text = act.CurScore.ToString("F2");
-    }
-
-    public void Hide()
-    {
-        if (action != null)
+        private void Start()
         {
-            action.onScoreChanged -= OnActionScoreChanged;
-            action = null;
+            btn.onClick.AddListener(() =>
+            {
+                onWidgetClick?.Invoke(this, action);
+            });
         }
 
-        gameObject.SetActive(false);
-    }
+        public void Show(Action act)
+        {
+            gameObject.SetActive(true);
 
-    private void OnActionScoreChanged(float v)
-    {
-        txtScore.text = v.ToString("F2");
-        onWidgetRefresh?.Invoke(this);
+            this.action = act;
+            act.onScoreChanged += OnActionScoreChanged;
+
+            txtName.text = act.name;
+            txtScore.text = act.CurScore.ToString("F2");
+        }
+
+        public void Hide()
+        {
+            if (action != null)
+            {
+                action.onScoreChanged -= OnActionScoreChanged;
+                action = null;
+            }
+
+            gameObject.SetActive(false);
+        }
+
+        private void OnActionScoreChanged(float v)
+        {
+            txtScore.text = v.ToString("F2");
+            onWidgetRefresh?.Invoke(this);
+        }
     }
 }

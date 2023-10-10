@@ -1,61 +1,64 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PanelActions : MonoBehaviour
+namespace AI.Utility
 {
-    public WidgetAction tmpWidgetAction;
-
-    private UtilityAIMonitor monitor;
-    private WidgetAction selectedWidgetAction;
-
-    public void Init(UtilityAIMonitor monitor)
+    public class PanelActions : MonoBehaviour
     {
-        this.monitor = monitor;
-        selectedWidgetAction = null;
-        tmpWidgetAction.Hide();
-    }
+        public WidgetAction tmpWidgetAction;
 
-    public void Show(AgentAI ai)
-    {
-        gameObject.SetActive(true);
+        private UtilityAIMonitor monitor;
+        private WidgetAction selectedWidgetAction;
 
-        UIUtils.HandleListAllWidgets<WidgetAction>(tmpWidgetAction, (wgt) => {
-            wgt.Hide();
-        });
-
-        if (ai.actions == null)
-            return;
-
-        for (int i = 0; i < ai.actions.Length; ++i)
+        public void Init(UtilityAIMonitor monitor)
         {
-            var act = ai.actions[i];
-            var wgt = UIUtils.GetListValidWidget<WidgetAction>(i, tmpWidgetAction);
-            wgt.Show(act);
-            wgt.onWidgetClick = OnWidgetActionClick;
-            wgt.onWidgetRefresh = OnWidgetActionRefresh;
+            this.monitor = monitor;
+            selectedWidgetAction = null;
+            tmpWidgetAction.Hide();
         }
-    }
 
-    public void Hide()
-    {
-        UIUtils.HandleListAllWidgets<WidgetAction>(tmpWidgetAction, (wgt) => {
-            wgt.Hide();
-        });
+        public void Show(AgentAI ai)
+        {
+            gameObject.SetActive(true);
 
-        gameObject.SetActive(false);
-    }
+            UIUtils.HandleListAllWidgets<WidgetAction>(tmpWidgetAction, (wgt) =>
+            {
+                wgt.Hide();
+            });
 
-    private void OnWidgetActionClick(WidgetAction wgt, Action act)
-    {
-        selectedWidgetAction = wgt;
-        monitor.panelConsiderations.Show(act);
-    }
+            if (ai.actions == null)
+                return;
 
-    private void OnWidgetActionRefresh(WidgetAction wgt)
-    {
-        if (wgt != selectedWidgetAction)
-            return;
-        monitor.panelConsiderations.Refresh();
+            for (int i = 0; i < ai.actions.Length; ++i)
+            {
+                var act = ai.actions[i];
+                var wgt = UIUtils.GetListValidWidget<WidgetAction>(i, tmpWidgetAction);
+                wgt.Show(act);
+                wgt.onWidgetClick = OnWidgetActionClick;
+                wgt.onWidgetRefresh = OnWidgetActionRefresh;
+            }
+        }
+
+        public void Hide()
+        {
+            UIUtils.HandleListAllWidgets<WidgetAction>(tmpWidgetAction, (wgt) =>
+            {
+                wgt.Hide();
+            });
+
+            gameObject.SetActive(false);
+        }
+
+        private void OnWidgetActionClick(WidgetAction wgt, Action act)
+        {
+            selectedWidgetAction = wgt;
+            monitor.panelConsiderations.Show(act);
+        }
+
+        private void OnWidgetActionRefresh(WidgetAction wgt)
+        {
+            if (wgt != selectedWidgetAction)
+                return;
+            monitor.panelConsiderations.Refresh();
+        }
     }
 }

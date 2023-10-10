@@ -3,37 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class WidgetConsideration : MonoBehaviour
+namespace AI.Utility
 {
-    public TMP_Text txtName;
-    public TMP_Text txtScore;
-
-    private Action action;
-    private int conIdx;
-
-    public void Show(Action act, int conIdx)
+    public class WidgetConsideration : MonoBehaviour
     {
-        gameObject.SetActive(true);
+        public TMP_Text txtName;
+        public TMP_Text txtScore;
 
-        this.action = act;
-        this.conIdx = conIdx;
+        private Action action;
+        private int conIdx;
 
-        var con = act.considerations[conIdx];
-        txtName.text = con.name;
-        txtScore.text = act.GetConsiderationScore(conIdx).ToString("F2");
-    }
+        public void Show(Action act, int conIdx)
+        {
+            gameObject.SetActive(true);
 
-    public void Hide()
-    {
-        action = null;
-        gameObject.SetActive(false);
-    }
+            this.action = act;
+            this.conIdx = conIdx;
 
-    public void Refresh()
-    {
-        if (gameObject.activeSelf == false || action == null)
-            return;
+            var con = act.considerations[conIdx];
+            txtName.text = con.name;
+            txtScore.text = act.GetConsiderationScore(conIdx).ToString("F2");
+        }
 
-        txtScore.text = action.GetConsiderationScore(conIdx).ToString("F2");
+        public void Hide()
+        {
+            action = null;
+            gameObject.SetActive(false);
+        }
+
+        public void Refresh()
+        {
+            if (gameObject.activeSelf == false || action == null)
+                return;
+
+            txtScore.text = action.GetConsiderationScore(conIdx).ToString("F2");
+        }
     }
 }

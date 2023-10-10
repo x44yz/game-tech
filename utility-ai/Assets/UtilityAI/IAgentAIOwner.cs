@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public interface IAgentAIOwner
+namespace AI.Utility
 {
-    IContext GetContext();
-    AgentAI GetAgentAI();
+    public interface IAgentAIOwner
+    {
+        IContext GetContext();
+        AgentAI GetAgentAI();
+    }
 }

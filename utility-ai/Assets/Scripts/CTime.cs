@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AI.Utility;
 
 [CreateAssetMenu(menuName = "AI/C/CTime")]
 public class CTime : Consideration

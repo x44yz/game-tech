@@ -2,53 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PanelConsiderations : MonoBehaviour
+namespace AI.Utility
 {
-    public WidgetConsideration tmpWidgetConsideration;
-
-    private UtilityAIMonitor monitor;
-    private List<WidgetConsideration> widgets = new List<WidgetConsideration>();
-
-    public void Init(UtilityAIMonitor monitor)
+    public class PanelConsiderations : MonoBehaviour
     {
-        this.monitor = monitor;
-        tmpWidgetConsideration.Hide();
-    }
+        public WidgetConsideration tmpWidgetConsideration;
 
-    public void Show(Action act)
-    {
-        gameObject.SetActive(true);
+        private UtilityAIMonitor monitor;
+        private List<WidgetConsideration> widgets = new List<WidgetConsideration>();
 
-        UIUtils.HandleListAllWidgets<WidgetConsideration>(tmpWidgetConsideration, (wgt) => {
-            wgt.Hide();
-        });
-
-        if (act.considerations == null)
-            return;
-
-        widgets.Clear();
-        for (int i = 0; i < act.considerations.Length; ++i)
+        public void Init(UtilityAIMonitor monitor)
         {
-            var wgt = UIUtils.GetListValidWidget<WidgetConsideration>(i, tmpWidgetConsideration);
-            widgets.Add(wgt);
-            wgt.Show(act, i);
+            this.monitor = monitor;
+            tmpWidgetConsideration.Hide();
         }
-    }
 
-    public void Hide()
-    {
-        UIUtils.HandleListAllWidgets<WidgetConsideration>(tmpWidgetConsideration, (wgt) => {
-            wgt.Hide();
-        });
-
-        gameObject.SetActive(false);
-    }
-
-    public void Refresh()
-    {
-        foreach (var wgt in widgets)
+        public void Show(Action act)
         {
-            wgt.Refresh();
+            gameObject.SetActive(true);
+
+            UIUtils.HandleListAllWidgets<WidgetConsideration>(tmpWidgetConsideration, (wgt) =>
+            {
+                wgt.Hide();
+            });
+
+            if (act.considerations == null)
+                return;
+
+            widgets.Clear();
+            for (int i = 0; i < act.considerations.Length; ++i)
+            {
+                var wgt = UIUtils.GetListValidWidget<WidgetConsideration>(i, tmpWidgetConsideration);
+                widgets.Add(wgt);
+                wgt.Show(act, i);
+            }
+        }
+
+        public void Hide()
+        {
+            UIUtils.HandleListAllWidgets<WidgetConsideration>(tmpWidgetConsideration, (wgt) =>
+            {
+                wgt.Hide();
+            });
+
+            gameObject.SetActive(false);
+        }
+
+        public void Refresh()
+        {
+            foreach (var wgt in widgets)
+            {
+                wgt.Refresh();
+            }
         }
     }
 }

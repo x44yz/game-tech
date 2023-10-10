@@ -1,62 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-// namespace AI.Utility
-// {
-[CreateAssetMenu(menuName = "AI/AgentAI")]
-public class AgentAI : ScriptableObject
+namespace AI.Utility
 {
-    public float selectInterval;
-    public Action[] actions;
-
-    [SerializeField] private Action curAction;
-    [SerializeField] private float tick;
-
-    public Action CurAction => curAction;
-
-    public void Tick(IContext ctx, float dt)
+    [CreateAssetMenu(fileName = "AgentAI", menuName = "AI/AgentAI")]
+    public class AgentAI : ScriptableObject
     {
-        if (curAction != null)
-            curAction.Execute(ctx);
+        public float selectInterval;
+        public Action[] actions;
 
-        tick += dt;
-        if (tick < selectInterval)
-            return;
+        [SerializeField] private Action curAction;
+        [SerializeField] private float tick;
 
-        var bestAction = Select(ctx);
-        if (bestAction == curAction)
-            return;
+        public Action CurAction => curAction;
 
-        if (curAction != null)
-            curAction.Exit(ctx);
-        curAction = bestAction;
-        if (curAction != null)
-            curAction.Enter(ctx);
-    }
-
-    private Action Select(IContext ctx)
-    {
-        if (actions == null || actions.Length == 0)
-            return null;
-
-        float bestScore = float.MinValue;
-        Action bestAction = null;
-        for (int i = 0; i < actions.Length; ++i)
+        public void Tick(IContext ctx, float dt)
         {
-            var act = actions[i];
-            if (act.Evaluate(ctx) == false)
-                continue;
+            if (curAction != null)
+                curAction.Execute(ctx);
 
-            float score = act.Score(ctx);
-            if (score > bestScore)
-            {
-                bestScore = score;
-                bestAction = act;
-            }
+            tick += dt;
+            if (tick < selectInterval)
+                return;
+
+            var bestAction = Select(ctx);
+            if (bestAction == curAction)
+                return;
+
+            if (curAction != null)
+                curAction.Exit(ctx);
+            curAction = bestAction;
+            if (curAction != null)
+                curAction.Enter(ctx);
         }
 
-        return bestAction;
+        private Action Select(IContext ctx)
+        {
+            if (actions == null || actions.Length == 0)
+                return null;
+
+            float bestScore = float.MinValue;
+            Action bestAction = null;
+            for (int i = 0; i < actions.Length; ++i)
+            {
+                var act = actions[i];
+                if (act.Evaluate(ctx) == false)
+                    continue;
+
+                float score = act.Score(ctx);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestAction = act;
+                }
+            }
+
+            return bestAction;
+        }
     }
 }
-// }

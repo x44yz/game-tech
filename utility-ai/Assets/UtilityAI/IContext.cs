@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public interface IContext
+namespace AI.Utility
 {
-    // float GetConsiderationVal(string key);
+    public interface IContext
+    {
+    }
 }
