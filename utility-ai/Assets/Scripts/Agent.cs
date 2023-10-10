@@ -12,13 +12,19 @@ using UnityEngine;
 // agent.SetVoidActionDelegate("Work", Work);
 // agent.SetVoidActionDelegate("Work at Home", WorkAtHome);
 
-public class Agent : MonoBehaviour
+public class Agent : MonoBehaviour, IAIAgent
 {
-    public Brain brain;
+    public UtilityAI utilityAI;
+    public AgentContext context;
 
     private void Update() 
     {
         float dt = Time.deltaTime;
-        brain.Tick(dt);
+        utilityAI.Tick(dt);
+    }
+
+    public IContext Context()
+    {
+        return context;
     }
 }

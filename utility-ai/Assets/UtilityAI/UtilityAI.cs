@@ -4,8 +4,11 @@ using UnityEngine;
 
 // namespace AI.Utility
 // {
-    public class Brain : MonoBehaviour
+    [CreateAssetMenu(menuName = "AI/UtilityAI")]
+    public class UtilityAI : ScriptableObject
     {
+        public Action[] actions; 
+
         public void Tick(float dt)
         {
             

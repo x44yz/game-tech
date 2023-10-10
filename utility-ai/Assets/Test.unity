@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 52059574}
   - component: {fileID: 52059573}
-  - component: {fileID: 52059572}
   m_Layer: 0
   m_Name: Actor
   m_TagString: Untagged
@@ -141,18 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &52059572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 52059571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de07845da4af2e04bb78576a96e9207f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &52059573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a93ed94e5aec4d4183c76b87a7128f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brain: {fileID: 0}
+  utilityAI: {fileID: 11400000, guid: 41a462c1962ee5f4ebc5f7a183bd294f, type: 2}
 --- !u!4 &52059574
 Transform:
   m_ObjectHideFlags: 0
