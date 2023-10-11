@@ -1,15 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AI.Utility
 {
     public class PanelConsiderations : MonoBehaviour
     {
         public WidgetConsideration tmpWidgetConsideration;
+        public Button btnClose;
 
         private UtilityAIMonitor monitor;
         private List<WidgetConsideration> widgets = new List<WidgetConsideration>();
+
+        private void Start()
+        {
+            btnClose.onClick.AddListener(()=>{
+                Hide();
+                monitor.panelActions.DeselectWidgetAction();
+            });
+        }
 
         public void Init(UtilityAIMonitor monitor)
         {

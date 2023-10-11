@@ -1,10 +1,17 @@
 ## UtilityAI
-Utility-based AI systems in Unity(test 2020 or later).
+Utility-based AI systems in Unity(test 2020 or later).  
+![preview](./preview.png)
 
 ## FEATURES
 * UtiliyAI Framwork  
 * Test Scene  
 * Monitor  
+
+## HOW-TO-USE
+1. Copy UtilityAI to your project directory. 
+2. Add AgentAI componment to the object which you want AI control. 
+3. Configure AIConfig.  
+4. Add the UtilityAIMonitor Prefab to your project for tracking.  
 
 ## TODO
 * AI Editor  

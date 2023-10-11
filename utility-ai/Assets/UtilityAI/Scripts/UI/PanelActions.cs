@@ -1,13 +1,23 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace AI.Utility
 {
     public class PanelActions : MonoBehaviour
     {
         public WidgetAction tmpWidgetAction;
+        public Button btnClose;
 
         private UtilityAIMonitor monitor;
         private WidgetAction selectedWidgetAction;
+
+        private void Start()
+        {
+            btnClose.onClick.AddListener(()=>{
+                Hide();
+                monitor.panelAgents.DeselectWidgetAgent();
+            });
+        }
 
         public void Init(UtilityAIMonitor monitor)
         {
@@ -40,21 +50,19 @@ namespace AI.Utility
 
         public void Hide()
         {
+            monitor.panelConsiderations.Hide();
             UIUtils.HandleListAllWidgets<WidgetAction>(tmpWidgetAction, (wgt) =>
             {
                 wgt.Hide();
             });
 
-            if (selectedWidgetAction != null)
-                selectedWidgetAction.Deselect();
-            selectedWidgetAction = null;
+            DeselectWidgetAction();
             gameObject.SetActive(false);
         }
 
         private void OnWidgetActionClick(WidgetAction wgt, Action act)
         {
-            if (selectedWidgetAction != null)
-                selectedWidgetAction.Deselect();
+            DeselectWidgetAction();
             selectedWidgetAction = wgt;
             selectedWidgetAction.Select();
             monitor.panelConsiderations.Show(act);
@@ -65,6 +73,13 @@ namespace AI.Utility
             if (wgt != selectedWidgetAction)
                 return;
             monitor.panelConsiderations.Refresh();
+        }
+
+        public void DeselectWidgetAction()
+        {
+            if (selectedWidgetAction != null)
+                selectedWidgetAction.Deselect();
+            selectedWidgetAction = null;
         }
     }
 }
