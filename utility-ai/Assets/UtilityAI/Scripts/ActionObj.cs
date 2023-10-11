@@ -85,7 +85,7 @@ namespace AI.Utility
             for (int i = 0; i < considerations.Length; i++)
             {
                 var con = considerations[i];
-                float s = con.Score(ctx) * con.weight / conTotalWeight;
+                float s = con.Score(ctx) * con.weight; // / conTotalWeight;
                 // Debug.Log($"xx-- {name} - {i}/{considerations.Length}");
                 conScores[i] = s;
 

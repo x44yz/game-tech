@@ -9,6 +9,7 @@ public enum PointType
     HOME,
     OFFICE,
     DINER,
+    PUB,
 }
 
 public class Point : MonoBehaviour
