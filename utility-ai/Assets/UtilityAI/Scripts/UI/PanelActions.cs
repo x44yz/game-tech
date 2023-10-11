@@ -26,7 +26,7 @@ namespace AI.Utility
             tmpWidgetAction.Hide();
         }
 
-        public void Show(Action[] actions)
+        public void Show(ActionObj[] actions)
         {
             gameObject.SetActive(true);
 
@@ -60,7 +60,7 @@ namespace AI.Utility
             gameObject.SetActive(false);
         }
 
-        private void OnWidgetActionClick(WidgetAction wgt, Action act)
+        private void OnWidgetActionClick(WidgetAction wgt, ActionObj act)
         {
             DeselectWidgetAction();
             selectedWidgetAction = wgt;

@@ -10,10 +10,10 @@ namespace AI.Utility
         public TMP_Text txtName;
         public TMP_Text txtScore;
 
-        private Action action;
+        private ActionObj action;
         private int conIdx;
 
-        public void Show(Action act, int conIdx)
+        public void Show(ActionObj act, int conIdx)
         {
             gameObject.SetActive(true);
 

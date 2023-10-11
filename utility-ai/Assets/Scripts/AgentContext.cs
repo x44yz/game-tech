@@ -6,8 +6,7 @@ using AI.Utility;
 public class AgentContext : MonoBehaviour, IContext
 {
     public Agent agent;
-    // public Vector3? moveTarget;
-    // public Vector3 pos => agent.transform.position;
+    public float deltaSecs;
 
     public float GetCurTimeNOR()
     {

@@ -155,6 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 52059573}
+  deltaSecs: 0
 --- !u!114 &52059573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -382,7 +383,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeSpd: 360
   txtTime: {fileID: 899903735}
+  timeScale: 5.65
   daySecs: 0
+  deltaSecs: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

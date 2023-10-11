@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI.Utility;
 
-[CreateAssetMenu(menuName = "AI/A/AWork")]
+[CreateAssetMenu(fileName = "AWork", menuName = "AI/A/AWork")]
 public class AWork : Action
 {
-    public override void Execute(IContext ctx, float dt)
-    {
+    public override System.Type ActionObjType() => typeof(AWorkObj);
 
-    }
+    public float energyDrainSpd;
+    public float moneyCollectSpd;
+    public float hungerDrainSpd;
 }

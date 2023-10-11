@@ -15,8 +15,8 @@ namespace AI.Utility
         public Color selectedBgColor;
         public Color normalBgColor;
 
-        private Action action;
-        public System.Action<WidgetAction, Action> onWidgetClick;
+        private ActionObj action;
+        public System.Action<WidgetAction, ActionObj> onWidgetClick;
         public System.Action<WidgetAction> onWidgetRefresh;
 
         private void Start()
@@ -27,7 +27,7 @@ namespace AI.Utility
             });
         }
 
-        public void Show(Action act)
+        public void Show(ActionObj act)
         {
             gameObject.SetActive(true);
 

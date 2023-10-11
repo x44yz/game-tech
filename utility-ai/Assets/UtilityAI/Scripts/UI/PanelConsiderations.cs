@@ -27,7 +27,7 @@ namespace AI.Utility
             tmpWidgetConsideration.Hide();
         }
 
-        public void Show(Action act)
+        public void Show(ActionObj act)
         {
             gameObject.SetActive(true);
 

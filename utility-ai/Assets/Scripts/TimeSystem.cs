@@ -11,9 +11,12 @@ public class TimeSystem : MonoBehaviour
 
     public float timeSpd;
     public TMP_Text txtTime;
+    [Range(0.1f, 10f)]
+    public float timeScale;
     
     [Header("RUNTIME")]
     public float daySecs;
+    public float deltaSecs;
 
     private void Awake()
     {
@@ -23,7 +26,9 @@ public class TimeSystem : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-        daySecs += timeSpd * dt;
+        deltaSecs = timeSpd * timeScale * dt;
+
+        daySecs += deltaSecs;
         if (daySecs > ONEDAY_SECONDS)
             daySecs -= ONEDAY_SECONDS;
 

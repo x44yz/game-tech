@@ -7,3 +7,4 @@
 [x]move to point  
 [+]action done  
 [x]consideration weight  
+[x]splite action & scriptableobject => actionObj

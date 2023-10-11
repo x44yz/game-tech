@@ -27,7 +27,7 @@ public class Agent : MonoBehaviour, IAgentAIOwner
 
     [Header("RUNTIME")]
     public float[] stats;
-    public Action curAction;
+    public ActionObj curAction;
     public Point[] points;
     public Point moveToPoint;
     public Point curAtPoint;
@@ -64,8 +64,12 @@ public class Agent : MonoBehaviour, IAgentAIOwner
     private void Update()
     {
         float dt = Time.deltaTime;
+
+        // update context
+        context.deltaSecs = TimeSystem.Inst.deltaSecs;
+
         ai.Tick(context, dt);
-        curAction = ai.CurAction;
+        curAction = ai.CurActionObj;
 
         if (moveToPoint != null)
         {

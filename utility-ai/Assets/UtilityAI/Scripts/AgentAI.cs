@@ -8,51 +8,78 @@ namespace AI.Utility
         public AIConfig config;
 
         [Header("RUNTIME")]
-        [SerializeField] private Action curAction;
+        public ActionObj[] actionObjs;
+        public ActionObj curActionObj;
         [SerializeField] private float tick;
+        [SerializeField] private bool bInited;
 
-        public delegate void actionChangedDelegate(Action act);
+        public delegate void actionChangedDelegate(ActionObj act);
         public actionChangedDelegate onActionChanged;
 
-        public Action CurAction => curAction;
+        public ActionObj CurActionObj => curActionObj;
+
+        public void Init()
+        {
+            if (bInited)
+                return;
+            bInited = true;
+
+            actionObjs = new ActionObj[config.actions.Length];
+            for (int i  = 0; i < actionObjs.Length; ++i)
+            {
+                var actionCfg = config.actions[i];
+                actionObjs[i] = (ActionObj)gameObject.AddComponent(actionCfg.ActionObjType());
+                actionObjs[i].Init(actionCfg);
+            }
+        }
 
         public void Tick(IContext ctx, float dt)
         {
             if (config == null)
                 return;
+
+            if (!bInited)
+            {
+                Init();
+            }
                 
-            if (curAction != null)
-                curAction.Execute(ctx, dt);
+            if (curActionObj != null)
+                curActionObj.Execute(ctx, dt);
 
             tick += dt;
             if (tick < selectInterval)
                 return;
 
             var bestAction = Select(ctx);
-            if (bestAction == curAction)
+            if (bestAction == curActionObj)
                 return;
 
-            if (curAction != null)
-                curAction.Exit(ctx);
-            curAction = bestAction;
-            if (curAction != null)
-                curAction.Enter(ctx);
+            if (curActionObj != null)
+            {
+                curActionObj.Exit(ctx);
+                Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.name}");
+            }
+            curActionObj = bestAction;
+            if (curActionObj != null)
+            {
+                curActionObj.Enter(ctx);
+                Debug.Log($"[UTILITY_AI]{name} enter action > {curActionObj.name}");
+            }
 
             if (onActionChanged != null)
-                onActionChanged.Invoke(curAction);
+                onActionChanged.Invoke(curActionObj);
         }
 
-        private Action Select(IContext ctx)
+        private ActionObj Select(IContext ctx)
         {
-            if (config == null || config.actions == null || 
-                config.actions.Length == 0)
+            if (actionObjs == null || actionObjs.Length == 0)
                 return null;
 
             float bestScore = float.MinValue;
-            Action bestAction = null;
-            for (int i = 0; i < config.actions.Length; ++i)
+            ActionObj bestAction = null;
+            for (int i = 0; i < actionObjs.Length; ++i)
             {
-                var act = config.actions[i];
+                var act = actionObjs[i];
                 if (act.Evaluate(ctx) == false)
                     continue;
 

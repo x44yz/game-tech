@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6adfe85cdef60274f9ceec5d11f71255, type: 3}
-  m_Name: ASleep
+  m_Script: {fileID: 11500000, guid: 1bf4578dcff00494b91867b2a540bfee, type: 3}
+  m_Name: AWork
   m_EditorClassIdentifier: 
   preconditions: []
   considerations:
-  - {fileID: 11400000, guid: 5c535aa08fa9b954d9a0c40c80f707a7, type: 2}
-  - {fileID: 11400000, guid: f372ad8435be7f84e9636cac9fcb9e82, type: 2}
-  weight: 1
-  energyRecoverSpd: 1
+  - {fileID: 11400000, guid: cd61c6e53eb497a4ebe6b990e65912d7, type: 2}
+  energyDrainSpd: -1
+  moneyCollectSpd: 1
+  hungerDrainSpd: -1

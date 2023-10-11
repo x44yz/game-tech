@@ -9,12 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83b9545ae8e16f046b20a3b0cd0b762d, type: 3}
+  m_Script: {fileID: 11500000, guid: 642f6cffaf175824a8d2d02b2d9c39be, type: 3}
   m_Name: AEatAtHome
   m_EditorClassIdentifier: 
   preconditions: []
   considerations:
   - {fileID: 11400000, guid: 8205033c733f4ec4cadacc138d8e100f, type: 2}
-  - {fileID: 11400000, guid: 49d6095c9ec79b3478805318a40c3514, type: 2}
   - {fileID: 11400000, guid: e9c15a785242f6546835859b0b66ec6f, type: 2}
-  weight: 1
+  - {fileID: 11400000, guid: 49d6095c9ec79b3478805318a40c3514, type: 2}
+  hungerRecoverSpd: 1
+  moneyCost: -4

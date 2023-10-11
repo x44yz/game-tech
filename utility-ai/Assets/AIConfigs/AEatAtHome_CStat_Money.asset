@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a18eeb88bebede4f913dbb87eeb7ea7, type: 3}
   m_Name: AEatAtHome_CStat_Money
   m_EditorClassIdentifier: 
+  weight: 0.2
   stat: 2
   curve:
     serializedVersion: 2
