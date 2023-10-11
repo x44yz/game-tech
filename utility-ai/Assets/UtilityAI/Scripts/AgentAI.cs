@@ -22,7 +22,7 @@ namespace AI.Utility
                 return;
                 
             if (curAction != null)
-                curAction.Execute(ctx);
+                curAction.Execute(ctx, dt);
 
             tick += dt;
             if (tick < selectInterval)

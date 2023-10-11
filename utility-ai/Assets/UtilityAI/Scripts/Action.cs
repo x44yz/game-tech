@@ -6,7 +6,6 @@ namespace AI.Utility
     {
         public Precondition[] preconditions;
         public Consideration[] considerations;
-        public float weight = 1f; // 权重
 
         public delegate void scoreChangedDelegate(float v);
         public scoreChangedDelegate onScoreChanged;
@@ -38,15 +37,16 @@ namespace AI.Utility
             float score = 0.0f;
             for (int i = 0; i < considerations.Length; i++)
             {
-                float s = considerations[i].Score(ctx);
+                var con = considerations[i];
+                float s = con.Score(ctx) * con.weight;
                 // Debug.Log($"xx-- {name} - {i}/{considerations.Length}");
                 conScores[i] = s;
 
                 score += s;
             }
 
-            // 平均
-            score = score / considerations.Length * weight;
+            // average
+            score = score / considerations.Length;
             CurScore = score;
 
             if (onScoreChanged != null)
@@ -64,7 +64,7 @@ namespace AI.Utility
         public virtual void Enter(IContext ctx)
         {
         }
-        public virtual void Execute(IContext ctx)
+        public virtual void Execute(IContext ctx, float dt)
         {
         }
         public virtual void Exit(IContext ctx)

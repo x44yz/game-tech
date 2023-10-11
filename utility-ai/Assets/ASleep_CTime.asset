@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e5999e4338201741872c4aa30c28ba9, type: 3}
   m_Name: ASleep_CTime
   m_EditorClassIdentifier: 
+  weight: 0.8
   curve:
     serializedVersion: 2
     m_Curve:
@@ -24,6 +25,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    - serializedVersion: 3
+      time: 0.073719546
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.1015564
       value: 0.022583008

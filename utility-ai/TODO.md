@@ -4,4 +4,6 @@
 [x]panel considerations close  
 [x]panel actions close  
 [x]monitor button  
-[+]move to point  
+[x]move to point  
+[+]action done  
+[x]consideration weight  

@@ -13,6 +13,7 @@ namespace AI.Utility
         public PanelActions panelActions;
         public PanelConsiderations panelConsiderations;
         public Button btnMonitor;
+        public bool autoShowAgents;
 
         // private void Awake()
         // {
@@ -37,15 +38,19 @@ namespace AI.Utility
 
             btnMonitor.onClick.AddListener(()=>{
                 if (panelAgents.gameObject.activeSelf)
-                {
                     panelAgents.Hide();
-                }
                 else
-                {
-                    var agents = GameObject.FindObjectsOfType<AgentAI>();
-                    panelAgents.Show(agents);
-                }
+                    ShowPanelAgents();
             });
+
+            if (autoShowAgents)
+                ShowPanelAgents();
+        }
+
+        private void ShowPanelAgents()
+        {
+            var agents = GameObject.FindObjectsOfType<AgentAI>();
+            panelAgents.Show(agents);
         }
     }
 }

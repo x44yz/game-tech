@@ -6,7 +6,7 @@ using AI.Utility;
 [CreateAssetMenu(menuName = "AI/A/AEatAtDiner")]
 public class AEatAtDiner : Action
 {
-    public override void Execute(IContext ctx)
+    public override void Execute(IContext ctx, float dt)
     {
 
     }
