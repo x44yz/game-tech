@@ -34,7 +34,7 @@ namespace AI.Utility
             agent.onActionChanged += OnActionChanged;
 
             txtName.text = agent.name;
-            SetAction(agent.CurActionObj);
+            SetAction(agent.curActionObj);
         }
 
         public void Hide()

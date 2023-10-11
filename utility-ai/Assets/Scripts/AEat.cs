@@ -9,6 +9,7 @@ public class AEat : Action
     public override System.Type ActionObjType() => typeof(AEatObj);
 
     public PointType pointType;
-    public float hungerRecoverSpd;
+    public float hungerRecover;
     public float moneyCost;
+    public float minutes;
 }

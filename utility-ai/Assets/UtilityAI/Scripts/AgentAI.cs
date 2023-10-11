@@ -4,25 +4,23 @@ namespace AI.Utility
 {
     public class AgentAI : MonoBehaviour
     {
-        public float selectInterval;
+        // public float selectInterval;
         public AIConfig config;
 
         [Header("RUNTIME")]
         public ActionObj[] actionObjs;
         public ActionObj curActionObj;
         [SerializeField] private float tick;
-        [SerializeField] private bool bInited;
+        [SerializeField] private bool inited;
 
-        public delegate void actionChangedDelegate(ActionObj act);
-        public actionChangedDelegate onActionChanged;
-
-        public ActionObj CurActionObj => curActionObj;
+        public delegate void ActionChangedDelegate(ActionObj act);
+        public ActionChangedDelegate onActionChanged;
 
         public void Init()
         {
-            if (bInited)
+            if (inited)
                 return;
-            bInited = true;
+            inited = true;
 
             actionObjs = new ActionObj[config.actions.Length];
             for (int i  = 0; i < actionObjs.Length; ++i)
@@ -38,17 +36,27 @@ namespace AI.Utility
             if (config == null)
                 return;
 
-            if (!bInited)
+            if (!inited)
             {
                 Init();
             }
                 
             if (curActionObj != null)
-                curActionObj.Execute(ctx, dt);
+            {
+                var status = curActionObj.Execute(ctx, dt);
+                if (status == ActionObj.Status.FINISHED)
+                {
+                    curActionObj.StartCooldown(ctx);
+                    curActionObj.Exit(ctx);
+                    Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.dbgName}");
+                    curActionObj = null;
+                }
+            }
 
-            tick += dt;
-            if (tick < selectInterval)
-                return;
+            // tick += dt;
+            // if (tick < selectInterval)
+            //     return;
+            // tick -= selectInterval;
 
             var bestAction = Select(ctx);
             if (bestAction == curActionObj)
@@ -56,6 +64,7 @@ namespace AI.Utility
 
             if (curActionObj != null)
             {
+                curActionObj.StartCooldown(ctx);
                 curActionObj.Exit(ctx);
                 Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.dbgName}");
             }
@@ -80,6 +89,9 @@ namespace AI.Utility
             for (int i = 0; i < actionObjs.Length; ++i)
             {
                 var act = actionObjs[i];
+                if (act.IsInCooldown(ctx))
+                    continue;
+
                 if (act.Evaluate(ctx) == false)
                     continue;
 

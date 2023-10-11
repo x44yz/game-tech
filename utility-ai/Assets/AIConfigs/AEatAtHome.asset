@@ -17,6 +17,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8205033c733f4ec4cadacc138d8e100f, type: 2}
   - {fileID: 11400000, guid: e9c15a785242f6546835859b0b66ec6f, type: 2}
   - {fileID: 11400000, guid: 49d6095c9ec79b3478805318a40c3514, type: 2}
+  cooldown: 60
   pointType: 0
-  hungerRecoverSpd: -0.0011
-  moneyCost: -4
+  hungerRecover: -30
+  moneyCost: -10
+  minutes: 60

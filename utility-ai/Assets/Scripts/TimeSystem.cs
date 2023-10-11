@@ -6,7 +6,7 @@ using AI.Utility;
 
 public class TimeSystem : MonoBehaviour
 {
-    public const float ONEDAY_SECONDS = 24 * 3600f;
+    public const float ONEDAY_MINUTES = 24 * 60f;
     public static TimeSystem Inst = null;
 
     public float timeSpd;
@@ -15,9 +15,10 @@ public class TimeSystem : MonoBehaviour
     public float timeScale;
     
     [Header("RUNTIME")]
-    public float daySecs;
-    public float deltaSecs;
+    public float dayMins;
+    public float deltaMins;
     public bool paused;
+    public float totalMins;
 
     private void Awake()
     {
@@ -33,14 +34,16 @@ public class TimeSystem : MonoBehaviour
             return;
 
         float dt = Time.deltaTime;
-        deltaSecs = timeSpd * timeScale * dt;
+        deltaMins = timeSpd * timeScale * dt;
 
-        daySecs += deltaSecs;
-        if (daySecs > ONEDAY_SECONDS)
-            daySecs -= ONEDAY_SECONDS;
+        dayMins += deltaMins;
+        totalMins += deltaMins;
 
-        int hour = (int)(daySecs / 3600f);
-        int min = (int)((daySecs - hour * 3600) / 60f);
+        if (dayMins > ONEDAY_MINUTES)
+            dayMins -= ONEDAY_MINUTES;
+
+        int hour = (int)(dayMins / 60f);
+        int min = (int)(dayMins - hour * 60);
         txtTime.text = $"{hour}:{min}";
     }
 }

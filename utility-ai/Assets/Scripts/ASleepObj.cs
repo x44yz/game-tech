@@ -17,13 +17,15 @@ public class ASleepObj : ActionObj
             agent.moveToPoint = agent.GetPoint(PointType.HOME);
     }
 
-    public override void Execute(IContext ctx, float dt)
+    public override Status Execute(IContext ctx, float dt)
     {
         var actx = ctx as AgentContext;
         var agent = actx.agent;
         if (agent.curAtPointType != PointType.HOME)
-            return;
-        agent.ModStat(Stat.ENERGY, energyRecoverSpd * actx.deltaSecs);
-        agent.ModStat(Stat.HUNGER, hungerDrainSpd * actx.deltaSecs);
+            return Status.WAITING;
+
+        agent.ModStat(Stat.ENERGY, energyRecoverSpd * actx.deltaMins);
+        agent.ModStat(Stat.HUNGER, hungerDrainSpd * actx.deltaMins);
+        return Status.EXECUTING;
     }
 }

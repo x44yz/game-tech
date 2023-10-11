@@ -8,6 +8,7 @@ namespace AI.Utility
     {
         public Precondition[] preconditions;
         public Consideration[] considerations;
+        public float cooldown = -1f;
 
         public abstract System.Type ActionObjType();
     }

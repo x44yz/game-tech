@@ -6,11 +6,17 @@ using AI.Utility;
 public class AgentContext : MonoBehaviour, IContext
 {
     public Agent agent;
-    public float deltaSecs;
+    // public float deltaSecs;
+    public float deltaMins;
+
+    public float GetActionCooldownTS()
+    {
+        return TimeSystem.Inst.totalMins;
+    }
 
     public float GetCurTimeNOR()
     {
-        float t = TimeSystem.Inst.daySecs / TimeSystem.ONEDAY_SECONDS;
+        float t = TimeSystem.Inst.dayMins / TimeSystem.ONEDAY_MINUTES;
         return Mathf.Clamp01(t);
     }
 

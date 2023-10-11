@@ -35,7 +35,7 @@ namespace AI.Utility
             act.onScoreChanged += OnActionScoreChanged;
 
             txtName.text = act.dbgName;
-            txtScore.text = act.CurScore.ToString("F2");
+            txtScore.text = act.curScore.ToString("F2");
         }
 
         public void Hide()

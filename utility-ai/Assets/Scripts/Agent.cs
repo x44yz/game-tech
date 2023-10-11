@@ -13,7 +13,7 @@ public enum Stat
     COUNT,
 }
 
-public class Agent : MonoBehaviour, IAgentAIOwner
+public class Agent : MonoBehaviour
 {
     public AgentAI ai;
     public AgentContext context;
@@ -27,7 +27,6 @@ public class Agent : MonoBehaviour, IAgentAIOwner
 
     [Header("RUNTIME")]
     public float[] stats;
-    public ActionObj curAction;
     public Point[] points;
     public Point moveToPoint;
     public Point curAtPoint;
@@ -73,10 +72,9 @@ public class Agent : MonoBehaviour, IAgentAIOwner
             return;
 
         // update context
-        context.deltaSecs = TimeSystem.Inst.deltaSecs;
+        context.deltaMins = TimeSystem.Inst.deltaMins;
 
         ai.Tick(context, dt);
-        curAction = ai.CurActionObj;
 
         if (moveToPoint != null)
         {

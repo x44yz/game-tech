@@ -4,14 +4,21 @@ namespace AI.Utility
 {
     public abstract class ActionObj : MonoBehaviour
     {
-        public delegate void scoreChangedDelegate(float v);
-        public scoreChangedDelegate onScoreChanged;
+        public enum Status
+        {
+            WAITING,
+            EXECUTING,
+            FINISHED,
+        }
+
+        public delegate void ScoreChangedDelegate(float v);
+        public ScoreChangedDelegate onScoreChanged;
 
         public string dbgName => action ? action.name : name;
         public Action action { get; protected set; }
         public Precondition[] preconditions => action.preconditions;
         public Consideration[] considerations => action.considerations;
-        public float CurScore { get; protected set; }
+        public float curScore { get; protected set; }
         private float[] conScores = null;
         private float conTotalWeight;
 
@@ -87,7 +94,7 @@ namespace AI.Utility
 
             // average
             score = score / considerations.Length;
-            CurScore = score;
+            curScore = score;
 
             if (onScoreChanged != null)
                 onScoreChanged.Invoke(score);
@@ -101,11 +108,25 @@ namespace AI.Utility
             return conScores[idx];
         }
 
+        public float cooldownStartTS = float.MinValue;
+        public bool IsInCooldown(IContext ctx)
+        {
+            if (action.cooldown <= 0f)
+                return false;
+            return ctx.GetActionCooldownTS() < cooldownStartTS + action.cooldown;
+        }
+
+        public void StartCooldown(IContext ctx)
+        {
+            cooldownStartTS = ctx.GetActionCooldownTS();
+        }
+
         public virtual void Enter(IContext ctx)
         {
         }
-        public virtual void Execute(IContext ctx, float dt)
+        public virtual Status Execute(IContext ctx, float dt)
         {
+            return Status.EXECUTING;
         }
         public virtual void Exit(IContext ctx)
         {

@@ -18,14 +18,16 @@ public class AWorkObj : ActionObj
             agent.moveToPoint = agent.GetPoint(PointType.OFFICE);
     }
 
-    public override void Execute(IContext ctx, float dt)
+    public override Status Execute(IContext ctx, float dt)
     {
         var actx = ctx as AgentContext;
         var agent = actx.agent;
         if (agent.curAtPointType != PointType.OFFICE)
-            return;
-        agent.ModStat(Stat.ENERGY, energyDrainSpd * actx.deltaSecs);
-        agent.ModStat(Stat.MONEY, moneyCollectSpd * actx.deltaSecs);
-        agent.ModStat(Stat.HUNGER, hungerDrainSpd * actx.deltaSecs);
+            return Status.WAITING;
+
+        agent.ModStat(Stat.ENERGY, energyDrainSpd * actx.deltaMins);
+        agent.ModStat(Stat.MONEY, moneyCollectSpd * actx.deltaMins);
+        agent.ModStat(Stat.HUNGER, hungerDrainSpd * actx.deltaMins);
+        return Status.EXECUTING;
     }
 }
