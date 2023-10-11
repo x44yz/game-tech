@@ -7,6 +7,7 @@ public class ASleepObj : ActionObj
 {
     public ASleep sleep => action as ASleep;
     public float energyRecoverSpd => sleep.energyRecoverSpd;
+    public float hungerDrainSpd => sleep.hungerDrainSpd;
 
     public override void Enter(IContext ctx)
     {
@@ -23,5 +24,6 @@ public class ASleepObj : ActionObj
         if (agent.curAtPointType != PointType.HOME)
             return;
         agent.ModStat(Stat.ENERGY, energyRecoverSpd * actx.deltaSecs);
+        agent.ModStat(Stat.HUNGER, hungerDrainSpd * actx.deltaSecs);
     }
 }

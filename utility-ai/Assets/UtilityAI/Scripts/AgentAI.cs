@@ -57,13 +57,13 @@ namespace AI.Utility
             if (curActionObj != null)
             {
                 curActionObj.Exit(ctx);
-                Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.name}");
+                Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.dbgName}");
             }
             curActionObj = bestAction;
             if (curActionObj != null)
             {
                 curActionObj.Enter(ctx);
-                Debug.Log($"[UTILITY_AI]{name} enter action > {curActionObj.name}");
+                Debug.Log($"[UTILITY_AI]{name} enter action > {curActionObj.dbgName}");
             }
 
             if (onActionChanged != null)

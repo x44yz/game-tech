@@ -59,11 +59,18 @@ public class Agent : MonoBehaviour, IAgentAIOwner
 
         moveToPoint = null;
         curAtPoint = null;
+
+        ai.onActionChanged += (ActionObj obj) =>{
+            TimeSystem.Inst.paused = true;
+        };
     }
 
     private void Update()
     {
         float dt = Time.deltaTime;
+
+        if (TimeSystem.Inst.paused)
+            return;
 
         // update context
         context.deltaSecs = TimeSystem.Inst.deltaSecs;

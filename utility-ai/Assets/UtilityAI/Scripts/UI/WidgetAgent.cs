@@ -66,7 +66,7 @@ namespace AI.Utility
         private void SetAction(ActionObj act)
         {
             if (act != null)
-                txtAction.text = act.name;
+                txtAction.text = act.dbgName;
             else
                 txtAction.text = "null";
         }

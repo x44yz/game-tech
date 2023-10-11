@@ -7,6 +7,7 @@ namespace AI.Utility
         public delegate void scoreChangedDelegate(float v);
         public scoreChangedDelegate onScoreChanged;
 
+        public string dbgName => action ? action.name : name;
         public Action action { get; protected set; }
         public Precondition[] preconditions => action.preconditions;
         public Consideration[] considerations => action.considerations;
@@ -38,6 +39,35 @@ namespace AI.Utility
             }
             return true;
         }
+
+        // public float Score(IContext ctx)
+        // {
+        //     if (considerations == null || considerations.Length == 0)
+        //         return 1;
+
+        //     var totalScore = 1f;
+
+        //     var modificationFactor = 1f - 1f / considerations.Length;
+        //     for (int i = 0; i < considerations.Length; i++)
+        //     {
+        //         var con = considerations[i];
+        //         float score = con.Score(ctx);
+
+        //         var makeUpValue = (1f - score) * modificationFactor;
+        //         score += (makeUpValue * score);
+        //         conScores[i] = score;
+
+        //         totalScore *= score;
+        //         if (totalScore < 0.01f)
+        //             break;
+        //     }
+
+        //     CurScore = totalScore;
+
+        //     if (onScoreChanged != null)
+        //         onScoreChanged.Invoke(totalScore);
+        //     return totalScore;
+        // }
 
         public float Score(IContext ctx)
         {

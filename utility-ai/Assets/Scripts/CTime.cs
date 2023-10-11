@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI.Utility;
 
-[CreateAssetMenu(menuName = "AI/C/CTime")]
+[CreateAssetMenu(fileName = "CTime", menuName = "AI/C/CTime")]
 public class CTime : Consideration
 {
     public AnimationCurve curve;

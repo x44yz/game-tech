@@ -17,6 +17,7 @@ public class TimeSystem : MonoBehaviour
     [Header("RUNTIME")]
     public float daySecs;
     public float deltaSecs;
+    public bool paused;
 
     private void Awake()
     {
@@ -25,6 +26,12 @@ public class TimeSystem : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+            paused = !paused;
+
+        if (paused)
+            return;
+
         float dt = Time.deltaTime;
         deltaSecs = timeSpd * timeScale * dt;
 

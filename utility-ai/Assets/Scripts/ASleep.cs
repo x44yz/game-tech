@@ -9,4 +9,5 @@ public class ASleep : Action
     public override System.Type ActionObjType() => typeof(ASleepObj);
 
     public float energyRecoverSpd;
+    public float hungerDrainSpd;
 }

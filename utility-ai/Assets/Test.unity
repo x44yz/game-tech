@@ -172,7 +172,7 @@ MonoBehaviour:
   context: {fileID: 52059572}
   walkSpd: 10
   initEnergy: 31.4
-  initHunger: 70.5
+  initHunger: 34.5
   initMoney: 26.7
   stats: []
   curAction: {fileID: 0}
@@ -208,8 +208,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectInterval: 1
   config: {fileID: 11400000, guid: c53c695f7d42bf548ba0b3501b6f89a7, type: 2}
-  curAction: {fileID: 0}
+  actionObjs: []
+  curActionObj: {fileID: 0}
   tick: 0
+  bInited: 0
 --- !u!1 &290695620
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +388,7 @@ MonoBehaviour:
   timeScale: 5.65
   daySecs: 0
   deltaSecs: 0
+  paused: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using AI.Utility;
 
-[CreateAssetMenu(menuName = "AI/C/CStat")]
+[CreateAssetMenu(fileName = "CStat", menuName = "AI/C/CStat")]
 public class CStat : Consideration
 {
     public Stat stat;

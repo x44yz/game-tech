@@ -34,7 +34,7 @@ namespace AI.Utility
             this.action = act;
             act.onScoreChanged += OnActionScoreChanged;
 
-            txtName.text = act.name;
+            txtName.text = act.dbgName;
             txtScore.text = act.CurScore.ToString("F2");
         }
 

@@ -13,8 +13,8 @@ public class AEatObj : ActionObj
     {
         var actx = ctx as AgentContext;
         var agent = actx.agent;
-        if (agent.IsAtPoint(PointType.HOME) == false)
-            agent.moveToPoint = agent.GetPoint(PointType.HOME);
+        if (agent.IsAtPoint(eat.pointType) == false)
+            agent.moveToPoint = agent.GetPoint(eat.pointType);
         agent.ModStat(Stat.MONEY, moneyCost);
     }
 
@@ -22,7 +22,7 @@ public class AEatObj : ActionObj
     {
         var actx = ctx as AgentContext;
         var agent = actx.agent;
-        if (agent.curAtPointType != PointType.HOME)
+        if (agent.curAtPointType != eat.pointType)
             return;
         agent.ModStat(Stat.HUNGER, hungerRecoverSpd * actx.deltaSecs);
     }
