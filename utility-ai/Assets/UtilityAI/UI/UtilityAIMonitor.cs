@@ -8,6 +8,7 @@ namespace AI.Utility
     {
         public static UtilityAIMonitor Inst;
 
+        public PanelAgents panelAgents;
         public PanelActions panelActions;
         public PanelConsiderations panelConsiderations;
 
@@ -24,16 +25,17 @@ namespace AI.Utility
 
         private void Start()
         {
+            panelAgents.Init(this);
             panelActions.Init(this);
             panelConsiderations.Init(this);
 
             panelActions.Hide();
             panelConsiderations.Hide();
 
-            var agent = GameObject.FindObjectOfType<Agent>();
-            if (agent != null)
+            var agents = GameObject.FindObjectsOfType<AgentAI>();
+            if (agents != null)
             {
-                panelActions.Show(agent.ai);
+                panelAgents.Show(agents);
             }
         }
     }

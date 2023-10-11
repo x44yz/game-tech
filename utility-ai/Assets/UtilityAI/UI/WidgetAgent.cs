@@ -6,47 +6,51 @@ using UnityEngine.UI;
 
 namespace AI.Utility
 {
-    public class WidgetAction : MonoBehaviour
+    public class WidgetAgent : MonoBehaviour
     {
         public TMP_Text txtName;
-        public TMP_Text txtScore;
+        public TMP_Text txtAction;
         public Button btn;
         public Image imgBG;
         public Color selectedBgColor;
         public Color normalBgColor;
 
-        private Action action;
-        public System.Action<WidgetAction, Action> onWidgetClick;
-        public System.Action<WidgetAction> onWidgetRefresh;
+        private AgentAI agent;
+        public System.Action<WidgetAgent, AgentAI> onWidgetClick;
 
         private void Start()
         {
             btn.onClick.AddListener(() =>
             {
-                onWidgetClick?.Invoke(this, action);
+                onWidgetClick?.Invoke(this, agent);
             });
         }
 
-        public void Show(Action act)
+        public void Show(AgentAI agent)
         {
             gameObject.SetActive(true);
 
-            this.action = act;
-            act.onScoreChanged += OnActionScoreChanged;
+            this.agent = agent;
+            agent.onActionChanged += OnActionChanged;
 
-            txtName.text = act.name;
-            txtScore.text = act.CurScore.ToString("F2");
+            txtName.text = agent.name;
+            SetAction(agent.CurAction);
         }
 
         public void Hide()
         {
-            if (action != null)
+            if (agent != null)
             {
-                action.onScoreChanged -= OnActionScoreChanged;
-                action = null;
+                agent.onActionChanged -= OnActionChanged;
+                agent = null;
             }
 
             gameObject.SetActive(false);
+        }
+
+        private void OnActionChanged(Action act)
+        {
+            SetAction(act);
         }
 
         public void Select()
@@ -59,10 +63,12 @@ namespace AI.Utility
             imgBG.color = normalBgColor;
         }
 
-        private void OnActionScoreChanged(float v)
+        private void SetAction(Action act)
         {
-            txtScore.text = v.ToString("F2");
-            onWidgetRefresh?.Invoke(this);
+            if (act != null)
+                txtAction.text = act.name;
+            else
+                txtAction.text = "null";
         }
     }
 }

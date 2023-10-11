@@ -16,7 +16,7 @@ namespace AI.Utility
             tmpWidgetAction.Hide();
         }
 
-        public void Show(AgentAI ai)
+        public void Show(Action[] actions)
         {
             gameObject.SetActive(true);
 
@@ -25,12 +25,12 @@ namespace AI.Utility
                 wgt.Hide();
             });
 
-            if (ai.actions == null)
+            if (actions == null)
                 return;
 
-            for (int i = 0; i < ai.actions.Length; ++i)
+            for (int i = 0; i < actions.Length; ++i)
             {
-                var act = ai.actions[i];
+                var act = actions[i];
                 var wgt = UIUtils.GetListValidWidget<WidgetAction>(i, tmpWidgetAction);
                 wgt.Show(act);
                 wgt.onWidgetClick = OnWidgetActionClick;
@@ -45,12 +45,18 @@ namespace AI.Utility
                 wgt.Hide();
             });
 
+            if (selectedWidgetAction != null)
+                selectedWidgetAction.Deselect();
+            selectedWidgetAction = null;
             gameObject.SetActive(false);
         }
 
         private void OnWidgetActionClick(WidgetAction wgt, Action act)
         {
+            if (selectedWidgetAction != null)
+                selectedWidgetAction.Deselect();
             selectedWidgetAction = wgt;
+            selectedWidgetAction.Select();
             monitor.panelConsiderations.Show(act);
         }
 

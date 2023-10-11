@@ -8,8 +8,8 @@ namespace AI.Utility
         public Consideration[] considerations;
         public float weight = 1f; // 权重
 
-        public delegate void FloatDelegate(float v);
-        public FloatDelegate onScoreChanged;
+        public delegate void scoreChangedDelegate(float v);
+        public scoreChangedDelegate onScoreChanged;
 
         public float CurScore { get; protected set; }
         private float[] conScores = null;

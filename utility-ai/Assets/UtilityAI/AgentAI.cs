@@ -2,19 +2,25 @@ using UnityEngine;
 
 namespace AI.Utility
 {
-    [CreateAssetMenu(fileName = "AgentAI", menuName = "AI/AgentAI")]
-    public class AgentAI : ScriptableObject
+    public class AgentAI : MonoBehaviour
     {
         public float selectInterval;
-        public Action[] actions;
+        public AIConfig config;
 
+        [Header("RUNTIME")]
         [SerializeField] private Action curAction;
         [SerializeField] private float tick;
+
+        public delegate void actionChangedDelegate(Action act);
+        public actionChangedDelegate onActionChanged;
 
         public Action CurAction => curAction;
 
         public void Tick(IContext ctx, float dt)
         {
+            if (config == null)
+                return;
+                
             if (curAction != null)
                 curAction.Execute(ctx);
 
@@ -31,18 +37,22 @@ namespace AI.Utility
             curAction = bestAction;
             if (curAction != null)
                 curAction.Enter(ctx);
+
+            if (onActionChanged != null)
+                onActionChanged.Invoke(curAction);
         }
 
         private Action Select(IContext ctx)
         {
-            if (actions == null || actions.Length == 0)
+            if (config == null || config.actions == null || 
+                config.actions.Length == 0)
                 return null;
 
             float bestScore = float.MinValue;
             Action bestAction = null;
-            for (int i = 0; i < actions.Length; ++i)
+            for (int i = 0; i < config.actions.Length; ++i)
             {
-                var act = actions[i];
+                var act = config.actions[i];
                 if (act.Evaluate(ctx) == false)
                     continue;
 

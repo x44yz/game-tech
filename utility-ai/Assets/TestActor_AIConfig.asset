@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de07845da4af2e04bb78576a96e9207f, type: 3}
-  m_Name: Test AI
+  m_Script: {fileID: 11500000, guid: f8470be2874e0dc4db9bb14fcb10e977, type: 3}
+  m_Name: TestActor_AIConfig
   m_EditorClassIdentifier: 
-  selectInterval: 1
   actions:
-  - {fileID: 11400000, guid: bfbd99c96175c5144ab777e82242953f, type: 2}
+  - {fileID: 11400000, guid: 2e09b35539ebd4243887757d705476dc, type: 2}
   - {fileID: 11400000, guid: 876c797844a0b9f4cb4d784e3a998aa8, type: 2}
+  - {fileID: 11400000, guid: bfbd99c96175c5144ab777e82242953f, type: 2}
   - {fileID: 11400000, guid: 2cbc1dbdee39cae42a719e9f0ac2ad0b, type: 2}
-  curAction: {fileID: 11400000, guid: bfbd99c96175c5144ab777e82242953f, type: 2}
-  tick: 346.73453
