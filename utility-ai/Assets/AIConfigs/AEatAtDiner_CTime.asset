@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e5999e4338201741872c4aa30c28ba9, type: 3}
   m_Name: AEatAtDiner_CTime
   m_EditorClassIdentifier: 
-  weight: 0.5
+  weight: 0.2
   curve:
     serializedVersion: 2
     m_Curve:
