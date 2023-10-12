@@ -26,11 +26,13 @@ public class ADrinkObj : ActionObj
         if (agent.curAtPointType != PointType.PUB)
             return Status.WAITING;
 
+        agent.ModStat(Stat.MONEY, drink.moneyCostSpd * actx.deltaMins);
+        agent.ModStat(Stat.SOCIAL, drink.socialEarnSpd * actx.deltaMins);
+        agent.ModStat(Stat.MOOD, drink.moodEarnSpd * actx.deltaMins);
+
         tick += actx.deltaMins;
         if (tick >= drink.minutes)
         {
-            agent.ModStat(Stat.HUNGER, eat.hungerRecover);
-            agent.ModStat(Stat.MONEY, eat.moneyCost);
             return Status.FINISHED;
         }
 

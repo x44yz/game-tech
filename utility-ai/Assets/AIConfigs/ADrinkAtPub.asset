@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ca24cb84a8b574daeee51455752af3, type: 3}
+  m_Name: ADrinkAtPub
+  m_EditorClassIdentifier: 
+  preconditions: []
+  considerations:
+  - {fileID: 11400000, guid: 9bff212ac27d3964981ef0d88e562a84, type: 2}
+  - {fileID: 11400000, guid: 1e730d0d41d00204e9c15b75c39ec895, type: 2}
+  - {fileID: 11400000, guid: f073b4316ea31444c922e9ef4a3b60f6, type: 2}
+  cooldown: 60
+  moneyCostSpd: -0.5
+  moodEarnSpd: 0.16
+  socialEarnSpd: 0.11
+  minutes: 120

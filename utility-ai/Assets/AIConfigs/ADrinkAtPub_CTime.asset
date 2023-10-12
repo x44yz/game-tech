@@ -9,11 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a18eeb88bebede4f913dbb87eeb7ea7, type: 3}
-  m_Name: AEatAtHome_CStat_Hunger
+  m_Script: {fileID: 11500000, guid: 2e5999e4338201741872c4aa30c28ba9, type: 3}
+  m_Name: ADrinkAtPub_CTime
   m_EditorClassIdentifier: 
-  weight: 0.7
-  stat: 1
+  weight: 0.2
   curve:
     serializedVersion: 2
     m_Curve:
@@ -21,28 +20,37 @@ MonoBehaviour:
       time: 0
       value: 0
       inSlope: 0
-      outSlope: 0.14437315
-      tangentMode: 65
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.66221756
-      value: 0.09560643
-      inSlope: 0.60298425
-      outSlope: 0.60298425
+      time: 0.8333333
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1344103
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9583333
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      value: 0
+      inSlope: -23.999989
+      outSlope: -23.999989
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

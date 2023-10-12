@@ -1,4 +1,6 @@
-[+]AEatAtHome & AEatAtDiner 如何避免依次执行  
+// 2023年10月12日
+[x]action drink  
+[x]ai logger  
 
 // 2023年10月11日
 [x]panel agents  

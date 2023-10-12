@@ -10,6 +10,8 @@ public enum Stat
     ENERGY = 0,
     HUNGER = 1,
     MONEY = 2,
+    SOCIAL = 3,
+    MOOD = 4,
     COUNT,
 }
 
@@ -24,6 +26,10 @@ public class Agent : MonoBehaviour
     public float initHunger;
     [Range(0, 100)]
     public float initMoney;
+    [Range(0, 100)]
+    public float initSocial;
+    [Range(0, 100)]
+    public float initMood;
 
     [Header("RUNTIME")]
     public float[] stats;
@@ -55,6 +61,8 @@ public class Agent : MonoBehaviour
         ModStat(Stat.ENERGY, initEnergy);
         ModStat(Stat.HUNGER, initHunger);
         ModStat(Stat.MONEY, initMoney);
+        ModStat(Stat.SOCIAL, initSocial);
+        ModStat(Stat.MOOD, initMood);
 
         moveToPoint = null;
         curAtPoint = null;

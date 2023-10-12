@@ -6,6 +6,7 @@ namespace AI.Utility
     {
         // public float selectInterval;
         public AIConfig config;
+        public bool showLog;
 
         [Header("RUNTIME")]
         public ActionObj[] actionObjs;
@@ -26,8 +27,14 @@ namespace AI.Utility
             for (int i  = 0; i < actionObjs.Length; ++i)
             {
                 var actionCfg = config.actions[i];
-                actionObjs[i] = (ActionObj)gameObject.AddComponent(actionCfg.ActionObjType());
-                actionObjs[i].Init(actionCfg);
+                var actionObj = (ActionObj)gameObject.AddComponent(actionCfg.ActionObjType());
+                if (actionObj == null)
+                {
+                    AILogger.LogError($"{config.name} action {i} cant create obj");
+                    continue;
+                }
+                actionObjs[i] = actionObj;
+                actionObj.Init(actionCfg);
             }
         }
 
@@ -48,7 +55,7 @@ namespace AI.Utility
                 {
                     curActionObj.StartCooldown(ctx);
                     curActionObj.Exit(ctx);
-                    Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.dbgName}");
+                    AILogger.Log($"{name} exit action > {curActionObj.dbgName}");
                     curActionObj = null;
                 }
             }
@@ -66,13 +73,13 @@ namespace AI.Utility
             {
                 curActionObj.StartCooldown(ctx);
                 curActionObj.Exit(ctx);
-                Debug.Log($"[UTILITY_AI]{name} exit action > {curActionObj.dbgName}");
+                AILogger.Log($"{name} exit action > {curActionObj.dbgName}");
             }
             curActionObj = bestAction;
             if (curActionObj != null)
             {
                 curActionObj.Enter(ctx);
-                Debug.Log($"[UTILITY_AI]{name} enter action > {curActionObj.dbgName}");
+                AILogger.Log($"{name} enter action > {curActionObj.dbgName}");
             }
 
             if (onActionChanged != null)
@@ -89,6 +96,9 @@ namespace AI.Utility
             for (int i = 0; i < actionObjs.Length; ++i)
             {
                 var act = actionObjs[i];
+                if (act == null)
+                    continue;
+
                 if (act.IsInCooldown(ctx))
                     continue;
 

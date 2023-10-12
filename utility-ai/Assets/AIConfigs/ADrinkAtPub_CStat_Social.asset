@@ -10,39 +10,39 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2a18eeb88bebede4f913dbb87eeb7ea7, type: 3}
-  m_Name: AEatAtHome_CStat_Hunger
+  m_Name: ADrinkAtPub_CStat_Social
   m_EditorClassIdentifier: 
-  weight: 0.7
-  stat: 1
+  weight: 0.4
+  stat: 3
   curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0.14437315
-      tangentMode: 65
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.66221756
-      value: 0.09560643
-      inSlope: 0.60298425
-      outSlope: 0.60298425
+      value: 1
+      inSlope: -2.6845496
+      outSlope: -2.6845496
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.1344103
+      inWeight: 0
+      outWeight: 0.027160125
+    - serializedVersion: 3
+      time: 0.5987127
+      value: 0.1
+      inSlope: -0.5074447
+      outSlope: 0
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 2
-      outSlope: 2
+      value: 0.1
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.10978317
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
