@@ -35,16 +35,6 @@ public class Grid : MonoBehaviour, IGrid
 		}
 	}
 
-	public int Cost(Node nodeA, Node nodeB)
-	{
-		int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
-		int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
-
-		if (dstX > dstY)
-			return 14 * dstY + 10* (dstX-dstY);
-		return 14 * dstX + 10 * (dstY-dstX);
-	}
-
 	public List<Node> GetNeighbours(Node node)
 	{
 		List<Node> neighbours = new List<Node>();
@@ -67,7 +57,7 @@ public class Grid : MonoBehaviour, IGrid
 	}
 	
 
-	public Node NodeFromWorldPoint(Vector3 worldPosition)
+	public Node GetNode(Vector3 worldPosition)
 	{
 		float percentX = (worldPosition.x + gridWorldSize.x/2) / gridWorldSize.x;
 		float percentY = (worldPosition.z + gridWorldSize.y/2) / gridWorldSize.y;

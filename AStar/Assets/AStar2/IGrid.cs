@@ -6,8 +6,8 @@ namespace AStar
 {
 	public interface IGrid
 	{
-		int Cost(Node a, Node b);
+		// int Cost(Node a, Node b);
 		List<Node> GetNeighbours(Node node);
-		Node NodeFromWorldPoint(Vector3 pos);
+		Node GetNode(Vector3 pos);
 	}
 }

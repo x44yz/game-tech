@@ -29,5 +29,10 @@ namespace AStar
 				return gCost + hCost;
 			}
 		}
+
+		public override string ToString()
+		{
+			return $"Node ({gridX},{gridY}) - gCost:{gCost}, hCost:{hCost}, walkable:{walkable}";
+		}
 	}
 }

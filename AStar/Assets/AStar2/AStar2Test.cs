@@ -12,11 +12,12 @@ public class AStar2Test : MonoBehaviour
 
 	void Start()
 	{
-		grid.path = pathfinding.FindPath(grid, start.position, target.position);
+		
 	}
 
 	void Update()
 	{
-			
+		if (Input.GetKeyDown(KeyCode.Space))
+			grid.path = pathfinding.FindPath(grid, start.position, target.position);
 	}
 }
