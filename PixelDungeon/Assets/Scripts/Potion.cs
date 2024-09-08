@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+// using System.Collections;
+// using System.Collections.Generic;
+// using UnityEngine;
 
-public class Potion : Item
-{
-	public void setKnown() {
-		// if (!isKnown()) {
-		// 	handler.know( this );
-		// }
+// public class Potion : Item
+// {
+// 	public void setKnown() {
+// 		// if (!isKnown()) {
+// 		// 	handler.know( this );
+// 		// }
 		
-		// Badges.validateAllPotionsIdentified();
-	}
-}
+// 		// Badges.validateAllPotionsIdentified();
+// 	}
+// }
 
-public class PotionOfStrength : Potion 
-{
+// public class PotionOfStrength : Potion 
+// {
 
-}
+// }

@@ -1,23 +1,13 @@
 {
   "dependencies": {
-    "com.dongl1n.quickdemo": {
-      "version": "git@github.com:dongl1n4444/unity-quickdemo.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.addressables": "1.18.19",
-        "com.unity.textmeshpro": "3.0.6"
-      },
-      "hash": "96e040049f7ca58ae26185be3e1e19c9e307f39f"
-    },
     "com.unity.2d.animation": {
       "version": "5.0.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.2d.common": "4.0.4",
-        "com.unity.mathematics": "1.1.0",
         "com.unity.2d.sprite": "1.0.0",
+        "com.unity.mathematics": "1.1.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.uielements": "1.0.0"
       },
@@ -45,27 +35,13 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.addressables": {
-      "version": "1.18.19",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.19.2",
-        "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.collab-proxy": {
       "version": "1.13.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
-        "com.unity.services.core": "1.0.1"
+        "com.unity.services.core": "1.0.1",
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -86,19 +62,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.11",
+      "version": "2.0.22",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.test-framework": "1.1.9"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.ide.vscode": {
-      "version": "1.2.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
@@ -111,13 +80,6 @@
     "com.unity.nuget.newtonsoft-json": {
       "version": "2.0.0",
       "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.scriptablebuildpipeline": {
-      "version": "1.19.2",
-      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -156,9 +118,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
