@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -7,6 +8,8 @@ public class Char : Actor
 {
     public int HT; // max hp
     public int HP;
+
+	private HashSet<Buff> _buffs = new HashSet<Buff>();
 
 	public static bool hit( Char attacker, Char defender, bool magic ) {
 		float acuRoll = Random.Float( attacker.attackSkill( defender ) );
@@ -118,5 +121,15 @@ public class Char : Actor
 	public void die( Entity src ) {
 		destroy();
 		// sprite.die();
+	}
+
+	public HashSet<T> buffs<T>() where T : Buff {
+		HashSet<T> filtered = new HashSet<T>();
+		foreach (Buff b in _buffs) {
+			if (b is T) {
+				filtered.Add( (T)b );
+			}
+		}
+		return filtered;
 	}
 }

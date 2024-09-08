@@ -1,61 +1,55 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
 
-// public class Item
-// {
-//     public bool levelKnown = false;
-//     public bool cursedKnown = false;
-//     protected int quantity = 1;
+public class Item
+{
+    private int level = 0;
+	private int durability;
 
-//     public Item identify()
-//     {
-// 		levelKnown = true;
-// 		cursedKnown = true;
-		
-// 		return this;
-//     }
+    public Item()
+    {
+        durability = maxDurability();
+    }
 
-// 	public bool collect() {
-// 		return collect( Main.Inst.hero.inventory );
-// 	}
+	public int effectiveLevel() {
+		return isBroken() ? 0 : level;
+	}
 
-//     public bool collect(Inventory inventory)
-//     {
-//         inventory.AddItem(this);
-//         return true;
-//     }
-// }
+	public bool isBroken() {
+		return durability <= 0;
+	}
 
-// public class Armor
-// {
-//     public int STR;
-//     public int DR()
-//     {
-//         return 0;
-//     }
+	public int maxDurability( int lvl ) {
+		return 1;
+	}
+	
+	public int maxDurability() {
+		return maxDurability( level );
+	}
+}
 
-// 	public int proc( Actor attacker, Actor defender, int damage ) {
-		
-// 		// if (glyph != null) {
-// 		// 	damage = glyph.proc( this, attacker, defender, damage );
-// 		// }
-		
-// 		// if (!levelKnown) {
-// 		// 	if (--hitsToKnow <= 0) {
-// 		// 		levelKnown = true;
-// 		// 		GLog.w( TXT_IDENTIFY, name(), toString() );
-// 		// 		Badges.validateItemLevelAquired( this );
-// 		// 	}
-// 		// }
-		
-// 		// use();
-		
-// 		return damage;
-// 	}
-// }
+public class EquipableItem : Item
+{
 
-// public class Ring
-// {
+}
 
-// }
+public class KindOfWeapon : EquipableItem
+{
+    // 精度
+	public virtual float acuracyFactor( Hero hero ) {
+		return 1f;
+	}
+
+	public int damageRoll( Hero owner ) {
+	    // return Random.NormalIntRange( min(), max() );
+        return 1;
+	}
+}
+
+public class Weapon : KindOfWeapon
+{
+
+}
+
+public class MissileWeapon : Weapon
+{
+
+}
