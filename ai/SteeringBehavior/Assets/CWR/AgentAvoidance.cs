@@ -35,12 +35,11 @@ namespace CWR
             return steering;
         }
 
-        private Vector3 Avoidance()
+        private Agent FindMostThreateningObstacle()
         {
             var ahead = agent.pos + agent.velocity.normalized * aheadLength;
             var ahead2 = agent.pos + agent.velocity.normalized * aheadLength * 0.5f;
 
-            // find most threatening obstacle
             Agent obstacle = null;
             float obstacleDist = float.MaxValue;
             foreach (var a in collisionAgents)
@@ -50,15 +49,22 @@ namespace CWR
                 if (a == target)
                     continue;
                 
-                float dist = (ahead - a.pos).ZeroYLength();
-                if (dist > a.collisionRadius + agent.collisionRadius)
+                float radiusSqr = a.collisionRadius * a.collisionRadius;
+                float dist = (ahead - a.pos).ZeroYSqrLength();
+                if (dist >= radiusSqr)
                 {
-                    dist = (ahead2 - a.pos).ZeroYLength();
-                    if (dist > a.collisionRadius + agent.collisionRadius)
-                        continue;
+                    // 如果和 head 的中段发生碰撞
+                    dist = (ahead2 - a.pos).ZeroYSqrLength();
+                    if (dist >= radiusSqr)
+                    {
+                        // 如果两个 agent 靠得太近
+                        dist = (agent.pos - a.pos).ZeroYSqrLength();
+                        if (dist >= radiusSqr)
+                            continue;
+                    }
                 }
 
-                dist = (agent.pos - a.pos).ZeroYLength();
+                dist = (agent.pos - a.pos).ZeroYSqrLength();
                 if (obstacle == null || dist < obstacleDist)
                 {
                     obstacle = a;
@@ -66,9 +72,16 @@ namespace CWR
                 }
             }
 
+            return obstacle;
+        }
+
+        private Vector3 CollisionAvoidance()
+        {
+            var obstacle = FindMostThreateningObstacle();
             if (obstacle == null)
                 return Vector3.zero;
 
+            var ahead = agent.pos + agent.velocity.normalized * aheadLength;
             var avoidance = (ahead - obstacle.pos).ZeroY();
             avoidance = avoidance.normalized * maxAvoidForce;
             Debug.DrawLine(obstacle.pos, obstacle.pos + avoidance, Color.red, 0.1f);
@@ -80,13 +93,15 @@ namespace CWR
             float dt = Time.fixedDeltaTime;
 
             var steering = Seek(target.position);
-            steering += Avoidance();
+            steering += CollisionAvoidance();
 
+            // 可以添加最大转向力
             // steering = steering.Truncate(agent.maxForce);
             
             var accel = steering / agent.mass;
-            agent.velocity = agent.velocity + accel * dt;
-            // agent.velocity = agent.velocity.Truncate(agent.maxSpeed);
+            agent.velocity = agent.velocity + accel;
+            // 限制最大速度
+            agent.velocity = agent.velocity.Truncate(agent.maxSpeed);
 
             agent.pos = agent.pos + agent.velocity * dt;
 

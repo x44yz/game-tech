@@ -21,6 +21,12 @@ public static class Utils
         return v.magnitude;
     }
 
+    public static float ZeroYSqrLength(this Vector3 v)
+    {
+        v.y = 0f;
+        return v.sqrMagnitude;
+    }
+
     public static Vector3 Truncate(this Vector3 v, float maxLength)
     {
         float maxLengthSquard = maxLength * maxLength;
